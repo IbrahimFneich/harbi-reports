@@ -230,6 +230,74 @@
   .footer a { color: var(--accent); text-decoration: none; }
   .footer a:hover { text-decoration: underline; }
 
+  /* Global Search */
+  .global-search {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 10px 16px; display: flex; gap: 10px; align-items: center;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  }
+  .global-search input {
+    flex: 1; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px; font-size: 0.84rem;
+    color: var(--text); font-family: inherit; outline: none;
+    transition: border-color 0.2s;
+  }
+  .global-search input:focus { border-color: var(--accent); }
+  .global-search input::placeholder { color: var(--text-dim); }
+  .gs-stats {
+    font-size: 0.7rem; color: var(--text-dim); white-space: nowrap;
+  }
+  .gs-stats .gs-count { color: var(--accent); font-weight: 700; }
+  .gs-clear {
+    background: none; border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text-dim); cursor: pointer; padding: 6px 10px; font-size: 0.72rem;
+    font-family: inherit; transition: all 0.2s; display: none;
+  }
+  .gs-clear:hover { color: #e74c3c; border-color: #e74c3c; }
+  .gs-clear.visible { display: inline-block; }
+
+  .gs-results {
+    max-width: 800px; margin: 0 auto; padding: 0 16px;
+  }
+  .gs-result-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-right: 4px solid var(--accent); border-radius: 10px;
+    padding: 14px 18px; margin-bottom: 10px;
+    text-decoration: none; display: block; color: var(--text);
+    transition: all 0.2s;
+  }
+  .gs-result-card:hover {
+    transform: translateX(-3px); border-right-color: var(--green);
+    background: var(--surface2);
+  }
+  .gs-result-date {
+    font-size: 0.95rem; font-weight: 700; color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .gs-result-card:hover .gs-result-date { color: var(--green); }
+  .gs-result-stats {
+    font-size: 0.7rem; color: var(--text-dim); margin-bottom: 8px;
+  }
+  .gs-result-matches {
+    display: flex; flex-wrap: wrap; gap: 4px;
+  }
+  .gs-match-tag {
+    font-size: 0.65rem; font-weight: 600; padding: 2px 8px;
+    border-radius: 4px; background: var(--accent-dim); color: var(--accent);
+  }
+  .gs-no-results {
+    text-align: center; padding: 30px; color: var(--text-dim); font-size: 0.85rem;
+  }
+  .gs-overlay {
+    display: none;
+  }
+  .gs-overlay.active {
+    display: block;
+    padding-bottom: 40px;
+  }
+  .calendar-section.hidden { display: none; }
+
   @media (max-width: 500px) {
     .header h1 { font-size: 1.5rem; }
     .cal-day .day-num { font-size: 1rem; }
@@ -246,6 +314,17 @@
   <div class="subtitle">أرشيف التقارير اليومية — التغطية الإخبارية</div>
 </div>
 
+<div class="global-search">
+  <input type="text" id="gsInput" placeholder="بحث شامل عبر كل التقارير... (ميركافا، كريات شمونة، كمين، FPV)" autocomplete="off">
+  <div class="gs-stats" id="gsStats"></div>
+  <button class="gs-clear" id="gsClear">مسح</button>
+</div>
+
+<div class="gs-overlay" id="gsOverlay">
+  <div class="gs-results" id="gsResults"></div>
+</div>
+
+<div class="calendar-section" id="calSection">
 <div class="stats-strip" id="statsStrip"></div>
 
 <div class="month-nav">
@@ -267,6 +346,8 @@
     <span>أقل</span>
   </div>
 </div>
+
+</div><!-- /calSection -->
 
 <div class="footer">
   مصدر: قناة الإعلام الحربي — التغطية الإخبارية (Telegram)
@@ -495,6 +576,141 @@ function changeMonth(dir) {
 
 renderCalendar();
 
+// ═══════════════ GLOBAL SEARCH ═══════════════
+
+var searchIndex = {
+  '2026-04-01': {kw:'عميعاد كريات شمونة ميرون مسكاف عام القنطرة دير سريان العديسة الطيبة يرؤون نيمرا نهاريا كابري القوزح القلعة عيناتا البيّاضة شوميرا المطلة هضبة العجل كفاريوفال كفرجلعادي العليقة الجولان ميركافا دبابة طائرة مروحية هرمز صاروخ أرض جو مسيّرة انقضاضية محلّقة مدفعية صلية صاروخية تل أبيب بني براك إيران الوعد الصادق يمن إيلات أم الرشراش حرس الثورة FPV',b:47,s:35,e:29,ir:9,v:3},
+  '2026-04-02': {kw:'عيناتا مارون الراس القنطرة الطيبة رشاف البيّاضة كريات شمونة نهاريا المطلة مسكاف عام يرؤون أفيفيم حانيتا مرغليوت شلومي الخيام صفد عكا حيفا الكريوت ميركافا دبابة طائرة مسيّرة صلية صاروخية مدفعية تل أبيب القدس إيران الوعد الصادق يمن عراق حرس الثورة بئر السبع ديمونا الجولان',b:41,s:33,e:19,ir:18,v:4},
+  '2026-04-03': {kw:'عيناتا مارون الراس رشاف البيّاضة كريات شمونة نهاريا المطلة مسكاف عام يرؤون أفيفيم الخيام صفد عكا حيفا القنطرة الطيبة ميركافا دبابة مسيّرة صلية صاروخية مدفعية تل أبيب إيران الوعد الصادق حرس الثورة كمين نزع سلاح حزب الله كان القناة 12 يديعوت أحرونوت الجيش الإسرائيلي احتياط FPV هرمز',b:38,s:47,e:39,ir:12,v:3},
+  '2026-04-04': {kw:'عيناتا مارون الراس القنطرة الطيبة رشاف البيّاضة كريات شمونة نهاريا المطلة مسكاف عام صفد حيفا ميركافا دبابة جرافة مسيّرة صلية صاروخية مدفعية تل أبيب القدس بئر السبع ديمونا إيران الوعد الصادق يمن عراق حرس الثورة MQ-1 الليطاني قلعة شقيف نار صديقة',b:38,s:37,e:22,ir:12,v:3},
+  '2026-04-05': {kw:'عيناتا القنطرة الطيبة رشاف البيّاضة كريات شمونة نهاريا المطلة مسكاف عام صفد عكا حيفا ستيلا ماريس ميركافا دبابة نميرا مسيّرة صلية صاروخية مدفعية بئر السبع ديمونا كتسرين الجولان إيران الوعد الصادق حرس الثورة MQ-9 هيرمس 900 C-130 بلاك هوك عراق سفينة حربية',b:31,s:35,e:21,ir:12,v:3},
+  '2026-04-06': {kw:'عيناتا مارون الراس القنطرة الطيبة رشاف بنت جبيل البيّاضة كريات شمونة نهاريا المطلة مسكاف عام يرؤون أفيفيم حانيتا مرغليوت شلومي المالكية حولاتا الخيام صفد عكا حيفا ميركافا دبابة مسيّرة صلية صاروخية مدفعية تل أبيب القدس أسدود إيلات إيران الوعد الصادق يمن عراق حرس الثورة كمين الليطاني قلعة شقيف FPV ألياف بصرية غفعات اولغا تسنوبار كرم بن زمرة هرمز 450 القناة 12 القناة 15 غلوبز',b:52,s:32,e:25,ir:17,v:4},
+  '2026-04-07': {kw:'عيناتا مارون الراس الطيبة رشاف بنت جبيل كريات شمونة نهاريا المطلة مسكاف عام أفيفيم مرغليوت الخيام صفد عكا حيفا ميركافا مسيّرة صلية صاروخية مدفعية تل أبيب القدس أسدود إيران الوعد الصادق حرس الثورة خيبرشكن ديمونا بئر السبع بتاح تكفا جبل علي أحمد الجابر قشم فكتوريا هدهد روش بينا',b:20,s:22,e:0,ir:0,v:3}
+};
+
+var gsAliases = {
+  'merkava':'ميركافا','tank':'ميركافا','drone':'مسيّرة','uav':'مسيّرة','fpv':'FPV',
+  'missile':'صاروخ','rocket':'صاروخ','siren':'صفارات','haifa':'حيفا',
+  'tel aviv':'تل أبيب','telaviv':'تل أبيب','iran':'إيران',
+  'kiryat':'كريات','nahariya':'نهاريا','metula':'المطلة',
+  'bint jbeil':'بنت جبيل','maroun':'مارون','litani':'الليطاني',
+  'yemen':'يمن','iraq':'عراق','ambush':'كمين','safed':'صفد',
+  'acre':'عكا','golan':'الجولان','jerusalem':'القدس'
+};
+
+function gsNorm(s) {
+  return s.replace(/[إأآٱ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي')
+    .replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/ّ/g,'')
+    .replace(/[\u064B-\u065F\u0670]/g,'').toLowerCase();
+}
+
+var gsInput = document.getElementById('gsInput');
+var gsStats = document.getElementById('gsStats');
+var gsClear = document.getElementById('gsClear');
+var gsOverlay = document.getElementById('gsOverlay');
+var gsResults = document.getElementById('gsResults');
+var calSec = document.getElementById('calSection');
+
+var gsTO;
+gsInput.addEventListener('input', function() {
+  clearTimeout(gsTO);
+  var v = gsInput.value;
+  gsTO = setTimeout(function() { gsSearch(v); }, 200);
+});
+gsInput.addEventListener('keydown', function(e) { if (e.key === 'Escape') gsClear(); });
+gsClear.addEventListener('click', function() { gsInput.value = ''; gsSearch(''); gsInput.focus(); });
+
+function gsSearch(raw) {
+  var q = raw.trim();
+  document.getElementById('gsClear').classList.toggle('visible', q.length > 0);
+
+  if (!q) {
+    gsOverlay.classList.remove('active');
+    calSec.classList.remove('hidden');
+    gsStats.textContent = '';
+    gsResults.textContent = '';
+    return;
+  }
+
+  var terms = q.toLowerCase();
+  var ak = Object.keys(gsAliases);
+  for (var i = 0; i < ak.length; i++) {
+    if (terms.indexOf(ak[i]) !== -1) terms = terms.replace(ak[i], gsAliases[ak[i]]);
+  }
+  var nq = gsNorm(terms);
+  var words = nq.split(/\s+/).filter(function(w) { return w.length > 0; });
+
+  var results = [];
+  var dates = Object.keys(searchIndex).sort().reverse();
+  dates.forEach(function(ds) {
+    var entry = searchIndex[ds];
+    var hay = gsNorm(entry.kw);
+    if (words.every(function(w) { return hay.indexOf(w) !== -1; })) {
+      var matched = [];
+      words.forEach(function(w) {
+        var kws = entry.kw.split(/\s+/);
+        for (var k = 0; k < kws.length; k++) {
+          if (gsNorm(kws[k]).indexOf(w) !== -1 && matched.indexOf(kws[k]) === -1) { matched.push(kws[k]); break; }
+        }
+      });
+      results.push({d: ds, st: entry, m: matched});
+    }
+  });
+
+  gsOverlay.classList.add('active');
+  calSec.classList.add('hidden');
+  gsResults.textContent = '';
+
+  if (results.length === 0) {
+    var nr = document.createElement('div');
+    nr.className = 'gs-no-results';
+    nr.textContent = '\u0644\u0627 \u0646\u062A\u0627\u0626\u062C \u0644\u0640 \u00AB' + q + '\u00BB';
+    gsResults.appendChild(nr);
+    gsStats.textContent = '\u0644\u0627 \u0646\u062A\u0627\u0626\u062C';
+    return;
+  }
+
+  gsStats.textContent = '';
+  var cs = document.createElement('span');
+  cs.className = 'gs-count';
+  cs.textContent = results.length;
+  gsStats.appendChild(cs);
+  gsStats.appendChild(document.createTextNode(' \u064A\u0648\u0645'));
+
+  results.forEach(function(r) {
+    var p = r.d.split('-');
+    var dy = parseInt(p[2]), mo = parseInt(p[1]);
+    var dt3 = new Date(parseInt(p[0]), mo - 1, dy);
+
+    var card = document.createElement('a');
+    card.className = 'gs-result-card';
+    card.href = 'report-' + r.d + '.html';
+
+    var dd = document.createElement('div');
+    dd.className = 'gs-result-date';
+    dd.textContent = arabicDays[dt3.getDay()] + ' ' + dy + ' ' + arabicMonths[mo - 1] + ' ' + p[0];
+    card.appendChild(dd);
+
+    var sd = document.createElement('div');
+    sd.className = 'gs-result-stats';
+    sd.textContent = r.st.b + ' \u0628\u064A\u0627\u0646 \u2022 ' + r.st.s + ' \u0635\u0641\u0627\u0631\u0629 \u2022 ' + r.st.e + ' \u0625\u0639\u0644\u0627\u0645 \u2022 ' + r.st.ir + ' \u0625\u064A\u0631\u0627\u0646';
+    card.appendChild(sd);
+
+    if (r.m.length > 0) {
+      var md = document.createElement('div');
+      md.className = 'gs-result-matches';
+      r.m.forEach(function(mt) {
+        var tg = document.createElement('span');
+        tg.className = 'gs-match-tag';
+        tg.textContent = mt;
+        md.appendChild(tg);
+      });
+      card.appendChild(md);
+    }
+
+    gsResults.appendChild(card);
+  });
+}
 </script>
 
 <script src="report-enhancements.js"></script>
