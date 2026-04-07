@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإعلام الحربي — 5 نيسان 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800;900&display=swap');
+
+  :root {
+    --bg: #080c12;
+    --surface: #0f1520;
+    --surface2: #151d2b;
+    --surface3: #1a2538;
+    --border: #1e2d3d;
+    --text: #dfe6ee;
+    --text-dim: #6b7d92;
+    --accent: #c9a84c;
+    --accent-dim: rgba(201,168,76,0.12);
+    --green: #27ae60;
+    --green-bright: #2ecc71;
+    --green-dim: rgba(46,204,113,0.08);
+    --red: #e74c3c;
+    --red-dim: rgba(231,76,60,0.10);
+    --orange: #e67e22;
+    --orange-dim: rgba(230,126,34,0.10);
+    --blue: #3498db;
+    --blue-dim: rgba(52,152,219,0.10);
+    --purple: #9b59b6;
+    --purple-dim: rgba(155,89,182,0.10);
+    --cyan: #1abc9c;
+    --cyan-dim: rgba(26,188,156,0.08);
+    --pink: #e84393;
+    --pink-dim: rgba(232,67,147,0.08);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Noto Kufi Arabic', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #080c12 0%, #121a2a 50%, #0d1520 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 36px 20px 20px;
+    text-align: center;
+    position: relative;
+  }
+  .header::before {
+    content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+    background:radial-gradient(ellipse at center,rgba(201,168,76,0.06) 0%,transparent 70%);
+  }
+  .header h1 { font-size:1.9rem; font-weight:900; color:var(--accent); position:relative; margin-bottom:4px; }
+  .header .date { font-size:0.95rem; color:var(--text-dim); position:relative; }
+  .header .date span { color:var(--accent); font-weight:700; }
+
+  /* Stats */
+  .stats {
+    display:flex; justify-content:center; gap:14px; flex-wrap:wrap;
+    padding:16px 20px; background:var(--surface); border-bottom:1px solid var(--border);
+  }
+  .stat {
+    text-align:center; padding:10px 16px; border-radius:10px; min-width:90px;
+  }
+  .stat .n { font-size:1.5rem; font-weight:900; display:block; }
+  .stat .l { font-size:0.68rem; color:var(--text-dim); margin-top:1px; }
+
+  .stat.s1 { background:var(--green-dim); } .stat.s1 .n { color:var(--green-bright); }
+  .stat.s2 { background:var(--red-dim); } .stat.s2 .n { color:var(--red); }
+  .stat.s3 { background:var(--orange-dim); } .stat.s3 .n { color:var(--orange); }
+  .stat.s4 { background:var(--purple-dim); } .stat.s4 .n { color:var(--purple); }
+  .stat.s5 { background:var(--cyan-dim); } .stat.s5 .n { color:var(--cyan); }
+  .stat.s6 { background:var(--blue-dim); } .stat.s6 .n { color:var(--blue); }
+
+  /* Tabs */
+  .tabs {
+    display:flex; justify-content:flex-start; gap:0; background:var(--surface2);
+    border-bottom:1px solid var(--border); overflow-x:auto; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; -ms-overflow-style:none;
+  }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab {
+    padding:12px 16px; cursor:pointer; font-size:0.78rem; font-weight:600;
+    color:var(--text-dim); border-bottom:3px solid transparent;
+    transition:all 0.2s; white-space:nowrap; position:relative; flex-shrink:0;
+  }
+  .tab:hover { color:var(--text); background:rgba(255,255,255,0.02); }
+  .tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+  .tab .badge {
+    display:inline-block; font-size:0.6rem; font-weight:800; padding:1px 6px;
+    border-radius:8px; margin-right:4px; vertical-align:middle;
+  }
+  .tab.active .badge { background:var(--accent); color:var(--bg); }
+  .tab:not(.active) .badge { background:var(--surface3); color:var(--text-dim); }
+
+  /* Tab content */
+  .tab-content { display:none; }
+  .tab-content.active { display:block; }
+
+  .container { max-width:940px; margin:0 auto; padding:24px 16px 60px; }
+
+  /* Phase divider */
+  .phase {
+    text-align:center; margin:28px 0 18px; position:relative;
+  }
+  .phase::before,.phase::after {
+    content:'';position:absolute;top:50%;width:28%;height:1px;background:var(--border);
+  }
+  .phase::before{right:0} .phase::after{left:0}
+  .phase span {
+    background:var(--accent); color:var(--bg); font-weight:700; font-size:0.8rem;
+    padding:4px 18px; border-radius:20px; display:inline-block; position:relative; z-index:1;
+  }
+
+  /* bayan card */
+  .bayan {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-right:4px solid var(--green);
+    border-radius:10px;
+    padding:12px 16px;
+    margin-bottom:10px;
+    transition:transform 0.15s;
+  }
+  .bayan:hover { transform:translateX(-2px); }
+
+  .bayan.tank { border-right-color:var(--orange); }
+  .bayan.settlement { border-right-color:var(--purple); }
+  .bayan.deep { border-right-color:var(--blue); }
+  .bayan.multi { border-right-color:var(--accent); }
+
+  .bayan-header {
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;
+  }
+  .bayan-num {
+    font-size:1.3rem; font-weight:900; color:var(--green-bright);
+    background:var(--green-dim); width:40px; height:40px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .bayan.tank .bayan-num { color:var(--orange); background:var(--orange-dim); }
+  .bayan.settlement .bayan-num { color:var(--purple); background:var(--purple-dim); }
+  .bayan.deep .bayan-num { color:var(--blue); background:var(--blue-dim); }
+  .bayan.multi .bayan-num { color:var(--accent); background:var(--accent-dim); }
+
+  .bayan-times {
+    display:flex; gap:10px; font-size:0.7rem; color:var(--text-dim);
+  }
+  .bayan-times .t-label { color:var(--text-dim); }
+  .bayan-times .t-val { color:var(--text); font-weight:600; }
+
+  .bayan-target {
+    font-size:0.92rem; font-weight:700; color:var(--accent); margin-bottom:4px;
+  }
+
+  .bayan-details {
+    display:flex; gap:16px; flex-wrap:wrap;
+    font-size:0.78rem; color:var(--text-dim);
+  }
+  .bayan-details .detail-label { color:var(--text-dim); font-size:0.68rem; }
+  .bayan-details .detail-val { color:var(--text); }
+
+  .bayan-tag {
+    display:inline-block; font-size:0.63rem; font-weight:700;
+    padding:2px 8px; border-radius:4px; margin-top:6px;
+  }
+  .tag-warning { background:var(--purple-dim); color:var(--purple); }
+  .tag-hit { background:var(--red-dim); color:var(--red); }
+  .tag-deep { background:var(--blue-dim); color:var(--blue); }
+  .tag-retaliation { background:var(--orange-dim); color:var(--orange); }
+
+  /* Collapsible full text */
+  .txt-toggle {
+    display:inline-block; cursor:pointer; font-size:0.66rem; font-weight:600;
+    color:var(--text-dim); margin-top:6px; padding:3px 10px;
+    border:1px solid var(--border); border-radius:6px;
+    transition:all 0.2s; user-select:none;
+  }
+  .txt-toggle:hover { color:var(--accent); border-color:var(--accent); }
+  .txt-toggle.open { color:var(--accent); border-color:rgba(201,168,76,0.3); }
+
+  .txt-full {
+    display:none; margin-top:8px; padding:10px 14px;
+    background:rgba(0,0,0,0.25); border-radius:8px; border:1px solid var(--border);
+    font-size:0.76rem; line-height:2; color:var(--text-dim);
+    white-space:pre-wrap; max-height:300px; overflow-y:auto;
+  }
+  .txt-full.show { display:block; }
+
+  /* Siren row */
+  .siren-row {
+    display:flex; gap:12px; align-items:center;
+    padding:10px 16px; margin-bottom:6px;
+    background:var(--surface); border:1px solid var(--border);
+    border-right:3px solid var(--red); border-radius:8px;
+    font-size:0.82rem;
+  }
+  .siren-row .s-time { color:var(--red); font-weight:700; min-width:42px; }
+  .siren-row .s-loc { color:var(--text); }
+
+  /* Enemy report */
+  .enemy-row {
+    padding:12px 16px; margin-bottom:8px;
+    background:var(--surface); border:1px solid var(--border);
+    border-right:3px solid var(--orange); border-radius:8px;
+  }
+  .enemy-row .e-time { font-size:0.72rem; color:var(--orange); font-weight:700; }
+  .enemy-row .e-text { font-size:0.84rem; margin-top:4px; }
+  .enemy-row .e-source { font-size:0.68rem; color:var(--text-dim); margin-top:2px; }
+
+  /* Video card */
+  .vid-card {
+    padding:14px 16px; margin-bottom:8px;
+    background:var(--surface); border:1px solid var(--border);
+    border-right:3px solid var(--cyan); border-radius:8px;
+  }
+  .vid-card .v-time { font-size:0.72rem; color:var(--cyan); font-weight:700; }
+  .vid-card .v-text { font-size:0.84rem; margin-top:4px; }
+  .vid-icon { display:inline-block; margin-left:6px; color:var(--cyan); }
+
+  /* Iran card */
+  .iran-card {
+    padding:14px 18px; margin-bottom:10px;
+    background:var(--surface); border:1px solid var(--border);
+    border-right:4px solid var(--purple); border-radius:10px;
+  }
+  .iran-card .i-time { font-size:0.72rem; color:var(--purple); font-weight:700; }
+  .iran-card .i-source { font-size:0.7rem; color:var(--text-dim); margin-top:2px; }
+  .iran-card .i-text { font-size:0.84rem; margin-top:6px; line-height:1.8; }
+
+  /* Allies card */
+  .ally-card {
+    padding:14px 18px; margin-bottom:10px;
+    background:var(--surface); border:1px solid var(--border);
+    border-right:4px solid var(--cyan); border-radius:10px;
+  }
+  .ally-card .a-flag { font-size:0.7rem; font-weight:700; color:var(--cyan); }
+  .ally-card .a-time { font-size:0.72rem; color:var(--text-dim); }
+  .ally-card .a-text { font-size:0.84rem; margin-top:6px; }
+
+  .hl { color:var(--accent); font-weight:600; }
+
+  /* Search */
+  .search-bar {
+    position:sticky; top:0; z-index:100;
+    background:var(--surface); border-bottom:1px solid var(--border);
+    padding:10px 16px; display:flex; gap:10px; align-items:center;
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  }
+  .search-bar input {
+    flex:1; background:var(--surface2); border:1px solid var(--border);
+    border-radius:8px; padding:9px 14px; font-size:0.82rem;
+    color:var(--text); font-family:inherit; outline:none;
+    transition:border-color 0.2s;
+  }
+  .search-bar input:focus { border-color:var(--accent); }
+  .search-bar input::placeholder { color:var(--text-dim); }
+  .search-stats {
+    font-size:0.7rem; color:var(--text-dim); white-space:nowrap; min-width:60px;
+    text-align:center;
+  }
+  .search-stats .count { color:var(--accent); font-weight:700; }
+  .search-clear {
+    background:none; border:1px solid var(--border); border-radius:6px;
+    color:var(--text-dim); cursor:pointer; padding:6px 10px; font-size:0.72rem;
+    font-family:inherit; transition:all 0.2s; display:none;
+  }
+  .search-clear:hover { color:var(--red); border-color:var(--red); }
+  .search-clear.visible { display:inline-block; }
+
+  .search-highlight {
+    background:rgba(201,168,76,0.3); color:var(--accent); border-radius:2px;
+    padding:0 1px;
+  }
+
+  .card-hidden { display:none !important; }
+  .phase.phase-hidden { display:none !important; }
+
+  .no-results {
+    text-align:center; padding:40px 20px; color:var(--text-dim); font-size:0.9rem;
+    display:none;
+  }
+  .no-results.show { display:block; }
+
+  .footer {
+    text-align:center; padding:24px; color:var(--text-dim); font-size:0.72rem;
+    border-top:1px solid var(--border); background:var(--surface);
+  }
+
+  @media(max-width:600px){
+    .header h1{font-size:1.3rem}
+    .stats{gap:8px} .stat{min-width:70px;padding:6px 10px} .stat .n{font-size:1.2rem}
+    .tab{padding:10px 12px;font-size:0.72rem}
+    .bayan-details{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>الإعلام الحربي — التغطية الإخبارية</h1>
+  <div class="date">السبت <span>5 نيسان 2026</span> — 17 شوال 1447 هـ</div>
+</div>
+
+<div class="stats">
+  <div class="stat s1"><span class="n">31</span><span class="l">بيان عسكري</span></div>
+  <div class="stat s2"><span class="n">35</span><span class="l">صفارة إنذار</span></div>
+  <div class="stat s3"><span class="n">21</span><span class="l">تقرير إعلام العدو</span></div>
+  <div class="stat s4"><span class="n">12</span><span class="l">إيران</span></div>
+  <div class="stat s5"><span class="n">3</span><span class="l">فيديو عمليات</span></div>
+  <div class="stat s6"><span class="n">2</span><span class="l">يمن + عراق</span></div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('bayanat',this)">بيانات المقاومة <span class="badge">31</span></div>
+  <div class="tab" onclick="switchTab('sirens',this)">صفارات الإنذار <span class="badge">35</span></div>
+  <div class="tab" onclick="switchTab('enemy',this)">إعلام العدو <span class="badge">21</span></div>
+  <div class="tab" onclick="switchTab('iran',this)">إيران <span class="badge">12</span></div>
+  <div class="tab" onclick="switchTab('videos',this)">فيديوهات <span class="badge">3</span></div>
+  <div class="tab" onclick="switchTab('allies',this)">اليمن والعراق <span class="badge">2</span></div>
+</div>
+
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="بحث... (مثلاً: ميركافا، كريات شمونة، مسيّرة، حيفا)" autocomplete="off">
+  <div class="search-stats" id="searchStats"></div>
+  <button class="search-clear" id="searchClear" onclick="clearSearch()">مسح</button>
+</div>
+
+
+<!-- TAB 1: BAYANAT -->
+<div id="bayanat" class="tab-content active">
+<div class="container">
+
+  <div class="phase"><span>الفجر — 00:00 – 05:00</span></div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">1</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">01:15</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">20:15 (أمس)</span></div>
+    </div>
+    <div class="bayan-target">منطقة السّدر — بلدة عيناتا</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود وآليات</span></div>
+    </div>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">2</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">01:20</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">23:00 (أمس)</span></div>
+    </div>
+    <div class="bayan-target">قرب مستوطنة المالكيّة</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود وآليات</span></div>
+    </div>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">3</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">01:25</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">23:30 (أمس)</span></div>
+    </div>
+    <div class="bayan-target">منطقة السّدر — بلدة عيناتا</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود وآليات</span></div>
+    </div>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">4</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">01:30</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">00:05</span></div>
+    </div>
+    <div class="bayan-target">ثكنة زرعيت</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">سرب مسيّرات انقضاضية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">ثكنة عسكرية</span></div>
+    </div>
+  </div>
+
+  <div class="bayan deep">
+    <div class="bayan-header">
+      <div class="bayan-num">5</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">06:45</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">00:05</span></div>
+    </div>
+    <div class="bayan-target">بارجة عسكرية إسرائيلية — 68 ميلاً بحرياً قبالة السواحل اللبنانية</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صاروخ كروز بحري</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف بحري</span></div>
+    </div>
+    <span class="bayan-tag tag-hit">إصابة مباشرة مؤكّدة</span>
+    <span class="bayan-tag tag-retaliation">ردّاً على قصف القرى والمدن</span>
+  </div>
+
+  <div class="phase"><span>الصباح — 05:00 – 12:00</span></div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">6</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">09:30</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">08:45</span></div>
+    </div>
+    <div class="bayan-target">مستوطنة يسود همعلاه — بنى تحتية عسكرية</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">بنى تحتية عسكرية</span></div>
+    </div>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">7</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">09:36</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">09:15</span></div>
+    </div>
+    <div class="bayan-target">موقع كفرسولد</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+    </div>
+  </div>
+
+  <div class="bayan settlement">
+    <div class="bayan-header">
+      <div class="bayan-num">8</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">09:40</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">10:30</span></div>
+    </div>
+    <div class="bayan-target">مستوطنتي أفيفيم ويرؤون</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صليات صاروخية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف مستوطنة</span></div>
+    </div>
+    <span class="bayan-tag tag-warning">في إطار التحذير</span>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">9</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">09:45</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">11:00</span></div>
+    </div>
+    <div class="bayan-target">مستوطنة معالوت ترشيحا — بنى تحتية عسكرية</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">بنى تحتية عسكرية</span></div>
+    </div>
+  </div>
+
+  <div class="bayan deep">
+    <div class="bayan-header">
+      <div class="bayan-num">10</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">09:50</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">11:35</span></div>
+    </div>
+    <div class="bayan-target">قاعدة ميرون للمراقبة وإدارة العمليات الجوية</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">ضربة قاعدة مراقبة</span></div>
+    </div>
+    <span class="bayan-tag tag-deep">ضربة عمق</span>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">11</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">13:10</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">10:00</span></div>
+    </div>
+    <div class="bayan-target">موقع المالكية</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود</span></div>
+    </div>
+  </div>
+
+  <div class="phase"><span>الظهر — 12:00 – 16:00</span></div>
+
+  <div class="bayan deep">
+    <div class="bayan-header">
+      <div class="bayan-num">12</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">13:15</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">11:50</span></div>
+    </div>
+    <div class="bayan-target">مستوطنة كتسرين — الجولان السوري المحتل</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">بنى تحتية عسكرية</span></div>
+    </div>
+    <span class="bayan-tag tag-deep">ضربة عمق — الجولان</span>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">13</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">13:20</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">11:50</span></div>
+    </div>
+    <div class="bayan-target">مدينة صفد المحتلة — بنى تحتية عسكرية</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+    </div>
+  </div>
+
+  <div class="bayan multi">
+    <div class="bayan-header">
+      <div class="bayan-num">14</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">13:25</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">12:40</span></div>
+    </div>
+    <div class="bayan-target">منطقة السّدر + تلّة غدماثا — بلدة عيناتا</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صليات صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود وآليات</span></div>
+    </div>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">15</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">13:30</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">10:15</span></div>
+    </div>
+    <div class="bayan-target">موقع المالكيّة</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">مسيّرة انقضاضية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود</span></div>
+    </div>
+    <span class="bayan-tag tag-hit">إصابة مباشرة</span>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">16</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">13:35</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">11:50</span></div>
+    </div>
+    <div class="bayan-target">مستوطنة كرميئيل — بنى تحتية عسكرية</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+    </div>
+  </div>
+
+  <div class="phase"><span>المساء — 16:00 – 00:00</span></div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">17</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">15:30</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">17:40</span></div>
+    </div>
+    <div class="bayan-target">قلعة بلدة شمع — عبوة ناسفة + قصف قوّة الإخلاء</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">عبوة ناسفة + قذائف مدفعية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">كمين</span></div>
+    </div>
+    <span class="bayan-tag tag-hit">إصابات مؤكّدة</span>
+  </div>
+
+  <div class="bayan settlement">
+    <div class="bayan-header">
+      <div class="bayan-num">18</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">15:35</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">18:05</span></div>
+    </div>
+    <div class="bayan-target">مستوطنة نهاريّا</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف مستوطنة</span></div>
+    </div>
+    <span class="bayan-tag tag-warning">في إطار التحذير</span>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">19</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">16:08</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">13:00</span></div>
+    </div>
+    <div class="bayan-target">تلّة فريز — بلدة عيناتا</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع آليات وجنود</span></div>
+    </div>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">20</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">16:15</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">13:30</span></div>
+    </div>
+    <div class="bayan-target">تلّة غدماثا — بلدة عيناتا</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع آليات وجنود</span></div>
+    </div>
+  </div>
+
+  <div class="bayan deep">
+    <div class="bayan-header">
+      <div class="bayan-num">21</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">16:20</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">15:00</span></div>
+    </div>
+    <div class="bayan-target">قاعدة ميرون للمراقبة وإدارة العمليات الجوية (المرّة الثانية)</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">ضربة قاعدة مراقبة</span></div>
+    </div>
+    <span class="bayan-tag tag-deep">ضربة عمق</span>
+  </div>
+
+  <div class="bayan settlement">
+    <div class="bayan-header">
+      <div class="bayan-num">22</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">16:25</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">17:30</span></div>
+    </div>
+    <div class="bayan-target">مستوطنة المطلّة</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف مستوطنة</span></div>
+    </div>
+    <span class="bayan-tag tag-warning">في إطار التحذير</span>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">23</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">16:52</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">17:30 – 17:35</span></div>
+    </div>
+    <div class="bayan-target">شرق معتقل الخيام</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صليات صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود وآليات</span></div>
+    </div>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">24</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">16:58</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">17:20</span></div>
+    </div>
+    <div class="bayan-target">هضبة العجل — شمال مستوطنة كفاريوفال</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">سرب مسيّرات انقضاضية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود</span></div>
+    </div>
+  </div>
+
+  <div class="bayan settlement">
+    <div class="bayan-header">
+      <div class="bayan-num">25</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">17:05</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">18:10</span></div>
+    </div>
+    <div class="bayan-target">مستوطنة نهاريّا (المرّة الثانية)</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف مستوطنة</span></div>
+    </div>
+    <span class="bayan-tag tag-warning">في إطار التحذير</span>
+  </div>
+
+  <div class="bayan deep">
+    <div class="bayan-header">
+      <div class="bayan-num">26</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">18:55</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">19:00</span></div>
+    </div>
+    <div class="bayan-target">قاعدة إدارية للدعم اللوجستي — شمال مدينة عكّا</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">مسيّرة انقضاضية نوعية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">ضربة قاعدة لوجستية</span></div>
+    </div>
+    <span class="bayan-tag tag-deep">ضربة عمق — عكّا</span>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">27</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">20:35</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">19:00</span></div>
+    </div>
+    <div class="bayan-target">تلّة فريز — بلدة عيناتا</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية + قذائف مدفعية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود وآليات</span></div>
+    </div>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">28</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">20:38</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">22:50</span></div>
+    </div>
+    <div class="bayan-target">تلّة السدر + تلّة غدماثا — بلدة عيناتا</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صليات صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود وآليات</span></div>
+    </div>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">29</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">21:10</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">15:30</span></div>
+    </div>
+    <div class="bayan-target">محيط موقع المرج — مقابل بلدة مركبا</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">سرب مسيّرات انقضاضية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع آليات وجنود</span></div>
+    </div>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">30</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">21:15</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">15:15</span></div>
+    </div>
+    <div class="bayan-target">مقرّ قيادة مستحدث — بلدة الطيّبة</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">سرب مسيّرات انقضاضية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">مقرّ قيادة</span></div>
+    </div>
+  </div>
+
+  <div class="bayan deep">
+    <div class="bayan-header">
+      <div class="bayan-num">31</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">21:20</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">19:00</span></div>
+    </div>
+    <div class="bayan-target">قاعدة سنط جين — شمال مدينة عكّا</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">سرب مسيّرات انقضاضية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">ضربة قاعدة عسكرية</span></div>
+    </div>
+    <span class="bayan-tag tag-deep">ضربة عمق — عكّا</span>
+  </div>
+
+</div>
+</div>
+
+<!-- TAB 2: SIRENS -->
+<div id="sirens" class="tab-content">
+<div class="container">
+  <div class="phase"><span>35 صفارة إنذار عبر فلسطين المحتلة</span></div>
+  <div class="siren-row"><span class="s-time">01:12</span><span class="s-loc">مستوطنات الجليل الأعلى وحيفا ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">05:49</span><span class="s-loc">سهل الحولة</span></div>
+  <div class="siren-row"><span class="s-time">07:05</span><span class="s-loc">حيفا ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">07:06</span><span class="s-loc">نهاريا والجليل الأسفل</span></div>
+  <div class="siren-row"><span class="s-time">07:34</span><span class="s-loc">أفيفيم ويرؤون — الجليل الغربي</span></div>
+  <div class="siren-row"><span class="s-time">07:58</span><span class="s-loc">معالوت ترشيحا ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">08:38</span><span class="s-loc">ميرون ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">08:52</span><span class="s-loc">صفد</span></div>
+  <div class="siren-row"><span class="s-time">08:55</span><span class="s-loc">كتسرين جنوبي الجولان</span></div>
+  <div class="siren-row"><span class="s-time">10:00</span><span class="s-loc">يرؤون وبرعام — الجليل الغربي</span></div>
+  <div class="siren-row"><span class="s-time">10:08</span><span class="s-loc">ميرون ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">10:12</span><span class="s-loc">تجدد في ميرون</span></div>
+  <div class="siren-row"><span class="s-time">10:33</span><span class="s-loc">بئر السبع ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">10:35</span><span class="s-loc">ديمونا ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">10:48</span><span class="s-loc">بئر السبع ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">11:07</span><span class="s-loc">مرجليوت — إصبع الجليل</span></div>
+  <div class="siren-row"><span class="s-time">11:38</span><span class="s-loc">يفتاح — الجليل الأعلى</span></div>
+  <div class="siren-row"><span class="s-time">11:46</span><span class="s-loc">المنارة — إصبع الجليل</span></div>
+  <div class="siren-row"><span class="s-time">11:46</span><span class="s-loc">كريات شمونه ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">12:23</span><span class="s-loc">صفد ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">12:46</span><span class="s-loc">كرمئيل ومحيطها — الجليل الأعلى</span></div>
+  <div class="siren-row"><span class="s-time">12:58</span><span class="s-loc">راموت نفتالي ويفتاح والمالكية — الجليل الأعلى</span></div>
+  <div class="siren-row"><span class="s-time">14:26</span><span class="s-loc">كفار جلعادي — إصبع الجليل</span></div>
+  <div class="siren-row"><span class="s-time">14:35</span><span class="s-loc">الجليل الغربي — خشية تسلل مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">14:36</span><span class="s-loc">معالوت ترشيحا — الجليل الغربي — خشية مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">15:12</span><span class="s-loc">حيفا ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">15:15</span><span class="s-loc">ديمونا ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">15:15</span><span class="s-loc">بئر السبع ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">15:41</span><span class="s-loc">الجليل الغربي — خشية تسلل مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">15:59</span><span class="s-loc">الجليل الغربي — خشية تسلل مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">16:01</span><span class="s-loc">نهاريا ومحيطها — خشية مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">16:04</span><span class="s-loc">عكا ومحيطها — خشية مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">16:06</span><span class="s-loc">تجدد في الجليل الغربي — خشية مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">21:31</span><span class="s-loc">متات — الجليل الغربي</span></div>
+  <div class="siren-row"><span class="s-time">23:58</span><span class="s-loc">نهاريا ومحيطها</span></div>
+</div>
+</div>
+
+<!-- TAB 3: ENEMY REPORTS -->
+<div id="enemy" class="tab-content">
+<div class="container">
+  <div class="phase"><span>تقارير إعلام العدو — 21 تقريراً</span></div>
+
+  <div class="enemy-row"><div class="e-time">01:15</div><div class="e-text">وسائل إعلام إسرائيلية: <span class="hl">انفجارات قوية</span> تسمع في أجواء مستوطنات الجليل الأعلى وحيفا</div></div>
+  <div class="enemy-row"><div class="e-time">06:59</div><div class="e-text">الجبهة الداخلية الإسرائيلية: رصد إطلاق <span class="hl">صواريخ من إيران</span> — على المستوطنين الدخول فوراً إلى الملاجئ</div></div>
+  <div class="enemy-row"><div class="e-time">07:29</div><div class="e-text">يديعوت أحرونوت: حادثة <span class="hl">مواد خطرة في مطار بن غوريون</span> — إجلاء جميع العاملين</div></div>
+  <div class="enemy-row"><div class="e-time">08:07</div><div class="e-text">يديعوت أحرونوت — بن درور يميني: تصريحات التباهي حول <span class="hl">هزيمة حزب الله وإيران ستنتهي بخيبة أمل</span></div></div>
+  <div class="enemy-row"><div class="e-time">08:08</div><div class="e-text">يديعوت أحرونوت — بن درور يميني: <span class="hl">نحن لم نعد في عصر الانتصارات الكبرى</span> — حزب الله لن يُنزع سلاحه</div></div>
+  <div class="enemy-row"><div class="e-time">08:18</div><div class="e-text">يديعوت أحرونوت: قائد كتيبة نخبة ناحال يروي عن <span class="hl">كمين بيت ليف</span> الذي قُتل فيه 4 جنود — حزب الله فتح النيران من مسافة صفر</div></div>
+  <div class="enemy-row"><div class="e-time">08:46</div><div class="e-text">القناة 12: بعد أكثر من شهر من القتال، <span class="hl">لا يزال الإيرانيون يطلقون عدداً كبيراً من الصواريخ الباليستية</span></div></div>
+  <div class="enemy-row"><div class="e-time">08:56</div><div class="e-text">القناة 12: الخبير في الصواريخ الإيرانية: أكثر ما يمكن لسلاح الجو فعله هو <span class="hl">ضرب مداخل الأنفاق</span> إلا أن الإيرانيين يعيدون فتحها خلال ساعات</div></div>
+  <div class="enemy-row"><div class="e-time">10:27</div><div class="e-text">الجبهة الداخلية: رصد إطلاق <span class="hl">صواريخ من إيران</span> — الدخول فوراً إلى الملاجئ</div></div>
+  <div class="enemy-row"><div class="e-time">10:40</div><div class="e-text">وسائل إعلام إسرائيلية: أنباء أولية عن <span class="hl">سقوط صاروخ في النقب</span></div></div>
+  <div class="enemy-row"><div class="e-time">10:42</div><div class="e-text">الجبهة الداخلية: رصد إطلاق <span class="hl">صواريخ من إيران</span> — الدخول فوراً إلى الملاجئ</div></div>
+  <div class="enemy-row"><div class="e-time">10:49</div><div class="e-text">وسائل إعلام إسرائيلية: الصاروخ الإيراني استهدف <span class="hl">المنطقة الصناعية في بئر السبع</span></div></div>
+  <div class="enemy-row"><div class="e-time">11:13</div><div class="e-text">جيش العدو: ارتفاع عدد الجرحى منذ بدء المعركة مع إيران وحزب الله إلى <span class="hl">375 جريحاً</span></div></div>
+  <div class="enemy-row"><div class="e-time">14:43</div><div class="e-text">وسائل إعلام إسرائيلية: <span class="hl">اشتباكات عنيفة</span> بين الجيش الإسرائيلي وعناصر حزب الله جنوبي لبنان</div></div>
+  <div class="enemy-row"><div class="e-time">14:51</div><div class="e-text">وسائل إعلام إسرائيلية: حزب الله أطلق <span class="hl">صاروخ أرض-أرض نحو نقطة استراتيجية</span> في الشمال</div></div>
+  <div class="enemy-row"><div class="e-time">15:09</div><div class="e-text">الجبهة الداخلية: رصد إطلاق <span class="hl">صواريخ من إيران</span> — الدخول فوراً إلى الملاجئ</div></div>
+  <div class="enemy-row"><div class="e-time">15:20</div><div class="e-text">وسائل إعلام إسرائيلية: تقارير أولية عن <span class="hl">سقوط صاروخ في حيفا</span></div></div>
+  <div class="enemy-row"><div class="e-time">15:30</div><div class="e-text">وسائل إعلام إسرائيلية: عدد من <span class="hl">الإصابات الخطيرة في حيفا</span></div></div>
+  <div class="enemy-row"><div class="e-time">16:19</div><div class="e-text">وسائل إعلام إسرائيلية: <span class="hl">طائرة بدون طيار تابعة لحزب الله</span> تحلّق في الجليل الغربي</div></div>
+  <div class="enemy-row"><div class="e-time">16:25</div><div class="e-text">القناة 12: <span class="hl">إصابة مباشرة لمبنى قرب عكا</span> جراء انفجار طائرة بدون طيار</div></div>
+  <div class="enemy-row"><div class="e-time">16:46</div><div class="e-text">إسرائيل اليوم: البحث عن <span class="hl">3 أشخاص مفقودين</span> مكان سقوط الصاروخ في حيفا</div></div>
+</div>
+</div>
+
+<!-- TAB 4: IRAN -->
+<div id="iran" class="tab-content">
+<div class="container">
+  <div class="phase"><span>العمليات الإيرانية — 12 خبراً</span></div>
+
+  <div class="iran-card"><div class="i-time">03:16</div><div class="i-source">حرس الثورة الإسلامية</div><div class="i-text">رصد واستهداف طائرة مسيّرة أميركية من طراز <span class="hl">MQ-9</span> في أجواء <span class="hl">أصفهان</span> — يرتفع العدد إلى 4 طائرات خلال 5 أيام</div></div>
+
+  <div class="iran-card"><div class="i-time">04:38</div><div class="i-source">حرس الثورة الإسلامية</div><div class="i-text">إسقاط <span class="hl">طائرة أميركية</span> كانت تبحث عن طيّار المقاتلة المُسقطة في جنوب أصفهان</div></div>
+
+  <div class="iran-card"><div class="i-time">04:45</div><div class="i-source">حرس الثورة الإسلامية</div><div class="i-text">ترامب مُني بفشل واضح مع <span class="hl">اليوم الـ38 من المعركة</span></div></div>
+
+  <div class="iran-card"><div class="i-time">04:53</div><div class="i-source">الجيش الإيراني</div><div class="i-text">إسقاط طائرة مسيّرة <span class="hl">هيرمس 900</span> في أصفهان — العدد يرتفع إلى <span class="hl">162 طائرة</span></div></div>
+
+  <div class="iran-card"><div class="i-time">06:11</div><div class="i-source">حرس الثورة الإسلامية</div><div class="i-text">فشل عملية إنقاذ أميركية — تدمير طائرات العدو في عملية مشتركة — <span class="hl">فشل على غرار عملية طبس</span></div></div>
+
+  <div class="iran-card"><div class="i-time">06:29</div><div class="i-source">مقر خاتم الأنبياء</div><div class="i-text">استهداف <span class="hl">مروحيتين بلاك هوك + طائرة C-130</span> — أصيبت وتحترق تحت ضربات القوات المدافعة</div></div>
+
+  <div class="iran-card"><div class="i-time">09:11</div><div class="i-source">مقر خاتم الأنبياء</div><div class="i-text"><span class="hl">فشل كامل لعملية الإنقاذ الأميركية</span> — تدمير طائرتي C-130 ومروحيتي بلاك هوك — تعميق خسائر الجيش الأميركي</div></div>
+
+  <div class="iran-card"><div class="i-time">11:31</div><div class="i-source">حرس الثورة الإسلامية</div><div class="i-text"><span class="hl">الموجة 96 من عملية الوعد الصادق 4</span> تحت شعار «يا رقية (ع)» — استهداف مصفاة حيفا ومنشآت أميركية في الإمارات والبحرين والكويت</div></div>
+
+  <div class="iran-card"><div class="i-time">15:31</div><div class="i-source">الجيش الإيراني — بيان 56</div><div class="i-text">هجمات بمسيّرات على <span class="hl">منشآت بتروكيميائية قرب ديمونا</span> + قاعدة أميركية في جزيرة <span class="hl">بوبيان</span> بالكويت</div></div>
+
+  <div class="iran-card"><div class="i-time">16:41</div><div class="i-source">حرس الثورة — القوة البحرية</div><div class="i-text"><span class="hl">الموجة 97 من الوعد الصادق</span> — استهداف قاعدة محمد الأحمد بالكويت + سفينة صهيونية في ميناء جبل علي + السيطرة على مضيق هرمز + استهداف بئر السبع</div></div>
+
+  <div class="iran-card"><div class="i-time">19:23</div><div class="i-source">مقر خاتم الأنبياء</div><div class="i-text">بيان مفصّل: <span class="hl">تدمير طائرتي C-130 ومروحيتي بلاك هوك</span> — العدو اضطر لقصف طائراته المتروكة — فشل ذريع للجيش الأميركي</div></div>
+
+  <div class="iran-card"><div class="i-time">21:42</div><div class="i-source">الأمين العام لكتائب حزب الله العراق</div><div class="i-text">كلمة <span class="hl">الحاج أبو حسين الحميداوي</span> في دعم محور المقاومة</div></div>
+</div>
+</div>
+
+<!-- TAB 5: VIDEOS -->
+<div id="videos" class="tab-content">
+<div class="container">
+  <div class="phase"><span>3 عمليات موثّقة بالفيديو</span></div>
+
+  <div class="vid-card">
+    <div class="v-time">10:02 <span class="vid-icon">&#9654;</span></div>
+    <div class="v-text">استهداف <span class="hl">قاعدة ستيلا ماريس</span> التابعة لجيش العدو في مدينة حيفا المحتلّة بصليةٍ من الصواريخ النوعيّة</div>
+  </div>
+
+  <div class="vid-card">
+    <div class="v-time">14:05 <span class="vid-icon">&#9654;</span></div>
+    <div class="v-text">استهداف <span class="hl">آلية هامر</span> تابعة لجيش العدو في محيط مستشفى ميس الجبل بمحلّقة انقضاضيّة</div>
+  </div>
+
+  <div class="vid-card">
+    <div class="v-time">20:42 <span class="vid-icon">&#9654;</span></div>
+    <div class="v-text">مشاهد من ساحة <span class="hl">الكمين في منطقة بيدر النهر</span> في بلدة الطيبة بعد فرار قوات جيش العدو</div>
+  </div>
+</div>
+</div>
+
+<!-- TAB 6: ALLIES -->
+<div id="allies" class="tab-content">
+<div class="container">
+  <div class="phase"><span>المقاومة الإسلامية في العراق</span></div>
+
+  <div class="ally-card">
+    <div class="a-flag">العراق</div>
+    <div class="a-time">03:13</div>
+    <div class="a-text">
+      نفّذ مجاهدو <span class="hl">المقاومة الإسلامية في العراق</span> خلال الأربع والعشرين ساعة الماضية <span class="hl">19 عملية</span> استُخدمت فيها عشرات الطائرات المسيّرة على قواعد العدو في العراق والمنطقة.
+    </div>
+  </div>
+
+  <div class="phase"><span>القوات المسلحة اليمنية</span></div>
+
+  <div class="ally-card">
+    <div class="a-flag">اليمن</div>
+    <div class="a-time">—</div>
+    <div class="a-text">
+      لا بيانات مستقلة صادرة عن القوات المسلحة اليمنية في هذا اليوم.
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="footer">
+  مصدر: قناة الإعلام الحربي — التغطية الإخبارية (Telegram) &bull; السبت 5 نيسان 2026
+</div>
+
+<script>
+function switchTab(id, el) {
+  document.querySelectorAll('.tab-content').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo({top: document.querySelector('.tabs').offsetTop, behavior:'smooth'});
+}
+
+function toggleText(btn) {
+  var ft = btn.nextElementSibling;
+  ft.classList.toggle('show');
+  btn.classList.toggle('open');
+  btn.textContent = ft.classList.contains('show') ? '\u0625\u062e\u0641\u0627\u0621 \u0627\u0644\u0646\u0635 \u25b2' : '\u0627\u0644\u0646\u0635 \u0627\u0644\u0643\u0627\u0645\u0644 \u25bc';
+}
+
+function addToggle(card, text) {
+  var btn = document.createElement('span');
+  btn.className = 'txt-toggle';
+  btn.textContent = '\u0627\u0644\u0646\u0635 \u0627\u0644\u0643\u0627\u0645\u0644 \u25bc';
+  btn.onclick = function(){ toggleText(this); };
+  var div = document.createElement('div');
+  div.className = 'txt-full';
+  div.textContent = text;
+  card.appendChild(btn);
+  card.appendChild(div);
+}
+
+var bayanTexts = {
+1: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 20:15 \u0623\u0645\u0633 \u0627\u0644\u0633\u0628\u062a 04-04-2026 \u062a\u062c\u0645\u0651\u0639\u064b\u0627 \u0644\u062c\u0646\u0648\u062f \u0648\u0622\u0644\u064a\u0627\u062a \u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0641\u064a \u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0633\u0651\u062f\u0631 \u0641\u064a \u0628\u0644\u062f\u0629 \u0639\u064a\u0646\u0627\u062a\u0627 \u0628\u0635\u0644\u064a\u0629\u064d \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+2: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 23:00 \u0623\u0645\u0633 \u0627\u0644\u0633\u0628\u062a 04-04-2026 \u062a\u062c\u0645\u0651\u0639\u064b\u0627 \u0644\u062c\u0646\u0648\u062f \u0648\u0622\u0644\u064a\u0627\u062a \u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0642\u0631\u0628 \u0645\u0633\u062a\u0648\u0637\u0646\u0629 \u0627\u0644\u0645\u0627\u0644\u0643\u064a\u0651\u0629 \u0628\u0635\u0644\u064a\u0629\u064d \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+3: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 23:30 \u0623\u0645\u0633 \u0627\u0644\u0633\u0628\u062a 04-04-2026 \u062a\u062c\u0645\u0651\u0639\u064b\u0627 \u0644\u062c\u0646\u0648\u062f \u0648\u0622\u0644\u064a\u0627\u062a \u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0641\u064a \u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0633\u0651\u062f\u0631 \u0641\u064a \u0628\u0644\u062f\u0629 \u0639\u064a\u0646\u0627\u062a\u0627 \u0628\u0635\u0644\u064a\u0629\u064d \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+4: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 00:05 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u062b\u0643\u0646\u0629 \u0632\u0631\u0639\u064a\u062a \u0628\u0633\u0631\u0628 \u0645\u0646 \u0627\u0644\u0645\u0633\u064a\u0651\u0631\u0627\u062a \u0627\u0644\u0627\u0646\u0642\u0636\u0627\u0636\u064a\u0651\u0629.",
+5: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0648\u0641\u064a \u0625\u0637\u0627\u0631 \u0627\u0644\u0631\u062f \u0639\u0644\u0649 \u062a\u0645\u0627\u062f\u064a \u0627\u0644\u0639\u062f\u0648 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a \u0641\u064a \u0642\u0635\u0641 \u0627\u0644\u0642\u0631\u0649 \u0648\u0627\u0644\u0645\u062f\u0646 \u0648\u062a\u062f\u0645\u064a\u0631 \u0627\u0644\u0628\u0646\u0649 \u0627\u0644\u062a\u062d\u062a\u064a\u0629 \u0648\u062a\u0647\u062c\u064a\u0631 \u0627\u0644\u0645\u062f\u0646\u064a\u064a\u0646\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 00:05 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0628\u0627\u0631\u062c\u0629 \u0639\u0633\u0643\u0631\u064a\u0651\u0629 \u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651\u0629 \u0639\u0644\u0649 \u0628\u0639\u062f 68 \u0645\u064a\u0644\u0627\u064b \u0628\u062d\u0631\u064a\u0627\u064b \u0642\u0628\u0627\u0644\u0629 \u0627\u0644\u0633\u0648\u0627\u062d\u0644 \u0627\u0644\u0644\u0628\u0646\u0627\u0646\u064a\u0629 \u0643\u0627\u0646\u062a \u062a\u062a\u062d\u0636\u0651\u0631 \u0644\u062a\u0646\u0641\u064a\u0630 \u0627\u0639\u062a\u062f\u0627\u0621\u0627\u062a\u0647\u0627 \u0639\u0644\u0649 \u0627\u0644\u0623\u0631\u0627\u0636\u064a \u0627\u0644\u0644\u0628\u0646\u0627\u0646\u064a\u0651\u0629\u061b \u0648\u062a\u0645\u062a \u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u0625\u0633\u062a\u0647\u062f\u0627\u0641 \u0628\u0635\u0627\u0631\u0648\u062e \u0643\u0631\u0648\u0632 \u0628\u062d\u0631\u064a\u0651 \u0628\u0639\u062f \u0631\u0635\u062f \u0627\u0644\u0647\u062f\u0641 \u0644\u0633\u0627\u0639\u0627\u062a\u060c \u0648\u062a\u0623\u0643\u0651\u062f\u062a \u0625\u0635\u0627\u0628\u062a\u0647 \u0628\u0634\u0643\u0644 \u0645\u0628\u0627\u0634\u0631.",
+6: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 08:45 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0628\u0646\u0649 \u062a\u062d\u062a\u064a\u0651\u0629 \u062a\u062a\u0628\u0639 \u0644\u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0641\u064a \u0645\u0633\u062a\u0648\u0637\u0646\u0629 \u064a\u0633\u0648\u062f \u0647\u0645\u0639\u0644\u0627\u0647 \u0628\u0635\u0644\u064a\u0629 \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+7: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 09:15 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0645\u0648\u0642\u0639 \u0643\u0641\u0631\u0633\u0648\u0644\u062f \u0628\u0635\u0644\u064a\u0629 \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+8: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0648\u0641\u064a \u0625\u0637\u0627\u0631 \u0627\u0644\u062a\u062d\u0630\u064a\u0631 \u0627\u0644\u0630\u064a \u0648\u062c\u0651\u0647\u062a\u0647 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0644\u0639\u062f\u062f\u064d \u0645\u0646 \u0645\u0633\u062a\u0648\u0637\u0646\u0627\u062a \u0634\u0645\u0627\u0644 \u0641\u0644\u0633\u0637\u064a\u0646 \u0627\u0644\u0645\u062d\u062a\u0644\u0629\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 10:30 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0645\u0633\u062a\u0648\u0637\u0646\u062a\u064a \u0623\u0641\u064a\u0641\u064a\u0645 \u0648\u064a\u0631\u0624\u0648\u0646 \u0628\u0635\u0644\u064a\u0627\u062a\u064d \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+9: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 11:00 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0628\u0646\u0649 \u062a\u062d\u062a\u064a\u0651\u0629 \u062a\u062a\u0628\u0639 \u0644\u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0641\u064a \u0645\u0633\u062a\u0648\u0637\u0646\u0629 \u0645\u0639\u0627\u0644\u0648\u062a \u062a\u0631\u0634\u064a\u062d\u0627 \u0628\u0635\u0644\u064a\u0629 \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+10: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 11:35 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0642\u0627\u0639\u062f\u0629 \u0645\u064a\u0631\u0648\u0646 \u0644\u0644\u0645\u0631\u0627\u0642\u0628\u0629 \u0648\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0639\u0645\u0644\u064a\u0651\u0627\u062a \u0627\u0644\u062c\u0648\u064a\u0651\u0629 \u0634\u0645\u0627\u0644 \u0641\u0644\u0633\u0637\u064a\u0646 \u0627\u0644\u0645\u062d\u062a\u0644\u0651\u0629 \u0628\u0635\u0644\u064a\u0629 \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+11: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 10:00 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u062a\u062c\u0645\u0651\u0639\u064b\u0627 \u0644\u062c\u0646\u0648\u062f \u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0641\u064a \u0645\u0648\u0642\u0639 \u0627\u0644\u0645\u0627\u0644\u0643\u064a\u0629 \u0628\u0635\u0644\u064a\u0629 \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+12: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 11:50 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0628\u0646\u0649 \u062a\u062d\u062a\u064a\u0651\u0629 \u062a\u062a\u0628\u0639 \u0644\u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0641\u064a \u0645\u0633\u062a\u0648\u0637\u0646\u0629 \u0643\u062a\u0633\u0631\u064a\u0646 \u0641\u064a \u0627\u0644\u062c\u0648\u0644\u0627\u0646 \u0627\u0644\u0633\u0648\u0631\u064a\u0651 \u0627\u0644\u0645\u062d\u062a\u0644\u0651 \u0628\u0635\u0644\u064a\u0629 \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+13: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 11:50 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0628\u0646\u0649 \u062a\u062d\u062a\u064a\u0651\u0629 \u062a\u062a\u0628\u0639 \u0644\u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0641\u064a \u0645\u062f\u064a\u0646\u0629 \u0635\u0641\u062f \u0627\u0644\u0645\u062d\u062a\u0644\u0651\u0629 \u0628\u0635\u0644\u064a\u0629 \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+14: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 12:40 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u062a\u062c\u0645\u0651\u0639\u064b\u0627 \u0644\u062c\u0646\u0648\u062f \u0648\u0622\u0644\u064a\u0627\u062a \u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0641\u064a \u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0633\u0651\u062f\u0631 \u0648\u062a\u0644\u0629 \u063a\u062f\u0645\u0627\u062b\u0627 \u0641\u064a \u0628\u0644\u062f\u0629 \u0639\u064a\u0646\u0627\u062a\u0627 \u0628\u0635\u0644\u064a\u0627\u062a\u064d \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+15: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 10:15 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u062a\u062c\u0645\u0651\u0639\u064b\u0627 \u0644\u062c\u0646\u0648\u062f \u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0641\u064a \u0645\u0648\u0642\u0639 \u0627\u0644\u0645\u0627\u0644\u0643\u064a\u0651\u0629 \u0628\u0645\u0633\u064a\u0651\u0631\u0629 \u0627\u0646\u0642\u0636\u0627\u0636\u064a\u0651\u0629\u060c \u0648\u062d\u0642\u0642\u0648\u0627 \u0625\u0635\u0627\u0628\u0629 \u0645\u0628\u0627\u0634\u0631\u0629.",
+16: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 11:50 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0628\u0646\u0649 \u062a\u062d\u062a\u064a\u0651\u0629 \u062a\u062a\u0628\u0639 \u0644\u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0641\u064a \u0645\u0633\u062a\u0648\u0637\u0646\u0629 \u0643\u0631\u0645\u064a\u0626\u064a\u0644 \u0628\u0635\u0644\u064a\u0629 \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+17: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0641\u062c\u0651\u0631 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 17:40 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0639\u0628\u0648\u0629 \u0646\u0627\u0633\u0641\u0629 \u0628\u0642\u0648\u0651\u0629 \u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651\u0629 \u0641\u064a \u0645\u062d\u064a\u0637 \u0642\u0644\u0639\u0629 \u0628\u0644\u062f\u0629 \u0634\u0645\u0639 \u0648\u062d\u0642\u0642\u0648\u0627 \u0625\u0635\u0627\u0628\u0627\u062a \u0645\u0624\u0643\u0651\u062f\u0629. \u0623\u062a\u0628\u0639\u0647\u0627 \u0627\u0644\u0645\u062c\u0627\u0647\u062f\u0648\u0646 \u0628\u0627\u0633\u062a\u0647\u062f\u0627\u0641 \u0642\u0648\u0651\u0629 \u0627\u0644\u0625\u062e\u0644\u0627\u0621 \u0627\u0644\u062a\u064a \u062d\u0636\u0631\u062a \u0625\u0644\u0649 \u0627\u0644\u0645\u0643\u0627\u0646 \u0628\u0642\u0630\u0627\u0626\u0641 \u0627\u0644\u0645\u062f\u0641\u0639\u064a\u0651\u0629.",
+18: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0648\u0641\u064a \u0625\u0637\u0627\u0631 \u0627\u0644\u062a\u062d\u0630\u064a\u0631 \u0627\u0644\u0630\u064a \u0648\u062c\u0651\u0647\u062a\u0647 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0644\u0639\u062f\u062f\u064d \u0645\u0646 \u0645\u0633\u062a\u0648\u0637\u0646\u0627\u062a \u0634\u0645\u0627\u0644 \u0641\u0644\u0633\u0637\u064a\u0646 \u0627\u0644\u0645\u062d\u062a\u0644\u0651\u0629\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 18:05 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0645\u0633\u062a\u0648\u0637\u0646\u0629 \u0646\u0647\u0627\u0631\u064a\u0651\u0627 \u0628\u0635\u0644\u064a\u0629\u064d \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+19: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 13:00 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u062a\u062c\u0645\u0651\u0639\u064b\u0627 \u0644\u0622\u0644\u064a\u0627\u062a \u0648\u062c\u0646\u0648\u062f \u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0639\u0646\u062f \u062a\u0644\u0651\u0629 \u0641\u0631\u064a\u0632 \u0641\u064a \u0628\u0644\u062f\u0629 \u0639\u064a\u0646\u0627\u062a\u0627 \u0628\u0635\u0644\u064a\u0629 \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+20: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 13:30 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u062a\u062c\u0645\u0651\u0639\u064b\u0627 \u0644\u0622\u0644\u064a\u0627\u062a \u0648\u062c\u0646\u0648\u062f \u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0639\u0646\u062f \u062a\u0644\u0651\u0629 \u063a\u062f\u0645\u0627\u062b\u0627 \u0641\u064a \u0628\u0644\u062f\u0629 \u0639\u064a\u0646\u0627\u062a\u0627 \u0628\u0635\u0644\u064a\u0629 \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+21: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 15:00 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0642\u0627\u0639\u062f\u0629 \u0645\u064a\u0631\u0648\u0646 \u0644\u0644\u0645\u0631\u0627\u0642\u0628\u0629 \u0648\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0639\u0645\u0644\u064a\u0651\u0627\u062a \u0627\u0644\u062c\u0648\u064a\u0651\u0629 \u0634\u0645\u0627\u0644 \u0641\u0644\u0633\u0637\u064a\u0646 \u0627\u0644\u0645\u062d\u062a\u0644\u0651\u0629 \u0628\u0635\u0644\u064a\u0629 \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+22: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0648\u0641\u064a \u0625\u0637\u0627\u0631 \u0627\u0644\u062a\u062d\u0630\u064a\u0631 \u0627\u0644\u0630\u064a \u0648\u062c\u0651\u0647\u062a\u0647 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0644\u0639\u062f\u062f\u064d \u0645\u0646 \u0645\u0633\u062a\u0648\u0637\u0646\u0627\u062a \u0634\u0645\u0627\u0644 \u0641\u0644\u0633\u0637\u064a\u0646 \u0627\u0644\u0645\u062d\u062a\u0644\u0651\u0629\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 17:30 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0645\u0633\u062a\u0648\u0637\u0646\u0629 \u0627\u0644\u0645\u0637\u0644\u0651\u0629 \u0628\u0635\u0644\u064a\u0629 \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+23: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 17:30 \u0648\u0627\u0644\u0633\u0627\u0639\u0629 17:35 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u062a\u062c\u0645\u0651\u0639\u064b\u0627 \u0644\u062c\u0646\u0648\u062f \u0648\u0622\u0644\u064a\u0651\u0627\u062a \u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0634\u0631\u0642 \u0645\u0639\u062a\u0642\u0644 \u0627\u0644\u062e\u064a\u0627\u0645 \u0628\u0635\u0644\u064a\u0627\u062a \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+24: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 17:20 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u062a\u062c\u0645\u0651\u0639\u064b\u0627 \u0644\u062c\u0646\u0648\u062f \u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0641\u064a \u0645\u0648\u0642\u0639 \u0647\u0636\u0628\u0629 \u0627\u0644\u0639\u062c\u0644 \u0634\u0645\u0627\u0644 \u0645\u0633\u062a\u0648\u0637\u0646\u0629 \u0643\u0641\u0627\u0631\u064a\u0648\u0641\u0627\u0644 \u0628\u0633\u0631\u0628\u064d \u0645\u0646 \u0627\u0644\u0645\u064f\u0633\u064a\u0651\u0631\u0627\u062a \u0627\u0644\u0627\u0646\u0642\u0636\u0627\u0636\u064a\u0651\u0629.",
+25: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0648\u0641\u064a \u0625\u0637\u0627\u0631 \u0627\u0644\u062a\u062d\u0630\u064a\u0631 \u0627\u0644\u0630\u064a \u0648\u062c\u0651\u0647\u062a\u0647 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0644\u0639\u062f\u062f\u064d \u0645\u0646 \u0645\u0633\u062a\u0648\u0637\u0646\u0627\u062a \u0634\u0645\u0627\u0644 \u0641\u0644\u0633\u0637\u064a\u0646 \u0627\u0644\u0645\u062d\u062a\u0644\u0651\u0629\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 18:10 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0645\u0633\u062a\u0648\u0637\u0646\u0629 \u0646\u0647\u0627\u0631\u064a\u0651\u0627 \u0644\u0644\u0645\u0631\u0651\u0629 \u0627\u0644\u062b\u0627\u0646\u064a\u0629 \u0628\u0635\u0644\u064a\u0629\u064d \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+26: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 19:00 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0642\u0627\u0639\u062f\u0629 \u0625\u062f\u0627\u0631\u064a\u0629 \u0644\u0644\u062f\u0639\u0645 \u0627\u0644\u0644\u0648\u062c\u0633\u062a\u064a \u062a\u062a\u0628\u0639 \u0644\u0642\u064a\u0627\u062f\u0629 \u0627\u0644\u0645\u0646\u0637\u0642\u0629 \u0627\u0644\u0634\u0645\u0627\u0644\u064a\u0651\u0629 \u0641\u064a \u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0634\u0645\u0627\u0644 \u0645\u062f\u064a\u0646\u0629 \u0639\u0643\u0651\u0627 \u0627\u0644\u0645\u062d\u062a\u0644\u0629 \u0628\u0645\u064f\u0633\u064a\u0651\u0631\u0629 \u0627\u0646\u0642\u0636\u0627\u0636\u064a\u0651\u0629 \u0646\u0648\u0639\u064a\u0651\u0629.",
+27: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 19:00 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u062a\u062c\u0645\u0651\u0639\u064b\u0627 \u0644\u062c\u0646\u0648\u062f \u0648\u0622\u0644\u064a\u0627\u062a \u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0639\u0646\u062f \u062a\u0644\u0651\u0629 \u0641\u0631\u064a\u0632 \u0641\u064a \u0628\u0644\u062f\u0629 \u0639\u064a\u0646\u0627\u062a\u0627 \u0628\u0635\u0644\u064a\u0629 \u0635\u0627\u0631\u0648\u062e\u064a\u0629 \u0648\u0642\u0630\u0627\u0626\u0641 \u0627\u0644\u0645\u062f\u0641\u0639\u064a\u0651\u0629.",
+28: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 22:50 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u062a\u062c\u0645\u0651\u0639\u064b\u0627 \u0644\u062c\u0646\u0648\u062f \u0648\u0622\u0644\u064a\u0627\u062a \u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0639\u0646\u062f \u062a\u0644\u0651\u0629 \u0627\u0644\u0633\u062f\u0631 \u0648\u062a\u0644\u0651\u0629 \u063a\u062f\u0645\u0627\u062b\u0627 \u0641\u064a \u0628\u0644\u062f\u0629 \u0639\u064a\u0646\u0627\u062a\u0627 \u0628\u0635\u0644\u064a\u0627\u062a \u0635\u0627\u0631\u0648\u062e\u064a\u0651\u0629.",
+29: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 15:30 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u062a\u062c\u0645\u0651\u0639\u0627\u064b \u0644\u0622\u0644\u064a\u0627\u062a \u0648\u062c\u0646\u0648\u062f \u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0641\u064a \u0645\u062d\u064a\u0637 \u0645\u0648\u0642\u0639 \u0627\u0644\u0645\u0631\u062c \u0645\u0642\u0627\u0628\u0644 \u0628\u0644\u062f\u0629 \u0645\u0631\u0643\u0628\u0627 \u0627\u0644\u062d\u062f\u0648\u062f\u064a\u0651\u0629 \u0628\u0633\u0631\u0628\u064d \u0645\u0646 \u0627\u0644\u0645\u064f\u0633\u064a\u0651\u0631\u0627\u062a \u0627\u0644\u0627\u0646\u0642\u0636\u0627\u0636\u064a\u0651\u0629.",
+30: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 15:15 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0645\u0642\u0631\u0651 \u0642\u064a\u0627\u062f\u0629 \u0645\u0633\u062a\u062d\u062f\u062b \u0644\u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648\u0651 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0651 \u0641\u064a \u0628\u0644\u062f\u0629 \u0627\u0644\u0637\u064a\u0651\u0628\u0629 \u0628\u0633\u0631\u0628\u064d \u0645\u0646 \u0627\u0644\u0645\u064f\u0633\u064a\u0651\u0631\u0627\u062a \u0627\u0644\u0627\u0646\u0642\u0636\u0627\u0636\u064a\u0651\u0629.",
+31: "\u062f\u0641\u0627\u0639\u064b\u0627 \u0639\u0646 \u0644\u0628\u0646\u0627\u0646 \u0648\u0634\u0639\u0628\u0647\u060c \u0627\u0633\u062a\u0647\u062f\u0641 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u064f\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0651\u0629 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629 19:00 \u0627\u0644\u0623\u062d\u062f 05-04-2026 \u0642\u0627\u0639\u062f\u0629 \u0633\u0646\u0637 \u062c\u064a\u0646 \u0634\u0645\u0627\u0644 \u0645\u062f\u064a\u0646\u0629 \u0639\u0643\u0651\u0627 \u0627\u0644\u0645\u062d\u062a\u0644\u0629 \u0628\u0633\u0631\u0628\u064d \u0645\u0646 \u0627\u0644\u0645\u064f\u0633\u064a\u0651\u0631\u0627\u062a \u0627\u0644\u0627\u0646\u0642\u0636\u0627\u0636\u064a\u0651\u0629."
+};
+
+// Inject into bayanat
+document.querySelectorAll('.bayan').forEach(function(card) {
+  var numEl = card.querySelector('.bayan-num');
+  if (!numEl) return;
+  var num = parseInt(numEl.textContent);
+  if (!bayanTexts[num]) return;
+  addToggle(card, bayanTexts[num]);
+});
+
+// Inject into enemy
+var enemyTexts = {
+  '\u0627\u0646\u0641\u062c\u0627\u0631\u0627\u062a \u0642\u0648\u064a\u0629': '\u0648\u0633\u0627\u0626\u0644 \u0625\u0639\u0644\u0627\u0645 \u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0629: \u0627\u0646\u0641\u062c\u0627\u0631\u0627\u062a \u0642\u0648\u064a\u0629 \u062a\u0633\u0645\u0639 \u0641\u064a \u0623\u062c\u0648\u0627\u0621 \u0645\u0633\u062a\u0648\u0637\u0646\u0627\u062a \u0627\u0644\u062c\u0644\u064a\u0644 \u0627\u0644\u0623\u0639\u0644\u0649 \u0648\u062d\u064a\u0641\u0627.',
+  '\u0645\u0648\u0627\u062f \u062e\u0637\u0631\u0629': '\u064a\u062f\u064a\u0639\u0648\u062a \u0623\u062d\u0631\u0648\u0646\u0648\u062a: \u062d\u0627\u062f\u062b\u0629 \u0645\u0648\u0627\u062f \u062e\u0637\u0631\u0629 \u0641\u064a \u0645\u0637\u0627\u0631 \u0628\u0646 \u063a\u0648\u0631\u064a\u0648\u0646\u060c \u0625\u062b\u0631 \u0648\u0635\u0648\u0644 \u0637\u0631\u062f \u0643\u0627\u0646 \u064a\u0646\u0628\u0639\u062b \u0645\u0646\u0647 \u062f\u062e\u0627\u0646. \u0625\u062c\u0644\u0627\u0621 \u062c\u0645\u064a\u0639 \u0627\u0644\u0639\u0627\u0645\u0644\u064a\u0646.',
+  '\u0643\u0645\u064a\u0646 \u0628\u064a\u062a \u0644\u064a\u0641': '\u064a\u062f\u064a\u0639\u0648\u062a \u0623\u062d\u0631\u0648\u0646\u0648\u062a: \u0642\u0627\u0626\u062f \u0643\u062a\u064a\u0628\u0629 \u0646\u062e\u0628\u0629 \u0646\u0627\u062d\u0627\u0644 \u064a\u0631\u0648\u064a \u0639\u0646 \u0643\u0645\u064a\u0646 \u0628\u064a\u062a \u0644\u064a\u0641 \u0627\u0644\u0630\u064a \u0642\u064f\u062a\u0644 \u0641\u064a\u0647 4 \u062c\u0646\u0648\u062f \u2014 \u062d\u0632\u0628 \u0627\u0644\u0644\u0647 \u0641\u062a\u062d \u0627\u0644\u0646\u064a\u0631\u0627\u0646 \u0645\u0646 \u0645\u0633\u0627\u0641\u0629 \u0635\u0641\u0631.',
+  '375': '\u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648: \u0627\u0631\u062a\u0641\u0627\u0639 \u0639\u062f\u062f \u0627\u0644\u062c\u0631\u062d\u0649 \u0645\u0646\u0630 \u0628\u062f\u0621 \u0627\u0644\u0645\u0639\u0631\u0643\u0629 \u0645\u0639 \u0625\u064a\u0631\u0627\u0646 \u0648\u062d\u0632\u0628 \u0627\u0644\u0644\u0647 \u0625\u0644\u0649 375 \u062c\u0631\u064a\u062d\u0627\u064b.',
+  '\u0627\u0634\u062a\u0628\u0627\u0643\u0627\u062a \u0639\u0646\u064a\u0641\u0629': '\u0648\u0633\u0627\u0626\u0644 \u0625\u0639\u0644\u0627\u0645 \u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0629: \u0627\u0634\u062a\u0628\u0627\u0643\u0627\u062a \u0639\u0646\u064a\u0641\u0629 \u0628\u064a\u0646 \u0639\u0646\u0627\u0635\u0631 \u0627\u0644\u062c\u064a\u0634 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a \u0648\u0639\u0646\u0627\u0635\u0631 \u062d\u0632\u0628 \u0627\u0644\u0644\u0647 \u062c\u0646\u0648\u0628\u064a \u0644\u0628\u0646\u0627\u0646.',
+  '\u0633\u0642\u0648\u0637 \u0635\u0627\u0631\u0648\u062e \u0641\u064a \u062d\u064a\u0641\u0627': '\u0648\u0633\u0627\u0626\u0644 \u0625\u0639\u0644\u0627\u0645 \u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0629: \u062a\u0642\u0627\u0631\u064a\u0631 \u0623\u0648\u0644\u064a\u0629 \u0639\u0646 \u0633\u0642\u0648\u0637 \u0635\u0627\u0631\u0648\u062e \u0641\u064a \u062d\u064a\u0641\u0627.',
+  '\u0625\u0635\u0627\u0628\u0627\u062a \u0627\u0644\u062e\u0637\u064a\u0631\u0629 \u0641\u064a \u062d\u064a\u0641\u0627': '\u0648\u0633\u0627\u0626\u0644 \u0625\u0639\u0644\u0627\u0645 \u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a\u0629: \u0639\u062f\u062f \u0645\u0646 \u0627\u0644\u0625\u0635\u0627\u0628\u0627\u062a \u0627\u0644\u062e\u0637\u064a\u0631\u0629 \u0641\u064a \u062d\u064a\u0641\u0627 \u062c\u0631\u0627\u0621 \u0633\u0642\u0648\u0637 \u0627\u0644\u0635\u0627\u0631\u0648\u062e.',
+  '\u0645\u0641\u0642\u0648\u062f\u064a\u0646': '\u0625\u0633\u0631\u0627\u0626\u064a\u0644 \u0627\u0644\u064a\u0648\u0645: \u0627\u0644\u0628\u062d\u062b \u0639\u0646 3 \u0623\u0634\u062e\u0627\u0635 \u0645\u0641\u0642\u0648\u062f\u064a\u0646 \u0645\u0643\u0627\u0646 \u0633\u0642\u0648\u0637 \u0627\u0644\u0635\u0627\u0631\u0648\u062e \u0641\u064a \u062d\u064a\u0641\u0627.'
+};
+document.querySelectorAll('.enemy-row').forEach(function(card) {
+  var text = card.querySelector('.e-text');
+  if (!text) return;
+  var content = text.textContent;
+  var keys = Object.keys(enemyTexts);
+  for (var i = 0; i < keys.length; i++) {
+    if (content.indexOf(keys[i]) !== -1) { addToggle(card, enemyTexts[keys[i]]); break; }
+  }
+});
+
+// Inject into Iran
+var iranTexts = [
+  '\u062d\u0631\u0633 \u0627\u0644\u062b\u0648\u0631\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0629: \u062a\u0645 \u0631\u0635\u062f \u0648\u0627\u0633\u062a\u0647\u062f\u0627\u0641 \u0637\u0627\u0626\u0631\u0629 \u0645\u0633\u064a\u0651\u0631\u0629 \u0623\u0645\u064a\u0631\u0643\u064a\u0629 \u0645\u062a\u0637\u0648\u0631\u0629 \u0645\u0646 \u0637\u0631\u0627\u0632 MQ-9 \u0641\u064a \u0623\u062c\u0648\u0627\u0621 \u0623\u0635\u0641\u0647\u0627\u0646\u060c \u0645\u0627 \u0623\u062f\u0649 \u0625\u0644\u0649 \u0625\u0633\u0642\u0627\u0637\u0647\u0627. \u064a\u0631\u062a\u0641\u0639 \u0627\u0644\u0639\u062f\u062f \u0625\u0644\u0649 4 \u0637\u0627\u0626\u0631\u0627\u062a \u062e\u0644\u0627\u0644 5 \u0623\u064a\u0627\u0645.',
+  '\u062d\u0631\u0633 \u0627\u0644\u062b\u0648\u0631\u0629: \u0625\u0633\u0642\u0627\u0637 \u0637\u0627\u0626\u0631\u0629 \u0623\u0645\u064a\u0631\u0643\u064a\u0629 \u0645\u0639\u0627\u062f\u064a\u0629 \u0643\u0627\u0646\u062a \u062a\u0628\u062d\u062b \u0639\u0646 \u0637\u064a\u0651\u0627\u0631 \u0627\u0644\u0645\u0642\u0627\u062a\u0644\u0629 \u0627\u0644\u0645\u064f\u0633\u0642\u0637\u0629 \u0641\u064a \u062c\u0646\u0648\u0628 \u0623\u0635\u0641\u0647\u0627\u0646.',
+  '\u062d\u0631\u0633 \u0627\u0644\u062b\u0648\u0631\u0629: \u062a\u0631\u0627\u0645\u0628 \u0645\u064f\u0646\u064a \u0628\u0641\u0634\u0644 \u0648\u0627\u0636\u062d \u0645\u0639 \u0627\u0644\u064a\u0648\u0645 \u0627\u0644\u0640 38 \u0645\u0646 \u0627\u0644\u0645\u0639\u0631\u0643\u0629\u060c \u0648\u0645\u062d\u0627\u0648\u0644\u0627\u062a\u0647 \u062a\u0639\u062f\u0651 \u062a\u0633\u062a\u0631\u0627\u064b \u0639\u0644\u0649 \u062e\u0633\u0627\u0631\u0629 \u0643\u0628\u064a\u0631\u0629.',
+  '\u0627\u0644\u062c\u064a\u0634 \u0627\u0644\u0625\u064a\u0631\u0627\u0646\u064a: \u0625\u0633\u0642\u0627\u0637 \u0637\u0627\u0626\u0631\u0629 \u0645\u0633\u064a\u0631\u0629 \u0647\u064a\u0631\u0645\u0633 900 \u0641\u064a \u0623\u0635\u0641\u0647\u0627\u0646 \u2014 \u0627\u0644\u0639\u062f\u062f \u064a\u0631\u062a\u0641\u0639 \u0625\u0644\u0649 162 \u0637\u0627\u0626\u0631\u0629.',
+  '\u062d\u0631\u0633 \u0627\u0644\u062b\u0648\u0631\u0629: \u0641\u0634\u0644 \u0639\u0645\u0644\u064a\u0629 \u0625\u0646\u0642\u0627\u0630 \u0623\u0645\u064a\u0631\u0643\u064a\u0629 \u2014 \u062a\u062f\u0645\u064a\u0631 \u0637\u0627\u0626\u0631\u0627\u062a \u0627\u0644\u0639\u062f\u0648 \u0641\u064a \u0639\u0645\u0644\u064a\u0629 \u0645\u0634\u062a\u0631\u0643\u0629 \u0639\u0644\u0649 \u063a\u0631\u0627\u0631 \u0639\u0645\u0644\u064a\u0629 \u0637\u0628\u0633.',
+  '\u0645\u0642\u0631 \u062e\u0627\u062a\u0645 \u0627\u0644\u0623\u0646\u0628\u064a\u0627\u0621: \u0627\u0633\u062a\u0647\u062f\u0627\u0641 \u0645\u0631\u0648\u062d\u064a\u062a\u064a\u0646 \u0628\u0644\u0627\u0643 \u0647\u0648\u0643 \u0648\u0637\u0627\u0626\u0631\u0629 C-130 \u2014 \u0623\u0635\u064a\u0628\u062a \u0648\u062a\u062d\u062a\u0631\u0642 \u062a\u062d\u062a \u0636\u0631\u0628\u0627\u062a \u0627\u0644\u0642\u0648\u0627\u062a \u0627\u0644\u0645\u062f\u0627\u0641\u0639\u0629.',
+  '\u0645\u0642\u0631 \u062e\u0627\u062a\u0645 \u0627\u0644\u0623\u0646\u0628\u064a\u0627\u0621: \u0641\u0634\u0644 \u0643\u0627\u0645\u0644 \u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u0625\u0646\u0642\u0627\u0630 \u0627\u0644\u0623\u0645\u064a\u0631\u0643\u064a\u0629 \u2014 \u062a\u062f\u0645\u064a\u0631 \u0637\u0627\u0626\u0631\u062a\u064a C-130 \u0648\u0645\u0631\u0648\u062d\u064a\u062a\u064a \u0628\u0644\u0627\u0643 \u0647\u0648\u0643.',
+  '\u0627\u0644\u0645\u0648\u062c\u0629 96 \u0645\u0646 \u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u0648\u0639\u062f \u0627\u0644\u0635\u0627\u062f\u0642 4 \u062a\u062d\u062a \u0634\u0639\u0627\u0631 \u00ab\u064a\u0627 \u0631\u0642\u064a\u0629 (\u0639)\u00bb \u2014 \u0627\u0633\u062a\u0647\u062f\u0627\u0641 \u0645\u0635\u0641\u0627\u0629 \u062d\u064a\u0641\u0627 \u0648\u0645\u0646\u0634\u0622\u062a \u0623\u0645\u064a\u0631\u0643\u064a\u0629 \u0641\u064a \u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062a \u0648\u0627\u0644\u0628\u062d\u0631\u064a\u0646 \u0648\u0627\u0644\u0643\u0648\u064a\u062a.',
+  '\u0627\u0644\u062c\u064a\u0634 \u0627\u0644\u0625\u064a\u0631\u0627\u0646\u064a \u2014 \u0628\u064a\u0627\u0646 56: \u0647\u062c\u0645\u0627\u062a \u0628\u0645\u0633\u064a\u0651\u0631\u0627\u062a \u0639\u0644\u0649 \u0645\u0646\u0634\u0622\u062a \u0628\u062a\u0631\u0648\u0643\u064a\u0645\u064a\u0627\u0626\u064a\u0629 \u0642\u0631\u0628 \u062f\u064a\u0645\u0648\u0646\u0627 + \u0642\u0627\u0639\u062f\u0629 \u0623\u0645\u064a\u0631\u0643\u064a\u0629 \u0641\u064a \u062c\u0632\u064a\u0631\u0629 \u0628\u0648\u0628\u064a\u0627\u0646 \u0628\u0627\u0644\u0643\u0648\u064a\u062a.',
+  '\u0627\u0644\u0645\u0648\u062c\u0629 97 \u0645\u0646 \u0627\u0644\u0648\u0639\u062f \u0627\u0644\u0635\u0627\u062f\u0642 \u2014 \u0627\u0633\u062a\u0647\u062f\u0627\u0641 \u0642\u0627\u0639\u062f\u0629 \u0645\u062d\u0645\u062f \u0627\u0644\u0623\u062d\u0645\u062f \u0628\u0627\u0644\u0643\u0648\u064a\u062a + \u0633\u0641\u064a\u0646\u0629 \u0635\u0647\u064a\u0648\u0646\u064a\u0629 \u0641\u064a \u0645\u064a\u0646\u0627\u0621 \u062c\u0628\u0644 \u0639\u0644\u064a + \u0627\u0644\u0633\u064a\u0637\u0631\u0629 \u0639\u0644\u0649 \u0645\u0636\u064a\u0642 \u0647\u0631\u0645\u0632 + \u0627\u0633\u062a\u0647\u062f\u0627\u0641 \u0628\u0626\u0631 \u0627\u0644\u0633\u0628\u0639.',
+  '\u0645\u0642\u0631 \u062e\u0627\u062a\u0645 \u0627\u0644\u0623\u0646\u0628\u064a\u0627\u0621: \u0628\u064a\u0627\u0646 \u0645\u0641\u0635\u0651\u0644 \u0639\u0646 \u062a\u062f\u0645\u064a\u0631 \u0637\u0627\u0626\u0631\u062a\u064a C-130 \u0648\u0645\u0631\u0648\u062d\u064a\u062a\u064a \u0628\u0644\u0627\u0643 \u0647\u0648\u0643 \u2014 \u0627\u0644\u0639\u062f\u0648 \u0627\u0636\u0637\u0631 \u0644\u0642\u0635\u0641 \u0637\u0627\u0626\u0631\u0627\u062a\u0647 \u0627\u0644\u0645\u062a\u0631\u0648\u0643\u0629 \u2014 \u0641\u0634\u0644 \u0630\u0631\u064a\u0639 \u0644\u0644\u062c\u064a\u0634 \u0627\u0644\u0623\u0645\u064a\u0631\u0643\u064a.',
+  '\u0643\u0644\u0645\u0629 \u0627\u0644\u062d\u0627\u062c \u0623\u0628\u0648 \u062d\u0633\u064a\u0646 \u0627\u0644\u062d\u0645\u064a\u062f\u0627\u0648\u064a \u0627\u0644\u0623\u0645\u064a\u0646 \u0627\u0644\u0639\u0627\u0645 \u0644\u0643\u062a\u0627\u0626\u0628 \u062d\u0632\u0628 \u0627\u0644\u0644\u0647 \u0627\u0644\u0639\u0631\u0627\u0642 \u0641\u064a \u062f\u0639\u0645 \u0645\u062d\u0648\u0631 \u0627\u0644\u0645\u0642\u0627\u0648\u0645\u0629.'
+];
+document.querySelectorAll('.iran-card').forEach(function(card, i) {
+  if (iranTexts[i]) addToggle(card, iranTexts[i]);
+});
+
+// Inject into videos
+var vidTexts = [
+  '\u0628\u0627\u0644\u0641\u064a\u062f\u064a\u0648 | \u0645\u0634\u0627\u0647\u062f \u0645\u0646 \u0639\u0645\u0644\u064a\u0629 \u0627\u0633\u062a\u0647\u062f\u0627\u0641 \u0627\u0644\u0645\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0629 \u0642\u0627\u0639\u062f\u0629 \u0633\u062a\u064a\u0644\u0627 \u0645\u0627\u0631\u064a\u0633 \u0627\u0644\u062a\u0627\u0628\u0639\u0629 \u0644\u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a \u0641\u064a \u0645\u062f\u064a\u0646\u0629 \u062d\u064a\u0641\u0627 \u0627\u0644\u0645\u062d\u062a\u0644\u0651\u0629 \u0628\u0635\u0644\u064a\u0629\u064d \u0645\u0646 \u0627\u0644\u0635\u0648\u0627\u0631\u064a\u062e \u0627\u0644\u0646\u0648\u0639\u064a\u0651\u0629.',
+  '\u0628\u0627\u0644\u0641\u064a\u062f\u064a\u0648 | \u0645\u0634\u0627\u0647\u062f \u0645\u0646 \u0639\u0645\u0644\u064a\u0629 \u0627\u0633\u062a\u0647\u062f\u0627\u0641 \u0627\u0644\u0645\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0629 \u0622\u0644\u064a\u0629 \u0647\u0627\u0645\u0631 \u062a\u0627\u0628\u0639\u0629 \u0644\u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a \u0641\u064a \u0645\u062d\u064a\u0637 \u0645\u0633\u062a\u0634\u0641\u0649 \u0645\u064a\u0633 \u0627\u0644\u062c\u0628\u0644 \u062c\u0646\u0648\u0628 \u0644\u0628\u0646\u0627\u0646 \u0628\u0645\u062d\u0644\u0651\u0642\u0629 \u0627\u0646\u0642\u0636\u0627\u0636\u064a\u0651\u0629.',
+  '\u0628\u0627\u0644\u0641\u064a\u062f\u064a\u0648 | \u0645\u0634\u0627\u0647\u062f \u0645\u0646 \u0633\u0627\u062d\u0629 \u0627\u0644\u0643\u0645\u064a\u0646 \u0627\u0644\u0630\u064a \u0646\u0641\u0630\u0647 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0629 \u0641\u064a \u0645\u0646\u0637\u0642\u0629 \u0628\u064a\u062f\u0631 \u0627\u0644\u0646\u0647\u0631 \u0641\u064a \u0628\u0644\u062f\u0629 \u0627\u0644\u0637\u064a\u0628\u0629 \u062c\u0646\u0648\u0628 \u0644\u0628\u0646\u0627\u0646 \u0628\u0639\u062f \u0641\u0631\u0627\u0631 \u0642\u0648\u0627\u062a \u062c\u064a\u0634 \u0627\u0644\u0639\u062f\u0648 \u0627\u0644\u0625\u0633\u0631\u0627\u0626\u064a\u0644\u064a.'
+];
+document.querySelectorAll('.vid-card').forEach(function(card, i) {
+  if (vidTexts[i]) addToggle(card, vidTexts[i]);
+});
+
+// Inject into allies
+var allyTexts = [
+  '\u0627\u0644\u0645\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0627\u0633\u0644\u0627\u0645\u064a\u0629 \u0641\u064a \u0627\u0644\u0639\u0631\u0627\u0642: \u0646\u0641\u0651\u0630 \u0645\u062c\u0627\u0647\u062f\u0648 \u0627\u0644\u0645\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u0629 \u0641\u064a \u0627\u0644\u0639\u0631\u0627\u0642 \u062e\u0644\u0627\u0644 \u0627\u0644\u0623\u0631\u0628\u0639 \u0648\u0627\u0644\u0639\u0634\u0631\u064a\u0646 \u0633\u0627\u0639\u0629 \u0627\u0644\u0645\u0627\u0636\u064a\u0629\u060c \u062a\u0633\u0639\u0629 \u0639\u0634\u0631 \u0639\u0645\u0644\u064a\u0629 \u0627\u0633\u062a\u062e\u062f\u0645\u062a \u0641\u064a\u0647\u0627 \u0639\u0634\u0631\u0627\u062a \u0627\u0644\u0637\u0627\u0626\u0631\u0627\u062a \u0627\u0644\u0645\u0633\u064a\u0651\u0631\u0629 \u0639\u0644\u0649 \u0642\u0648\u0627\u0639\u062f \u0627\u0644\u0639\u062f\u0648 \u0641\u064a \u0627\u0644\u0639\u0631\u0627\u0642 \u0648\u0627\u0644\u0645\u0646\u0637\u0642\u0629.',
+  '\u0644\u0627 \u0628\u064a\u0627\u0646\u0627\u062a \u0645\u0633\u062a\u0642\u0644\u0629 \u0635\u0627\u062f\u0631\u0629 \u0639\u0646 \u0627\u0644\u0642\u0648\u0627\u062a \u0627\u0644\u0645\u0633\u0644\u062d\u0629 \u0627\u0644\u064a\u0645\u0646\u064a\u0629 \u0641\u064a \u0647\u0630\u0627 \u0627\u0644\u064a\u0648\u0645.'
+];
+document.querySelectorAll('.ally-card').forEach(function(card, i) {
+  if (allyTexts[i]) addToggle(card, allyTexts[i]);
+});
+
+// SMART SEARCH
+var aliases = {
+  'merkava': '\u0645\u064a\u0631\u0643\u0627\u0641\u0627', 'tank': '\u0645\u064a\u0631\u0643\u0627\u0641\u0627', '\u062f\u0628\u0627\u0628\u0629': '\u0645\u064a\u0631\u0643\u0627\u0641\u0627', '\u062f\u0628\u0627\u0628\u0647': '\u0645\u064a\u0631\u0643\u0627\u0641\u0627',
+  'drone': '\u0645\u0633\u064a\u0651\u0631\u0629', 'uav': '\u0645\u0633\u064a\u0651\u0631\u0629', 'fpv': 'FPV',
+  'missile': '\u0635\u0627\u0631\u0648\u062e', 'rocket': '\u0635\u0627\u0631\u0648\u062e',
+  'siren': '\u0635\u0641\u0627\u0631\u0627\u062a', '\u0635\u0641\u0627\u0631\u0629': '\u0635\u0641\u0627\u0631\u0627\u062a', '\u0627\u0646\u0630\u0627\u0631': '\u0625\u0646\u0630\u0627\u0631',
+  'haifa': '\u062d\u064a\u0641\u0627', 'tel aviv': '\u062a\u0644 \u0623\u0628\u064a\u0628', 'telaviv': '\u062a\u0644 \u0623\u0628\u064a\u0628',
+  'iran': '\u0625\u064a\u0631\u0627\u0646', '\u0627\u064a\u0631\u0627\u0646': '\u0625\u064a\u0631\u0627\u0646',
+  'kiryat': '\u0643\u0631\u064a\u0627\u062a', 'kiryat shmona': '\u0643\u0631\u064a\u0627\u062a \u0634\u0645\u0648\u0646\u0629',
+  'nahariya': '\u0646\u0647\u0627\u0631\u064a\u0627', 'metula': '\u0627\u0644\u0645\u0637\u0644\u0629',
+  'bint jbeil': '\u0628\u0646\u062a \u062c\u0628\u064a\u0644', 'maroun': '\u0645\u0627\u0631\u0648\u0646',
+  'litani': '\u0627\u0644\u0644\u064a\u0637\u0627\u0646\u064a', '\u0644\u064a\u0637\u0627\u0646\u064a': '\u0627\u0644\u0644\u064a\u0637\u0627\u0646\u064a',
+  'yemen': '\u0627\u0644\u064a\u0645\u0646', '\u064a\u0645\u0646': '\u0627\u0644\u064a\u0645\u0646',
+  'iraq': '\u0627\u0644\u0639\u0631\u0627\u0642', '\u0639\u0631\u0627\u0642': '\u0627\u0644\u0639\u0631\u0627\u0642',
+  'ambush': '\u0643\u0645\u064a\u0646',
+  'killed': '\u0642\u062a\u0644\u0649', '\u0642\u062a\u064a\u0644': '\u0642\u062a\u0644\u0649', '\u0645\u0642\u062a\u0644': '\u0642\u062a\u0644\u0649',
+  'injured': '\u062c\u0631\u062d\u0649', '\u062c\u0631\u064a\u062d': '\u062c\u0631\u062d\u0649', '\u0625\u0635\u0627\u0628\u0629': '\u0625\u0635\u0627\u0628',
+  'settlement': '\u0645\u0633\u062a\u0648\u0637\u0646\u0629', '\u0645\u0633\u062a\u0648\u0637\u0646\u0647': '\u0645\u0633\u062a\u0648\u0637\u0646\u0629',
+  'base': '\u0642\u0627\u0639\u062f\u0629', '\u0642\u0627\u0639\u062f\u0647': '\u0642\u0627\u0639\u062f\u0629',
+  'artillery': '\u0645\u062f\u0641\u0639\u064a\u0629', '\u0645\u062f\u0641\u0639\u064a\u0647': '\u0645\u062f\u0641\u0639\u064a\u0629',
+  'safed': '\u0635\u0641\u062f', 'acre': '\u0639\u0643\u0627', 'akka': '\u0639\u0643\u0627',
+  'golan': '\u0627\u0644\u062c\u0648\u0644\u0627\u0646', '\u062c\u0648\u0644\u0627\u0646': '\u0627\u0644\u062c\u0648\u0644\u0627\u0646',
+  'jerusalem': '\u0627\u0644\u0642\u062f\u0633', '\u0642\u062f\u0633': '\u0627\u0644\u0642\u062f\u0633',
+  'warning': '\u0627\u0644\u062a\u062d\u0630\u064a\u0631', '\u062a\u062d\u0630\u064a\u0631': '\u0627\u0644\u062a\u062d\u0630\u064a\u0631',
+  'khiam': '\u0627\u0644\u062e\u064a\u0627\u0645', '\u062e\u064a\u0627\u0645': '\u0627\u0644\u062e\u064a\u0627\u0645'
+};
+
+function normalizeAr(s) {
+  return s.replace(/[\u0625\u0623\u0622\u0671]/g,'\u0627').replace(/\u0629/g,'\u0647').replace(/\u0649/g,'\u064a')
+    .replace(/\u0624/g,'\u0648').replace(/\u0626/g,'\u064a').replace(/\u0651/g,'')
+    .replace(/[\u064B-\u065F\u0670]/g,'').toLowerCase();
+}
+
+var CARD_SEL = '.bayan, .siren-row, .enemy-row, .iran-card, .vid-card, .ally-card';
+var searchInput = document.getElementById('searchInput');
+var searchStats = document.getElementById('searchStats');
+var searchClear = document.getElementById('searchClear');
+var tabNames = {bayanat:'\u0628\u064a\u0627\u0646\u0627\u062a',sirens:'\u0635\u0641\u0627\u0631\u0627\u062a',enemy:'\u0625\u0639\u0644\u0627\u0645',iran:'\u0625\u064a\u0631\u0627\u0646',videos:'\u0641\u064a\u062f\u064a\u0648',allies:'\u062d\u0644\u0641\u0627\u0621'};
+
+var searchTimeout;
+searchInput.addEventListener('input', function() {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(function(){ performSearch(searchInput.value); }, 150);
+});
+searchInput.addEventListener('keydown', function(e) { if(e.key==='Escape') clearSearch(); });
+
+function clearSearch() {
+  searchInput.value = '';
+  performSearch('');
+  searchInput.focus();
+}
+
+function performSearch(raw) {
+  var query = raw.trim();
+  searchClear.classList.toggle('visible', query.length > 0);
+  var allCards = document.querySelectorAll(CARD_SEL);
+
+  if (!query) {
+    allCards.forEach(function(c){ c.classList.remove('card-hidden'); });
+    document.querySelectorAll('.phase').forEach(function(p){ p.classList.remove('phase-hidden'); });
+    document.querySelectorAll('.no-results').forEach(function(n){ n.remove(); });
+    searchStats.textContent = '';
+    return;
+  }
+
+  var terms = query.toLowerCase();
+  for (var alias in aliases) {
+    if (terms.indexOf(alias) !== -1) terms = terms.replace(alias, aliases[alias]);
+  }
+  var nq = normalizeAr(terms);
+  var queryWords = nq.split(/\s+/).filter(function(w){ return w.length > 0; });
+
+  var totalVisible = 0;
+  var tabCounts = {};
+
+  allCards.forEach(function(card) {
+    var cardText = normalizeAr(card.textContent || '');
+    var ftEl = card.querySelector('.txt-full');
+    if (ftEl) cardText += ' ' + normalizeAr(ftEl.textContent);
+
+    var matches = queryWords.every(function(w){ return cardText.indexOf(w) !== -1; });
+
+    if (matches) {
+      card.classList.remove('card-hidden');
+      totalVisible++;
+      var tab = card.closest('.tab-content');
+      if (tab) tabCounts[tab.id] = (tabCounts[tab.id] || 0) + 1;
+    } else {
+      card.classList.add('card-hidden');
+    }
+  });
+
+  // Hide empty phase dividers
+  document.querySelectorAll('.phase').forEach(function(phase) {
+    var next = phase.nextElementSibling;
+    var hasVisible = false;
+    while (next && !next.classList.contains('phase')) {
+      if (next.matches && next.matches(CARD_SEL) && !next.classList.contains('card-hidden')) {
+        hasVisible = true; break;
+      }
+      next = next.nextElementSibling;
+    }
+    phase.classList.toggle('phase-hidden', !hasVisible);
+  });
+
+  // No-results message per tab
+  document.querySelectorAll('.no-results').forEach(function(n){ n.remove(); });
+  document.querySelectorAll('.tab-content').forEach(function(tab) {
+    var container = tab.querySelector('.container');
+    if (!container) return;
+    var vis = container.querySelectorAll(CARD_SEL + ':not(.card-hidden)');
+    if (vis.length === 0) {
+      var noRes = document.createElement('div');
+      noRes.className = 'no-results show';
+      noRes.textContent = '\u0644\u0627 \u0646\u062a\u0627\u0626\u062c \u0644\u0640 \u00ab' + query + '\u00bb';
+      container.appendChild(noRes);
+    }
+  });
+
+  // Stats
+  if (totalVisible > 0) {
+    var parts = [];
+    var ids = Object.keys(tabCounts);
+    for (var j = 0; j < ids.length; j++) {
+      var id = ids[j];
+      parts.push((tabNames[id]||id) + ' ' + tabCounts[id]);
+    }
+    var statsEl = document.getElementById('searchStats');
+    statsEl.textContent = '';
+    var countSpan = document.createElement('span');
+    countSpan.className = 'count';
+    countSpan.textContent = totalVisible;
+    statsEl.appendChild(countSpan);
+    statsEl.appendChild(document.createTextNode(' \u0646\u062a\u064a\u062c\u0629 \u2014 ' + parts.join(' \u00b7 ')));
+  } else {
+    searchStats.textContent = '\u0644\u0627 \u0646\u062a\u0627\u0626\u062c';
+  }
+
+  // Auto-switch to first tab with results if current tab is empty
+  if (totalVisible > 0) {
+    var activeTab = document.querySelector('.tab-content.active');
+    var activeCards = activeTab ? activeTab.querySelectorAll(CARD_SEL + ':not(.card-hidden)') : [];
+    if (activeCards.length === 0) {
+      var firstId = Object.keys(tabCounts)[0];
+      if (firstId) {
+        document.querySelectorAll('.tab-content').forEach(function(t){ t.classList.remove('active'); });
+        document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+        document.getElementById(firstId).classList.add('active');
+        document.querySelectorAll('.tab').forEach(function(t) {
+          var oc = t.getAttribute('onclick') || '';
+          if (oc.indexOf("'" + firstId + "'") !== -1) t.classList.add('active');
+        });
+      }
+    }
+  }
+}
+</script>
+
+</body>
+</html>
