@@ -596,6 +596,267 @@ function filterSirensAuto(filter, btn) {
   });
 }
 
+// ═══════════════════════ AUTO ENEMY DASHBOARD ═══════════════════════
+(function() {
+  var enemyTab = document.getElementById('enemy');
+  if (!enemyTab) return;
+  var container = enemyTab.querySelector('.container');
+  if (!container) return;
+  var rows = container.querySelectorAll('.enemy-row');
+  if (rows.length === 0) return;
+  if (container.querySelector('.auto-enemy-dashboard')) return;
+
+  var sources = {};
+  var topics = {missiles:0, casualties:0, clashes:0, political:0, other:0};
+  var hours = [];
+  for (var i = 0; i < 24; i++) hours[i] = 0;
+
+  var sourceKw = [
+    ['القناة 12',['القناة 12']],['القناة 13',['القناة 13']],['القناة 14',['القناة 14']],
+    ['القناة 15',['القناة 15']],['كان',['قناة كان']],['يديعوت',['يديعوت']],
+    ['غلوبز',['غلوبز']],['الجبهة الداخلية',['الجبهة الداخلية']],
+    ['إذاعة الجيش',['إذاعة جيش']],['جيش العدو',['جيش العدو']],
+    ['وسائل إعلام',['وسائل إعلام']]
+  ];
+
+  rows.forEach(function(row) {
+    var timeEl = row.querySelector('.e-time');
+    var textEl = row.querySelector('.e-text');
+    if (!timeEl) return;
+    var time = timeEl.textContent.trim();
+    var text = textEl ? textEl.textContent : '';
+
+    var h = parseInt(time.split(':')[0]);
+    if (!isNaN(h) && h >= 0 && h < 24) hours[h]++;
+
+    // Source
+    var matched = false;
+    for (var s = 0; s < sourceKw.length; s++) {
+      for (var k = 0; k < sourceKw[s][1].length; k++) {
+        if (text.indexOf(sourceKw[s][1][k]) !== -1) {
+          sources[sourceKw[s][0]] = (sources[sourceKw[s][0]] || 0) + 1;
+          matched = true; break;
+        }
+      }
+      if (matched) break;
+    }
+
+    // Topics
+    if (text.indexOf('صاروخ') !== -1 || text.indexOf('مقذوف') !== -1 || text.indexOf('سقوط') !== -1 || text.indexOf('انفجار') !== -1) topics.missiles++;
+    else if (text.indexOf('قتل') !== -1 || text.indexOf('جرح') !== -1 || text.indexOf('إصاب') !== -1 || text.indexOf('قتيل') !== -1) topics.casualties++;
+    else if (text.indexOf('قتال') !== -1 || text.indexOf('اشتباك') !== -1 || text.indexOf('كمين') !== -1 || text.indexOf('عملية') !== -1) topics.clashes++;
+    else if (text.indexOf('نتنياهو') !== -1 || text.indexOf('رئيس الأركان') !== -1 || text.indexOf('كابينيت') !== -1 || text.indexOf('سكان') !== -1) topics.political++;
+    else topics.other++;
+  });
+
+  var sortedSources = Object.keys(sources).sort(function(a,b){return sources[b]-sources[a];}).slice(0,8);
+  var maxSrc = sortedSources.length > 0 ? sources[sortedSources[0]] : 1;
+
+  var topicLabels = {missiles:'صواريخ وقصف',casualties:'قتلى وجرحى',clashes:'اشتباكات وعمليات',political:'سياسي وعسكري',other:'أخرى'};
+  var topicColors = {missiles:'#e74c3c',casualties:'#e67e22',clashes:'#f39c12',political:'#9b59b6',other:'#6b7d92'};
+  var topicKeys = ['missiles','casualties','clashes','political','other'];
+  var maxTopic = 0;
+  topicKeys.forEach(function(k){if(topics[k]>maxTopic)maxTopic=topics[k];});
+
+  var dash = document.createElement('div');
+  dash.className = 'siren-cats auto-enemy-dashboard';
+
+  // Card 1: By source
+  var c1 = makeCatCard('\u2139','rgba(230,126,34,0.12)','#e67e22','حسب المصدر');
+  sortedSources.forEach(function(s,idx){c1.appendChild(makeBarRow(s,sources[s],maxSrc,barColors[idx%barColors.length]));});
+  dash.appendChild(c1);
+
+  // Card 2: By topic + timeline
+  var c2 = makeCatCard('\u2691','rgba(231,76,60,0.12)','#e74c3c','حسب الموضوع');
+  topicKeys.forEach(function(k){
+    if(topics[k]>0) c2.appendChild(makeBarRow(topicLabels[k],topics[k],maxTopic,topicColors[k]));
+  });
+  var tlWrap = document.createElement('div');
+  tlWrap.style.marginTop = '12px';
+  var tlHead = makeCatCard('\u23F1','rgba(155,89,182,0.12)','#9b59b6','التوزيع الزمني');
+  tlWrap.appendChild(tlHead.querySelector('.cat-title'));
+  var tlBar = document.createElement('div');
+  tlBar.className = 'cat-timeline';
+  tlBar.id = 'autoEnemyTimeline';
+  tlWrap.appendChild(tlBar);
+  var tlLabels = document.createElement('div');
+  tlLabels.className = 'cat-tlabels';
+  ['00:00','06:00','12:00','18:00','23:59'].forEach(function(l){
+    var s2=document.createElement('span');s2.textContent=l;tlLabels.appendChild(s2);
+  });
+  tlWrap.appendChild(tlLabels);
+  c2.appendChild(tlWrap);
+  dash.appendChild(c2);
+
+  // Filters
+  var filterDiv = document.createElement('div');
+  filterDiv.className = 'cat-filter-bar';
+  var eFilters = [['الكل ('+rows.length+')','all']];
+  sortedSources.slice(0,5).forEach(function(s){eFilters.push([s+' ('+sources[s]+')','s:'+s]);});
+  eFilters.forEach(function(f){
+    var b = document.createElement('button');
+    b.className = 'cat-filter-btn'+(f[1]==='all'?' active':'');
+    b.textContent = f[0];
+    b.setAttribute('data-filter',f[1]);
+    b.onclick = function(){filterEnemyAuto(this.getAttribute('data-filter'),this);};
+    filterDiv.appendChild(b);
+  });
+
+  var listTitle = document.createElement('div');
+  listTitle.className = 'siren-list-title';
+  listTitle.textContent = 'التقارير الكاملة';
+
+  var firstEl = container.querySelector('.phase') || rows[0];
+  if (firstEl) {
+    container.insertBefore(listTitle, firstEl);
+    container.insertBefore(filterDiv, listTitle);
+    container.insertBefore(dash, filterDiv);
+  }
+
+  buildTimeline('autoEnemyTimeline', hours, '#e67e22');
+})();
+
+function filterEnemyAuto(filter, btn) {
+  var tab = document.getElementById('enemy');
+  tab.querySelectorAll('.cat-filter-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  tab.querySelectorAll('.enemy-row').forEach(function(row){
+    var text = (row.querySelector('.e-text')||{}).textContent||'';
+    if(filter==='all') row.style.display='';
+    else if(filter.indexOf('s:')===0) row.style.display=text.indexOf(filter.substring(2))!==-1?'':'none';
+    else row.style.display=text.indexOf(filter)!==-1?'':'none';
+  });
+  tab.querySelectorAll('.phase').forEach(function(p){
+    var next=p.nextElementSibling; var vis=false;
+    while(next&&!next.classList.contains('phase')&&!next.classList.contains('siren-list-title')){
+      if(next.classList&&next.classList.contains('enemy-row')&&next.style.display!=='none'){vis=true;break;}
+      next=next.nextElementSibling;
+    }
+    p.style.display=vis?'':'none';
+  });
+}
+
+// ═══════════════════════ AUTO IRAN DASHBOARD ═══════════════════════
+(function() {
+  var iranTab = document.getElementById('iran');
+  if (!iranTab) return;
+  var container = iranTab.querySelector('.container');
+  if (!container) return;
+  var rows = container.querySelectorAll('.iran-card');
+  if (rows.length === 0) return;
+  if (container.querySelector('.auto-iran-dashboard')) return;
+
+  var categories = {irgc:0, army:0, missiles:0, drones_down:0, warnings:0, statements:0, other:0};
+  var hours = [];
+  for (var i = 0; i < 24; i++) hours[i] = 0;
+
+  rows.forEach(function(row) {
+    var timeEl = row.querySelector('.i-time');
+    var srcEl = row.querySelector('.i-source');
+    var textEl = row.querySelector('.i-text');
+    var time = timeEl ? timeEl.textContent.trim() : '';
+    var src = srcEl ? srcEl.textContent : '';
+    var text = textEl ? textEl.textContent : '';
+    var all = src + ' ' + text;
+
+    var h = parseInt(time.split(':')[0]);
+    if (!isNaN(h) && h >= 0 && h < 24) hours[h]++;
+
+    if (all.indexOf('حرس الثورة') !== -1 || all.indexOf('الحرس') !== -1) categories.irgc++;
+    else if (all.indexOf('الجيش الإيراني') !== -1 || all.indexOf('القوات المسلحة') !== -1) categories.army++;
+
+    if (all.indexOf('إسقاط') !== -1 || all.indexOf('أسقط') !== -1) categories.drones_down++;
+    if (all.indexOf('صواريخ من إيران') !== -1 || all.indexOf('رصد إطلاق') !== -1 || all.indexOf('الملاجئ') !== -1) categories.warnings++;
+    if (all.indexOf('الوعد الصادق') !== -1 || all.indexOf('الموجة') !== -1 || all.indexOf('موجة') !== -1) categories.missiles++;
+    if (all.indexOf('بيان') !== -1 || all.indexOf('قائد الثورة') !== -1 || all.indexOf('خامنئي') !== -1) categories.statements++;
+  });
+
+  var catLabels = {irgc:'حرس الثورة',army:'الجيش الإيراني',missiles:'موجات صاروخية',drones_down:'إسقاط طائرات',warnings:'إنذارات',statements:'بيانات رسمية'};
+  var catColors = {irgc:'#9b59b6',army:'#3498db',missiles:'#e74c3c',drones_down:'#e67e22',warnings:'#f39c12',statements:'#1abc9c'};
+  var catKeys = ['irgc','army','missiles','drones_down','warnings','statements'];
+  var maxCat = 0;
+  catKeys.forEach(function(k){if(categories[k]>maxCat)maxCat=categories[k];});
+
+  var dash = document.createElement('div');
+  dash.className = 'siren-cats auto-iran-dashboard';
+
+  // Card 1: By category
+  var c1 = makeCatCard('\u2600','rgba(155,89,182,0.12)','#9b59b6','حسب الفئة');
+  catKeys.forEach(function(k){
+    if(categories[k]>0) c1.appendChild(makeBarRow(catLabels[k],categories[k],maxCat,catColors[k]));
+  });
+  dash.appendChild(c1);
+
+  // Card 2: Type pills + timeline
+  var c2 = makeCatCard('\u26A1','rgba(231,76,60,0.12)','#e74c3c','نوع النشاط');
+  var pills = document.createElement('div');
+  pills.className = 'cat-type-pills';
+  if (categories.missiles > 0) pills.appendChild(makePill(categories.missiles,'هجوم صاروخي','rgba(231,76,60,0.12)','#e74c3c'));
+  if (categories.drones_down > 0) pills.appendChild(makePill(categories.drones_down,'إسقاط طائرة','rgba(230,126,34,0.12)','#e67e22'));
+  if (categories.warnings > 0) pills.appendChild(makePill(categories.warnings,'إنذار','rgba(243,156,18,0.12)','#f39c12'));
+  c2.appendChild(pills);
+
+  var tlWrap = document.createElement('div');
+  tlWrap.style.marginTop = '12px';
+  var tlHead = makeCatCard('\u23F1','rgba(155,89,182,0.12)','#9b59b6','التوزيع الزمني');
+  tlWrap.appendChild(tlHead.querySelector('.cat-title'));
+  var tlBar = document.createElement('div');
+  tlBar.className = 'cat-timeline';
+  tlBar.id = 'autoIranTimeline';
+  tlWrap.appendChild(tlBar);
+  var tlLabels = document.createElement('div');
+  tlLabels.className = 'cat-tlabels';
+  ['00:00','06:00','12:00','18:00','23:59'].forEach(function(l){
+    var s2=document.createElement('span');s2.textContent=l;tlLabels.appendChild(s2);
+  });
+  tlWrap.appendChild(tlLabels);
+  c2.appendChild(tlWrap);
+  dash.appendChild(c2);
+
+  // Filters
+  var filterDiv = document.createElement('div');
+  filterDiv.className = 'cat-filter-bar';
+  var iFilters = [['الكل ('+rows.length+')','all']];
+  if(categories.irgc>0) iFilters.push(['حرس الثورة ('+categories.irgc+')','حرس الثورة']);
+  if(categories.army>0) iFilters.push(['الجيش ('+categories.army+')','الجيش الإيراني']);
+  if(categories.missiles>0) iFilters.push(['الوعد الصادق ('+categories.missiles+')','الوعد']);
+  if(categories.drones_down>0) iFilters.push(['إسقاط ('+categories.drones_down+')','إسقاط']);
+  if(categories.warnings>0) iFilters.push(['إنذارات ('+categories.warnings+')','الملاجئ']);
+
+  iFilters.forEach(function(f){
+    var b = document.createElement('button');
+    b.className = 'cat-filter-btn'+(f[1]==='all'?' active':'');
+    b.textContent = f[0];
+    b.setAttribute('data-filter',f[1]);
+    b.onclick = function(){filterIranAuto(this.getAttribute('data-filter'),this);};
+    filterDiv.appendChild(b);
+  });
+
+  var listTitle = document.createElement('div');
+  listTitle.className = 'siren-list-title';
+  listTitle.textContent = 'التقارير الكاملة';
+
+  var firstEl = container.querySelector('.phase') || rows[0];
+  if (firstEl) {
+    container.insertBefore(listTitle, firstEl);
+    container.insertBefore(filterDiv, listTitle);
+    container.insertBefore(dash, filterDiv);
+  }
+
+  buildTimeline('autoIranTimeline', hours, '#9b59b6');
+})();
+
+function filterIranAuto(filter, btn) {
+  var tab = document.getElementById('iran');
+  tab.querySelectorAll('.cat-filter-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  tab.querySelectorAll('.iran-card').forEach(function(row){
+    var text = row.textContent || '';
+    if(filter==='all') row.style.display='';
+    else row.style.display=text.indexOf(filter)!==-1?'':'none';
+  });
+}
+
 // ═══════════════════════ AUTO BAYANAT MAP ═══════════════════════
 (function() {
   if (typeof L === 'undefined') return;
