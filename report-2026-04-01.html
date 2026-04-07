@@ -223,6 +223,87 @@
   .siren-row.highlighted {
     border-color:var(--red); background:var(--red-dim);
   }
+
+  /* ── Siren categorization ── */
+  .siren-cats {
+    display:grid; grid-template-columns:1fr 1fr; gap:12px;
+    margin-bottom:20px;
+  }
+  @media(max-width:500px) { .siren-cats { grid-template-columns:1fr; } }
+
+  .siren-cat-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:10px; padding:14px 16px; position:relative; overflow:hidden;
+  }
+  .siren-cat-card .cat-title {
+    font-size:0.78rem; font-weight:700; color:var(--text);
+    margin-bottom:10px; display:flex; align-items:center; gap:8px;
+  }
+  .siren-cat-card .cat-icon {
+    width:28px; height:28px; border-radius:8px; display:flex;
+    align-items:center; justify-content:center; font-size:0.75rem; font-weight:800;
+    flex-shrink:0;
+  }
+
+  .cat-bar-row {
+    display:flex; align-items:center; gap:8px; margin-bottom:6px;
+    font-size:0.72rem;
+  }
+  .cat-bar-label {
+    min-width:80px; color:var(--text-dim); text-align:right;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .cat-bar-track {
+    flex:1; height:18px; background:var(--surface2);
+    border-radius:4px; overflow:hidden; position:relative;
+  }
+  .cat-bar-fill {
+    height:100%; border-radius:4px; transition:width 0.6s ease;
+    display:flex; align-items:center; justify-content:flex-end; padding:0 6px;
+    font-size:0.6rem; font-weight:700; color:#fff; min-width:20px;
+  }
+  .cat-bar-count {
+    font-size:0.68rem; font-weight:700; min-width:18px; text-align:left;
+  }
+
+  .cat-type-pills {
+    display:flex; gap:8px; flex-wrap:wrap;
+  }
+  .cat-pill {
+    padding:6px 14px; border-radius:8px; font-size:0.75rem;
+    font-weight:700; text-align:center;
+  }
+  .cat-pill .pill-num { font-size:1.2rem; display:block; line-height:1; margin-bottom:2px; }
+
+  .cat-timeline {
+    display:flex; align-items:flex-end; gap:2px; height:50px;
+  }
+  .cat-tbar {
+    flex:1; background:var(--red); border-radius:2px 2px 0 0;
+    min-width:4px; position:relative; transition:opacity 0.2s;
+  }
+  .cat-tbar:hover { opacity:0.7; }
+  .cat-tlabels {
+    display:flex; justify-content:space-between; font-size:0.58rem;
+    color:var(--text-dim); margin-top:4px;
+  }
+
+  .siren-list-title {
+    font-size:0.78rem; font-weight:700; color:var(--text-dim);
+    margin:16px 0 10px; padding-top:12px; border-top:1px solid var(--border);
+  }
+
+  .cat-filter-bar {
+    display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px;
+  }
+  .cat-filter-btn {
+    padding:5px 12px; border-radius:6px; font-size:0.68rem;
+    font-weight:600; font-family:inherit; cursor:pointer;
+    border:1px solid var(--border); background:var(--surface2);
+    color:var(--text-dim); transition:all 0.2s;
+  }
+  .cat-filter-btn:hover { border-color:var(--text-dim); color:var(--text); }
+  .cat-filter-btn.active { border-color:var(--red); color:var(--red); background:var(--red-dim); }
   .siren-row .s-time { color:var(--red); font-weight:700; min-width:42px; }
   .siren-row .s-loc { color:var(--text); }
 
@@ -636,6 +717,59 @@
   <div class="phase"><span>35 صفارة إنذار عبر فلسطين المحتلة</span></div>
   <div class="siren-map-title">خريطة انتشار صفارات الإنذار</div>
   <div id="sirenMap"></div>
+
+  <!-- Categorization -->
+  <div class="siren-cats">
+
+    <!-- By Region -->
+    <div class="siren-cat-card">
+      <div class="cat-title"><div class="cat-icon" style="background:var(--red-dim);color:var(--red);">&#9678;</div> حسب المنطقة</div>
+      <div class="cat-bar-row"><span class="cat-bar-label">تل أبيب</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:75%;background:#e74c3c;">9</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">الجليل الغربي</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:50%;background:#e67e22;">6</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">إصبع الجليل</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:50%;background:#f39c12;">6</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">كريات شمونه</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:25%;background:#3498db;">3</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">نهاريا</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:25%;background:#9b59b6;">3</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">الجليل الأعلى</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:25%;background:#1abc9c;">3</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">الجولان + طبريا</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:17%;background:#6b7d92;">2</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">المطلة</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:17%;background:#6b7d92;">2</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">أسدود</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:8%;background:#6b7d92;">1</div></div></div>
+    </div>
+
+    <!-- By Type -->
+    <div class="siren-cat-card">
+      <div class="cat-title"><div class="cat-icon" style="background:rgba(52,152,219,0.12);color:#3498db;">&#9888;</div> حسب النوع</div>
+      <div class="cat-type-pills">
+        <div class="cat-pill" style="background:var(--red-dim);color:var(--red);flex:1;">
+          <span class="pill-num">29</span>
+          صواريخ / قصف
+        </div>
+        <div class="cat-pill" style="background:rgba(52,152,219,0.12);color:#3498db;flex:1;">
+          <span class="pill-num">6</span>
+          تسلل مسيّرات
+        </div>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="cat-title" style="margin-bottom:8px;"><div class="cat-icon" style="background:rgba(155,89,182,0.12);color:#9b59b6;">&#9201;</div> حسب الوقت</div>
+        <div class="cat-timeline" id="sirenTimeline"></div>
+        <div class="cat-tlabels"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:59</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Filter buttons -->
+  <div class="cat-filter-bar">
+    <button class="cat-filter-btn active" onclick="filterSirens('all',this)">الكل (35)</button>
+    <button class="cat-filter-btn" onclick="filterSirens('تل أبيب',this)">تل أبيب (9)</button>
+    <button class="cat-filter-btn" onclick="filterSirens('الجليل',this)">الجليل (15)</button>
+    <button class="cat-filter-btn" onclick="filterSirens('كريات شمونه',this)">كريات شمونه (3)</button>
+    <button class="cat-filter-btn" onclick="filterSirens('نهاريا',this)">نهاريا (3)</button>
+    <button class="cat-filter-btn" onclick="filterSirens('مسيّرة',this)">مسيّرات (6)</button>
+    <button class="cat-filter-btn" onclick="filterSirens('المطلة',this)">المطلة (2)</button>
+    <button class="cat-filter-btn" onclick="filterSirens('أسدود',this)">أسدود (1)</button>
+  </div>
+
+  <div class="siren-list-title">القائمة الكاملة</div>
   <div class="siren-row"><span class="s-time">07:53</span><span class="s-loc">في تل أبيب ومحيطها</span></div>
   <div class="siren-row"><span class="s-time">08:35</span><span class="s-loc">في الجولان وطبريا والناصرة</span></div>
   <div class="siren-row"><span class="s-time">08:35</span><span class="s-loc">في تل أبيب ومحيطها</span></div>
@@ -1179,6 +1313,67 @@ function initSirenMap() {
   });
 
   setTimeout(function() { sirenMap.invalidateSize(); }, 200);
+
+  // Build timeline
+  buildSirenTimeline();
+}
+
+// ── Siren timeline chart ──
+function buildSirenTimeline() {
+  var hours = [];
+  for (var i = 0; i < 24; i++) hours[i] = 0;
+
+  var allTimes = ['07:53','08:35','08:35','08:37','09:06','09:28','09:52','10:29','10:48','10:50',
+    '11:05','11:10','13:06','13:26','14:59','15:25','15:31','15:43','16:14','16:14',
+    '17:20','17:25','17:30','17:35','18:02','18:06','18:15','18:21','19:48','20:18',
+    '20:19','20:41','21:00','21:23','21:23'];
+
+  allTimes.forEach(function(t) {
+    var h = parseInt(t.split(':')[0]);
+    hours[h]++;
+  });
+
+  var maxH = 0;
+  hours.forEach(function(v) { if (v > maxH) maxH = v; });
+
+  var container = document.getElementById('sirenTimeline');
+  if (!container) return;
+
+  for (var j = 0; j < 24; j++) {
+    var bar = document.createElement('div');
+    bar.className = 'cat-tbar';
+    var pct = maxH > 0 ? (hours[j] / maxH) * 100 : 0;
+    bar.style.height = Math.max(pct, 2) + '%';
+    if (hours[j] === 0) {
+      bar.style.background = 'var(--surface3)';
+      bar.style.height = '4%';
+    }
+    bar.title = j + ':00 — ' + hours[j] + ' صفارة';
+    container.appendChild(bar);
+  }
+}
+
+// ── Filter siren rows ──
+function filterSirens(filter, btn) {
+  document.querySelectorAll('.cat-filter-btn').forEach(function(b) {
+    b.classList.remove('active');
+  });
+  btn.classList.add('active');
+
+  var rows = document.querySelectorAll('#sirens .siren-row');
+  rows.forEach(function(row) {
+    var loc = row.querySelector('.s-loc');
+    if (!loc) return;
+    var text = loc.textContent;
+
+    if (filter === 'all') {
+      row.style.display = '';
+    } else if (filter === 'مسيّرة') {
+      row.style.display = text.indexOf('مسيّرة') !== -1 ? '' : 'none';
+    } else {
+      row.style.display = text.indexOf(filter) !== -1 ? '' : 'none';
+    }
+  });
 }
 </script>
 
