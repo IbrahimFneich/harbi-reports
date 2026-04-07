@@ -1,0 +1,78 @@
+/* ── Light Theme ── */
+body.light {
+  --bg: #f5f5f0;
+  --surface: #ffffff;
+  --surface2: #f0ede6;
+  --surface3: #e8e4db;
+  --border: #d4cfc4;
+  --text: #1a1a1a;
+  --text-dim: #6b6b6b;
+  --text-muted: #b0b0b0;
+  --accent: #9a7b2d;
+  --accent-dim: rgba(154,123,45,0.10);
+  --green: #1a8a46;
+  --green-bright: #22a855;
+  --green-dim: rgba(34,168,85,0.08);
+  --red: #cc3333;
+  --red-dim: rgba(204,51,51,0.08);
+  --orange: #c06010;
+  --orange-dim: rgba(192,96,16,0.08);
+  --blue: #2272b0;
+  --blue-dim: rgba(34,114,176,0.08);
+  --purple: #7a3d96;
+  --purple-dim: rgba(122,61,150,0.08);
+  --cyan: #148a72;
+  --cyan-dim: rgba(20,138,114,0.06);
+  --pink: #c43070;
+  --pink-dim: rgba(196,48,112,0.06);
+}
+
+body.light .header {
+  background: linear-gradient(135deg, #f5f5f0 0%, #e8e4db 50%, #f0ede6 100%);
+}
+
+body.light .header::before {
+  background: radial-gradient(ellipse at center, rgba(154,123,45,0.06) 0%, transparent 70%);
+}
+
+body.light .search-bar {
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+}
+
+body.light .leaflet-popup-content-wrapper {
+  background: #ffffff !important;
+  border-color: #d4cfc4 !important;
+  color: #1a1a1a !important;
+}
+
+body.light .leaflet-popup-tip {
+  background: #ffffff !important;
+}
+
+/* ── Theme Toggle Button ── */
+.theme-toggle {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  z-index: 10;
+  background: rgba(201,168,76,0.12);
+  border: 1px solid rgba(201,168,76,0.3);
+  color: var(--accent);
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: all 0.2s;
+}
+
+.theme-toggle:hover {
+  background: rgba(201,168,76,0.25);
+  border-color: var(--accent);
+}
+
+body.light .theme-toggle {
+  background: rgba(154,123,45,0.10);
+  border-color: rgba(154,123,45,0.3);
+}
