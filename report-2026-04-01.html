@@ -435,6 +435,76 @@
 
 <div id="bayanat" class="tab-content active">
 <div class="container">
+
+  <!-- Categorization dashboard -->
+  <div class="siren-cats" style="margin-top:8px;">
+
+    <!-- By Operation Type -->
+    <div class="siren-cat-card">
+      <div class="cat-title"><div class="cat-icon" style="background:var(--green-dim);color:var(--green);">&#9733;</div> حسب نوع العملية</div>
+      <div class="cat-bar-row"><span class="cat-bar-label">تجمّعات جنود</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:72%;background:#2ecc71;">34</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">مستوطنات</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:15%;background:#9b59b6;">7</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">طائرات / جو</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:8%;background:#3498db;">4</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">دبابات ميركافا</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:4%;background:#e67e22;">2</div></div></div>
+    </div>
+
+    <!-- By Weapon -->
+    <div class="siren-cat-card">
+      <div class="cat-title"><div class="cat-icon" style="background:rgba(230,126,34,0.12);color:#e67e22;">&#9900;</div> حسب السلاح المستخدم</div>
+      <div class="cat-bar-row"><span class="cat-bar-label">صليات صاروخية</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:57%;background:#e74c3c;">27</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">مدفعية</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:11%;background:#e67e22;">5</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">صاروخ أرض-جو</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:8%;background:#3498db;">4</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">مسيّرات انقضاضية</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:11%;background:#1abc9c;">5</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">محلّقات انقضاضية</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:4%;background:#f39c12;">2</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">صاروخ موجّه</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:4%;background:#9b59b6;">2</div></div></div>
+    </div>
+
+    <!-- Results -->
+    <div class="siren-cat-card">
+      <div class="cat-title"><div class="cat-icon" style="background:var(--red-dim);color:var(--red);">&#10003;</div> النتائج المعلنة</div>
+      <div class="cat-type-pills">
+        <div class="cat-pill" style="background:var(--red-dim);color:var(--red);flex:1;">
+          <span class="pill-num">9</span>
+          إصابة مؤكّدة
+        </div>
+        <div class="cat-pill" style="background:var(--green-dim);color:var(--green);flex:1;">
+          <span class="pill-num">38</span>
+          دون تفصيل
+        </div>
+      </div>
+      <div style="margin-top:12px;">
+        <div class="cat-title" style="margin-bottom:8px;"><div class="cat-icon" style="background:rgba(155,89,182,0.12);color:#9b59b6;">&#9201;</div> توزيع العمليات بالساعة</div>
+        <div class="cat-timeline" id="bayanTimeline"></div>
+        <div class="cat-tlabels"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:59</span></div>
+      </div>
+    </div>
+
+    <!-- Top Targets -->
+    <div class="siren-cat-card">
+      <div class="cat-title"><div class="cat-icon" style="background:var(--accent-dim);color:var(--accent);">&#9873;</div> أكثر المواقع استهدافاً</div>
+      <div class="cat-bar-row"><span class="cat-bar-label">القنطرة</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:55%;background:#c9a84c;">6</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">كريات شمونة</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:37%;background:#9b59b6;">4</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">عيناتا</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:27%;background:#e67e22;">3</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">البيّاضة</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:18%;background:#2ecc71;">2</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">نهاريا</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:18%;background:#3498db;">2</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">مسكاف عام</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:18%;background:#1abc9c;">2</div></div></div>
+      <div class="cat-bar-row"><span class="cat-bar-label">القواعد العسكرية</span><div class="cat-bar-track"><div class="cat-bar-fill" style="width:37%;background:#e74c3c;">4</div></div></div>
+    </div>
+  </div>
+
+  <!-- Filter buttons for bayanat -->
+  <div class="cat-filter-bar">
+    <button class="cat-filter-btn active" onclick="filterBayanat('all',this)">الكل (47)</button>
+    <button class="cat-filter-btn" onclick="filterBayanat('settlement',this)">مستوطنات (7)</button>
+    <button class="cat-filter-btn" onclick="filterBayanat('tank',this)">دبابات (2)</button>
+    <button class="cat-filter-btn" onclick="filterBayanat('deep',this)">ضربات عمق (2)</button>
+    <button class="cat-filter-btn" onclick="filterBayanat('hit',this)">إصابة مؤكّدة (9)</button>
+    <button class="cat-filter-btn" onclick="filterBayanat('drone',this)">مسيّرات (5)</button>
+    <button class="cat-filter-btn" onclick="filterBayanat('artillery',this)">مدفعية (5)</button>
+    <button class="cat-filter-btn" onclick="filterBayanat('air',this)">جوّي (4)</button>
+  </div>
+
+  <div class="siren-list-title">البيانات الكاملة</div>
   <div class="phase"><span>الصباح — 05:00 – 12:00</span></div>
 
   <div class="bayan deep"><div class="bayan-header"><div class="bayan-num">5</div><div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">10:47</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">06:20</span></div></div>
@@ -1191,6 +1261,93 @@ function performSearch(raw) {
       }
     }
   }
+}
+
+// ═══════════════════════ BAYANAT CATEGORIZATION ═══════════════════════
+
+// Build bayanat timeline
+(function() {
+  var hours = [];
+  for (var i = 0; i < 24; i++) hours[i] = 0;
+  // Operation times extracted from all 47 bayanat
+  var opTimes = ['06:20','08:00','09:30','08:30','10:00','10:45','10:30','11:00','11:30','11:30',
+    '12:00','11:00','11:50','09:00','12:00','06:30','12:30','13:00','13:00','13:00',
+    '13:30','14:00','14:00','14:30','14:45','14:30','14:30','15:00','15:00','15:00',
+    '15:30','16:00','16:30','16:15','16:30','17:00','17:00','17:00','17:30','17:30',
+    '18:00','18:30','18:30','19:00','19:30','19:30','19:30'];
+  opTimes.forEach(function(t) {
+    var h = parseInt(t.split(':')[0]);
+    hours[h]++;
+  });
+  var maxH = 0;
+  hours.forEach(function(v) { if (v > maxH) maxH = v; });
+  var container = document.getElementById('bayanTimeline');
+  if (!container) return;
+  for (var j = 0; j < 24; j++) {
+    var bar = document.createElement('div');
+    bar.className = 'cat-tbar';
+    bar.style.background = '#2ecc71';
+    var pct = maxH > 0 ? (hours[j] / maxH) * 100 : 0;
+    bar.style.height = Math.max(pct, 2) + '%';
+    if (hours[j] === 0) { bar.style.background = 'var(--surface3)'; bar.style.height = '4%'; }
+    bar.title = j + ':00 — ' + hours[j] + ' عملية';
+    container.appendChild(bar);
+  }
+})();
+
+// Filter bayanat cards
+function filterBayanat(filter, btn) {
+  document.querySelectorAll('#bayanat .cat-filter-btn').forEach(function(b) {
+    b.classList.remove('active');
+  });
+  btn.classList.add('active');
+
+  var cards = document.querySelectorAll('#bayanat .bayan');
+  cards.forEach(function(card) {
+    var cls = card.className;
+    var target = card.querySelector('.bayan-target');
+    var details = card.querySelector('.bayan-details');
+    var targetText = target ? target.textContent : '';
+    var detailText = details ? details.textContent : '';
+    var tags = card.querySelectorAll('.bayan-tag');
+    var tagText = '';
+    tags.forEach(function(t) { tagText += ' ' + t.textContent; });
+
+    var show = false;
+
+    if (filter === 'all') {
+      show = true;
+    } else if (filter === 'settlement') {
+      show = cls.indexOf('settlement') !== -1;
+    } else if (filter === 'tank') {
+      show = cls.indexOf('tank') !== -1 || targetText.indexOf('ميركافا') !== -1 || targetText.indexOf('دبابة') !== -1;
+    } else if (filter === 'deep') {
+      show = cls.indexOf('deep') !== -1 || tagText.indexOf('عمق') !== -1;
+    } else if (filter === 'hit') {
+      show = tagText.indexOf('إصابة') !== -1;
+    } else if (filter === 'drone') {
+      show = detailText.indexOf('مسيّر') !== -1 || detailText.indexOf('محلّق') !== -1 || detailText.indexOf('انقضاض') !== -1;
+    } else if (filter === 'artillery') {
+      show = detailText.indexOf('مدفع') !== -1;
+    } else if (filter === 'air') {
+      show = targetText.indexOf('طائرة') !== -1 || targetText.indexOf('مروحيّة') !== -1;
+    }
+
+    card.style.display = show ? '' : 'none';
+  });
+
+  // Hide empty phase dividers
+  document.querySelectorAll('#bayanat .phase').forEach(function(phase) {
+    var next = phase.nextElementSibling;
+    var hasVisible = false;
+    while (next && !next.classList.contains('phase')) {
+      if (next.classList && next.classList.contains('bayan') && next.style.display !== 'none') {
+        hasVisible = true; break;
+      }
+      next = next.nextElementSibling;
+    }
+    phase.style.display = hasVisible ? '' : 'none';
+  });
 }
 
 // ═══════════════════════ SIREN MAP ═══════════════════════
