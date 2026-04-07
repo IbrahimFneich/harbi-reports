@@ -161,8 +161,64 @@
     margin-top: 20px; font-size: 0.72rem; color: var(--text-dim);
   }
   .legend-item { display: flex; align-items: center; gap: 6px; }
-  .legend-dot {
-    width: 8px; height: 8px; border-radius: 50%;
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* Heatmap gradient legend */
+  .heatmap-legend {
+    display: flex; align-items: center; gap: 6px; margin-top: 8px;
+    justify-content: center; font-size: 0.62rem; color: var(--text-dim);
+  }
+  .heatmap-gradient {
+    width: 80px; height: 8px; border-radius: 4px;
+    background: linear-gradient(to right, rgba(231,76,60,0.15), rgba(231,76,60,1));
+  }
+
+  /* Tooltip */
+  .cal-tooltip {
+    position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%);
+    background: var(--surface3); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 12px; font-size: 0.65rem;
+    white-space: nowrap; z-index: 20; pointer-events: none;
+    opacity: 0; transition: opacity 0.2s; direction: rtl;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  }
+  .cal-day:hover .cal-tooltip { opacity: 1; }
+  .cal-tooltip .tt-date { font-weight: 700; color: var(--accent); margin-bottom: 3px; }
+  .cal-tooltip .tt-stats { color: var(--text-dim); }
+
+  /* Busiest badge */
+  .cal-day .busiest-badge {
+    position: absolute; top: -4px; right: -4px;
+    font-size: 0.65rem; color: var(--accent);
+  }
+
+  /* Trend chart */
+  .trend-section {
+    margin-top: 24px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px;
+  }
+  .trend-title {
+    font-size: 0.78rem; font-weight: 700; color: var(--text-dim);
+    margin-bottom: 12px; text-align: center;
+  }
+  .trend-chart {
+    display: flex; align-items: flex-end; gap: 4px; height: 80px;
+    direction: ltr;
+  }
+  .trend-bar-wrap {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  }
+  .trend-bar {
+    width: 100%; border-radius: 4px 4px 0 0; min-height: 4px;
+    transition: all 0.3s; cursor: pointer; position: relative;
+  }
+  .trend-bar:hover { opacity: 0.7; }
+  .trend-label {
+    font-size: 0.55rem; color: var(--text-dim); text-align: center;
+  }
+  .trend-val {
+    font-size: 0.58rem; font-weight: 700; color: var(--text);
   }
 
   /* Footer */
@@ -203,6 +259,18 @@
   <div class="legend">
     <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> تقرير متاح</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--text-muted)"></div> لا تقرير</div>
+    <div class="legend-item"><span style="color:var(--accent);">&starf;</span> الأكثر نشاطاً</div>
+  </div>
+  <div class="heatmap-legend">
+    <span>أقل</span>
+    <div class="heatmap-gradient"></div>
+    <span>أكثر</span>
+  </div>
+
+  <!-- Trend chart -->
+  <div class="trend-section" id="trendSection">
+    <div class="trend-title">اتجاه البيانات العسكرية يومياً</div>
+    <div class="trend-chart" id="trendChart"></div>
   </div>
 </div>
 
@@ -221,6 +289,28 @@ var reports = [
   '2026-04-02',
   '2026-04-01'
 ];
+
+// Per-day stats for heatmap + tooltips + trend
+var reportStats = {
+  '2026-04-01': {b:47, s:35, e:29, ir:9, v:3, total:124},
+  '2026-04-02': {b:41, s:33, e:19, ir:18, v:4, total:118},
+  '2026-04-03': {b:38, s:47, e:39, ir:12, v:3, total:139},
+  '2026-04-04': {b:38, s:37, e:22, ir:12, v:3, total:115},
+  '2026-04-05': {b:31, s:35, e:21, ir:12, v:3, total:104},
+  '2026-04-06': {b:52, s:32, e:25, ir:17, v:4, total:132},
+  '2026-04-07': {b:20, s:22, e:0, ir:0, v:3, total:45}
+};
+
+// Find busiest day
+var busiestDate = '';
+var busiestTotal = 0;
+Object.keys(reportStats).forEach(function(d) {
+  if (reportStats[d].total > busiestTotal) {
+    busiestTotal = reportStats[d].total;
+    busiestDate = d;
+  }
+});
+var maxTotal = busiestTotal;
 
 var reportSet = {};
 reports.forEach(function(d) { reportSet[d] = true; });
@@ -337,6 +427,14 @@ function renderCalendar() {
       if (isToday) a.className += ' today';
       a.href = 'report-' + dateStr + '.html';
 
+      // Heatmap background color
+      var stats = reportStats[dateStr];
+      if (stats && maxTotal > 0) {
+        var intensity = stats.total / maxTotal;
+        a.style.background = 'rgba(231,76,60,' + (0.08 + intensity * 0.25) + ')';
+        a.style.borderColor = 'rgba(231,76,60,' + (0.2 + intensity * 0.4) + ')';
+      }
+
       var num = document.createElement('div');
       num.className = 'day-num';
       num.textContent = d;
@@ -351,6 +449,31 @@ function renderCalendar() {
       a.appendChild(num);
       a.appendChild(name);
       a.appendChild(dot);
+
+      // Busiest badge
+      if (dateStr === busiestDate) {
+        var badge = document.createElement('span');
+        badge.className = 'busiest-badge';
+        badge.textContent = '\u2605';
+        badge.title = '\u0627\u0644\u064A\u0648\u0645 \u0627\u0644\u0623\u0643\u062B\u0631 \u0646\u0634\u0627\u0637\u0627\u064B';
+        a.appendChild(badge);
+      }
+
+      // Tooltip
+      if (stats) {
+        var tip = document.createElement('div');
+        tip.className = 'cal-tooltip';
+        var tipDate = document.createElement('div');
+        tipDate.className = 'tt-date';
+        tipDate.textContent = d + ' ' + arabicMonths[month] + ' — ' + arabicDays[dt.getDay()];
+        var tipStats = document.createElement('div');
+        tipStats.className = 'tt-stats';
+        tipStats.textContent = stats.b + ' بيان \u2022 ' + stats.s + ' صفارة \u2022 ' + stats.e + ' إعلام \u2022 ' + stats.ir + ' إيران';
+        tip.appendChild(tipDate);
+        tip.appendChild(tipStats);
+        a.appendChild(tip);
+      }
+
       grid.appendChild(a);
     } else {
       var cell = document.createElement('div');
@@ -377,6 +500,50 @@ function changeMonth(dir) {
 }
 
 renderCalendar();
+
+// Trend chart
+(function() {
+  var chart = document.getElementById('trendChart');
+  if (!chart) return;
+
+  var sorted = reports.slice().sort();
+  var maxB = 0;
+  sorted.forEach(function(d) {
+    var st = reportStats[d];
+    if (st && st.b > maxB) maxB = st.b;
+  });
+
+  sorted.forEach(function(d) {
+    var st = reportStats[d];
+    if (!st) return;
+    var pct = maxB > 0 ? (st.b / maxB) * 100 : 0;
+    var p = d.split('-');
+    var day = parseInt(p[2]);
+
+    var wrap = document.createElement('div');
+    wrap.className = 'trend-bar-wrap';
+
+    var val = document.createElement('div');
+    val.className = 'trend-val';
+    val.textContent = st.b;
+    wrap.appendChild(val);
+
+    var bar = document.createElement('div');
+    bar.className = 'trend-bar';
+    bar.style.height = Math.max(pct, 5) + '%';
+    bar.style.background = (d === busiestDate) ? 'var(--accent)' : 'var(--green)';
+    bar.title = day + ' ' + arabicMonths[parseInt(p[1]) - 1] + ' \u2014 ' + st.b + ' \u0628\u064A\u0627\u0646\u060C ' + st.s + ' \u0635\u0641\u0627\u0631\u0629';
+    bar.onclick = function() { window.location.href = 'report-' + d + '.html'; };
+    wrap.appendChild(bar);
+
+    var label = document.createElement('div');
+    label.className = 'trend-label';
+    label.textContent = day + '/' + parseInt(p[1]);
+    wrap.appendChild(label);
+
+    chart.appendChild(wrap);
+  });
+})();
 </script>
 
 <script src="report-enhancements.js"></script>
