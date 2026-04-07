@@ -651,8 +651,12 @@ function filterSirensAuto(filter, btn) {
     }
   });
 
-  var locs = Object.keys(locData);
+  var locs = Object.keys(locData).sort(function(a,b){ return locData[b].count - locData[a].count; });
   if (locs.length < 2) return;
+
+  // Assign barColors by rank (same order as the dashboard chart)
+  var locColorMap = {};
+  locs.forEach(function(name, idx) { locColorMap[name] = barColors[idx % barColors.length]; });
 
   var titleDiv = document.createElement('div');
   titleDiv.className = 'siren-map-title';
@@ -688,8 +692,7 @@ function filterSirensAuto(filter, btn) {
 
     locs.forEach(function(name) {
       var pt = locData[name];
-      var mainType = pt.types[0] || 'default';
-      var color = typeColors[mainType] || '#2ecc71';
+      var color = locColorMap[name] || '#2ecc71';
       var radius = 5 + Math.min(pt.count * 3, 16);
 
       var marker = L.circleMarker([pt.lat, pt.lng], {
