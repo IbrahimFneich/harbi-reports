@@ -300,7 +300,7 @@ body.light .theme-toggle {
 .map-fs-btn {
   position: absolute;
   top: 10px;
-  left: 10px;
+  right: 10px;
   z-index: 1001;
   background: rgba(15,21,32,0.9);
   border: 1px solid rgba(30,45,61,0.8);
@@ -328,7 +328,7 @@ body.light .theme-toggle {
 .map-fs-btn.fs-active {
   position: fixed;
   top: 14px;
-  left: 14px;
+  right: 14px;
   z-index: 10001;
   background: rgba(15,21,32,0.95);
   width: 36px;
