@@ -1185,9 +1185,11 @@ function initSirenMap() {
     attributionControl: false
   });
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    maxZoom: 15
-  }).addTo(sirenMap);
+  if (typeof addTrackedTileLayer === 'function') {
+    addTrackedTileLayer(sirenMap);
+  } else {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom: 15}).addTo(sirenMap);
+  }
 
   var sirenRows = document.querySelectorAll('#sirens .siren-row');
 

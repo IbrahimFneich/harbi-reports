@@ -185,6 +185,29 @@ function addFullscreenBtn(mapDiv, mapInstance) {
   });
 }
 
+// ── MAP TILE URLS ──
+var DARK_TILES = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+var LIGHT_TILES = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+var _allMapLayers = []; // track all tile layers for theme swap
+
+function getMapTileUrl() {
+  return document.body.classList.contains('light') ? LIGHT_TILES : DARK_TILES;
+}
+
+function addTrackedTileLayer(map) {
+  var layer = L.tileLayer(getMapTileUrl(), {maxZoom: 15}).addTo(map);
+  _allMapLayers.push({map: map, layer: layer});
+  return layer;
+}
+
+function swapAllMapTiles() {
+  var url = getMapTileUrl();
+  _allMapLayers.forEach(function(entry) {
+    entry.map.removeLayer(entry.layer);
+    entry.layer = L.tileLayer(url, {maxZoom: 15}).addTo(entry.map);
+  });
+}
+
 // ── THEME TOGGLE ──
 (function() {
   var saved = localStorage.getItem('harbi-theme');
@@ -202,6 +225,7 @@ function addFullscreenBtn(mapDiv, mapInstance) {
     var isLight = document.body.classList.contains('light');
     btn.textContent = isLight ? '\u263E' : '\u2600';
     localStorage.setItem('harbi-theme', isLight ? 'light' : 'dark');
+    swapAllMapTiles();
   };
   header.appendChild(btn);
 })();
@@ -660,7 +684,7 @@ function filterSirensAuto(filter, btn) {
     var map = L.map('autoBayanMap', {
       center: [33.1, 35.4], zoom: 10, zoomControl: true, attributionControl: false
     });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom: 15}).addTo(map);
+    addTrackedTileLayer(map);
 
     locs.forEach(function(name) {
       var pt = locData[name];
