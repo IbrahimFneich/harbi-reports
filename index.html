@@ -298,12 +298,45 @@
   }
   .calendar-section.hidden { display: none; }
 
-  @media (max-width: 500px) {
-    .header h1 { font-size: 1.5rem; }
-    .cal-day .day-num { font-size: 1rem; }
-    .cal-day .day-name { font-size: 0.5rem; }
-    .cal-grid { gap: 4px; }
-    .month-nav .current-month { font-size: 1rem; min-width: 120px; }
+  @media (max-width: 600px) {
+    .header { padding: 30px 16px 20px; }
+    .header h1 { font-size: 1.4rem; }
+    .header .subtitle { font-size: 0.75rem; }
+
+    .global-search { padding: 8px 12px; gap: 6px; }
+    .global-search input { padding: 8px 10px; font-size: 0.78rem; }
+    .gs-stats { font-size: 0.62rem; }
+
+    .stats-strip { gap: 12px; padding: 12px 10px; }
+    .stats-strip .stat { font-size: 0.65rem; }
+    .stats-strip .stat .n { font-size: 1.1rem; }
+
+    .month-nav { gap: 8px; padding: 12px 10px; }
+    .month-nav .btn { padding: 6px 10px; font-size: 0.68rem; }
+    .month-nav .current-month { font-size: 0.95rem; min-width: auto; }
+
+    .container { padding: 16px 10px 40px; }
+
+    .cal-grid { gap: 3px; }
+    .cal-header { font-size: 0.6rem; padding: 6px 0; }
+    .cal-day { border-radius: 8px; }
+    .cal-day .day-num { font-size: 0.95rem; }
+    .cal-day .day-name { font-size: 0.48rem; margin-top: 1px; }
+    .cal-day .dot { width: 4px; height: 4px; margin-top: 2px; }
+    .cal-day .busiest-badge { font-size: 0.5rem; top: -2px; right: -2px; }
+
+    .cal-tooltip { display: none; }
+
+    .legend { gap: 10px; font-size: 0.6rem; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+    .heatmap-legend { font-size: 0.55rem; gap: 4px; margin-top: 6px; }
+    .heatmap-gradient { width: 60px; height: 6px; }
+
+    .gs-result-card { padding: 12px 14px; }
+    .gs-result-date { font-size: 0.85rem; }
+    .gs-result-stats { font-size: 0.62rem; }
+    .gs-match-tag { font-size: 0.58rem; padding: 1px 6px; }
+
+    .footer { padding: 16px; font-size: 0.65rem; }
   }
 </style>
 </head>
