@@ -5,6 +5,231 @@
 // (no user input), safe for this static site context.
 // ═══════════════════════════════════════════════════════════
 
+// Reports list for navigation
+var ALL_REPORTS = ['2026-04-01','2026-04-02','2026-04-03','2026-04-04','2026-04-05','2026-04-06','2026-04-07'];
+var arabicMonthNames = {1:'كانون الثاني',2:'شباط',3:'آذار',4:'نيسان',5:'أيار',6:'حزيران',7:'تموز',8:'آب',9:'أيلول',10:'تشرين الأول',11:'تشرين الثاني',12:'كانون الأول'};
+var arabicDayNames = {0:'الأحد',1:'الإثنين',2:'الثلاثاء',3:'الأربعاء',4:'الخميس',5:'الجمعة',6:'السبت'};
+
+function getCurrentReportDate() {
+  var match = window.location.pathname.match(/report-(\d{4}-\d{2}-\d{2})/);
+  if (match) return match[1];
+  var titleMatch = document.title.match(/(\d{4})/);
+  return null;
+}
+
+function formatDateAr(dateStr) {
+  var p = dateStr.split('-');
+  var d = parseInt(p[2]);
+  var m = parseInt(p[1]);
+  return d + ' ' + (arabicMonthNames[m] || '');
+}
+
+// ═══════════════ 1. DAY SUMMARY HERO ═══════════════
+(function() {
+  var statsBar = document.querySelector('.stats');
+  if (!statsBar) return;
+  var bayanat = document.querySelectorAll('#bayanat .bayan').length;
+  if (bayanat === 0) return;
+
+  var tanks = 0, hits = 0, aircraft = 0, settlements = 0, bases = 0;
+  document.querySelectorAll('#bayanat .bayan').forEach(function(c) {
+    var cls = c.className || '';
+    var tt = (c.querySelector('.bayan-target') || {}).textContent || '';
+    var tg = ''; c.querySelectorAll('.bayan-tag').forEach(function(t) { tg += t.textContent; });
+    if (cls.indexOf('tank') !== -1 || tt.indexOf('ميركافا') !== -1) tanks++;
+    if (tg.indexOf('إصابة') !== -1) hits++;
+    if (tt.indexOf('طائرة') !== -1 || tt.indexOf('مروحيّة') !== -1) aircraft++;
+    if (cls.indexOf('settlement') !== -1) settlements++;
+    if (cls.indexOf('deep') !== -1 || tt.indexOf('قاعدة') !== -1) bases++;
+  });
+
+  var hero = document.createElement('div');
+  hero.className = 'day-hero';
+
+  var chips = [
+    [bayanat + ' عملية', 'rgba(46,204,113,0.12)', '#2ecc71'],
+    [hits + ' إصابة مؤكّدة', 'rgba(231,76,60,0.12)', '#e74c3c']
+  ];
+  if (tanks > 0) chips.push([tanks + ' ميركافا', 'rgba(230,126,34,0.12)', '#e67e22']);
+  if (aircraft > 0) chips.push([aircraft + ' طائرة', 'rgba(52,152,219,0.12)', '#3498db']);
+  if (settlements > 0) chips.push([settlements + ' مستوطنة', 'rgba(155,89,182,0.12)', '#9b59b6']);
+  if (bases > 0) chips.push([bases + ' قاعدة/بنى تحتية', 'rgba(201,168,76,0.12)', '#c9a84c']);
+
+  var sirens = document.querySelectorAll('#sirens .siren-row').length;
+  if (sirens > 0) chips.push([sirens + ' صفارة إنذار', 'rgba(231,76,60,0.08)', '#e74c3c']);
+
+  chips.forEach(function(ch) {
+    var chip = document.createElement('span');
+    chip.className = 'hero-chip';
+    chip.style.background = ch[1];
+    chip.style.color = ch[2];
+    chip.textContent = ch[0];
+    hero.appendChild(chip);
+  });
+
+  statsBar.parentNode.insertBefore(hero, statsBar.nextSibling);
+})();
+
+// ═══════════════ 2. PREV/NEXT NAVIGATION ═══════════════
+(function() {
+  var currentDate = getCurrentReportDate();
+  if (!currentDate) return;
+
+  var idx = ALL_REPORTS.indexOf(currentDate);
+  if (idx === -1) return;
+
+  var nav = document.createElement('div');
+  nav.className = 'day-nav';
+
+  var prevBtn = document.createElement('a');
+  prevBtn.className = 'day-nav-btn' + (idx === 0 ? ' disabled' : '');
+  if (idx > 0) {
+    prevBtn.href = 'report-' + ALL_REPORTS[idx - 1] + '.html';
+    prevBtn.textContent = '\u2192 ' + formatDateAr(ALL_REPORTS[idx - 1]);
+  } else {
+    prevBtn.textContent = '\u2192 السابق';
+  }
+
+  var center = document.createElement('span');
+  center.className = 'day-nav-current';
+  var dt = new Date(parseInt(currentDate.split('-')[0]), parseInt(currentDate.split('-')[1]) - 1, parseInt(currentDate.split('-')[2]));
+  center.textContent = arabicDayNames[dt.getDay()];
+
+  var nextBtn = document.createElement('a');
+  nextBtn.className = 'day-nav-btn' + (idx === ALL_REPORTS.length - 1 ? ' disabled' : '');
+  if (idx < ALL_REPORTS.length - 1) {
+    nextBtn.href = 'report-' + ALL_REPORTS[idx + 1] + '.html';
+    nextBtn.textContent = formatDateAr(ALL_REPORTS[idx + 1]) + ' \u2190';
+  } else {
+    nextBtn.textContent = 'التالي \u2190';
+  }
+
+  nav.appendChild(prevBtn);
+  nav.appendChild(center);
+  nav.appendChild(nextBtn);
+
+  // Insert after hero or stats
+  var hero = document.querySelector('.day-hero');
+  var ref = hero || document.querySelector('.stats');
+  if (ref) ref.parentNode.insertBefore(nav, ref.nextSibling);
+})();
+
+// ═══════════════ 3. COMBINED HEATMAP TIMELINE ═══════════════
+(function() {
+  var tabs = document.querySelector('.tabs');
+  if (!tabs) return;
+
+  var hours = [];
+  for (var i = 0; i < 24; i++) hours[i] = 0;
+
+  // Count all timed events
+  document.querySelectorAll('#bayanat .bayan .t-val').forEach(function(el, idx) {
+    if (idx % 2 === 1) { // op time (second t-val)
+      var h = parseInt(el.textContent.trim().split(':')[0]);
+      if (!isNaN(h) && h >= 0 && h < 24) hours[h]++;
+    }
+  });
+  document.querySelectorAll('#sirens .siren-row .s-time').forEach(function(el) {
+    var h = parseInt(el.textContent.trim().split(':')[0]);
+    if (!isNaN(h) && h >= 0 && h < 24) hours[h]++;
+  });
+  document.querySelectorAll('#enemy .enemy-row .e-time').forEach(function(el) {
+    var h = parseInt(el.textContent.trim().split(':')[0]);
+    if (!isNaN(h) && h >= 0 && h < 24) hours[h]++;
+  });
+
+  var maxH = 0;
+  hours.forEach(function(v) { if (v > maxH) maxH = v; });
+  if (maxH === 0) return;
+
+  var card = document.createElement('div');
+  card.className = 'heatmap-card';
+  var title = document.createElement('div');
+  title.className = 'hm-title';
+  title.textContent = 'كثافة الأحداث على مدار اليوم (كل الفئات)';
+  card.appendChild(title);
+
+  var strip = document.createElement('div');
+  strip.className = 'heatmap-strip';
+  for (var j = 0; j < 24; j++) {
+    var cell = document.createElement('div');
+    var intensity = hours[j] / maxH;
+    var r = Math.round(231 * intensity + 30 * (1 - intensity));
+    var g = Math.round(76 * intensity + 21 * (1 - intensity));
+    var b = Math.round(60 * intensity + 32 * (1 - intensity));
+    cell.style.background = 'rgba(' + r + ',' + g + ',' + b + ',' + (0.15 + intensity * 0.85) + ')';
+    cell.title = j + ':00 \u2014 ' + hours[j] + ' حدث';
+    strip.appendChild(cell);
+  }
+  card.appendChild(strip);
+
+  var labels = document.createElement('div');
+  labels.className = 'heatmap-labels';
+  ['00:00','04:00','08:00','12:00','16:00','20:00','23:59'].forEach(function(l) {
+    var s = document.createElement('span'); s.textContent = l; labels.appendChild(s);
+  });
+  card.appendChild(labels);
+
+  // Insert before search bar or tabs
+  var searchBar = document.querySelector('.search-bar');
+  var insertRef = searchBar || tabs;
+  if (insertRef) insertRef.parentNode.insertBefore(card, insertRef);
+})();
+
+// ═══════════════ 4. ACTION BUTTONS (Share + Print) ═══════════════
+(function() {
+  var tabs = document.querySelector('.tabs');
+  if (!tabs) return;
+
+  var bar = document.createElement('div');
+  bar.className = 'action-bar';
+
+  // Share button
+  var shareBtn = document.createElement('button');
+  shareBtn.className = 'action-btn';
+  shareBtn.textContent = '\uD83D\uDCE4 نسخ الرابط';
+  shareBtn.onclick = function() {
+    var url = window.location.href;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+    } else {
+      var t = document.createElement('textarea');
+      t.value = url; document.body.appendChild(t);
+      t.select(); document.execCommand('copy');
+      document.body.removeChild(t);
+    }
+    shareBtn.textContent = '\u2713 تم النسخ';
+    shareBtn.classList.add('copied');
+    setTimeout(function() {
+      shareBtn.textContent = '\uD83D\uDCE4 نسخ الرابط';
+      shareBtn.classList.remove('copied');
+    }, 2000);
+  };
+
+  // WhatsApp share
+  var waBtn = document.createElement('a');
+  waBtn.className = 'action-btn';
+  waBtn.textContent = 'واتساب';
+  waBtn.href = 'https://wa.me/?text=' + encodeURIComponent(document.title + ' ' + window.location.href);
+  waBtn.target = '_blank';
+  waBtn.rel = 'noopener';
+
+  // Print button
+  var printBtn = document.createElement('button');
+  printBtn.className = 'action-btn';
+  printBtn.textContent = '\uD83D\uDDA8 طباعة';
+  printBtn.onclick = function() { window.print(); };
+
+  bar.appendChild(shareBtn);
+  bar.appendChild(waBtn);
+  bar.appendChild(printBtn);
+
+  // Insert after nav or hero
+  var nav = document.querySelector('.day-nav');
+  var ref = nav || document.querySelector('.day-hero') || document.querySelector('.stats');
+  if (ref) ref.parentNode.insertBefore(bar, ref.nextSibling);
+})();
+
 // ── THEME TOGGLE ──
 (function() {
   var saved = localStorage.getItem('harbi-theme');
@@ -391,6 +616,134 @@ function filterSirensAuto(filter, btn) {
     else row.style.display=loc.indexOf(filter)!==-1?'':'none';
   });
 }
+
+// ═══════════════════════ AUTO BAYANAT MAP ═══════════════════════
+(function() {
+  if (typeof L === 'undefined') return;
+  var bayanatTab = document.getElementById('bayanat');
+  if (!bayanatTab) return;
+  var container = bayanatTab.querySelector('.container');
+  if (!container) return;
+  var cards = container.querySelectorAll('.bayan');
+  if (cards.length < 3) return;
+  if (container.querySelector('.auto-bayan-map')) return;
+
+  var opCoords = {
+    'القنطرة':[33.25,35.82],'عيناتا':[33.12,35.53],'الطيبة':[33.11,35.56],
+    'البيّاضة':[33.15,35.53],'مارون الراس':[33.10,35.53],'رشاف':[33.09,35.52],
+    'بنت جبيل':[33.12,35.43],'كريات شمونة':[33.21,35.57],'نهاريا':[33.00,35.10],
+    'المطلة':[33.28,35.58],'مسكاف عام':[33.21,35.58],'يرؤون':[33.09,35.15],
+    'أفيفيم':[33.08,35.42],'شلومي':[33.08,35.14],'حانيتا':[33.09,35.16],
+    'مرغليوت':[33.23,35.62],'الخيام':[33.23,35.59],'المالكية':[33.09,35.48],
+    'حولاتا':[33.01,35.61],'القوزح':[33.18,35.55],'دير سريان':[33.19,35.54],
+    'العديسة':[33.18,35.57],'صفد':[32.96,35.50],'عكا':[32.92,35.07],
+    'حيفا':[32.79,34.99],'مركبا':[33.17,35.58],'سعسع':[33.05,35.42],
+    'عيتا الشعب':[33.10,35.45],'عيترون':[33.13,35.50],'كفاريوفال':[33.24,35.64],
+    'كفرجلعادي':[33.24,35.58],'شوميرا':[33.08,35.17],'عميعاد':[32.92,35.51],
+    'ميرون':[32.98,35.44],'القلعة':[33.35,35.60],'ربّ ثلاثين':[33.15,35.47],
+    'كابري':[33.02,35.15],'جويّا':[33.33,35.39],'يارون':[33.07,35.44],
+    'بفلاي':[33.31,35.38],'معيان باروخ':[33.24,35.60]
+  };
+
+  var typeColors = {
+    'settlement': '#9b59b6',
+    'tank': '#e67e22',
+    'deep': '#3498db',
+    'default': '#2ecc71'
+  };
+
+  var locData = {};
+  cards.forEach(function(card) {
+    var cls = card.className || '';
+    var tt = (card.querySelector('.bayan-target') || {}).textContent || '';
+    var type = 'default';
+    if (cls.indexOf('tank') !== -1) type = 'tank';
+    else if (cls.indexOf('settlement') !== -1) type = 'settlement';
+    else if (cls.indexOf('deep') !== -1) type = 'deep';
+
+    var keys = Object.keys(opCoords);
+    for (var i = 0; i < keys.length; i++) {
+      if (tt.indexOf(keys[i]) !== -1) {
+        if (!locData[keys[i]]) locData[keys[i]] = {lat: opCoords[keys[i]][0], lng: opCoords[keys[i]][1], count: 0, types: []};
+        locData[keys[i]].count++;
+        if (locData[keys[i]].types.indexOf(type) === -1) locData[keys[i]].types.push(type);
+        break;
+      }
+    }
+  });
+
+  var locs = Object.keys(locData);
+  if (locs.length < 2) return;
+
+  var titleDiv = document.createElement('div');
+  titleDiv.className = 'siren-map-title';
+  titleDiv.textContent = '\u062E\u0631\u064A\u0637\u0629 \u0627\u0644\u0639\u0645\u0644\u064A\u0627\u062A \u0627\u0644\u0639\u0633\u0643\u0631\u064A\u0629';
+
+  var mapDiv = document.createElement('div');
+  mapDiv.id = 'autoBayanMap';
+  mapDiv.className = 'auto-bayan-map';
+
+  // Insert in dashboard area
+  var dash = container.querySelector('.auto-dashboard');
+  var ref = dash || container.querySelector('.phase') || container.firstChild;
+  container.insertBefore(titleDiv, ref);
+  container.insertBefore(mapDiv, titleDiv.nextSibling);
+
+  var mapInited = false;
+  var origSw2 = window._enhSwitchTab2 || switchTab;
+  window._enhSwitchTab2 = origSw2;
+  switchTab = function(id, el) {
+    origSw2(id, el);
+    if (id === 'bayanat' && !mapInited) initBayanMap();
+  };
+  // Also init if bayanat is already active
+  if (bayanatTab.classList.contains('active')) setTimeout(initBayanMap, 300);
+
+  function initBayanMap() {
+    if (mapInited) return;
+    mapInited = true;
+    var map = L.map('autoBayanMap', {
+      center: [33.1, 35.4], zoom: 10, zoomControl: true, attributionControl: false
+    });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom: 15}).addTo(map);
+
+    locs.forEach(function(name) {
+      var pt = locData[name];
+      var mainType = pt.types[0] || 'default';
+      var color = typeColors[mainType] || '#2ecc71';
+      var radius = 5 + Math.min(pt.count * 3, 16);
+
+      var marker = L.circleMarker([pt.lat, pt.lng], {
+        radius: radius, fillColor: color, fillOpacity: 0.6,
+        color: color, weight: 2
+      }).addTo(map);
+
+      var popup = document.createElement('div');
+      popup.style.cssText = 'text-align:right;direction:rtl;min-width:100px;';
+      var pTitle = document.createElement('div');
+      pTitle.style.cssText = 'font-weight:800;font-size:0.85rem;color:' + color + ';margin-bottom:3px;';
+      pTitle.textContent = name;
+      popup.appendChild(pTitle);
+      var pCount = document.createElement('div');
+      pCount.style.cssText = 'font-size:0.72rem;color:#6b7d92;';
+      pCount.textContent = pt.count + ' \u0639\u0645\u0644\u064A\u0629';
+      popup.appendChild(pCount);
+      marker.bindPopup(popup, {closeButton: false});
+      marker.on('mouseover', function() { this.openPopup(); this.setStyle({fillOpacity: 1, weight: 3}); });
+      marker.on('mouseout', function() { this.closePopup(); this.setStyle({fillOpacity: 0.6, weight: 2}); });
+
+      if (pt.count >= 3) {
+        var icon = L.divIcon({
+          className: '',
+          html: '<div style="background:' + color + ';color:#fff;font-size:0.55rem;font-weight:800;padding:1px 4px;border-radius:4px;font-family:sans-serif;">' + pt.count + '</div>',
+          iconSize: [18, 14], iconAnchor: [9, -6]
+        });
+        L.marker([pt.lat, pt.lng], {icon: icon, interactive: false}).addTo(map);
+      }
+    });
+    setTimeout(function() { map.invalidateSize(); }, 200);
+  }
+})();
 
 // ═══════════════════════ AUTO SIREN MAP ═══════════════════════
 (function() {

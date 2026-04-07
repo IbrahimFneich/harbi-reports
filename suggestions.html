@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اقتراحات التطوير — الإعلام الحربي</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800;900&display=swap');
+
+  :root {
+    --bg: #080c12;
+    --surface: #0f1520;
+    --surface2: #151d2b;
+    --surface3: #1a2538;
+    --border: #1e2d3d;
+    --text: #dfe6ee;
+    --text-dim: #6b7d92;
+    --accent: #c9a84c;
+    --green: #2ecc71;
+    --red: #e74c3c;
+    --orange: #e67e22;
+    --blue: #3498db;
+    --purple: #9b59b6;
+    --cyan: #1abc9c;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Noto Kufi Arabic', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #080c12 0%, #121a2a 50%, #0d1520 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 40px 20px 30px;
+    text-align: center;
+    position: relative;
+  }
+  .header::before {
+    content:''; position:absolute; top:0;left:0;right:0;bottom:0;
+    background:radial-gradient(ellipse at center, rgba(201,168,76,0.06) 0%, transparent 70%);
+  }
+  .header h1 { font-size:1.8rem; font-weight:900; color:var(--accent); position:relative; margin-bottom:6px; }
+  .header .sub { font-size:0.85rem; color:var(--text-dim); position:relative; }
+
+  .container { max-width:900px; margin:0 auto; padding:30px 20px 60px; }
+
+  .section {
+    margin-bottom: 40px;
+  }
+
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 20px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+  }
+
+  .section-title { font-size: 1.1rem; font-weight: 800; }
+  .section-desc { font-size: 0.75rem; color: var(--text-dim); }
+
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media(max-width:600px) { .cards { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    transition: all 0.2s;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+
+  .card-title {
+    font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .card-title .emoji {
+    font-size: 1.1rem;
+  }
+
+  .card-desc {
+    font-size: 0.76rem; color: var(--text-dim); line-height: 1.8;
+  }
+
+  .card-impact {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+    font-size: 0.68rem; color: var(--text-dim);
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .impact-tag {
+    padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.62rem;
+  }
+
+  .impact-high { background: rgba(46,204,113,0.12); color: var(--green); }
+  .impact-med { background: rgba(52,152,219,0.12); color: var(--blue); }
+  .impact-low { background: rgba(107,125,146,0.12); color: var(--text-dim); }
+
+  .difficulty-dots {
+    display: flex; gap: 3px; margin-right: auto;
+  }
+
+  .diff-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+  }
+
+  .card-preview {
+    margin-top: 12px; padding: 10px 12px;
+    background: var(--surface2); border-radius: 8px;
+    border: 1px dashed var(--border);
+    font-size: 0.7rem; color: var(--text-dim);
+    text-align: center;
+  }
+
+  .card-preview .mock {
+    color: var(--accent); font-weight: 600;
+  }
+
+  /* Mockups */
+  .mock-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 10px; background: var(--surface3); border-radius: 6px;
+    font-size: 0.65rem; margin-top: 8px;
+  }
+  .mock-nav .arr { color: var(--accent); font-weight: 700; }
+
+  .mock-heatmap {
+    display: flex; gap: 2px; margin-top: 8px; height: 12px;
+  }
+  .mock-heatmap div {
+    flex: 1; border-radius: 2px;
+  }
+
+  .mock-hero {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;
+  }
+  .mock-hero .chip {
+    padding: 3px 8px; border-radius: 4px; font-size: 0.6rem; font-weight: 700;
+  }
+
+  .mock-trend {
+    display: flex; align-items: flex-end; gap: 3px; height: 30px; margin-top: 8px;
+  }
+  .mock-trend div { flex:1; border-radius: 2px 2px 0 0; }
+
+  .mock-tooltip {
+    background: var(--surface3); border: 1px solid var(--border);
+    border-radius: 6px; padding: 6px 10px; margin-top: 8px;
+    font-size: 0.62rem;
+  }
+
+  .mock-search {
+    background: var(--surface3); border: 1px solid var(--border);
+    border-radius: 6px; padding: 6px 10px; margin-top: 8px;
+    font-size: 0.65rem; color: var(--text-dim);
+  }
+
+  .vote-bar {
+    display: flex; gap: 6px; margin-top: 10px;
+  }
+  .vote-btn {
+    padding: 4px 12px; border-radius: 6px; font-size: 0.68rem;
+    font-weight: 600; font-family: inherit; cursor: pointer;
+    border: 1px solid var(--border); background: var(--surface2);
+    color: var(--text-dim); transition: all 0.2s;
+  }
+  .vote-btn:hover { border-color: var(--green); color: var(--green); }
+  .vote-btn.voted { border-color: var(--green); color: var(--green); background: rgba(46,204,113,0.1); }
+
+  .footer {
+    text-align:center; padding:24px; color:var(--text-dim); font-size:0.72rem;
+    border-top:1px solid var(--border); background:var(--surface);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>اقتراحات التطوير</h1>
+  <div class="sub">ما الذي يمكن إضافته للتقارير والصفحة الرئيسية؟</div>
+</div>
+
+<div class="container">
+
+  <!-- ═══════════ REPORT PAGE ═══════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(201,168,76,0.12);color:var(--accent);">&#9776;</div>
+      <div>
+        <div class="section-title">تطويرات صفحة التقرير اليومي</div>
+        <div class="section-desc">إضافات لصفحة مثل report-2026-04-01.html</div>
+      </div>
+    </div>
+
+    <div class="cards">
+
+      <!-- 1: Day Summary Hero -->
+      <div class="card" style="border-right:3px solid var(--green);">
+        <div class="card-title"><span class="emoji">&#9733;</span> ملخص اليوم السريع</div>
+        <div class="card-desc">بطاقة بارزة أعلى الصفحة تعرض أهم أرقام اليوم بنظرة واحدة</div>
+        <div class="mock-hero">
+          <div class="chip" style="background:rgba(46,204,113,0.12);color:var(--green);">47 عملية</div>
+          <div class="chip" style="background:rgba(231,76,60,0.12);color:var(--red);">9 إصابة مؤكّدة</div>
+          <div class="chip" style="background:rgba(230,126,34,0.12);color:var(--orange);">2 ميركافا</div>
+          <div class="chip" style="background:rgba(52,152,219,0.12);color:var(--blue);">4 طائرات</div>
+        </div>
+        <div class="card-impact">
+          <span class="impact-tag impact-high">تأثير عالي</span>
+          <div class="difficulty-dots">
+            <div class="diff-dot" style="background:var(--green);"></div>
+            <div class="diff-dot" style="background:var(--green);"></div>
+            <div class="diff-dot" style="background:var(--border);"></div>
+          </div>
+          سهل
+        </div>
+      </div>
+
+      <!-- 2: Prev/Next navigation -->
+      <div class="card" style="border-right:3px solid var(--blue);">
+        <div class="card-title"><span class="emoji">&#8644;</span> تنقل بين الأيام</div>
+        <div class="card-desc">أزرار "اليوم السابق / التالي" في الهيدر للتنقل السريع بدون الرجوع للصفحة الرئيسية</div>
+        <div class="mock-nav">
+          <span class="arr">&rarr; 31 آذار</span>
+          <span style="color:var(--text-dim);font-weight:700;">1 نيسان 2026</span>
+          <span class="arr">2 نيسان &larr;</span>
+        </div>
+        <div class="card-impact">
+          <span class="impact-tag impact-high">تأثير عالي</span>
+          <div class="difficulty-dots">
+            <div class="diff-dot" style="background:var(--green);"></div>
+            <div class="diff-dot" style="background:var(--border);"></div>
+            <div class="diff-dot" style="background:var(--border);"></div>
+          </div>
+          سهل جداً
+        </div>
+      </div>
+
+      <!-- 3: Operations Map -->
+      <div class="card" style="border-right:3px solid var(--orange);">
+        <div class="card-title"><span class="emoji">&#9873;</span> خريطة العمليات</div>
+        <div class="card-desc">خريطة تفاعلية في تبويب البيانات تعرض مواقع العمليات بألوان مختلفة حسب النوع (أخضر=تجمّعات، بنفسجي=مستوطنات، برتقالي=دبابات)</div>
+        <div class="card-preview">
+          <div class="mock">&#9678; القنطرة (6) &nbsp; &#9678; عيناتا (3) &nbsp; &#9678; كريات شمونة (4)</div>
+        </div>
+        <div class="card-impact">
+          <span class="impact-tag impact-high">تأثير عالي</span>
+          <div class="difficulty-dots">
+            <div class="diff-dot" style="background:var(--orange);"></div>
+            <div class="diff-dot" style="background:var(--orange);"></div>
+            <div class="diff-dot" style="background:var(--orange);"></div>
+          </div>
+          متوسط
+        </div>
+      </div>
+
+      <!-- 4: Full heatmap timeline -->
+      <div class="card" style="border-right:3px solid var(--purple);">
+        <div class="card-title"><span class="emoji">&#9201;</span> شريط حراري كامل</div>
+        <div class="card-desc">شريط حراري أفقي يغطي 24 ساعة ويجمع كل الفئات (بيانات + صفارات + إعلام) بكثافة لونية</div>
+        <div class="mock-heatmap">
+          <div style="background:rgba(231,76,60,0.15);"></div>
+          <div style="background:rgba(231,76,60,0.15);"></div>
+          <div style="background:rgba(231,76,60,0.3);"></div>
+          <div style="background:rgba(231,76,60,0.5);"></div>
+          <div style="background:rgba(231,76,60,0.7);"></div>
+          <div style="background:rgba(231,76,60,0.9);"></div>
+          <div style="background:rgba(231,76,60,1);"></div>
+          <div style="background:rgba(231,76,60,0.8);"></div>
+          <div style="background:rgba(231,76,60,0.6);"></div>
+          <div style="background:rgba(231,76,60,0.9);"></div>
+          <div style="background:rgba(231,76,60,0.7);"></div>
+          <div style="background:rgba(231,76,60,0.4);"></div>
+          <div style="background:rgba(231,76,60,0.3);"></div>
+          <div style="background:rgba(231,76,60,0.2);"></div>
+        </div>
+        <div class="card-impact">
+          <span class="impact-tag impact-med">تأثير متوسط</span>
+          <div class="difficulty-dots">
+            <div class="diff-dot" style="background:var(--orange);"></div>
+            <div class="diff-dot" style="background:var(--orange);"></div>
+            <div class="diff-dot" style="background:var(--border);"></div>
+          </div>
+          متوسط
+        </div>
+      </div>
+
+      <!-- 5: Comparison -->
+      <div class="card" style="border-right:3px solid var(--cyan);">
+        <div class="card-title"><span class="emoji">&#8693;</span> مقارنة مع اليوم السابق</div>
+        <div class="card-desc">عرض فروقات الأرقام: "&#8593;12 بيان أكثر من أمس" — "&#8595;5 صفارات أقل"</div>
+        <div class="card-preview">
+          <span class="mock" style="color:var(--green);">&#8593; 47 بيان (+12)</span> &nbsp;
+          <span class="mock" style="color:var(--red);">&#8595; 35 صفارة (-8)</span>
+        </div>
+        <div class="card-impact">
+          <span class="impact-tag impact-med">تأثير متوسط</span>
+          <div class="difficulty-dots">
+            <div class="diff-dot" style="background:var(--orange);"></div>
+            <div class="diff-dot" style="background:var(--orange);"></div>
+            <div class="diff-dot" style="background:var(--border);"></div>
+          </div>
+          متوسط
+        </div>
+      </div>
+
+      <!-- 6: Source links -->
+      <div class="card" style="border-right:3px solid var(--text-dim);">
+        <div class="card-title"><span class="emoji">&#128279;</span> روابط المصدر</div>
+        <div class="card-desc">كل بطاقة تحتوي رابط مباشر للرسالة الأصلية في تيليغرام (t.me/channel/msgId)</div>
+        <div class="card-impact">
+          <span class="impact-tag impact-low">تأثير منخفض</span>
+          <div class="difficulty-dots">
+            <div class="diff-dot" style="background:var(--green);"></div>
+            <div class="diff-dot" style="background:var(--border);"></div>
+            <div class="diff-dot" style="background:var(--border);"></div>
+          </div>
+          سهل
+        </div>
+      </div>
+
+      <!-- 7: Print/PDF -->
+      <div class="card" style="border-right:3px solid var(--text-dim);">
+        <div class="card-title"><span class="emoji">&#128424;</span> تصدير PDF</div>
+        <div class="card-desc">زر طباعة ينتج نسخة نظيفة للطباعة أو التحميل كـ PDF</div>
+        <div class="card-impact">
+          <span class="impact-tag impact-low">تأثير منخفض</span>
+          <div class="difficulty-dots">
+            <div class="diff-dot" style="background:var(--green);"></div>
+            <div class="diff-dot" style="background:var(--green);"></div>
+            <div class="diff-dot" style="background:var(--border);"></div>
+          </div>
+          سهل
+        </div>
+      </div>
+
+      <!-- 8: Share -->
+      <div class="card" style="border-right:3px solid var(--text-dim);">
+        <div class="card-title"><span class="emoji">&#128228;</span> زر مشاركة</div>
+        <div class="card-desc">نسخ رابط التقرير أو مشاركته على واتساب / تويتر / تيليغرام</div>
+        <div class="card-impact">
+          <span class="impact-tag impact-low">تأثير منخفض</span>
+          <div class="difficulty-dots">
+            <div class="diff-dot" style="background:var(--green);"></div>
+            <div class="diff-dot" style="background:var(--border);"></div>
+            <div class="diff-dot" style="background:var(--border);"></div>
+          </div>
+          سهل جداً
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ LANDING PAGE ═══════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(52,152,219,0.12);color:var(--blue);">&#9675;</div>
+      <div>
+        <div class="section-title">تطويرات الصفحة الرئيسية</div>
+        <div class="section-desc">إضافات لصفحة التقويم index.html</div>
+      </div>
+    </div>
+
+    <div class="cards">
+
+      <!-- 1: Heatmap calendar -->
+      <div class="card" style="border-right:3px solid var(--green);">
+        <div class="card-title"><span class="emoji">&#128293;</span> تقويم حراري</div>
+        <div class="card-desc">تلوين كل يوم حسب كثافة الأحداث — أحمر فاتح = يوم هادئ، أحمر غامق = يوم ساخن</div>
+        <div style="display:flex;gap:4px;margin-top:10px;">
+          <div style="width:28px;height:28px;border-radius:6px;background:rgba(231,76,60,0.15);display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:var(--text-dim);">1</div>
+          <div style="width:28px;height:28px;border-radius:6px;background:rgba(231,76,60,0.3);display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:var(--text-dim);">2</div>
+          <div style="width:28px;height:28px;border-radius:6px;background:rgba(231,76,60,0.55);display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:#fff;">3</div>
+          <div style="width:28px;height:28px;border-radius:6px;background:rgba(231,76,60,0.75);display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:#fff;">4</div>
+          <div style="width:28px;height:28px;border-radius:6px;background:rgba(231,76,60,0.5);display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:#fff;">5</div>
+          <div style="width:28px;height:28px;border-radius:6px;background:rgba(231,76,60,0.9);display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:#fff;">6</div>
+          <div style="width:28px;height:28px;border-radius:6px;background:rgba(231,76,60,0.35);display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:var(--text-dim);">7</div>
+        </div>
+        <div class="card-impact">
+          <span class="impact-tag impact-high">تأثير عالي</span>
+          <div class="difficulty-dots">
+            <div class="diff-dot" style="background:var(--orange);"></div>
+            <div class="diff-dot" style="background:var(--orange);"></div>
+            <div class="diff-dot" style="background:var(--border);"></div>
+          </div>
+          متوسط
+        </div>
+      </div>
+
+      <!-- 2: Hover preview -->
+      <div class="card" style="border-right:3px solid var(--green);">
+        <div class="card-title"><span class="emoji">&#128065;</span> معاينة سريعة عند التحويم</div>
+        <div class="card-desc">عند تمرير الماوس فوق يوم في التقويم، يظهر tooltip بأهم الأرقام</div>
+        <div class="mock-tooltip">
+          <div style="font-weight:700;color:var(--accent);margin-bottom:2px;">6 نيسان 2026</div>
+          <div>52 بيان &bull; 32 صفارة &bull; 25 إعلام &bull; 17 إيران</div>
+        </div>
+        <div class="card-impact">
+          <span class="impact-tag impact-high">تأثير عالي</span>
+          <div class="difficulty-dots">
+            <div class="diff-dot" style="background:var(--orange);"></div>
+            <div class="diff-dot" style="background:var(--orange);"></div>
+            <div class="diff-dot" style="background:var(--border);"></div>
+          </div>
+          متوسط
+        </div>
+      </div>
+
+      <!-- 3: Weekly summary -->
+      <div class="card" style="border-right:3px solid var(--blue);">
+        <div class="card-title"><span class="emoji">&#128200;</span> ملخص أسبوعي</div>
+        <div class="card-desc">شريط إحصائيات فوق التقويم: إجمالي الأسبوع مع اتجاهات &#8593;&#8595;</div>
+        <div class="card-preview">
+          <span class="mock">267 بيان هذا الأسبوع</span> &nbsp;
+          <span style="color:var(--green);">&#8593;15%</span>
+        </div>
+        <div class="card-impact">
+          <span class="impact-tag impact-med">تأثير متوسط</span>
+          <div class="difficulty-dots">
+            <div class="diff-dot" style="background:var(--orange);"></div>
+            <div class="diff-dot" style="background:var(--orange);"></div>
+            <div class="diff-dot" style="background:var(--orange);"></div>
+          </div>
+          صعب
+        </div>
+      </div>
+
+      <!-- 4: Trend chart -->
+      <div class="card" style="border-right:3px solid var(--blue);">
+        <div class="card-title"><span class="emoji">&#128202;</span> خط بياني للاتجاه</div>
+        <div class="card-desc">رسم بياني أسفل التقويم يعرض عدد البيانات يوماً بيوم كمنحنى</div>
+        <div class="mock-trend">
+          <div style="height:60%;background:var(--green);"></div>
+          <div style="height:80%;background:var(--green);"></div>
+          <div style="height:70%;background:var(--green);"></div>
+          <div style="height:55%;background:var(--green);"></div>
+          <div style="height:45%;background:var(--green);"></div>
+          <div style="height:100%;background:var(--accent);"></div>
+          <div style="height:30%;background:var(--green);"></div>
+        </div>
+        <div class="card-impact">
+          <span class="impact-tag impact-med">تأثير متوسط</span>
+          <div class="difficulty-dots">
+            <div class="diff-dot" style="background:var(--orange);"></div>
+            <div class="diff-dot" style="background:var(--orange);"></div>
+            <div class="diff-dot" style="background:var(--border);"></div>
+          </div>
+          متوسط
+        </div>
+      </div>
+
+      <!-- 5: Most active badge -->
+      <div class="card" style="border-right:3px solid var(--purple);">
+        <div class="card-title"><span class="emoji">&#127942;</span> شارة "اليوم الأكثر نشاطاً"</div>
+        <div class="card-desc">تمييز اليوم الأكثر كثافة في الشهر بنجمة أو تاج ذهبي على التقويم</div>
+        <div class="card-preview">
+          <span class="mock" style="font-size:1.2rem;">&#9733;</span>
+          <span class="mock">6 نيسان — 132 حدث</span>
+        </div>
+        <div class="card-impact">
+          <span class="impact-tag impact-low">تأثير منخفض</span>
+          <div class="difficulty-dots">
+            <div class="diff-dot" style="background:var(--green);"></div>
+            <div class="diff-dot" style="background:var(--border);"></div>
+            <div class="diff-dot" style="background:var(--border);"></div>
+          </div>
+          سهل جداً
+        </div>
+      </div>
+
+      <!-- 6: Global search -->
+      <div class="card" style="border-right:3px solid var(--purple);">
+        <div class="card-title"><span class="emoji">&#128270;</span> بحث شامل عبر كل الأيام</div>
+        <div class="card-desc">شريط بحث في الصفحة الرئيسية يبحث في جميع التقارير — "ميركافا" &#8594; يعرض كل الأيام التي ذُكرت فيها</div>
+        <div class="mock-search">&#128269; بحث في كل التقارير... (مثلاً: ميركافا، كريات شمونة)</div>
+        <div class="card-impact">
+          <span class="impact-tag impact-med">تأثير متوسط</span>
+          <div class="difficulty-dots">
+            <div class="diff-dot" style="background:var(--red);"></div>
+            <div class="diff-dot" style="background:var(--red);"></div>
+            <div class="diff-dot" style="background:var(--red);"></div>
+          </div>
+          صعب
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  اختر ما يعجبك — سأنفذه مباشرة
+</div>
+
+</body>
+</html>

@@ -300,3 +300,89 @@ body.light .theme-toggle {
   border-color: var(--red) !important;
   background: var(--red-dim) !important;
 }
+
+/* ═══════════════ Day Summary Hero ═══════════════ */
+.day-hero {
+  display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+  padding: 14px 20px; background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.hero-chip {
+  padding: 6px 14px; border-radius: 8px;
+  font-size: 0.78rem; font-weight: 700; white-space: nowrap;
+}
+
+/* ═══════════════ Prev/Next Navigation ═══════════════ */
+.day-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 16px; background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+.day-nav-btn {
+  text-decoration: none; padding: 6px 14px; border-radius: 8px;
+  font-size: 0.75rem; font-weight: 600; font-family: inherit;
+  border: 1px solid var(--border); background: var(--surface3);
+  color: var(--text-dim); transition: all 0.2s; cursor: pointer;
+}
+.day-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+.day-nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.day-nav-current {
+  font-size: 0.72rem; color: var(--text-dim);
+}
+
+/* ═══════════════ Combined Heatmap ═══════════════ */
+.heatmap-strip {
+  display: flex; gap: 1px; height: 24px; border-radius: 6px;
+  overflow: hidden; margin: 12px 0;
+  direction: ltr;
+}
+.heatmap-strip div {
+  flex: 1; position: relative; transition: opacity 0.2s;
+}
+.heatmap-strip div:hover { opacity: 0.7; }
+.heatmap-labels {
+  display: flex; justify-content: space-between;
+  font-size: 0.55rem; color: var(--text-dim);
+  direction: ltr;
+}
+.heatmap-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 16px; margin-bottom: 16px;
+}
+.heatmap-card .hm-title {
+  font-size: 0.75rem; font-weight: 700; color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+/* ═══════════════ Action Buttons ═══════════════ */
+.action-bar {
+  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+  padding: 10px 16px; background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.action-btn {
+  padding: 6px 14px; border-radius: 8px; font-size: 0.72rem;
+  font-weight: 600; font-family: inherit; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--text-dim); transition: all 0.2s; text-decoration: none;
+}
+.action-btn:hover { border-color: var(--accent); color: var(--accent); }
+.action-btn.copied { border-color: var(--green); color: var(--green); }
+
+/* ═══════════════ Bayanat Map ═══════════════ */
+.auto-bayan-map {
+  width: 100%; height: 380px; border-radius: 12px;
+  border: 1px solid var(--border); margin-bottom: 16px;
+}
+
+/* ═══════════════ Print Styles ═══════════════ */
+@media print {
+  .header, .stats, .day-hero, .day-nav, .action-bar, .tabs, .search-bar,
+  .cat-filter-bar, .theme-toggle, .home-btn, .footer { break-inside: avoid; }
+  .tab-content { display: block !important; page-break-before: always; }
+  .auto-siren-map, .auto-bayan-map, #sirenMap { display: none; }
+  body { background: #fff; color: #000; }
+  .bayan, .siren-row, .enemy-row, .iran-card, .vid-card, .ally-card {
+    background: #f9f9f9; border-color: #ddd;
+  }
+}
