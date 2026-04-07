@@ -40,6 +40,12 @@ body.light .search-bar {
   backdrop-filter: blur(12px);
 }
 
+body.light .txt-full {
+  background: rgba(0,0,0,0.04);
+  border-color: var(--border);
+  color: #333;
+}
+
 body.light .leaflet-popup-content-wrapper {
   background: #ffffff !important;
   border-color: #d4cfc4 !important;
