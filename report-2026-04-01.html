@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>الإعلام الحربي — 1 نيسان 2026</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800;900&display=swap');
 
@@ -184,12 +186,42 @@
   }
   .txt-full.show { display:block; }
 
+  /* ── Siren map ── */
+  #sirenMap {
+    width:100%; height:420px; border-radius:12px;
+    border:1px solid var(--border); margin-bottom:16px;
+  }
+  .siren-map-title {
+    text-align:center; font-size:0.8rem; font-weight:700;
+    color:var(--text-dim); margin-bottom:10px;
+  }
+  .leaflet-popup-content-wrapper {
+    background:var(--surface) !important; color:var(--text) !important;
+    border:1px solid var(--border) !important; border-radius:8px !important;
+    font-family:'Noto Kufi Arabic',sans-serif !important;
+  }
+  .leaflet-popup-tip { background:var(--surface) !important; }
+  .leaflet-popup-content { font-size:0.78rem !important; direction:rtl !important; }
+  .popup-time { color:#e74c3c; font-weight:700; }
+  .popup-loc { color:#dfe6ee; }
+  .siren-pulse {
+    border-radius:50%; animation:pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow:0 0 0 0 rgba(231,76,60,0.5); }
+    70% { box-shadow:0 0 0 12px rgba(231,76,60,0); }
+    100% { box-shadow:0 0 0 0 rgba(231,76,60,0); }
+  }
+
   .siren-row {
     display:flex; gap:12px; align-items:center;
     padding:10px 16px; margin-bottom:6px;
     background:var(--surface); border:1px solid var(--border);
     border-right:3px solid var(--red); border-radius:8px;
     font-size:0.82rem;
+  }
+  .siren-row.highlighted {
+    border-color:var(--red); background:var(--red-dim);
   }
   .siren-row .s-time { color:var(--red); font-weight:700; min-width:42px; }
   .siren-row .s-loc { color:var(--text); }
@@ -602,6 +634,8 @@
 <div id="sirens" class="tab-content">
 <div class="container">
   <div class="phase"><span>35 صفارة إنذار عبر فلسطين المحتلة</span></div>
+  <div class="siren-map-title">خريطة انتشار صفارات الإنذار</div>
+  <div id="sirenMap"></div>
   <div class="siren-row"><span class="s-time">07:53</span><span class="s-loc">في تل أبيب ومحيطها</span></div>
   <div class="siren-row"><span class="s-time">08:35</span><span class="s-loc">في الجولان وطبريا والناصرة</span></div>
   <div class="siren-row"><span class="s-time">08:35</span><span class="s-loc">في تل أبيب ومحيطها</span></div>
@@ -1023,6 +1057,128 @@ function performSearch(raw) {
       }
     }
   }
+}
+
+// ═══════════════════════ SIREN MAP ═══════════════════════
+var sirenPoints = [
+  {lat:32.0853,lng:34.7818,loc:'تل أبيب',times:['07:53','08:35','09:06','09:52','17:20','17:30','17:35','18:06','20:18'],count:9},
+  {lat:32.8184,lng:35.5388,loc:'الجولان',times:['08:35','17:25'],count:2},
+  {lat:32.6996,lng:35.3035,loc:'طبريا',times:['08:35','13:06'],count:2},
+  {lat:32.6990,lng:35.2977,loc:'الناصرة',times:['08:35'],count:1},
+  {lat:33.0580,lng:35.1005,loc:'الجليل الغربي',times:['08:37','11:05','11:10','15:25','16:14','18:02'],count:6},
+  {lat:33.2260,lng:35.6233,loc:'مرجليوت',times:['09:28'],count:1},
+  {lat:33.2060,lng:35.5750,loc:'مسكاف عام',times:['10:29','19:48','21:00'],count:3},
+  {lat:33.2100,lng:35.5900,loc:'إصبع الجليل',times:['10:48','21:23'],count:2},
+  {lat:33.1310,lng:35.5150,loc:'يفتاح',times:['10:50'],count:1},
+  {lat:33.1340,lng:35.5540,loc:'راموت نفتالي',times:['10:50','13:26'],count:2},
+  {lat:33.1720,lng:35.5820,loc:'المنارة',times:['10:50'],count:1},
+  {lat:33.0876,lng:35.1475,loc:'يرؤون',times:['11:05','11:10'],count:2},
+  {lat:33.2081,lng:35.5731,loc:'كريات شمونه',times:['14:59','16:14','21:23'],count:3},
+  {lat:33.0042,lng:35.0968,loc:'نهاريا',times:['15:31','15:43','18:15'],count:3},
+  {lat:33.2784,lng:35.5785,loc:'المطلة',times:['18:21','20:41'],count:2},
+  {lat:31.8040,lng:34.6500,loc:'أسدود',times:['20:19'],count:1},
+  {lat:33.2390,lng:35.6450,loc:'دان',times:['21:23'],count:1},
+  {lat:33.2350,lng:35.6350,loc:'كفار يوفال',times:['21:23'],count:1}
+];
+
+var mapInited = false;
+var sirenMap = null;
+
+// Init map when sirens tab becomes visible
+var origSwitchTab = switchTab;
+switchTab = function(id, el) {
+  origSwitchTab(id, el);
+  if (id === 'sirens' && !mapInited) {
+    initSirenMap();
+  }
+};
+
+function initSirenMap() {
+  mapInited = true;
+  sirenMap = L.map('sirenMap', {
+    center: [32.5, 35.0],
+    zoom: 8,
+    zoomControl: true,
+    attributionControl: false
+  });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 15
+  }).addTo(sirenMap);
+
+  var sirenRows = document.querySelectorAll('#sirens .siren-row');
+
+  sirenPoints.forEach(function(pt, idx) {
+    var radius = 6 + Math.min(pt.count * 2, 14);
+    var opacity = 0.5 + Math.min(pt.count * 0.06, 0.4);
+
+    var marker = L.circleMarker([pt.lat, pt.lng], {
+      radius: radius,
+      fillColor: '#e74c3c',
+      fillOpacity: opacity,
+      color: '#e74c3c',
+      weight: 2,
+      className: 'siren-pulse'
+    }).addTo(sirenMap);
+
+    var popupHtml = '<div style="text-align:right;direction:rtl;min-width:120px;">' +
+      '<div style="font-weight:800;font-size:0.9rem;color:#e74c3c;margin-bottom:4px;">' + pt.loc + '</div>' +
+      '<div style="font-size:0.72rem;color:#6b7d92;margin-bottom:6px;">' + pt.count + ' صفارة</div>';
+
+    pt.times.forEach(function(t) {
+      popupHtml += '<div style="font-size:0.75rem;padding:2px 0;"><span class="popup-time">' + t + '</span></div>';
+    });
+    popupHtml += '</div>';
+
+    marker.bindPopup(popupHtml, {closeButton: false, offset: [0, -5]});
+
+    marker.on('mouseover', function() {
+      this.openPopup();
+      this.setStyle({fillOpacity: 1, weight: 3, radius: radius + 3});
+      // Highlight matching siren rows
+      sirenRows.forEach(function(row) {
+        var loc = row.querySelector('.s-loc');
+        if (loc && loc.textContent.indexOf(pt.loc) !== -1) {
+          row.classList.add('highlighted');
+        }
+      });
+    });
+
+    marker.on('mouseout', function() {
+      this.closePopup();
+      this.setStyle({fillOpacity: opacity, weight: 2, radius: radius});
+      sirenRows.forEach(function(row) {
+        row.classList.remove('highlighted');
+      });
+    });
+
+    marker.on('click', function() {
+      // Scroll to first matching siren row
+      sirenRows.forEach(function(row) {
+        var loc = row.querySelector('.s-loc');
+        if (loc && loc.textContent.indexOf(pt.loc) !== -1) {
+          row.scrollIntoView({behavior: 'smooth', block: 'center'});
+          row.classList.add('highlighted');
+          setTimeout(function() { row.classList.remove('highlighted'); }, 2000);
+        }
+      });
+    });
+  });
+
+  // Add count labels for high-frequency locations
+  sirenPoints.forEach(function(pt) {
+    if (pt.count >= 3) {
+      var icon = L.divIcon({
+        className: '',
+        html: '<div style="background:rgba(231,76,60,0.85);color:#fff;font-size:0.6rem;font-weight:800;padding:1px 5px;border-radius:6px;font-family:sans-serif;white-space:nowrap;text-align:center;">' + pt.count + '</div>',
+        iconSize: [20, 16],
+        iconAnchor: [10, -8]
+      });
+      L.marker([pt.lat, pt.lng], {icon: icon, interactive: false}).addTo(sirenMap);
+    }
+  });
+
+  setTimeout(function() { sirenMap.invalidateSize(); }, 200);
 }
 </script>
 
