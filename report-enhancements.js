@@ -114,7 +114,62 @@ function formatDateAr(dateStr) {
   if (ref) ref.parentNode.insertBefore(nav, ref.nextSibling);
 })();
 
-// (heatmap + action bar removed)
+// ═══════════════ MAP FULLSCREEN ═══════════════
+function addFullscreenBtn(mapDiv, mapInstance) {
+  if (!mapDiv) return;
+  var parent = mapDiv.parentNode;
+
+  // Wrap in relative container if not already
+  if (!parent.classList.contains('map-wrapper')) {
+    var wrapper = document.createElement('div');
+    wrapper.className = 'map-wrapper';
+    parent.insertBefore(wrapper, mapDiv);
+    wrapper.appendChild(mapDiv);
+    parent = wrapper;
+  }
+
+  var btn = document.createElement('button');
+  btn.className = 'map-fs-btn';
+  btn.textContent = '\u26F6';
+  btn.title = '\u0645\u0644\u0621 \u0627\u0644\u0634\u0627\u0634\u0629';
+  parent.appendChild(btn);
+
+  var isFS = false;
+  var origH = mapDiv.style.height;
+
+  btn.onclick = function() {
+    isFS = !isFS;
+    if (isFS) {
+      mapDiv.classList.add('map-fullscreen');
+      btn.textContent = '\u2716';
+      btn.title = '\u0625\u063A\u0644\u0627\u0642';
+      btn.style.position = 'fixed';
+      btn.style.top = '10px';
+      btn.style.left = '10px';
+      btn.style.zIndex = '10000';
+      document.body.style.overflow = 'hidden';
+    } else {
+      mapDiv.classList.remove('map-fullscreen');
+      btn.textContent = '\u26F6';
+      btn.title = '\u0645\u0644\u0621 \u0627\u0644\u0634\u0627\u0634\u0629';
+      btn.style.position = '';
+      btn.style.top = '';
+      btn.style.left = '';
+      btn.style.zIndex = '';
+      document.body.style.overflow = '';
+    }
+    if (mapInstance) {
+      setTimeout(function() { mapInstance.invalidateSize(); }, 200);
+    }
+  };
+
+  // ESC to exit
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && isFS) {
+      btn.click();
+    }
+  });
+}
 
 // ── THEME TOGGLE ──
 (function() {
@@ -628,6 +683,7 @@ function filterSirensAuto(filter, btn) {
       }
     });
     setTimeout(function() { map.invalidateSize(); }, 200);
+    addFullscreenBtn(document.getElementById('autoSirenMap'), map);
   }
 })();
 
@@ -800,5 +856,6 @@ function filterSirensAuto(filter, btn) {
     });
 
     setTimeout(function() { map.invalidateSize(); }, 200);
+    addFullscreenBtn(document.getElementById('autoBayanMap'), map);
   }
 })();
