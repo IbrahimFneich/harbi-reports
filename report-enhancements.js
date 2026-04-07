@@ -697,7 +697,7 @@ function filterSirensAuto(filter, btn) {
       }
     });
     setTimeout(function() { map.invalidateSize(); }, 200);
-    addFullscreenBtn(document.getElementById('autoSirenMap'), map);
+    addFullscreenBtn(document.getElementById('autoBayanMap'), map);
   }
 })();
 
@@ -870,6 +870,6 @@ function filterSirensAuto(filter, btn) {
     });
 
     setTimeout(function() { map.invalidateSize(); }, 200);
-    addFullscreenBtn(document.getElementById('autoBayanMap'), map);
+    addFullscreenBtn(document.getElementById('autoSirenMap'), map);
   }
 })();
