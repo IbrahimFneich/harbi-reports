@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإعلام الحربي — 6 نيسان 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800;900&display=swap');
+
+  :root {
+    --bg: #080c12;
+    --surface: #0f1520;
+    --surface2: #151d2b;
+    --surface3: #1a2538;
+    --border: #1e2d3d;
+    --text: #dfe6ee;
+    --text-dim: #6b7d92;
+    --accent: #c9a84c;
+    --accent-dim: rgba(201,168,76,0.12);
+    --green: #27ae60;
+    --green-bright: #2ecc71;
+    --green-dim: rgba(46,204,113,0.08);
+    --red: #e74c3c;
+    --red-dim: rgba(231,76,60,0.10);
+    --orange: #e67e22;
+    --orange-dim: rgba(230,126,34,0.10);
+    --blue: #3498db;
+    --blue-dim: rgba(52,152,219,0.10);
+    --purple: #9b59b6;
+    --purple-dim: rgba(155,89,182,0.10);
+    --cyan: #1abc9c;
+    --cyan-dim: rgba(26,188,156,0.08);
+    --pink: #e84393;
+    --pink-dim: rgba(232,67,147,0.08);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Noto Kufi Arabic', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #080c12 0%, #121a2a 50%, #0d1520 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 36px 20px 20px;
+    text-align: center;
+    position: relative;
+  }
+  .header::before {
+    content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+    background:radial-gradient(ellipse at center,rgba(201,168,76,0.06) 0%,transparent 70%);
+  }
+  .header h1 { font-size:1.9rem; font-weight:900; color:var(--accent); position:relative; margin-bottom:4px; }
+  .header .date { font-size:0.95rem; color:var(--text-dim); position:relative; }
+  .header .date span { color:var(--accent); font-weight:700; }
+
+  /* Stats */
+  .stats {
+    display:flex; justify-content:center; gap:14px; flex-wrap:wrap;
+    padding:16px 20px; background:var(--surface); border-bottom:1px solid var(--border);
+  }
+  .stat {
+    text-align:center; padding:10px 16px; border-radius:10px; min-width:90px;
+  }
+  .stat .n { font-size:1.5rem; font-weight:900; display:block; }
+  .stat .l { font-size:0.68rem; color:var(--text-dim); margin-top:1px; }
+
+  .stat.s1 { background:var(--green-dim); } .stat.s1 .n { color:var(--green-bright); }
+  .stat.s2 { background:var(--red-dim); } .stat.s2 .n { color:var(--red); }
+  .stat.s3 { background:var(--orange-dim); } .stat.s3 .n { color:var(--orange); }
+  .stat.s4 { background:var(--purple-dim); } .stat.s4 .n { color:var(--purple); }
+  .stat.s5 { background:var(--cyan-dim); } .stat.s5 .n { color:var(--cyan); }
+  .stat.s6 { background:var(--blue-dim); } .stat.s6 .n { color:var(--blue); }
+
+  /* Tabs */
+  .tabs {
+    display:flex; justify-content:flex-start; gap:0; background:var(--surface2);
+    border-bottom:1px solid var(--border); overflow-x:auto; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; -ms-overflow-style:none;
+  }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab {
+    padding:12px 16px; cursor:pointer; font-size:0.78rem; font-weight:600;
+    color:var(--text-dim); border-bottom:3px solid transparent;
+    transition:all 0.2s; white-space:nowrap; position:relative; flex-shrink:0;
+  }
+  .tab:hover { color:var(--text); background:rgba(255,255,255,0.02); }
+  .tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+  .tab .badge {
+    display:inline-block; font-size:0.6rem; font-weight:800; padding:1px 6px;
+    border-radius:8px; margin-right:4px; vertical-align:middle;
+  }
+  .tab.active .badge { background:var(--accent); color:var(--bg); }
+  .tab:not(.active) .badge { background:var(--surface3); color:var(--text-dim); }
+
+  /* Tab content */
+  .tab-content { display:none; }
+  .tab-content.active { display:block; }
+
+  .container { max-width:940px; margin:0 auto; padding:24px 16px 60px; }
+
+  /* Phase divider */
+  .phase {
+    text-align:center; margin:28px 0 18px; position:relative;
+  }
+  .phase::before,.phase::after {
+    content:'';position:absolute;top:50%;width:28%;height:1px;background:var(--border);
+  }
+  .phase::before{right:0} .phase::after{left:0}
+  .phase span {
+    background:var(--accent); color:var(--bg); font-weight:700; font-size:0.8rem;
+    padding:4px 18px; border-radius:20px; display:inline-block; position:relative; z-index:1;
+  }
+
+  /* ── بيان card (detailed) ── */
+  .bayan {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-right:4px solid var(--green);
+    border-radius:10px;
+    padding:12px 16px;
+    margin-bottom:10px;
+    transition:transform 0.15s;
+  }
+  .bayan:hover { transform:translateX(-2px); }
+
+  .bayan.tank { border-right-color:var(--orange); }
+  .bayan.settlement { border-right-color:var(--purple); }
+  .bayan.deep { border-right-color:var(--blue); }
+  .bayan.multi { border-right-color:var(--accent); }
+
+  .bayan-header {
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;
+  }
+  .bayan-num {
+    font-size:1.3rem; font-weight:900; color:var(--green-bright);
+    background:var(--green-dim); width:40px; height:40px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .bayan.tank .bayan-num { color:var(--orange); background:var(--orange-dim); }
+  .bayan.settlement .bayan-num { color:var(--purple); background:var(--purple-dim); }
+  .bayan.deep .bayan-num { color:var(--blue); background:var(--blue-dim); }
+  .bayan.multi .bayan-num { color:var(--accent); background:var(--accent-dim); }
+
+  .bayan-times {
+    display:flex; gap:10px; font-size:0.7rem; color:var(--text-dim);
+  }
+  .bayan-times .t-label { color:var(--text-dim); }
+  .bayan-times .t-val { color:var(--text); font-weight:600; }
+
+  .bayan-target {
+    font-size:0.92rem; font-weight:700; color:var(--accent); margin-bottom:4px;
+  }
+
+  .bayan-details {
+    display:flex; gap:16px; flex-wrap:wrap;
+    font-size:0.78rem; color:var(--text-dim);
+  }
+  .bayan-details .detail-label { color:var(--text-dim); font-size:0.68rem; }
+  .bayan-details .detail-val { color:var(--text); }
+
+  .bayan-tag {
+    display:inline-block; font-size:0.63rem; font-weight:700;
+    padding:2px 8px; border-radius:4px; margin-top:6px;
+  }
+  .tag-warning { background:var(--purple-dim); color:var(--purple); }
+  .tag-hit { background:var(--red-dim); color:var(--red); }
+  .tag-deep { background:var(--blue-dim); color:var(--blue); }
+  .tag-retaliation { background:var(--orange-dim); color:var(--orange); }
+
+  /* ── Collapsible full text (universal) ── */
+  .txt-toggle {
+    display:inline-block; cursor:pointer; font-size:0.66rem; font-weight:600;
+    color:var(--text-dim); margin-top:6px; padding:3px 10px;
+    border:1px solid var(--border); border-radius:6px;
+    transition:all 0.2s; user-select:none;
+  }
+  .txt-toggle:hover { color:var(--accent); border-color:var(--accent); }
+  .txt-toggle.open { color:var(--accent); border-color:rgba(201,168,76,0.3); }
+
+  .txt-full {
+    display:none; margin-top:8px; padding:10px 14px;
+    background:rgba(0,0,0,0.25); border-radius:8px; border:1px solid var(--border);
+    font-size:0.76rem; line-height:2; color:var(--text-dim);
+    white-space:pre-wrap; max-height:300px; overflow-y:auto;
+  }
+  .txt-full.show { display:block; }
+
+  /* ── Siren row ── */
+  .siren-row {
+    display:flex; gap:12px; align-items:center;
+    padding:10px 16px; margin-bottom:6px;
+    background:var(--surface); border:1px solid var(--border);
+    border-right:3px solid var(--red); border-radius:8px;
+    font-size:0.82rem;
+  }
+  .siren-row .s-time { color:var(--red); font-weight:700; min-width:42px; }
+  .siren-row .s-loc { color:var(--text); }
+
+  /* ── Enemy report ── */
+  .enemy-row {
+    padding:12px 16px; margin-bottom:8px;
+    background:var(--surface); border:1px solid var(--border);
+    border-right:3px solid var(--orange); border-radius:8px;
+  }
+  .enemy-row .e-time { font-size:0.72rem; color:var(--orange); font-weight:700; }
+  .enemy-row .e-text { font-size:0.84rem; margin-top:4px; }
+  .enemy-row .e-source { font-size:0.68rem; color:var(--text-dim); margin-top:2px; }
+
+  /* ── Video card ── */
+  .vid-card {
+    padding:14px 16px; margin-bottom:8px;
+    background:var(--surface); border:1px solid var(--border);
+    border-right:3px solid var(--cyan); border-radius:8px;
+  }
+  .vid-card .v-time { font-size:0.72rem; color:var(--cyan); font-weight:700; }
+  .vid-card .v-text { font-size:0.84rem; margin-top:4px; }
+  .vid-icon { display:inline-block; margin-left:6px; color:var(--cyan); }
+
+  /* ── Iran card ── */
+  .iran-card {
+    padding:14px 18px; margin-bottom:10px;
+    background:var(--surface); border:1px solid var(--border);
+    border-right:4px solid var(--purple); border-radius:10px;
+  }
+  .iran-card .i-time { font-size:0.72rem; color:var(--purple); font-weight:700; }
+  .iran-card .i-source { font-size:0.7rem; color:var(--text-dim); margin-top:2px; }
+  .iran-card .i-text { font-size:0.84rem; margin-top:6px; line-height:1.8; }
+
+  /* ── Allies card ── */
+  .ally-card {
+    padding:14px 18px; margin-bottom:10px;
+    background:var(--surface); border:1px solid var(--border);
+    border-right:4px solid var(--cyan); border-radius:10px;
+  }
+  .ally-card .a-flag { font-size:0.7rem; font-weight:700; color:var(--cyan); }
+  .ally-card .a-time { font-size:0.72rem; color:var(--text-dim); }
+  .ally-card .a-text { font-size:0.84rem; margin-top:6px; }
+
+  .hl { color:var(--accent); font-weight:600; }
+
+  /* ── Search ── */
+  .search-bar {
+    position:sticky; top:0; z-index:100;
+    background:var(--surface); border-bottom:1px solid var(--border);
+    padding:10px 16px; display:flex; gap:10px; align-items:center;
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  }
+  .search-bar input {
+    flex:1; background:var(--surface2); border:1px solid var(--border);
+    border-radius:8px; padding:9px 14px; font-size:0.82rem;
+    color:var(--text); font-family:inherit; outline:none;
+    transition:border-color 0.2s;
+  }
+  .search-bar input:focus { border-color:var(--accent); }
+  .search-bar input::placeholder { color:var(--text-dim); }
+  .search-stats {
+    font-size:0.7rem; color:var(--text-dim); white-space:nowrap; min-width:60px;
+    text-align:center;
+  }
+  .search-stats .count { color:var(--accent); font-weight:700; }
+  .search-clear {
+    background:none; border:1px solid var(--border); border-radius:6px;
+    color:var(--text-dim); cursor:pointer; padding:6px 10px; font-size:0.72rem;
+    font-family:inherit; transition:all 0.2s; display:none;
+  }
+  .search-clear:hover { color:var(--red); border-color:var(--red); }
+  .search-clear.visible { display:inline-block; }
+
+  .search-highlight {
+    background:rgba(201,168,76,0.3); color:var(--accent); border-radius:2px;
+    padding:0 1px;
+  }
+
+  .card-hidden { display:none !important; }
+  .phase.phase-hidden { display:none !important; }
+
+  .no-results {
+    text-align:center; padding:40px 20px; color:var(--text-dim); font-size:0.9rem;
+    display:none;
+  }
+  .no-results.show { display:block; }
+
+  .footer {
+    text-align:center; padding:24px; color:var(--text-dim); font-size:0.72rem;
+    border-top:1px solid var(--border); background:var(--surface);
+  }
+
+  @media(max-width:600px){
+    .header h1{font-size:1.3rem}
+    .stats{gap:8px} .stat{min-width:70px;padding:6px 10px} .stat .n{font-size:1.2rem}
+    .tab{padding:10px 12px;font-size:0.72rem}
+    .bayan-details{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>الإعلام الحربي — التغطية الإخبارية</h1>
+  <div class="date">الإثنين <span>6 نيسان 2026</span> — 17 شوال 1447 هـ</div>
+</div>
+
+<div class="stats">
+  <div class="stat s1"><span class="n">52</span><span class="l">بيان عسكري</span></div>
+  <div class="stat s2"><span class="n">32</span><span class="l">صفارة إنذار</span></div>
+  <div class="stat s3"><span class="n">25</span><span class="l">تقرير إعلام العدو</span></div>
+  <div class="stat s4"><span class="n">17</span><span class="l">إيران</span></div>
+  <div class="stat s5"><span class="n">4</span><span class="l">فيديو عمليات</span></div>
+  <div class="stat s6"><span class="n">2</span><span class="l">يمن + عراق</span></div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('bayanat',this)">بيانات المقاومة <span class="badge">52</span></div>
+  <div class="tab" onclick="switchTab('sirens',this)">صفارات الإنذار <span class="badge">32</span></div>
+  <div class="tab" onclick="switchTab('enemy',this)">إعلام العدو <span class="badge">25</span></div>
+  <div class="tab" onclick="switchTab('iran',this)">إيران <span class="badge">17</span></div>
+  <div class="tab" onclick="switchTab('videos',this)">فيديوهات <span class="badge">4</span></div>
+  <div class="tab" onclick="switchTab('allies',this)">اليمن والعراق <span class="badge">2</span></div>
+</div>
+
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="بحث... (مثلاً: ميركافا، كريات شمونة، مسيّرة، تل أبيب)" autocomplete="off">
+  <div class="search-stats" id="searchStats"></div>
+  <button class="search-clear" id="searchClear" onclick="clearSearch()">مسح</button>
+</div>
+
+
+<!-- ═══════════════════════ TAB 1: BAYANAT ═══════════════════════ -->
+<div id="bayanat" class="tab-content active">
+<div class="container">
+
+  <div class="phase"><span>الفجر — 00:00 – 05:00</span></div>
+
+  <div class="bayan settlement">
+    <div class="bayan-header">
+      <div class="bayan-num">1</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">00:00</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">02:25</span></div>
+    </div>
+    <div class="bayan-target">مستوطنة ليمان</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف مستوطنة</span></div>
+    </div>
+    <span class="bayan-tag tag-warning">في إطار التحذير</span>
+  </div>
+
+  <div class="bayan settlement">
+    <div class="bayan-header">
+      <div class="bayan-num">2</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">00:05</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">00:30</span></div>
+    </div>
+    <div class="bayan-target">مستوطنة حورفيش</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف مستوطنة</span></div>
+    </div>
+    <span class="bayan-tag tag-warning">في إطار التحذير</span>
+  </div>
+
+  <div class="bayan settlement">
+    <div class="bayan-header">
+      <div class="bayan-num">3</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">00:10</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">02:30</span></div>
+    </div>
+    <div class="bayan-target">مستوطنة شلومي</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف مستوطنة</span></div>
+    </div>
+    <span class="bayan-tag tag-warning">في إطار التحذير</span>
+  </div>
+
+  <div class="bayan settlement">
+    <div class="bayan-header">
+      <div class="bayan-num">4</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">01:30</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">03:10</span></div>
+    </div>
+    <div class="bayan-target">مستوطنة نهاريا</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف مستوطنة</span></div>
+    </div>
+    <span class="bayan-tag tag-warning">في إطار التحذير</span>
+  </div>
+
+  <div class="bayan multi">
+    <div class="bayan-header">
+      <div class="bayan-num">7</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">10:05</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">00:15 – 04:45</span></div>
+    </div>
+    <div class="bayan-target">عيناتا (7 صليات) + مارون الراس</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">المواقع</span><br><span class="detail-val">تلّة السدر × 3 — تلّة غدماثا × 2 — تلّة فريز — مارون الراس</span></div>
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صليات صاروخية متعددة الدفعات</span></div>
+    </div>
+  </div>
+
+  <div class="bayan tank">
+    <div class="bayan-header">
+      <div class="bayan-num">8</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">10:10</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">05:00</span></div>
+    </div>
+    <div class="bayan-target">دبّابة ميركافا — بلدة رشاف</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صاروخ مباشر</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف مدرّعات</span></div>
+    </div>
+    <span class="bayan-tag tag-hit">إصابة مؤكّدة</span>
+  </div>
+
+  <div class="phase"><span>الصباح — 05:00 – 12:00</span></div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">5</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">08:55</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">11:20</span></div>
+    </div>
+    <div class="bayan-target">بوابة فاطمة — الحدود اللبنانية الفلسطينية</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع آليات وجنود</span></div>
+    </div>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">6</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">09:05</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">11:20</span></div>
+    </div>
+    <div class="bayan-target">موقع إبل القمح</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع آليات وجنود</span></div>
+    </div>
+  </div>
+
+  <div class="bayan settlement">
+    <div class="bayan-header">
+      <div class="bayan-num">9</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">10:25</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">12:45</span></div>
+    </div>
+    <div class="bayan-target">مستوطنة نهاريا (المرّة الثانية)</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف مستوطنة</span></div>
+    </div>
+    <span class="bayan-tag tag-warning">في إطار التحذير</span>
+  </div>
+
+  <div class="bayan settlement">
+    <div class="bayan-header">
+      <div class="bayan-num">10</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">11:35</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">10:00</span></div>
+    </div>
+    <div class="bayan-target">مستوطنة كريات شمونة</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف مستوطنة</span></div>
+    </div>
+    <span class="bayan-tag tag-warning">في إطار التحذير</span>
+  </div>
+
+  <div class="bayan settlement">
+    <div class="bayan-header">
+      <div class="bayan-num">11</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">11:45</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">10:50</span></div>
+    </div>
+    <div class="bayan-target">مستوطنة المطلة</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف مستوطنة</span></div>
+    </div>
+    <span class="bayan-tag tag-warning">في إطار التحذير</span>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">12</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">11:55</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">02:20</span></div>
+    </div>
+    <div class="bayan-target">معالوت ترشيحا — بنى تحتية عسكرية</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">بنى تحتية عسكرية</span></div>
+    </div>
+  </div>
+
+  <div class="phase"><span>الظهر — 12:00 – 16:00</span></div>
+
+  <div class="bayan settlement">
+    <div class="bayan-header">
+      <div class="bayan-num">13</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">12:05</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">11:20</span></div>
+    </div>
+    <div class="bayan-target">كريات شمونة + المطلة (المرّة الثانية)</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صليات صاروخية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف مزدوج</span></div>
+    </div>
+    <span class="bayan-tag tag-warning">في إطار التحذير</span>
+  </div>
+
+  <div class="bayan deep">
+    <div class="bayan-header">
+      <div class="bayan-num">14</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">12:35</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">14:30</span></div>
+    </div>
+    <div class="bayan-target">قاعدة غفعات اولغا — 75 كلم غرب الخضيرة</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صاروخ نوعي + سرب مسيّرات انقضاضية نوعية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">قيادة المنطقة الشمالية</span></div>
+    </div>
+    <span class="bayan-tag tag-deep">ضربة عمق — 75 كلم</span>
+    <span class="bayan-tag tag-retaliation">ردّاً على قصف المدنيين والتهجير</span>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">15</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">12:55</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">14:30</span></div>
+    </div>
+    <div class="bayan-target">شرق معتقل الخيام</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">قذائف مدفعية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع آليات وجنود</span></div>
+    </div>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">16</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">13:50</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">16:00</span></div>
+    </div>
+    <div class="bayan-target">بلدة البيّاضة</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع آليات وجنود</span></div>
+    </div>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header">
+      <div class="bayan-num">17</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">14:00</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">16:00</span></div>
+    </div>
+    <div class="bayan-target">بلدة رشاف</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div>
+      <div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع آليات وجنود</span></div>
+    </div>
+  </div>
+
+  <div class="bayan tank">
+    <div class="bayan-header">
+      <div class="bayan-num">18</div>
+      <div class="bayan-times"><span class="t-label">نُشر</span> <span class="t-val">14:20</span> &nbsp; <span class="t-label">نُفّذ</span> <span class="t-val">16:10</span></div>
+    </div>
+    <div class="bayan-target">دبّابتا ميركافا — تلّة غدماثا، عيناتا</div>
+    <div class="bayan-details">
+      <div><span class="detail-label">السلاح</span><br><span class="detail-val">محلّقات انقضاضية</span></div>
+      <div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف مدرّعات × 2</span></div>
+    </div>
+    <span class="bayan-tag tag-hit">إصابات مباشرة</span>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header"><div class="bayan-num">19</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">16:40</span></div></div>
+    <div class="bayan-target">تلّة الحمامص — جنوب الخيام</div>
+    <div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صليات صاروخية + مدفعية</span></div><div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع آليات وجنود</span></div></div>
+  </div>
+
+  <div class="bayan">
+    <div class="bayan-header"><div class="bayan-num">20</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">16:40</span></div></div>
+    <div class="bayan-target">بلدة البيّاضة (المرّة الثانية)</div>
+    <div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صليات صاروخية + مدفعية</span></div><div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع آليات وجنود</span></div></div>
+  </div>
+
+  <div class="phase"><span>المساء — 16:00 – 21:30</span></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">21</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">18:20</span></div></div><div class="bayan-target">موقع نمر الجمل المستحدث</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">سرب مسيّرات انقضاضية</span></div><div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع آليات وجنود</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">22</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">15:50</span></div></div><div class="bayan-target">مستوطنة كريات شمونة</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">سرب مسيّرات انقضاضية</span></div><div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود</span></div></div></div>
+
+  <div class="bayan deep"><div class="bayan-header"><div class="bayan-num">23</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">16:50</span></div></div><div class="bayan-target">قاعدة تسنوبار اللوجستية — الجولان المحتل</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div><div><span class="detail-label">النوع</span><br><span class="detail-val">ضربة قاعدة لوجستية</span></div></div><span class="bayan-tag tag-deep">ضربة عمق</span></div>
+
+  <div class="bayan deep"><div class="bayan-header"><div class="bayan-num">24</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">16:50</span></div></div><div class="bayan-target">قاعدة كرم بن زمرة — الجليل الأعلى</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div><div><span class="detail-label">النوع</span><br><span class="detail-val">ضربة قاعدة لوجستية</span></div></div><span class="bayan-tag tag-deep">ضربة عمق</span></div>
+
+  <div class="bayan settlement"><div class="bayan-header"><div class="bayan-num">25</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">17:00</span></div></div><div class="bayan-target">مستوطنة كريات شمونة</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div></div><span class="bayan-tag tag-warning">في إطار التحذير</span></div>
+
+  <div class="bayan settlement"><div class="bayan-header"><div class="bayan-num">26</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">17:15</span></div></div><div class="bayan-target">مستوطنة مسكاف عام</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div></div><span class="bayan-tag tag-warning">في إطار التحذير</span></div>
+
+  <div class="bayan settlement"><div class="bayan-header"><div class="bayan-num">27</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">17:30</span></div></div><div class="bayan-target">مستوطنة مرغليوت</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div></div><span class="bayan-tag tag-warning">في إطار التحذير</span></div>
+
+  <div class="bayan settlement"><div class="bayan-header"><div class="bayan-num">28</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">17:30</span></div></div><div class="bayan-target">مستوطنة المطلة</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div></div><span class="bayan-tag tag-warning">في إطار التحذير</span></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">29</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">17:20</span></div></div><div class="bayan-target">هضبة العجل — شمال كفار يوفال</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">سرب مسيّرات انقضاضية</span></div><div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود</span></div></div></div>
+
+  <div class="bayan settlement"><div class="bayan-header"><div class="bayan-num">30</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">17:40</span></div></div><div class="bayan-target">مستوطنة مرغليوت (المرّة الثانية)</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div></div><span class="bayan-tag tag-warning">في إطار التحذير</span></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">31</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">17:50</span></div></div><div class="bayan-target">موقع المالكيّة</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">مسيّرة انقضاضية</span></div><div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود</span></div></div><span class="bayan-tag tag-hit">إصابة مباشرة</span></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">32</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">17:50</span></div></div><div class="bayan-target">مستوطنة مرغليوت</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">سرب مسيّرات انقضاضية</span></div><div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">33</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">18:15</span></div></div><div class="bayan-target">مستوطنة كريات شمونة (المرّة الثانية)</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">سرب مسيّرات انقضاضية</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">34</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">18:20</span></div></div><div class="bayan-target">مستوطنة حانيتا</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">سرب مسيّرات انقضاضية</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">35</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">19:10</span></div></div><div class="bayan-target">مستوطنة كريات شمونة (المرّة الثالثة)</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">سرب مسيّرات انقضاضية</span></div></div></div>
+
+  <div class="bayan settlement"><div class="bayan-header"><div class="bayan-num">36</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">18:30</span></div></div><div class="bayan-target">مستوطنة يرؤون</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div></div><span class="bayan-tag tag-warning">في إطار التحذير</span></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">37</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">18:30</span></div></div><div class="bayan-target">مستوطنة شلومي</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">سرب مسيّرات انقضاضية</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">38</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">19:20</span></div></div><div class="bayan-target">مستوطنة المالكية (المرّة الثانية)</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">سرب مسيّرات انقضاضية</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">39</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">فجر – 12:00</span></div></div><div class="bayan-target">مارون الراس — عمليات متواصلة</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صليات صاروخية</span></div><div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّعات جنود وآليات</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">40</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">19:00</span></div></div><div class="bayan-target">تلّة فريز — عيناتا</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">41</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">17:00</span></div></div><div class="bayan-target">مارون الراس</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div><div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود وآليات</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">42</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">13:45</span></div></div><div class="bayan-target">مستوطنة المالكية (المرّة الثالثة)</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">43</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">13:30</span></div></div><div class="bayan-target">مستوطنة حولاتا</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">44</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">14:10</span></div></div><div class="bayan-target">تلّة فريز — عيناتا</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div><div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّع جنود وآليات</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">45</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">16:55</span></div></div><div class="bayan-target">مدينة صفد المحتلة — بنى تحتية</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">46</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">19:30</span></div></div><div class="bayan-target">عيتا الشعب — مرابض مدفعية مستحدثة</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">47</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">20:00</span></div></div><div class="bayan-target">شرق مستوطنة سعسع — مرابض مدفعية</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">48</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">14:30</span></div></div><div class="bayan-target">ثكنة هونين + موقع المرج — مقابل مركبا</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صليات صاروخية</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">49</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">17:05</span></div></div><div class="bayan-target">مستوطنة كريات شمونة (المرّة الثالثة)</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">سرب مسيّرات انقضاضية</span></div></div></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">50</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">20:30</span></div></div><div class="bayan-target">ثكنة هونين + موقع المرج (المرّة الثانية)</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صليات صاروخية</span></div></div></div>
+
+  <div class="bayan tank"><div class="bayan-header"><div class="bayan-num">51</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">15:30</span></div></div><div class="bayan-target">دبّابتا ميركافا — تلّة فريز، عيناتا</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">محلّقات انقضاضية</span></div><div><span class="detail-label">النوع</span><br><span class="detail-val">استهداف مدرّعات × 2</span></div></div><span class="bayan-tag tag-hit">إصابات مباشرة</span></div>
+
+  <div class="bayan"><div class="bayan-header"><div class="bayan-num">52</div><div class="bayan-times"><span class="t-label">نُفّذ</span> <span class="t-val">21:30</span></div></div><div class="bayan-target">تلّة فريز — عيناتا</div><div class="bayan-details"><div><span class="detail-label">السلاح</span><br><span class="detail-val">صلية صاروخية كبيرة</span></div><div><span class="detail-label">الهدف</span><br><span class="detail-val">تجمّعات جيش العدو</span></div></div></div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════ TAB 2: SIRENS ═══════════════════════ -->
+<div id="sirens" class="tab-content">
+<div class="container">
+  <div class="phase"><span>32 صفارة إنذار عبر فلسطين المحتلة</span></div>
+  <div class="siren-row"><span class="s-time">00:26</span><span class="s-loc">تل أبيب ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">07:00</span><span class="s-loc">مسكاف عام وكفار جلعادي — إصبع الجليل</span></div>
+  <div class="siren-row"><span class="s-time">07:01</span><span class="s-loc">كريات شمونه</span></div>
+  <div class="siren-row"><span class="s-time">07:56</span><span class="s-loc">المطلة — إصبع الجليل</span></div>
+  <div class="siren-row"><span class="s-time">08:25</span><span class="s-loc">كريات شمونه ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">10:39</span><span class="s-loc">تل أبيب ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">11:34</span><span class="s-loc">نهاريا ومحيطها — خشية مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">11:36</span><span class="s-loc">عكا ومحيطها — خشية مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">11:54</span><span class="s-loc">إيلات ومحيطها — خشية مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">12:32</span><span class="s-loc">المنطقة الصناعية في إيلات — خشية مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">12:47</span><span class="s-loc">تل أبيب ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">12:49</span><span class="s-loc">القدس المحتلة ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">12:54</span><span class="s-loc">عربه (النقب) + مرجليوت — خشية مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">12:58</span><span class="s-loc">تل أبيب + مستوطنات الضفة الغربية + أسدود + نتانيا</span></div>
+  <div class="siren-row"><span class="s-time">13:43</span><span class="s-loc">كتسرين — جنوب الجولان</span></div>
+  <div class="siren-row"><span class="s-time">13:50</span><span class="s-loc">برعام وريحانية وكرم بن زمرا — الجليل الغربي</span></div>
+  <div class="siren-row"><span class="s-time">13:57</span><span class="s-loc">كريات شمونه ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">14:14</span><span class="s-loc">مرجليوت ومسكاف عام — إصبع الجليل</span></div>
+  <div class="siren-row"><span class="s-time">14:29</span><span class="s-loc">مرجليوت — إصبع الجليل</span></div>
+  <div class="siren-row"><span class="s-time">14:36</span><span class="s-loc">كفار جلعادي وكفار يوفال — خشية مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">15:04</span><span class="s-loc">يفتاح والمالكية وراموت نفتالي — خشية مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">15:17</span><span class="s-loc">إصبع الجليل — خشية مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">15:29</span><span class="s-loc">كفار جلعادي — خشية مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">15:34</span><span class="s-loc">إدميت وعرب العرامشة — الجليل الغربي — خشية مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">16:08</span><span class="s-loc">كريات شمونه ومحيطها</span></div>
+  <div class="siren-row"><span class="s-time">16:39</span><span class="s-loc">مرجليوت + أفيفيم + راموت نفتالي — خشية مسيّرات</span></div>
+  <div class="siren-row"><span class="s-time">17:27</span><span class="s-loc">جورين وجورنوت هجليل — الجليل الغربي</span></div>
+  <div class="siren-row"><span class="s-time">17:36</span><span class="s-loc">مرجليوت — إصبع الجليل</span></div>
+</div>
+</div>
+
+<!-- ═══════════════════════ TAB 3: ENEMY REPORTS ═══════════════════════ -->
+<div id="enemy" class="tab-content">
+<div class="container">
+  <div class="phase"><span>تقارير إعلام العدو — 25 تقريراً</span></div>
+
+  <div class="enemy-row"><div class="e-time">05:56</div><div class="e-text">العثور على <span class="hl">جثتين تحت أنقاض مبنى حيفا</span> المنهار</div></div>
+  <div class="enemy-row"><div class="e-time">06:38</div><div class="e-text">يديعوت أحرونوت — نائب قائد السرب 123: جهود الإنقاذ في جنوب لبنان <span class="hl">خطرة ومعقدة للغاية</span></div></div>
+  <div class="enemy-row"><div class="e-time">09:11</div><div class="e-text">العثور على <span class="hl">4 قتلى إسرائيليين</span> تحت أنقاض مبنى في حيفا جراء صاروخ إيراني</div></div>
+  <div class="enemy-row"><div class="e-time">10:43</div><div class="e-text">سقوط صاروخ في <span class="hl">بتاح تكفا</span></div></div>
+  <div class="enemy-row"><div class="e-time">10:44</div><div class="e-text">سقوط مقذوفات انشطارية في <span class="hl">5 ساحات في تل أبيب</span></div></div>
+  <div class="enemy-row"><div class="e-time">10:51</div><div class="e-text">سقوط صاروخ في <span class="hl">المنطقة الصناعية في بتاح تكفا</span></div></div>
+  <div class="enemy-row"><div class="e-time">10:56</div><div class="e-text">القناة 12: سقوط مقذوفات انشطارية في <span class="hl">27 نقطة في تل أبيب</span> ومحيطها</div></div>
+  <div class="enemy-row"><div class="e-time">12:16</div><div class="e-text">يديعوت أحرونوت: نتنياهو هاجم من يقولون <span class="hl">إننا فقدنا الشمال</span></div></div>
+  <div class="enemy-row"><div class="e-time">12:50</div><div class="e-text">انفجارات ضخمة في <span class="hl">تل أبيب والقدس</span></div></div>
+  <div class="enemy-row"><div class="e-time">13:03</div><div class="e-text">سقوط صاروخ في <span class="hl">اللد</span></div></div>
+  <div class="enemy-row"><div class="e-time">14:56</div><div class="e-text">القناة 12: <span class="hl">4 قذائف في المطلة</span> مع أضرار في البنية التحتية</div></div>
+
+  <div class="phase"><span>كمين نهر الليطاني — تفاصيل القناة 15</span></div>
+
+  <div class="enemy-row"><div class="e-time">17:47</div><div class="e-text">القناة 15: تفاصيل <span class="hl">كمين حزب الله</span> عند نهر الليطاني مقابل قلعة شقيف</div></div>
+  <div class="enemy-row"><div class="e-time">17:48</div><div class="e-text">القناة 15: قوة من <span class="hl">الكتيبة 890</span> خرجت للقتال على ضفاف نهر الليطاني</div></div>
+  <div class="enemy-row"><div class="e-time">17:48</div><div class="e-text">القناة 15: قصف كثيف من حزب الله — <span class="hl">عشرات قذائف الهاون والصواريخ</span></div></div>
+  <div class="enemy-row"><div class="e-time">17:50</div><div class="e-text">القناة 15: مقتل <span class="hl">الرقيب موشيه كاتس</span> + إصابة <span class="hl">20 مقاتلاً وضابطاً</span></div></div>
+  <div class="enemy-row"><div class="e-time">17:50</div><div class="e-text">القناة 15: لم يكن بالإمكان مواصلة المهمة بسبب <span class="hl">العدد الكبير من الإصابات</span></div></div>
+  <div class="enemy-row"><div class="e-time">17:51</div><div class="e-text">القناة 15: انسحبت قوة يهلوم تاركة <span class="hl">المعدات (جرافات، قوارب مطاطية)</span></div></div>
+  <div class="enemy-row"><div class="e-time">17:52</div><div class="e-text">القناة 15: تقرر إيقاف المهمة و<span class="hl">فك الاشتباك</span></div></div>
+  <div class="enemy-row"><div class="e-time">17:52</div><div class="e-text">القناة 15: حزب الله نشر <span class="hl">توثيقاً للمعدات المتروكة</span> في الأراضي اللبنانية</div></div>
+
+  <div class="phase"><span>تحليلات مسائية</span></div>
+
+  <div class="enemy-row"><div class="e-time">19:59</div><div class="e-text">القناة 12: ساكن كريات شمونة: <span class="hl">«المدينة ماتت وسيكون من الصعب إحياؤها»</span></div></div>
+  <div class="enemy-row"><div class="e-time">20:05</div><div class="e-text">غلوبز: حزب الله يستخدم سلاحاً جديداً مقاوماً للاعتراض بـ<span class="hl">500 دولار — طائرات FPV</span></div></div>
+  <div class="enemy-row"><div class="e-time">20:07</div><div class="e-text">غلوبز: ورقة رابحة جديدة-قديمة — <span class="hl">طائرات مسيّرة مفخخة</span></div></div>
+  <div class="enemy-row"><div class="e-time">20:09</div><div class="e-text">غلوبز: ترقية مستوحاة من أوكرانيا — <span class="hl">مسيّرة مفخخة متصلة بكابل ألياف بصرية</span></div></div>
+  <div class="enemy-row"><div class="e-time">20:12</div><div class="e-text">غلوبز: لطائرات FPV <span class="hl">ضرر معنوي ناتج عن العدد الكبير من الإصابات</span></div></div>
+  <div class="enemy-row"><div class="e-time">20:21</div><div class="e-text">القناة 13 — ألون بن دافيد: كمين حزب الله <span class="hl">أحبط تعميق المناورة البرية</span></div></div>
+  <div class="enemy-row"><div class="e-time">20:27</div><div class="e-text">القناة 14: رئيس الأركان <span class="hl">وبّخ قائد المنطقة الشمالية</span> بسبب اعترافه لسكان الشمال</div></div>
+</div>
+</div>
+
+<!-- ═══════════════════════ TAB 4: IRAN ═══════════════════════ -->
+<div id="iran" class="tab-content">
+<div class="container">
+  <div class="phase"><span>العمليات الإيرانية — 17 خبراً</span></div>
+
+  <div class="iran-card"><div class="i-time">00:22</div><div class="i-source">الجبهة الداخلية الإسرائيلية</div><div class="i-text">رصد إطلاق صواريخ من <span class="hl">إيران</span> — على المستوطنين الدخول فوراً إلى الملاجئ</div></div>
+
+  <div class="iran-card"><div class="i-time">08:05</div><div class="i-source">مقر خاتم الأنبياء</div><div class="i-text">ردّنا سيكون <span class="hl">أشدّ وأوسع</span> في حال تكرار استهداف المدنيين</div></div>
+
+  <div class="iran-card"><div class="i-time">09:11</div><div class="i-source">إعلام العدو</div><div class="i-text">العثور على <span class="hl">4 قتلى إسرائيليين</span> تحت أنقاض مبنى في حيفا جراء صاروخ إيراني</div></div>
+
+  <div class="iran-card"><div class="i-time">10:34</div><div class="i-source">الجبهة الداخلية</div><div class="i-text">رصد إطلاق صواريخ من إيران — الدخول فوراً إلى الملاجئ</div></div>
+
+  <div class="iran-card"><div class="i-time">10:40</div><div class="i-source">الجبهة الداخلية</div><div class="i-text">إطلاق صاروخ انشطاري من إيران اتجاه <span class="hl">تل أبيب</span></div></div>
+
+  <div class="iran-card"><div class="i-time">11:00</div><div class="i-source">حرس الثورة الإسلامية</div><div class="i-text">استهداف مقار قيادية وعسكرية أميركية وإسرائيلية ضمن <span class="hl">الموجة 98 من عملية الوعد الصادق 4</span></div></div>
+
+  <div class="iran-card"><div class="i-time">12:40 – 12:55</div><div class="i-source">الجبهة الداخلية</div><div class="i-text">رصد إطلاق صواريخ من إيران — هجوم مشترك بين إيران واليمن ولبنان</div></div>
+
+  <div class="iran-card"><div class="i-time">13:11</div><div class="i-source">حرس الثورة</div><div class="i-text">تفاصيل <span class="hl">الموجة 98 — تحت شعار «يا سيد الساجدين»</span></div></div>
+
+  <div class="iran-card"><div class="i-time">16:42</div><div class="i-source">القائد — آية الله السيد مجتبى الخامنئي</div><div class="i-text"><span class="hl">بيان قائد الثورة الإسلامية</span></div></div>
+
+  <div class="iran-card"><div class="i-time">17:31</div><div class="i-source">حرس الثورة</div><div class="i-text">إسقاط طائرة مسيّرة أميركية <span class="hl">MQ-9</span> في أجواء <span class="hl">جزيرة قشم</span></div></div>
+
+  <div class="iran-card"><div class="i-time">17:36</div><div class="i-source">حرس الثورة</div><div class="i-text">إسقاط طائرة مسيّرة <span class="hl">هيرمس 900</span> في أجواء <span class="hl">أنديمشك</span></div></div>
+
+  <div class="iran-card"><div class="i-time">19:51</div><div class="i-source">الجيش الإيراني</div><div class="i-text">إسقاط طائرة مسيّرة <span class="hl">أوربيتر</span> في أجواء <span class="hl">تبريز</span></div></div>
+
+  <div class="iran-card"><div class="i-time">20:33</div><div class="i-source">مقر خاتم الأنبياء</div><div class="i-text">بيان القوات البحرية وقوات الجو-فضاء في حرس الثورة</div></div>
+</div>
+</div>
+
+<!-- ═══════════════════════ TAB 5: VIDEOS ═══════════════════════ -->
+<div id="videos" class="tab-content">
+<div class="container">
+  <div class="phase"><span>4 عمليات موثّقة بالفيديو</span></div>
+
+  <div class="vid-card">
+    <div class="v-time">09:35 <span class="vid-icon">&#9654;</span></div>
+    <div class="v-text">استهداف منزل يتموضع فيه جنود العدو في <span class="hl">وادي العيون</span> بمحلّقة انقضاضية</div>
+  </div>
+
+  <div class="vid-card">
+    <div class="v-time">13:31 <span class="vid-icon">&#9654;</span></div>
+    <div class="v-text">إسقاط طائرة مسيّرة من نوع <span class="hl">هرمز 450 (زيك)</span> في أجواء بلدة عيناثا</div>
+  </div>
+
+  <div class="vid-card">
+    <div class="v-time">15:55 <span class="vid-icon">&#9654;</span></div>
+    <div class="v-text">استهداف <span class="hl">دبّابة ميركافا وآلية نميرا</span> في بلدة رشاف بمحلّقات انقضاضية</div>
+  </div>
+
+  <div class="vid-card">
+    <div class="v-time">19:01 <span class="vid-icon">&#9654;</span></div>
+    <div class="v-text">استهداف <span class="hl">قاعدة عميعاد</span> جنوب مدينة صفد المحتلة بمسيّرات نوعية</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════ TAB 6: ALLIES ═══════════════════════ -->
+<div id="allies" class="tab-content">
+<div class="container">
+  <div class="phase"><span>القوات المسلحة اليمنية</span></div>
+
+  <div class="ally-card">
+    <div class="a-flag">اليمن</div>
+    <div class="a-time">14:40</div>
+    <div class="a-text">
+      عملية مشتركة مع <span class="hl">الحرس الثوري والقوات المسلحة الإيرانية والمقاومة الإسلامية في لبنان</span>.<br>
+      استهداف أهداف حيوية وعسكرية في <span class="hl">أم الرشراش (إيلات)</span> جنوب فلسطين المحتلة بصواريخ مجنّحة وطائرات مسيّرة. حققت العملية أهدافها بنجاح.
+    </div>
+  </div>
+
+  <div class="phase"><span>المقاومة الإسلامية في العراق</span></div>
+
+  <div class="ally-card">
+    <div class="a-flag">العراق</div>
+    <div class="a-time">17:33</div>
+    <div class="a-text">
+      نفّذ مجاهدو <span class="hl">المقاومة الإسلامية في العراق</span> عملية عسكرية.
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="footer">
+  مصدر: قناة الإعلام الحربي — التغطية الإخبارية (Telegram) &bull; الإثنين 6 نيسان 2026
+</div>
+
+<script>
+function switchTab(id, el) {
+  document.querySelectorAll('.tab-content').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo({top: document.querySelector('.tabs').offsetTop, behavior:'smooth'});
+}
+
+function toggleText(btn) {
+  const ft = btn.nextElementSibling;
+  ft.classList.toggle('show');
+  btn.classList.toggle('open');
+  btn.textContent = ft.classList.contains('show') ? 'إخفاء النص ▲' : 'النص الكامل ▼';
+}
+
+function addToggle(card, text) {
+  const btn = document.createElement('span');
+  btn.className = 'txt-toggle';
+  btn.textContent = 'النص الكامل ▼';
+  btn.onclick = function(){ toggleText(this); };
+  const div = document.createElement('div');
+  div.className = 'txt-full';
+  div.textContent = text;
+  card.appendChild(btn);
+  card.appendChild(div);
+}
+
+const bayanTexts = {
+1: `دفاعًا عن لبنان وشعبه، وفي إطار ‏التحذير الذي وجّهته المُقاومة الإسلاميّة لعددٍ من مستوطنات شمال فلسطين المحتلّة، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 02:25 الإثنين 06-04-2026 مستوطنة ليمان بصلية صاروخيّة.`,
+2: `دفاعًا عن لبنان وشعبه، وفي إطار ‏التحذير الذي وجّهته المُقاومة الإسلاميّة لعددٍ من مستوطنات شمال فلسطين المحتلّة، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 00:30 الإثنين 06-04-2026 مستوطنة حورفيش بصلية صاروخيّة.`,
+3: `دفاعًا عن لبنان وشعبه، وفي إطار ‏التحذير الذي وجّهته المُقاومة الإسلاميّة لعددٍ من مستوطنات شمال فلسطين المحتلّة، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 02:30 الإثنين 06-04-2026 مستوطنة شلومي بصلية صاروخيّة.`,
+4: `دفاعًا عن لبنان وشعبه، وفي إطار ‏التحذير الذي وجّهته المُقاومة الإسلاميّة لعددٍ من مستوطنات شمال فلسطين المحتلّة، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 03:10 الإثنين 06-04-2026 مستوطنة نهاريا بصلية صاروخيّة.`,
+5: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 11:20 الإثنين 06-04-2026 تجمّعًا لآليات وجنود جيش العدوّ الإسرائيليّ عند بوابة فاطمة على الحدود اللبنانيّة الفلسطينيّة بصليةٍ صاروخيّة.`,
+6: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 11:20 الإثنين 06-04-2026 تجمّعًا لآليات وجنود جيش العدوّ الإسرائيليّ في موقع إبل القمح بصليةٍ صاروخيّة.`,
+7: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة فجر اليوم الإثنين 06-04-2026 تجمّعًات لآليات وجنود جيش العدوّ الإسرائيليّ بصلياتٍ صاروخيّة على النحو الآتي:\n\n- الساعة 00:15 في تلّة السدر في بلدة عيناتا.\n- الساعة 00:15 في بلدة مارون الراس.\n- الساعة 01:30 في تلّة غدماثا في بلدة عيناتا.\n- الساعة 01:30 في تلّة السدر في بلدة عيناتا.\n- الساعة 03:45 في تلّة غدماثا في بلدة عيناتا.\n- الساعة 04:00 في تلّة السدر في بلدة عيناتا.\n- الساعة 04:45 في تلّة فريز في بلدة عيناتا.`,
+8: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 05:00 الإثنين 06-04-2026 دبّابة ميركافا في بلدة رشاف بصاروخٍ مباشر، وحققوا إصابة مؤكّدة.`,
+9: `دفاعًا عن لبنان وشعبه، وفي إطار ‏التحذير الذي وجّهته المُقاومة الإسلاميّة لعددٍ من مستوطنات شمال فلسطين المحتلّة، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 12:45 الإثنين 06-04-2026 مستوطنة نهاريا للمرّة الثانية بصلية صاروخيّة.`,
+10: `دفاعًا عن لبنان وشعبه، وفي إطار ‏التحذير الذي وجّهته المُقاومة الإسلاميّة لعددٍ من مستوطنات شمال فلسطين المحتلّة، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 10:00 الإثنين 06-04-2026 مستوطنة كريات شمونة بصلية صاروخيّة.`,
+11: `دفاعًا عن لبنان وشعبه، وفي إطار ‏التحذير الذي وجّهته المُقاومة الإسلاميّة لعددٍ من مستوطنات شمال فلسطين المحتلّة، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 10:50 الإثنين 06-04-2026 مستوطنة المطلة بصلية صاروخيّة.`,
+12: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 02:20 الإثنين 06-04-2026 بنى تحتيّة تتبع لجيش العدوّ الإسرائيليّ في مستوطنة معالوت ترشيحا بصلية صاروخيّة.`,
+13: `دفاعًا عن لبنان وشعبه، وفي إطار ‏التحذير الذي وجّهته المُقاومة الإسلاميّة لعددٍ من مستوطنات شمال فلسطين المحتلّة، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 11:20 الإثنين 06-04-2026 مستوطنتي كريات شمونة والمطلة للمرّة الثانية بصليات صاروخيّة.`,
+14: `دفاعًا عن لبنان وشعبه، وردًّا على تمادي العدوّ في قصف المدنيّين والتهجير وهدم البيوت، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 14:30 الإثنين 06-04-2026 قاعدة غفعات اولغا تتبع لقيادة المنطقة الشمالية في جيش العدو الإسرائيلي، تبعد عن الحدود اللبنانيّة الفلسطينيّة 75 كلم غرب مدينة الخضيرة بصاروخٍ نوعيّ وسربٍ من المُسيّرات الانقضاضيّة النوعيّة.`,
+15: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 14:30 الإثنين 06-04-2026 تجمّعًا لآليات وجنود جيش العدوّ الإسرائيليّ شرق معتقل الخيام بقذائف المدفعيّة.`,
+16: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 16:00 الإثنين 06-04-2026 تجمّعًا لآليات وجنود جيش العدوّ الإسرائيليّ في بلدة البيّاضة بصليةٍ صاروخيّة.`,
+17: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 16:00 الإثنين 06-04-2026 تجمّعًا لآليات وجنود جيش العدوّ الإسرائيليّ في بلدة رشاف بصليةٍ صاروخيّة.`,
+18: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 16:10 الإثنين 06-04-2026 دبابتي ميركافا عند تلّة غدماثا في بلدة عيناتا بمحلّقات انقضاضيّة، وحققوا إصابات مباشرة.`,
+19: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 16:40 الإثنين 06-04-2026 تجمّعًا لآليات وجنود جيش العدوّ الإسرائيليّ في تلّة الحمامص جنوب مدينة الخيام بصلياتٍ صاروخيّة وقذائف المدفعيّة.`,
+20: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 16:40 الإثنين 06-04-2026 تجمّعًا لآليات وجنود جيش العدوّ الإسرائيليّ في بلدة البيّاضة بصلياتٍ صاروخيّة وقذائف المدفعيّة.`,
+21: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 18:20 الإثنين 06-04-2026 تجمّعا لآليات وجنود جيش العدوّ الإسرائيليّ في موقع نمر الجمل المستحدث بسرب من المسيّرات الانقضاضية.`,
+22: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 15:50 الإثنين 06-04-2026 تجمّعا لجنود جيش العدوّ الإسرائيليّ في مستوطنة كريات شمونة بسرب من المسيّرات الانقضاضية.`,
+23: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 16:50 الإثنين 06-04-2026 قاعدة تسنوبار اللوجستيّة في الجولان المحتل بصلية صاروخيّة.`,
+24: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 16:50 الإثنين 06-04-2026 قاعدة لوجستيّة تتبع لجيش العدوّ الإسرائيلي في مستوطنة كرم بن زمرة في الجليل الأعلى بصليةٍ صاروخيّة.`,
+25: `دفاعًا عن لبنان وشعبه، وفي إطار ‏التحذير الذي وجّهته المُقاومة الإسلاميّة لعددٍ من مستوطنات شمال فلسطين المحتلّة، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 17:00 الإثنين 06-04-2026 مستوطنة كريات شمونة بصلية صاروخيّة.`,
+26: `دفاعًا عن لبنان وشعبه، وفي إطار ‏التحذير الذي وجّهته المُقاومة الإسلاميّة لعددٍ من مستوطنات شمال فلسطين المحتلّة، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 17:15 الإثنين 06-04-2026 مستوطنة مسكاف عام بصلية صاروخيّة.`,
+27: `دفاعًا عن لبنان وشعبه، وفي إطار ‏التحذير الذي وجّهته المُقاومة الإسلاميّة لعددٍ من مستوطنات شمال فلسطين المحتلّة، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 17:30 الإثنين 06-04-2026 مستوطنة مرغليوت بصلية صاروخيّة.`,
+28: `دفاعًا عن لبنان وشعبه، وفي إطار ‏التحذير الذي وجّهته المُقاومة الإسلاميّة لعددٍ من مستوطنات شمال فلسطين المحتلّة، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 17:30 الإثنين 06-04-2026 مستوطنة المطلة بصلية صاروخيّة.`,
+29: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 17:20 الإثنين 06-04-2026 تجمّعًا لجنود جيش العدوّ الإسرائيليّ في موقع هضبة العجل شمال مستوطنة كفاريوفال بسربٍ من المُسيّرات الانقضاضيّة.`,
+30: `دفاعًا عن لبنان وشعبه، وفي إطار ‏التحذير الذي وجّهته المُقاومة الإسلاميّة لعددٍ من مستوطنات شمال فلسطين المحتلّة، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 17:40 الإثنين 06-04-2026 مستوطنة مرغليوت للمرة الثانية بصلية صاروخيّة.`,
+31: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 17:50 الإثنين 06-04-2026 تجمّعًا لجنود جيش العدوّ الإسرائيليّ في موقع المالكيّة بمسيّرة انقضاضيّة، وحققوا إصابة مباشرة.`,
+32: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 17:50 الإثنين 06-04-2026 تجمّعًا لجنود جيش العدوّ الإسرائيليّ في مستوطنة مرغليوت بسربٍ من المسيّرات الانقضاضيّة.`,
+33: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 18:15 الإثنين 06-04-2026 تجمّعًا لجنود جيش العدوّ الإسرائيليّ في مستوطنة كريات شمونة للمرّة الثانية بسربٍ من المسيّرات الانقضاضيّة.`,
+34: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 18:20 الإثنين 06-04-2026 تجمّعًا لجنود جيش العدوّ الإسرائيليّ في مستوطنة حانيتا بسربٍ من المسيّرات الانقضاضيّة.`,
+35: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 19:10 الإثنين 06-04-2026 تجمّعًا لجنود جيش العدوّ الإسرائيليّ في مستوطنة كريات شمونة للمرّة الثانية بسربٍ من المسيّرات الانقضاضيّة.`,
+36: `دفاعًا عن لبنان وشعبه، وفي إطار ‏التحذير الذي وجّهته المُقاومة الإسلاميّة لعددٍ من مستوطنات شمال فلسطين المحتلّة، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 18:30 الإثنين 06-04-2026 مستوطنة يرؤون بصلية صاروخيّة.`,
+37: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 18:30 الإثنين 06-04-2026 تجمّعًا لجنود جيش العدوّ الإسرائيليّ في مستوطنة شلومي بسربٍ من المسيّرات الانقضاضيّة.`,
+38: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 19:20 الإثنين 06-04-2026 تجمّعًا لجنود جيش العدوّ الإسرائيليّ في مستوطنة المالكية للمرّة الثانية بسربٍ من المسيّرات الانقضاضيّة.`,
+39: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة منذ فجر الإثنين 06-04-2026 وحتى الساعة 12:00 تجمّعات لجنود وآليات جيش العدوّ الإسرائيليّ في بلدة مارون الراس بصلياتٍ صاروخيّة.`,
+40: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 19:00 الإثنين 06-04-2026 تجمّعًا لجنود وآليات جيش العدوّ الإسرائيليّ عند تلّة فريز في بلدة عيناتا بصليةٍ صاروخيّة.`,
+41: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 17:00 الإثنين 06-04-2026 تجمّعًا لجنود وآليات جيش العدوّ الإسرائيليّ في بلدة مارون الراس بصليةٍ صاروخيّة.`,
+42: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 13:45 الإثنين 06-04-2026 تجمّعًا لجنود وآليات جيش العدوّ الإسرائيليّ في مستوطنة المالكية للمرّة الثالثة بصليةٍ صاروخيّة.`,
+43: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 13:30 الإثنين 06-04-2026 تجمّعًا لجنود جيش العدوّ الإسرائيليّ في مستوطنة حولاتا بصليةٍ صاروخيّة.`,
+44: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 14:10 الإثنين 06-04-2026 تجمّعًا لجنود وآليات جيش العدوّ الإسرائيليّ عند تلّة فريز في بلدة عيناتا بصليةٍ صاروخيّة.`,
+45: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 16:55 الإثنين 06-04-2026 بنى تحتيّة تتبع لجيش العدوّ الإسرائيليّ في مدينة صفد المحتلّة بصلية صاروخيّة.`,
+46: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 19:30 الإثنين 06-04-2026 مرابض مدفعيّة العدو المُستحدثة في بلدة عيتا الشعب بصلية صاروخيّة.`,
+47: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 20:00 الإثنين 06-04-2026 مرابض مدفعيّة العدو شرق مستوطنة سعسع بصلية صاروخيّة.`,
+48: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 14:30 الإثنين 06-04-2026 ثكنة هونين وموقع المرج مقابل بلدة مركبا بصلياتٍ صاروخيّة.`,
+49: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 17:05 الإثنين 06-04-2026 تجمّعًا لجنود جيش العدوّ الإسرائيليّ في مستوطنة كريات شمونة للمرّة الثالثة بسربٍ من المسيّرات الانقضاضيّة.`,
+50: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 20:30 الإثنين 06-04-2026 ثكنة هونين وموقع المرج مقابل بلدة مركبا للمرّة الثانية بصلياتٍ صاروخيّة.`,
+51: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 15:30 الإثنين 06-04-2026 دبابتي ميركافا عند تلّة فريز في بلدة عيناتا بمُحلّقات انقضاضيّة وحققوا إصابات مباشرة.`,
+52: `دفاعًا عن لبنان وشعبه، استهدف مجاهدو المُقاومة الإسلاميّة عند الساعة 21:30 الإثنين 06-04-2026 تجمّعات جيش العدوّ الإسرائيليّ عند تلّة فريز في بلدة عيناتا بصليةٍ صاروخيّة كبيرة.`
+};
+
+// ── Inject into بيانات ──
+document.querySelectorAll('.bayan').forEach(function(card) {
+  var numEl = card.querySelector('.bayan-num');
+  if (!numEl) return;
+  var num = parseInt(numEl.textContent);
+  if (!bayanTexts[num]) return;
+  addToggle(card, bayanTexts[num]);
+});
+
+// ── Inject into إعلام العدو ──
+const enemyTexts = {
+  'العثور على جثتين': 'العثور على جثتين تحت أنقاض المبنى المنهار في حيفا جراء القصف. يجري العمل على انتشال الجثث من تحت الأنقاض.',
+  'نائب قائد السرب': 'يديعوت أحرونوت عن نائب قائد السرب 123 في جيش العدو الإسرائيلي: جهود الإنقاذ في جنوب لبنان خطرة ومعقدة للغاية بسبب التهديدات المتعددة من حزب الله.',
+  '4 قتلى': 'العثور على 4 قتلى إسرائيليين تحت أنقاض المبنى في حيفا الذي انهار جراء سقوط صاروخ إيراني. ارتفاع حصيلة القتلى في المبنى إلى 6.',
+  'بتاح تكفا': 'تقارير أولية عن سقوط صاروخ في بتاح تكفا شرق تل أبيب. يجري التحقق من الأضرار والإصابات.',
+  '5 ساحات': 'سقوط مقذوفات انشطارية في 5 ساحات في تل أبيب ومحيطها. عمال الإنقاذ يتعاملون مع الحوادث المتعددة.',
+  'الصناعية في بتاح': 'سقوط صاروخ في المنطقة الصناعية في بتاح تكفا. أضرار مادية كبيرة في عدد من المباني.',
+  '27 نقطة': 'القناة 12 العبرية: سقوط مقذوفات انشطارية في 27 نقطة في تل أبيب ومحيطها خلال الموجة الأخيرة من القصف الإيراني.',
+  'فقدنا الشمال': 'يديعوت أحرونوت: نتنياهو هاجم في جلسة حكومية مغلقة من يقولون إننا فقدنا الشمال، مؤكداً أن العمليات مستمرة.',
+  'تل أبيب والقدس': 'سماع دوي انفجارات ضخمة في تل أبيب والقدس المحتلة وعدد من المدن في وسط فلسطين المحتلة جراء سقوط صواريخ.',
+  'اللد': 'تقارير أولية عن سقوط صاروخ في منطقة مدينة اللد. الشرطة والإسعاف في الطريق.',
+  '4 قذائف في المطلة': 'القناة 12: سقطت 4 قذائف في منطقة مستوطنة المطلة مع أضرار في البنية التحتية. لا تقارير عن إصابات حتى الآن.',
+  'كمين حزب الله': 'القناة 15 العبرية: تفاصيل جديدة حول كمين حزب الله الناري عند نهر الليطاني مقابل قلعة شقيف — كمين محكم استهدف قوة هندسية كانت تحاول عبور النهر.',
+  'الكتيبة 890': 'القناة 15: قوة من الكتيبة 890 (المظليين) خرجت للقتال على ضفاف نهر الليطاني مقابل قلعة شقيف ضمن محاولة لتعميق المناورة البرية شمالاً.',
+  'عشرات قذائف': 'القناة 15: قصف كثيف ومركّز من حزب الله على القوة المشتركة بعشرات قذائف الهاون والصواريخ المضادة للدروع والأسلحة الخفيفة من عدة اتجاهات.',
+  'موشيه كاتس': 'القناة 15: مقتل الرقيب موشيه كاتس من الكتيبة 890 وإصابة 20 مقاتلاً وضابطاً بجروح متفاوتة خلال الكمين. تم نقل الجرحى تحت النار.',
+  'مواصلة المهمة': 'القناة 15: لم يكن بالإمكان مواصلة المهمة بسبب العدد الكبير من الإصابات وشدة نيران حزب الله المركّزة على القوة.',
+  'يهلوم': 'القناة 15: انسحبت قوة يهلوم (الهندسة القتالية) تاركة المعدات في الميدان بما فيها جرافات D9 وقوارب مطاطية كانت معدّة لعبور النهر.',
+  'فك الاشتباك': 'القناة 15: تقرر إيقاف المهمة بالكامل وتنفيذ فك الاشتباك والانسحاب إلى المواقع الخلفية بعد فشل محاولة العبور.',
+  'المعدات المتروكة': 'القناة 15: حزب الله نشر توثيقاً مصوراً للجرافات والمعدات العسكرية المتروكة في الأراضي اللبنانية كغنائم حرب.',
+  'المدينة ماتت': 'القناة 12 العبرية: ساكن في مستوطنة كريات شمونة يقول في مقابلة: «المدينة ماتت وسيكون من الصعب إحياؤها مجدداً. لم يبقَ أحد هنا.»',
+  'FPV': 'غلوبز: حزب الله يستخدم سلاحاً جديداً مقاوماً للاعتراض بتكلفة 500 دولار فقط — طائرات FPV (First Person View) صغيرة مفخخة تُدار عن بعد بنظارات واقع افتراضي.',
+  'رابحة جديدة': 'غلوبز: حزب الله يخرج ورقة رابحة جديدة-قديمة — طائرات مسيّرة مفخخة بأحجام متعددة تحلّق على ارتفاعات منخفضة جداً ويصعب اعتراضها.',
+  'ألياف بصرية': 'غلوبز: ترقية جديدة للسلاح مستوحاة من ساحة المعركة في أوكرانيا — طائرة مفخخة متصلة بكابل ألياف بصرية تمنع التشويش عليها وتسمح بتوجيه دقيق.',
+  'ضرر معنوي': 'غلوبز: لطائرات FPV ضرر معنوي كبير ناتج عن العدد الكبير من الإصابات في صفوف الجنود. يصعب على الجنود العمل تحت تهديد دائم من مسيّرات لا يسمعونها.',
+  'أحبط تعميق': 'القناة 13 — المحلل العسكري ألون بن دافيد: كمين حزب الله عند نهر الليطاني أحبط فعلياً محاولة تعميق المناورة البرية الإسرائيلية شمالاً نحو الليطاني.',
+  'وبّخ قائد': 'القناة 14: رئيس الأركان هرتسي هاليفي وبّخ قائد المنطقة الشمالية اللواء أوري غوردين بسبب اعترافه لسكان الشمال في جلسة مغلقة بأن الجيش لا يستطيع ضمان عودتهم الآمنة.'
+};
+document.querySelectorAll('.enemy-row').forEach(function(card) {
+  var text = card.querySelector('.e-text');
+  if (!text) return;
+  var content = text.textContent;
+  var keys = Object.keys(enemyTexts);
+  for (var i = 0; i < keys.length; i++) {
+    if (content.indexOf(keys[i]) !== -1) { addToggle(card, enemyTexts[keys[i]]); break; }
+  }
+});
+
+// ── Inject into إيران ──
+const iranTexts = [
+  'الجبهة الداخلية الإسرائيلية: رصد إطلاق صواريخ من إيران اتجاه "إسرائيل". على المستوطنين الدخول فوراً إلى الملاجئ والغرف المحصنة.',
+  'المتحدث باسم مقر خاتم الأنبياء للدفاع الجوي: إن ردّنا على أي اعتداء مقبل سيكون أشدّ وأوسع نطاقاً. نحذر العدو من تكرار استهداف المنشآت المدنية والبنى التحتية.',
+  'وسائل إعلام إسرائيلية: العثور على 4 قتلى إسرائيليين إضافيين تحت أنقاض المبنى المنهار في حيفا جراء سقوط صاروخ باليستي إيراني. ارتفاع الحصيلة إلى 6 قتلى.',
+  'الجبهة الداخلية الإسرائيلية: رصد إطلاق صواريخ من إيران اتجاه "إسرائيل". على المستوطنين الدخول فوراً إلى الملاجئ.',
+  'الجبهة الداخلية الإسرائيلية: إطلاق صاروخ انشطاري من إيران اتجاه تل أبيب ومحيطها.',
+  'حرس الثورة الإسلامية: في إطار الموجة 98 من عملية الوعد الصادق 4، تم استهداف مقار قيادية وعسكرية أميركية وإسرائيلية بصواريخ باليستية ومسيّرات. استُهدفت قواعد في النقب والجولان ومواقع بحرية أميركية.',
+  'الجبهة الداخلية الإسرائيلية: رصد إطلاق موجة جديدة من الصواريخ من إيران. هجوم مشترك بين إيران واليمن ولبنان على أهداف متعددة.',
+  'حرس الثورة الإسلامية: تفاصيل الموجة 98 من عملية الوعد الصادق 4 — تحت شعار «يا سيد الساجدين». استُهدفت مواقع عسكرية ولوجستية في عمق الأراضي المحتلة.',
+  'بيان صادر عن قائد الثورة الإسلامية آية الله السيد مجتبى الخامنئي بشأن مواصلة العمليات العسكرية دفاعاً عن الجمهورية الإسلامية وشعوب المنطقة.',
+  'حرس الثورة الإسلامية: إسقاط طائرة مسيّرة أميركية من نوع MQ-9 Reaper في أجواء جزيرة قشم في مضيق هرمز بصاروخ أرض-جو.',
+  'حرس الثورة الإسلامية: إسقاط طائرة مسيّرة إسرائيلية من نوع هيرمس 900 في أجواء أنديمشك بمنظومة الدفاع الجوي.',
+  'الجيش الإيراني: إسقاط طائرة مسيّرة من نوع أوربيتر في أجواء مدينة تبريز شمال غرب إيران.',
+  'المتحدث باسم مقر خاتم الأنبياء: بيان القوات البحرية وقوات الجو-فضاء في حرس الثورة الإسلامية بشأن مواصلة عمليات الرصد والاعتراض.'
+];
+document.querySelectorAll('.iran-card').forEach(function(card, i) {
+  if (iranTexts[i]) addToggle(card, iranTexts[i]);
+});
+
+// ── Inject into فيديوهات ──
+const vidTexts = [
+  'بالفيديو | مشاهد من عملية استهداف مجاهدو المُقاومة الإسلاميّة منزلاً يتموضع فيه جنود جيش العدوّ الإسرائيليّ في وادي العيون بمحلّقة انقضاضيّة، حيث أظهرت المشاهد لحظة الإصابة المباشرة.',
+  'بالفيديو | مشاهد من عملية إسقاط طائرة مسيّرة تابعة لجيش العدوّ الإسرائيليّ من نوع هرمز 450 (زيك) في أجواء بلدة عيناثا بصاروخ أرض-جو. تظهر المشاهد لحظة الإصابة وسقوط الطائرة.',
+  'بالفيديو | مشاهد من عملية استهداف مجاهدو المُقاومة الإسلاميّة دبّابة ميركافا وآلية نميرا تابعتين لجيش العدوّ الإسرائيليّ في بلدة رشاف بمحلّقات انقضاضيّة. إصابات مباشرة مؤكّدة.',
+  'بالفيديو | مشاهد من عملية استهداف المقاومة الإسلامية قاعدة عميعاد العسكرية جنوب مدينة صفد المحتلّة بمسيّرات نوعيّة. تظهر المشاهد لحظات الانفجار داخل القاعدة.'
+];
+document.querySelectorAll('.vid-card').forEach(function(card, i) {
+  if (vidTexts[i]) addToggle(card, vidTexts[i]);
+});
+
+// ── Inject into اليمن والعراق ──
+const allyTexts = [
+  'بيانٌ صادرٌ عنِ القواتِ المسلحةِ اليمنيةِ\n\nدعمًا وإسنادًا لمحورِ الجهادِ والمقاومةِ في إيرانَ ولبنانَ والعراقِ وفلسطينَ، وفِي إطارِ مواجهةِ المخططِ الصهيونيِّ الذي يستهدفُ أبناءَ أمتِنا في المنطقةِ الساعي لإقامةِ ما يسمى بإسرائيلَ الكبرى تحتَ مسمى تغييرِ الشرقِ الأوسطِ.\n\nنفذتِ القواتُ المسلحةُ اليمنيةُ بعونِ اللهِ تعالى عمليةً مشتركةً مع الحرسِ الثوريِّ والقواتِ المسلحةِ للجمهوريةِ الإسلاميةِ في إيرانَ والمقاومةِ الإسلاميةِ في لبنانَ بدفعةٍ من الصواريخِ المجنحةِ والطائراتِ المسيرةِ استهدفتْ عدةَ أهدافٍ حيويةٍ وعسكريةٍ تابعةٍ للعدوِّ الإسرائيليِّ في أمِّ الرشراشِ جنوبيَّ فلسطينَ المحتلةِ وحققتِ العمليةُ أهدافَها بنجاحٍ بفضلِ اللهِ.\n\nمستمرونَ في عملياتِنا العسكريةِ في معركةِ الجهادِ المقدسِ حتى النصرِ بإذنِ اللهِ.',
+  'المقاومة الإسلامية في العراق: نفّذ مجاهدو المقاومة الإسلامية في العراق عملية عسكرية ضمن إطار محور المقاومة لدعم الجبهات المشتركة.'
+];
+document.querySelectorAll('.ally-card').forEach(function(card, i) {
+  if (allyTexts[i]) addToggle(card, allyTexts[i]);
+});
+
+// ═══════════════════════ SMART SEARCH ═══════════════════════
+
+const aliases = {
+  'merkava': 'ميركافا', 'tank': 'ميركافا', 'دبابة': 'ميركافا', 'دبابه': 'ميركافا',
+  'drone': 'مسيّرة', 'uav': 'مسيّرة', 'fpv': 'FPV',
+  'missile': 'صاروخ', 'rocket': 'صاروخ',
+  'siren': 'صفارات', 'صفارة': 'صفارات', 'انذار': 'إنذار',
+  'haifa': 'حيفا', 'tel aviv': 'تل أبيب', 'telaviv': 'تل أبيب',
+  'iran': 'إيران', 'ايران': 'إيران',
+  'kiryat': 'كريات', 'kiryat shmona': 'كريات شمونة',
+  'nahariya': 'نهاريا', 'metula': 'المطلة',
+  'bint jbeil': 'بنت جبيل', 'maroun': 'مارون',
+  'litani': 'الليطاني', 'ليطاني': 'الليطاني',
+  'yemen': 'اليمن', 'يمن': 'اليمن',
+  'iraq': 'العراق', 'عراق': 'العراق',
+  'ambush': 'كمين',
+  'killed': 'قتلى', 'قتيل': 'قتلى', 'مقتل': 'قتلى',
+  'injured': 'جرحى', 'جريح': 'جرحى', 'إصابة': 'إصاب',
+  'settlement': 'مستوطنة', 'مستوطنه': 'مستوطنة',
+  'base': 'قاعدة', 'قاعده': 'قاعدة',
+  'artillery': 'مدفعية', 'مدفعيه': 'مدفعية',
+  'safed': 'صفد', 'acre': 'عكا', 'akka': 'عكا',
+  'golan': 'الجولان', 'جولان': 'الجولان',
+  'jerusalem': 'القدس', 'قدس': 'القدس',
+  'warning': 'التحذير', 'تحذير': 'التحذير',
+  'khiam': 'الخيام', 'خيام': 'الخيام',
+};
+
+function normalizeAr(s) {
+  return s.replace(/[إأآٱ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي')
+    .replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/ّ/g,'')
+    .replace(/[\u064B-\u065F\u0670]/g,'').toLowerCase();
+}
+
+const CARD_SEL = '.bayan, .siren-row, .enemy-row, .iran-card, .vid-card, .ally-card';
+const searchInput = document.getElementById('searchInput');
+const searchStats = document.getElementById('searchStats');
+const searchClear = document.getElementById('searchClear');
+const tabNames = {bayanat:'بيانات',sirens:'صفارات',enemy:'إعلام',iran:'إيران',videos:'فيديو',allies:'حلفاء'};
+
+let searchTimeout;
+searchInput.addEventListener('input', function() {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(function(){ performSearch(searchInput.value); }, 150);
+});
+searchInput.addEventListener('keydown', function(e) { if(e.key==='Escape') clearSearch(); });
+
+function clearSearch() {
+  searchInput.value = '';
+  performSearch('');
+  searchInput.focus();
+}
+
+function performSearch(raw) {
+  const query = raw.trim();
+  searchClear.classList.toggle('visible', query.length > 0);
+  const allCards = document.querySelectorAll(CARD_SEL);
+
+  if (!query) {
+    allCards.forEach(function(c){ c.classList.remove('card-hidden'); });
+    document.querySelectorAll('.phase').forEach(function(p){ p.classList.remove('phase-hidden'); });
+    document.querySelectorAll('.no-results').forEach(function(n){ n.remove(); });
+    searchStats.textContent = '';
+    return;
+  }
+
+  var terms = query.toLowerCase();
+  for (var alias in aliases) {
+    if (terms.indexOf(alias) !== -1) terms = terms.replace(alias, aliases[alias]);
+  }
+  var nq = normalizeAr(terms);
+  var queryWords = nq.split(/\s+/).filter(function(w){ return w.length > 0; });
+
+  var totalVisible = 0;
+  var tabCounts = {};
+
+  allCards.forEach(function(card) {
+    var cardText = normalizeAr(card.textContent || '');
+    var ftEl = card.querySelector('.txt-full');
+    if (ftEl) cardText += ' ' + normalizeAr(ftEl.textContent);
+
+    var matches = queryWords.every(function(w){ return cardText.indexOf(w) !== -1; });
+
+    if (matches) {
+      card.classList.remove('card-hidden');
+      totalVisible++;
+      var tab = card.closest('.tab-content');
+      if (tab) tabCounts[tab.id] = (tabCounts[tab.id] || 0) + 1;
+    } else {
+      card.classList.add('card-hidden');
+    }
+  });
+
+  // Hide empty phase dividers
+  document.querySelectorAll('.phase').forEach(function(phase) {
+    var next = phase.nextElementSibling;
+    var hasVisible = false;
+    while (next && !next.classList.contains('phase')) {
+      if (next.matches && next.matches(CARD_SEL) && !next.classList.contains('card-hidden')) {
+        hasVisible = true; break;
+      }
+      next = next.nextElementSibling;
+    }
+    phase.classList.toggle('phase-hidden', !hasVisible);
+  });
+
+  // No-results message per tab
+  document.querySelectorAll('.no-results').forEach(function(n){ n.remove(); });
+  document.querySelectorAll('.tab-content').forEach(function(tab) {
+    var container = tab.querySelector('.container');
+    if (!container) return;
+    var vis = container.querySelectorAll(CARD_SEL + ':not(.card-hidden)');
+    if (vis.length === 0) {
+      var noRes = document.createElement('div');
+      noRes.className = 'no-results show';
+      noRes.textContent = 'لا نتائج لـ «' + query + '»';
+      container.appendChild(noRes);
+    }
+  });
+
+  // Stats
+  if (totalVisible > 0) {
+    var parts = [];
+    for (var id in tabCounts) {
+      parts.push((tabNames[id]||id) + ' ' + tabCounts[id]);
+    }
+    var statsEl = document.getElementById('searchStats');
+    statsEl.textContent = '';
+    var countSpan = document.createElement('span');
+    countSpan.className = 'count';
+    countSpan.textContent = totalVisible;
+    statsEl.appendChild(countSpan);
+    statsEl.appendChild(document.createTextNode(' نتيجة — ' + parts.join(' · ')));
+  } else {
+    searchStats.textContent = 'لا نتائج';
+  }
+
+  // Auto-switch to first tab with results if current tab is empty
+  if (totalVisible > 0) {
+    var activeTab = document.querySelector('.tab-content.active');
+    var activeCards = activeTab ? activeTab.querySelectorAll(CARD_SEL + ':not(.card-hidden)') : [];
+    if (activeCards.length === 0) {
+      var firstId = Object.keys(tabCounts)[0];
+      if (firstId) {
+        document.querySelectorAll('.tab-content').forEach(function(t){ t.classList.remove('active'); });
+        document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+        document.getElementById(firstId).classList.add('active');
+        document.querySelectorAll('.tab').forEach(function(t) {
+          var oc = t.getAttribute('onclick') || '';
+          if (oc.indexOf("'" + firstId + "'") !== -1) t.classList.add('active');
+        });
+      }
+    }
+  }
+}
+</script>
+
+</body>
+</html>

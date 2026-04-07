@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإعلام الحربي — ملخص يوم 7 نيسان 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg: #0a0e14;
+    --surface: #131a24;
+    --surface2: #1a2332;
+    --border: #1e2d3d;
+    --text: #e0e6ed;
+    --text-dim: #7a8a9e;
+    --accent: #c9a84c;
+    --red: #e74c3c;
+    --red-dim: rgba(231, 76, 60, 0.15);
+    --orange: #e67e22;
+    --orange-dim: rgba(230, 126, 34, 0.12);
+    --blue: #3498db;
+    --blue-dim: rgba(52, 152, 219, 0.12);
+    --green: #2ecc71;
+    --green-dim: rgba(46, 204, 113, 0.12);
+    --purple: #9b59b6;
+    --purple-dim: rgba(155, 89, 182, 0.12);
+    --cyan: #1abc9c;
+    --cyan-dim: rgba(26, 188, 156, 0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Kufi Arabic', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #0d1117 0%, #1a1a2e 50%, #16213e 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(201,168,76,0.08) 0%, transparent 70%);
+  }
+
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .header .date {
+    font-size: 1rem;
+    color: var(--text-dim);
+    position: relative;
+  }
+
+  .header .date span {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Stats bar */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat {
+    text-align: center;
+    padding: 12px 20px;
+    border-radius: 10px;
+    min-width: 130px;
+  }
+
+  .stat .num {
+    font-size: 1.8rem;
+    font-weight: 800;
+    display: block;
+  }
+
+  .stat .label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  .stat.operations { background: var(--green-dim); }
+  .stat.operations .num { color: var(--green); }
+  .stat.sirens { background: var(--red-dim); }
+  .stat.sirens .num { color: var(--red); }
+  .stat.iran { background: var(--purple-dim); }
+  .stat.iran .num { color: var(--purple); }
+  .stat.casualties { background: var(--orange-dim); }
+  .stat.casualties .num { color: var(--orange); }
+  .stat.videos { background: var(--cyan-dim); }
+  .stat.videos .num { color: var(--cyan); }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 16px 20px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  /* Timeline */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+    position: relative;
+  }
+
+  .container::before {
+    content: '';
+    position: absolute;
+    right: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, var(--border) 5%, var(--border) 95%, transparent);
+    transform: translateX(50%);
+  }
+
+  .time-group {
+    margin-bottom: 40px;
+  }
+
+  .time-label {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 20px;
+  }
+
+  .time-label span {
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 4px 18px;
+    border-radius: 20px;
+    display: inline-block;
+  }
+
+  .event {
+    position: relative;
+    margin-bottom: 14px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    border-right: 4px solid;
+    transition: transform 0.2s ease;
+  }
+
+  .event:hover {
+    transform: scale(1.01);
+  }
+
+  .event .tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  .event .time {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+
+  .event .content {
+    font-size: 0.88rem;
+    line-height: 1.8;
+  }
+
+  /* Event types */
+  .event.operation {
+    background: var(--green-dim);
+    border-color: var(--green);
+  }
+  .event.operation .tag {
+    background: var(--green);
+    color: var(--bg);
+  }
+
+  .event.siren {
+    background: var(--red-dim);
+    border-color: var(--red);
+  }
+  .event.siren .tag {
+    background: var(--red);
+    color: #fff;
+  }
+
+  .event.enemy-report {
+    background: var(--orange-dim);
+    border-color: var(--orange);
+  }
+  .event.enemy-report .tag {
+    background: var(--orange);
+    color: var(--bg);
+  }
+
+  .event.iran {
+    background: var(--purple-dim);
+    border-color: var(--purple);
+  }
+  .event.iran .tag {
+    background: var(--purple);
+    color: #fff;
+  }
+
+  .event.video {
+    background: var(--cyan-dim);
+    border-color: var(--cyan);
+  }
+  .event.video .tag {
+    background: var(--cyan);
+    color: var(--bg);
+  }
+
+  .event.recon {
+    background: var(--blue-dim);
+    border-color: var(--blue);
+  }
+  .event.recon .tag {
+    background: var(--blue);
+    color: #fff;
+  }
+
+  .highlight {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .section-divider {
+    text-align: center;
+    padding: 10px;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  @media (max-width: 600px) {
+    .header h1 { font-size: 1.4rem; }
+    .stats { gap: 10px; }
+    .stat { min-width: 100px; padding: 8px 12px; }
+    .stat .num { font-size: 1.4rem; }
+    .container::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>الإعلام الحربي — التغطية الإخبارية</h1>
+  <div class="date">الثلاثاء <span>7 نيسان 2026</span> — 18 شوال 1447 هـ</div>
+</div>
+
+<div class="stats">
+  <div class="stat operations">
+    <span class="num">17</span>
+    <span class="label">بيان عسكري</span>
+  </div>
+  <div class="stat sirens">
+    <span class="num">22</span>
+    <span class="label">صفارة إنذار</span>
+  </div>
+  <div class="stat iran">
+    <span class="num">2</span>
+    <span class="label">بيان إيراني</span>
+  </div>
+  <div class="stat casualties">
+    <span class="num">411</span>
+    <span class="label">إصابة عدو (إجمالي)</span>
+  </div>
+  <div class="stat videos">
+    <span class="num">3</span>
+    <span class="label">فيديو عمليات</span>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> بيان عسكري</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> صفارة إنذار</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div> تقرير إعلام العدو</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div> عمليات إيرانية</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--cyan)"></div> فيديو</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div> استطلاع</div>
+</div>
+
+<div class="container">
+
+  <!-- 09:25 - 09:50 -->
+  <div class="time-group">
+    <div class="time-label"><span>09:25 – 09:50</span></div>
+
+    <div class="event enemy-report">
+      <span class="tag">إعلام العدو</span>
+      <div class="time">09:33</div>
+      <div class="content">إذاعة جيش العدو: منذ ساعات الصباح إطلاق نار متواصل على مستوطنات الشمال — حوالي <span class="highlight">40 صاروخاً</span> من لبنان.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 21</span>
+      <div class="time">09:35 (العملية 11:30)</div>
+      <div class="content">استهداف تجمّع آليات وجنود في <span class="highlight">بلدة الطيبة</span> بصلية صاروخية.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 22</span>
+      <div class="time">09:40 (العملية 11:55)</div>
+      <div class="content">استهداف تجمّعات آليات وجنود في <span class="highlight">بلدتي رشاف وبيت ليف</span> بصليات صاروخية.</div>
+    </div>
+
+    <div class="event enemy-report">
+      <span class="tag">إعلام العدو</span>
+      <div class="time">09:47</div>
+      <div class="content">القناة 12: حوالي <span class="highlight">20 جولة إنذارات</span> مع أكثر من 40 صاروخاً منذ الصباح.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 23</span>
+      <div class="time">09:50 (العملية 11:35)</div>
+      <div class="content">استهداف قوة عدو داخل منزل في <span class="highlight">بلدة البيّاضة</span> بصاروخ موجّه — إصابات مؤكّدة.</div>
+    </div>
+  </div>
+
+  <!-- 10:00 - 10:35 -->
+  <div class="time-group">
+    <div class="time-label"><span>10:00 – 10:35</span></div>
+
+    <div class="event operation">
+      <span class="tag">بيان 24</span>
+      <div class="time">10:00 (العملية 12:10)</div>
+      <div class="content">استهداف <span class="highlight">مستوطنة نهاريّا</span> بصلية صاروخية — في إطار التحذير الموجّه للمستوطنات.</div>
+    </div>
+
+    <div class="event siren">
+      <span class="tag">صفارات إنذار</span>
+      <div class="time">10:01</div>
+      <div class="content">الجبهة الداخلية: رصد إطلاق صواريخ من <span class="highlight">إيران</span> — على المستوطنين الدخول فوراً إلى الملاجئ.</div>
+    </div>
+
+    <div class="event siren">
+      <span class="tag">صفارات إنذار</span>
+      <div class="time">10:01 – 10:06</div>
+      <div class="content">صفد ومحيطها — كريات شمونه — <span class="highlight">تل أبيب</span> ومحيطها.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 25</span>
+      <div class="time">10:10 (العملية 06:30)</div>
+      <div class="content">التصدي لطائرة حربية إسرائيلية في أجواء <span class="highlight">البقاع الغربي</span> بصاروخ أرض-جو.</div>
+    </div>
+
+    <div class="event enemy-report">
+      <span class="tag">إعلام العدو</span>
+      <div class="time">10:10 – 10:15</div>
+      <div class="content">سقوط صاروخ في <span class="highlight">منطقة صفد الصناعية</span>. مقذوفات انشطارية في <span class="highlight">تل أبيب</span> ومحيطها.</div>
+    </div>
+
+    <div class="event siren">
+      <span class="tag">صفارات إنذار</span>
+      <div class="time">10:21 – 10:35</div>
+      <div class="content">عكا — المطلة — مرجليوت — مسكاف عام.</div>
+    </div>
+
+    <div class="event enemy-report">
+      <span class="tag">إعلام العدو</span>
+      <div class="time">10:27</div>
+      <div class="content">تقرير عن انهيار مبنى في <span class="highlight">بتاح تكفا</span> — يجري التحقق من محاصرين.</div>
+    </div>
+  </div>
+
+  <!-- 11:00 - 11:56 -->
+  <div class="time-group">
+    <div class="time-label"><span>11:00 – 12:00</span></div>
+
+    <div class="event enemy-report">
+      <span class="tag">إعلام العدو</span>
+      <div class="time">11:13</div>
+      <div class="content">ارتفاع عدد الجرحى في صفوف الجيش منذ بدء العملية في لبنان إلى <span class="highlight">411 إصابة</span> — 27 خطيرة، 60 متوسطة.</div>
+    </div>
+
+    <div class="event siren">
+      <span class="tag">صفارات إنذار</span>
+      <div class="time">11:31 – 11:56</div>
+      <div class="content">المطلة — أفيفيم — يرؤون.</div>
+    </div>
+
+    <div class="event enemy-report">
+      <span class="tag">إعلام العدو</span>
+      <div class="time">11:43</div>
+      <div class="content">حدث أمني جنوبي لبنان — <span class="highlight">4 جرحى</span> في صفوف الجيش منهم 2 بحالة خطيرة.</div>
+    </div>
+
+    <div class="event video">
+      <span class="tag">فيديو</span>
+      <div class="time">12:01</div>
+      <div class="content">مشاهد استهداف بنى تحتية عسكرية في <span class="highlight">منطقة الكريوت</span> شمال حيفا بصواريخ نوعية.</div>
+    </div>
+  </div>
+
+  <!-- 12:10 - 12:55 -->
+  <div class="time-group">
+    <div class="time-label"><span>12:10 – 13:00</span></div>
+
+    <div class="event iran">
+      <span class="tag">الجمهورية الإسلامية</span>
+      <div class="time">12:10</div>
+      <div class="content">حرس الثورة — الموجة 99 من عملية <span class="highlight">الوعد الصادق 4</span>: صواريخ خيبرشكن على أكثر من <span class="highlight">30 نقطة</span> في ريشون لتسيون، بتاح تكفا، بئر السبع، ديمونا، عراد، كريات غات، أوفاكيم + 10 نقاط في تل أبيب.</div>
+    </div>
+
+    <div class="event iran">
+      <span class="tag">الجيش الإيراني — بيان 58</span>
+      <div class="time">12:12</div>
+      <div class="content">هجمات مسيّرات على: <span class="highlight">منطقة ديمونا الصناعية</span> (إنتاج كهرباء ومخازن وقود)، <span class="highlight">ميناء جبل علي</span> (مركز إسناد بحرية أمريكية)، <span class="highlight">قاعدة أحمد الجابر</span> في الكويت (رادارات وحظائر طائرات).</div>
+    </div>
+
+    <div class="event siren">
+      <span class="tag">صفارات إنذار</span>
+      <div class="time">12:22 – 12:53</div>
+      <div class="content">زرعيت — كريات شمونه — المطلة — الجولان.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 26</span>
+      <div class="time">12:28</div>
+      <div class="content">اشتباكات عنيفة عند <span class="highlight">أطراف بنت جبيل</span> الشرقية — استهداف دبابة ميركافا بصاروخ مباشر — إصابة مؤكدة. الاشتباكات مستمرة.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 27</span>
+      <div class="time">12:37</div>
+      <div class="content">استهداف تجمعات العدو في <span class="highlight">مارون الراس</span>، مجمع موسى عباس، مثلث التحرير ببنت جبيل، وتلّتي فريز وغدماثا بعيناتا بصليات صاروخية وقذائف مدفعية.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 28</span>
+      <div class="time">12:45 (العملية 14:50)</div>
+      <div class="content">استهداف تجمعات آليات وجنود في <span class="highlight">رشاف وبيت ليف</span> بصليات صاروخية.</div>
+    </div>
+
+    <div class="event enemy-report">
+      <span class="tag">إعلام العدو</span>
+      <div class="time">12:49</div>
+      <div class="content">قتلى وجرحى في صفوف الجيش <span class="highlight">جنوبي لبنان</span>.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 29</span>
+      <div class="time">12:55 (العملية 12:50)</div>
+      <div class="content">استهداف تجمعات آليات وجنود في <span class="highlight">مشروع الطيبة</span> بصليات صاروخية وقذائف مدفعية.</div>
+    </div>
+  </div>
+
+  <!-- 13:00 - 13:50 -->
+  <div class="time-group">
+    <div class="time-label"><span>13:00 – 14:00</span></div>
+
+    <div class="event operation">
+      <span class="tag">بيان 30</span>
+      <div class="time">13:00</div>
+      <div class="content">استهداف آلية <span class="highlight">نميرا</span> في مشروع الطيبة بمسيّرة انقضاضية — إصابة مباشرة.</div>
+    </div>
+
+    <div class="event siren">
+      <span class="tag">صفارات إنذار</span>
+      <div class="time">13:03 – 13:17</div>
+      <div class="content">كريات شمونه — الجبهة الداخلية: رصد صواريخ من <span class="highlight">إيران</span> — بئر السبع — ديمونا — ميرون.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 31</span>
+      <div class="time">13:10</div>
+      <div class="content">استهداف تجمع جنود في منزل بمحيط <span class="highlight">مشروع الطيبة</span> بمسيّرة انقضاضية — إصابة مباشرة.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 32</span>
+      <div class="time">13:20 (العملية 12:30)</div>
+      <div class="content">استهداف تجمع جنود محيط <span class="highlight">معتقل الخيام</span> بصلية صاروخية.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 33 — عملية واسعة</span>
+      <div class="time">13:30</div>
+      <div class="content">في إطار التحذير للمستوطنات — استهداف <span class="highlight">7 مستوطنات</span> منذ 12:10: كريات شمونة (مرتين)، أفيفيم، يرؤون، زرعيت (مرتين)، بيت هلل.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 34</span>
+      <div class="time">13:40 (العمليات 14:30 + 15:50)</div>
+      <div class="content">استهداف تجمعات جنود في <span class="highlight">موقع المطلّة</span> بصليات صاروخية.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 35</span>
+      <div class="time">13:50 (العملية 13:30)</div>
+      <div class="content">استهداف تجمع جنود في <span class="highlight">موقع مسكاف عام</span> بصلية صاروخية.</div>
+    </div>
+  </div>
+
+  <!-- 14:00 - 14:55 -->
+  <div class="time-group">
+    <div class="time-label"><span>14:00 – 15:00</span></div>
+
+    <div class="event video">
+      <span class="tag">فيديو</span>
+      <div class="time">14:01</div>
+      <div class="content">مشاهد استهداف <span class="highlight">قاعدة زئيف</span> في حيفا بصليات صواريخ نوعية.</div>
+    </div>
+
+    <div class="event siren">
+      <span class="tag">صفارة إنذار</span>
+      <div class="time">14:10</div>
+      <div class="content">أفيفيم — الجليل الغربي.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 36</span>
+      <div class="time">14:25 (العملية 14:45)</div>
+      <div class="content">استهداف تجمع جنود في منزل بـ<span class="highlight">بلدة الطيبة</span> بمسيّرة انقضاضية وصلية صاروخية.</div>
+    </div>
+
+    <div class="event recon">
+      <span class="tag">استطلاع</span>
+      <div class="time">14:34</div>
+      <div class="content">مسيّرة <span class="highlight">هدهد الأولياء</span> الاستطلاعية فوق قاعدة الاحتلال الأمريكي (فكتوريا).</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 37</span>
+      <div class="time">14:35 (العملية 13:00)</div>
+      <div class="content">استهداف بنى تحتية في <span class="highlight">صفد وروش بينا</span> بصليات صاروخية.</div>
+    </div>
+
+    <div class="event siren">
+      <span class="tag">صفارة إنذار</span>
+      <div class="time">14:41</div>
+      <div class="content">يفتاح — الجليل الأعلى.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 38</span>
+      <div class="time">14:45 (العملية 13:20)</div>
+      <div class="content">استهداف بنى تحتية في <span class="highlight">مدينة عكّا</span> المحتلة بصلية صاروخية.</div>
+    </div>
+
+    <div class="event operation">
+      <span class="tag">بيان 39</span>
+      <div class="time">14:55 (العملية 13:20)</div>
+      <div class="content">هجوم جوي بأسراب <span class="highlight">مسيّرات انقضاضية</span> على تجمعات جنود في موقع المطلة وثكنة يفتاح.</div>
+    </div>
+  </div>
+
+  <!-- 15:00 - 16:13 -->
+  <div class="time-group">
+    <div class="time-label"><span>15:00 – 16:13</span></div>
+
+    <div class="event operation">
+      <span class="tag">بيان 40</span>
+      <div class="time">15:00 (العملية 15:50)</div>
+      <div class="content">استهداف تجمع جنود في <span class="highlight">بلدة الطيبة</span> بصلية صاروخية.</div>
+    </div>
+
+    <div class="event siren">
+      <span class="tag">صفارات إنذار</span>
+      <div class="time">15:15 – 15:23</div>
+      <div class="content">الجبهة الداخلية: رصد صواريخ من <span class="highlight">إيران</span> — القدس — الضفة — تل أبيب — أسدود — راموت نفتالي — أفيفيم.</div>
+    </div>
+
+    <div class="event enemy-report">
+      <span class="tag">إعلام العدو</span>
+      <div class="time">15:37</div>
+      <div class="content">الجبهة الداخلية: رصد صواريخ جديدة من <span class="highlight">إيران</span> — الدخول فوراً إلى الملاجئ.</div>
+    </div>
+
+    <div class="event enemy-report">
+      <span class="tag">إعلام العدو</span>
+      <div class="time">15:38</div>
+      <div class="content">مقتل <span class="highlight">جندي إسرائيلي</span> وإصابة عدد من الضباط والجنود بكمين لحزب الله جنوب لبنان.</div>
+    </div>
+
+    <div class="event siren">
+      <span class="tag">صفارة إنذار</span>
+      <div class="time">15:42</div>
+      <div class="content"><span class="highlight">تل أبيب</span> ومحيطها.</div>
+    </div>
+
+    <div class="event siren">
+      <span class="tag">صفارة إنذار</span>
+      <div class="time">16:00</div>
+      <div class="content">كريات شمونه — خشية مسيّرات.</div>
+    </div>
+
+    <div class="event video">
+      <span class="tag">فيديو</span>
+      <div class="time">16:02</div>
+      <div class="content">مشاهد استهداف بنى تحتية في <span class="highlight">حيفا</span> بصواريخ نوعية.</div>
+    </div>
+
+    <div class="event siren">
+      <span class="tag">صفارة إنذار</span>
+      <div class="time">16:13</div>
+      <div class="content">المالكية، يفتاح، راموت نفتالي — الجليل الأعلى — خشية مسيّرات.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  مصدر: قناة الإعلام الحربي — التغطية الإخبارية (Telegram) &bull; تم التجميع بتاريخ 7 نيسان 2026
+</div>
+
+</body>
+</html>

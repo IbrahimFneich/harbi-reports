@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإعلام الحربي — أرشيف التقارير اليومية</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800;900&display=swap');
+
+  :root {
+    --bg: #080c12;
+    --surface: #0f1520;
+    --surface2: #151d2b;
+    --border: #1e2d3d;
+    --text: #dfe6ee;
+    --text-dim: #6b7d92;
+    --accent: #c9a84c;
+    --green: #2ecc71;
+    --green-dim: rgba(46,204,113,0.08);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Noto Kufi Arabic', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #080c12 0%, #121a2a 50%, #0d1520 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 50px 20px 40px;
+    text-align: center;
+    position: relative;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(201,168,76,0.06) 0%, transparent 70%);
+  }
+
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--accent);
+    position: relative;
+    margin-bottom: 8px;
+  }
+
+  .header .subtitle {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    position: relative;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+  }
+
+  .section-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .report-list {
+    list-style: none;
+  }
+
+  .report-item {
+    margin-bottom: 10px;
+  }
+
+  .report-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-right: 4px solid var(--accent);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+
+  .report-link:hover {
+    transform: translateX(-3px);
+    border-right-color: var(--green);
+    background: var(--surface2);
+  }
+
+  .report-date {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .report-link:hover .report-date {
+    color: var(--green);
+  }
+
+  .report-day {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  .report-arrow {
+    font-size: 1.2rem;
+    color: var(--text-dim);
+    transition: color 0.2s;
+  }
+
+  .report-link:hover .report-arrow {
+    color: var(--green);
+  }
+
+  .empty {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-dim);
+    font-size: 0.72rem;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  @media (max-width: 600px) {
+    .header h1 { font-size: 1.5rem; }
+    .report-link { padding: 12px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>الإعلام الحربي</h1>
+  <div class="subtitle">أرشيف التقارير اليومية — التغطية الإخبارية</div>
+</div>
+
+<div class="container">
+  <div class="section-title">التقارير المتاحة</div>
+  <ul class="report-list" id="reportList"></ul>
+</div>
+
+<div class="footer">
+  مصدر: قناة الإعلام الحربي — التغطية الإخبارية (Telegram)
+</div>
+
+<script>
+var arabicDays = {0:'الأحد',1:'الإثنين',2:'الثلاثاء',3:'الأربعاء',4:'الخميس',5:'الجمعة',6:'السبت'};
+var arabicMonths = {1:'كانون الثاني',2:'شباط',3:'آذار',4:'نيسان',5:'أيار',6:'حزيران',7:'تموز',8:'آب',9:'أيلول',10:'تشرين الأول',11:'تشرين الثاني',12:'كانون الأول'};
+
+// Auto-discover reports by scanning known date range
+// Add new dates here when generating reports
+var reports = [
+  '2026-04-07',
+  '2026-04-06'
+];
+
+var list = document.getElementById('reportList');
+
+reports.forEach(function(dateStr) {
+  var parts = dateStr.split('-');
+  var y = parseInt(parts[0]);
+  var m = parseInt(parts[1]);
+  var d = parseInt(parts[2]);
+  var dt = new Date(y, m - 1, d);
+  var dayName = arabicDays[dt.getDay()];
+  var monthName = arabicMonths[m];
+
+  var li = document.createElement('li');
+  li.className = 'report-item';
+
+  var a = document.createElement('a');
+  a.className = 'report-link';
+  a.href = 'report-' + dateStr + '.html';
+
+  var info = document.createElement('div');
+
+  var dateDiv = document.createElement('div');
+  dateDiv.className = 'report-date';
+  dateDiv.textContent = d + ' ' + monthName + ' ' + y;
+
+  var dayDiv = document.createElement('div');
+  dayDiv.className = 'report-day';
+  dayDiv.textContent = dayName;
+
+  info.appendChild(dateDiv);
+  info.appendChild(dayDiv);
+
+  var arrow = document.createElement('span');
+  arrow.className = 'report-arrow';
+  arrow.textContent = '\u2190';
+
+  a.appendChild(info);
+  a.appendChild(arrow);
+  li.appendChild(a);
+  list.appendChild(li);
+});
+
+if (reports.length === 0) {
+  var empty = document.createElement('div');
+  empty.className = 'empty';
+  empty.textContent = 'لا تقارير متاحة بعد';
+  list.parentNode.appendChild(empty);
+}
+</script>
+
+</body>
+</html>
