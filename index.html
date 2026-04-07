@@ -262,15 +262,9 @@
     <div class="legend-item"><span style="color:var(--accent);">&starf;</span> الأكثر نشاطاً</div>
   </div>
   <div class="heatmap-legend">
-    <span>أقل</span>
-    <div class="heatmap-gradient"></div>
     <span>أكثر</span>
-  </div>
-
-  <!-- Trend chart -->
-  <div class="trend-section" id="trendSection">
-    <div class="trend-title">اتجاه البيانات العسكرية يومياً</div>
-    <div class="trend-chart" id="trendChart"></div>
+    <div class="heatmap-gradient"></div>
+    <span>أقل</span>
   </div>
 </div>
 
@@ -501,49 +495,6 @@ function changeMonth(dir) {
 
 renderCalendar();
 
-// Trend chart
-(function() {
-  var chart = document.getElementById('trendChart');
-  if (!chart) return;
-
-  var sorted = reports.slice().sort();
-  var maxB = 0;
-  sorted.forEach(function(d) {
-    var st = reportStats[d];
-    if (st && st.b > maxB) maxB = st.b;
-  });
-
-  sorted.forEach(function(d) {
-    var st = reportStats[d];
-    if (!st) return;
-    var pct = maxB > 0 ? (st.b / maxB) * 100 : 0;
-    var p = d.split('-');
-    var day = parseInt(p[2]);
-
-    var wrap = document.createElement('div');
-    wrap.className = 'trend-bar-wrap';
-
-    var val = document.createElement('div');
-    val.className = 'trend-val';
-    val.textContent = st.b;
-    wrap.appendChild(val);
-
-    var bar = document.createElement('div');
-    bar.className = 'trend-bar';
-    bar.style.height = Math.max(pct, 5) + '%';
-    bar.style.background = (d === busiestDate) ? 'var(--accent)' : 'var(--green)';
-    bar.title = day + ' ' + arabicMonths[parseInt(p[1]) - 1] + ' \u2014 ' + st.b + ' \u0628\u064A\u0627\u0646\u060C ' + st.s + ' \u0635\u0641\u0627\u0631\u0629';
-    bar.onclick = function() { window.location.href = 'report-' + d + '.html'; };
-    wrap.appendChild(bar);
-
-    var label = document.createElement('div');
-    label.className = 'trend-label';
-    label.textContent = day + '/' + parseInt(p[1]);
-    wrap.appendChild(label);
-
-    chart.appendChild(wrap);
-  });
-})();
 </script>
 
 <script src="report-enhancements.js"></script>
