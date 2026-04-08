@@ -172,7 +172,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v1.0.45';
+  ver.textContent = 'Harbi Reports v1.0.46';
   ver.onclick = function() { showChangelog(); };
   footer.appendChild(ver);
   root.appendChild(footer);
@@ -181,6 +181,38 @@ function renderReport(data) {
   initSearch();
   window._mapInited = false;
   window._sirenPoints = data.sirenPoints || [];
+
+  // Handle deep-link from search: ?tab=X&idx=N&q=term
+  var urlParams = new URLSearchParams(window.location.search);
+  var targetTab = urlParams.get('tab');
+  var targetIdx = urlParams.get('idx');
+
+  if (targetTab) {
+    // Switch to the target tab
+    var tabEl = document.querySelector('.tab[onclick*="' + targetTab + '"]');
+    if (tabEl) switchTab(targetTab, tabEl);
+
+    // Scroll to the specific card
+    if (targetIdx !== null) {
+      setTimeout(function() {
+        var cards = document.querySelectorAll('#' + targetTab + ' .tl-wrap');
+        var idx = parseInt(targetIdx);
+        if (cards[idx]) {
+          cards[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Highlight effect
+          var body = cards[idx].querySelector('.tl-body');
+          if (body) {
+            body.style.borderColor = 'var(--accent)';
+            body.style.boxShadow = '0 0 20px rgba(201,168,76,0.25)';
+            setTimeout(function() {
+              body.style.borderColor = '';
+              body.style.boxShadow = '';
+            }, 3000);
+          }
+        }
+      }, 300);
+    }
+  }
 }
 
 function makePhase(text, count) {

@@ -121,7 +121,7 @@ function idxDay(data) {
       _sIdx.push({
         cat: c.key, date: date, dateLabel: dl,
         time: r.time, title: r.title, subtitle: r.sub,
-        norm: sNorm(r.text), tab: r.tab
+        norm: sNorm(r.text), tab: r.tab, idx: ii
       });
     }
   }
@@ -365,7 +365,7 @@ function openSel() {
 }
 
 function navTo(item) {
-  var url = 'report.html?date=' + item.date + '&tab=' + item.tab;
+  var url = 'report.html?date=' + item.date + '&tab=' + item.tab + '&idx=' + item.idx;
   if (_sInput && _sInput.value) url += '&q=' + encodeURIComponent(_sInput.value);
   window.location.href = url;
 }
