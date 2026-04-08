@@ -1,0 +1,95 @@
+[
+  {
+    "version": "1.0",
+    "date": "2026-04-08",
+    "title": "SPA + Timeline Redesign",
+    "changes": [
+      "Migrated from per-day HTML files to single-page app (report.html + app.js)",
+      "Unified timeline card design for all 6 tabs (Option C v2)",
+      "Operation time in timeline nodes instead of statement numbers",
+      "Color-coded cards: purple (settlement), orange (tank), blue (deep strike), green (default)",
+      "Red hit indicator on nodes for confirmed strikes",
+      "Phase dividers show operation count",
+      "Python categorizer script for 97% token reduction",
+      "JSON data files replace generated HTML",
+      "LTR direction for all time/date elements",
+      "Auto-increment version on every push"
+    ]
+  },
+  {
+    "version": "0.9",
+    "date": "2026-04-08",
+    "title": "Full Text Format Fix",
+    "changes": [
+      "Fixed full text display across all reports (Apr 1-7)",
+      "JS object + DOM textContent approach preserves Arabic line breaks",
+      "Full bayan text includes bismillah, Quran verses, date, hashtags"
+    ]
+  },
+  {
+    "version": "0.8",
+    "date": "2026-04-07",
+    "title": "Landing Page + Polish",
+    "changes": [
+      "Custom domain (harbi-reports.com)",
+      "Mobile responsiveness: smaller text, tighter gaps, no overflow",
+      "Global smart search on landing page with Arabic normalization",
+      "Auto-categorization dashboards for enemy + Iran tabs",
+      "Clean verbose targets, correct badge colors across all reports"
+    ]
+  },
+  {
+    "version": "0.7",
+    "date": "2026-04-07",
+    "title": "Maps + Fullscreen",
+    "changes": [
+      "Fullscreen button on all maps (siren + operations)",
+      "Dark/light tile swap on theme toggle",
+      "Map marker colors match dashboard bar charts"
+    ]
+  },
+  {
+    "version": "0.6",
+    "date": "2026-04-07",
+    "title": "Enhancements System",
+    "changes": [
+      "Shared report-enhancements.js across all reports",
+      "Hero summary with operation chips",
+      "Prev/next day navigation",
+      "Operations map with target markers",
+      "Siren categorization: region bars, type pills, timeline, filters"
+    ]
+  },
+  {
+    "version": "0.5",
+    "date": "2026-04-07",
+    "title": "Interactive Features",
+    "changes": [
+      "Interactive siren map with Leaflet (hover, click, popups)",
+      "Bayanat categorization dashboard",
+      "Dark/light theme toggle"
+    ]
+  },
+  {
+    "version": "0.4",
+    "date": "2026-04-07",
+    "title": "Calendar Landing Page",
+    "changes": [
+      "Calendar view with month navigation",
+      "Heatmap coloring by report density",
+      "Tooltips with category breakdown",
+      "Home button on all reports"
+    ]
+  },
+  {
+    "version": "0.1",
+    "date": "2026-04-06",
+    "title": "Initial Release",
+    "changes": [
+      "First reports: Apr 6-7, 2026",
+      "6-tab layout: bayanat, sirens, enemy, Iran, videos, allies",
+      "Full text toggle on every card",
+      "Smart search with Arabic normalization + English aliases"
+    ]
+  }
+]

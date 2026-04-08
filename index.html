@@ -387,9 +387,74 @@
 <div class="footer">
   <div>مصدر: <a href="https://t.me/C_Military1" target="_blank" rel="noopener">قناة الإعلام الحربي — التغطية الإخبارية</a></div>
   <div style="margin-top:8px;font-size:0.65rem;color:var(--text-muted);">هذا الموقع غير رسمي ولا يمثّل قناة الإعلام الحربي. المحتوى منقول من القناة لأغراض التوثيق والأرشفة فقط.</div>
-  <div style="margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;">Harbi Reports v1.0.40</div>
+  <span style="display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v1.0.41</span>
 </div>
 
+<script>
+function showChangelog() {
+  var existing = document.querySelector('.changelog-overlay');
+  if (existing) { existing.classList.add('show'); return; }
+  var x = new XMLHttpRequest();
+  x.open('GET', 'changelog.json');
+  x.onload = function() {
+    var releases = JSON.parse(x.responseText);
+    var o = document.createElement('div');
+    o.className = 'changelog-overlay show';
+    o.style.cssText = 'display:flex;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:9999;justify-content:center;align-items:center;padding:20px;';
+    o.onclick = function(e) { if (e.target === o) o.classList.remove('show'); };
+    var m = document.createElement('div');
+    m.style.cssText = 'background:#0f1520;border:1px solid #1e2d3d;border-radius:14px;max-width:560px;width:100%;max-height:80vh;overflow-y:auto;direction:ltr;';
+    var hdr = document.createElement('div');
+    hdr.style.cssText = 'padding:20px 24px 16px;border-bottom:1px solid #1e2d3d;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#0f1520;border-radius:14px 14px 0 0;';
+    var h2 = document.createElement('h2');
+    h2.style.cssText = 'font-size:1rem;font-weight:800;color:#c9a84c;margin:0;';
+    h2.textContent = 'Changelog';
+    hdr.appendChild(h2);
+    var cb = document.createElement('button');
+    cb.style.cssText = 'background:none;border:1px solid #1e2d3d;border-radius:8px;color:#6b7d92;cursor:pointer;padding:4px 10px;font-size:0.8rem;';
+    cb.textContent = '\u2715';
+    cb.onclick = function() { o.style.display = 'none'; };
+    hdr.appendChild(cb);
+    m.appendChild(hdr);
+    var bd = document.createElement('div');
+    bd.style.cssText = 'padding:16px 24px 24px;';
+    for (var i = 0; i < releases.length; i++) {
+      var r = releases[i];
+      var rv = document.createElement('div');
+      rv.style.cssText = 'margin-bottom:20px;';
+      var vr = document.createElement('div');
+      vr.style.cssText = 'display:flex;align-items:center;gap:10px;margin-bottom:8px;';
+      var bg = document.createElement('span');
+      bg.style.cssText = 'font-size:0.72rem;font-weight:800;padding:3px 10px;border-radius:6px;background:rgba(201,168,76,0.1);color:#c9a84c;';
+      bg.textContent = 'v' + r.version;
+      vr.appendChild(bg);
+      var tt = document.createElement('span');
+      tt.style.cssText = 'font-size:0.82rem;font-weight:700;color:#dfe6ee;';
+      tt.textContent = r.title;
+      vr.appendChild(tt);
+      var dt = document.createElement('span');
+      dt.style.cssText = 'font-size:0.62rem;color:#6b7d92;margin-left:auto;';
+      dt.textContent = r.date;
+      vr.appendChild(dt);
+      rv.appendChild(vr);
+      var ul = document.createElement('ul');
+      ul.style.cssText = 'list-style:none;padding:0;margin:0;';
+      for (var j = 0; j < r.changes.length; j++) {
+        var li = document.createElement('li');
+        li.style.cssText = 'font-size:0.74rem;color:#6b7d92;padding:3px 0 3px 16px;position:relative;';
+        li.textContent = r.changes[j];
+        ul.appendChild(li);
+      }
+      rv.appendChild(ul);
+      bd.appendChild(rv);
+    }
+    m.appendChild(bd);
+    o.appendChild(m);
+    document.body.appendChild(o);
+  };
+  x.send();
+}
+</script>
 <script>
 // ── Report dates ──
 var reports = [
