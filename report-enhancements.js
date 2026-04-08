@@ -89,14 +89,15 @@ function formatDateAr(dateStr) {
 
   var nav = document.createElement('div');
   nav.className = 'day-nav';
+  nav.style.direction = 'ltr';
 
   var prevBtn = document.createElement('a');
   prevBtn.className = 'day-nav-btn' + (idx === 0 ? ' disabled' : '');
   if (idx > 0) {
     prevBtn.href = reportUrl(ALL_REPORTS[idx - 1]);
-    prevBtn.textContent = '\u2192 ' + formatDateAr(ALL_REPORTS[idx - 1]);
+    prevBtn.textContent = '\u2190 ' + formatDateAr(ALL_REPORTS[idx - 1]);
   } else {
-    prevBtn.textContent = '\u2192 السابق';
+    prevBtn.textContent = '\u2190 السابق';
   }
 
   var center = document.createElement('span');
@@ -108,9 +109,9 @@ function formatDateAr(dateStr) {
   nextBtn.className = 'day-nav-btn' + (idx === ALL_REPORTS.length - 1 ? ' disabled' : '');
   if (idx < ALL_REPORTS.length - 1) {
     nextBtn.href = reportUrl(ALL_REPORTS[idx + 1]);
-    nextBtn.textContent = formatDateAr(ALL_REPORTS[idx + 1]) + ' \u2190';
+    nextBtn.textContent = formatDateAr(ALL_REPORTS[idx + 1]) + ' \u2192';
   } else {
-    nextBtn.textContent = 'التالي \u2190';
+    nextBtn.textContent = 'التالي \u2192';
   }
 
   nav.appendChild(prevBtn);

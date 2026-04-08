@@ -71,6 +71,7 @@
     display: flex; justify-content: center; align-items: center; gap: 20px;
     padding: 20px; background: var(--surface2);
     border-bottom: 1px solid var(--border);
+    direction: ltr;
   }
   .month-nav .btn {
     background: var(--surface3); border: 1px solid var(--border);
@@ -98,6 +99,7 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 6px;
+    direction: ltr;
   }
 
   .cal-header {
@@ -361,9 +363,9 @@
 <div class="stats-strip" id="statsStrip"></div>
 
 <div class="month-nav">
-  <button class="btn" id="prevBtn" onclick="changeMonth(-1)">&rarr; الشهر السابق</button>
+  <button class="btn" id="prevBtn" onclick="changeMonth(-1)">&larr; الشهر السابق</button>
   <div class="current-month" id="currentMonth"></div>
-  <button class="btn" id="nextBtn" onclick="changeMonth(1)">الشهر التالي &larr;</button>
+  <button class="btn" id="nextBtn" onclick="changeMonth(1)">الشهر التالي &rarr;</button>
 </div>
 
 <div class="container">
@@ -495,8 +497,8 @@ function renderCalendar() {
   var grid = document.getElementById('calGrid');
   grid.textContent = '';
 
-  // Day headers (Sat first for Arabic calendar)
-  var dayOrder = [6, 0, 1, 2, 3, 4, 5]; // Sat, Sun, Mon, Tue, Wed, Thu, Fri
+  // Day headers (Sat first, LTR grid direction)
+  var dayOrder = [6, 0, 1, 2, 3, 4, 5]; // Sat, Sun, Mon, Tue, Wed, Thu, Fri (LTR)
   var weekendDays = [5, 6]; // Fri, Sat
   dayOrder.forEach(function(di) {
     var hdr = document.createElement('div');

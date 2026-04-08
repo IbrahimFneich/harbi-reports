@@ -126,7 +126,7 @@ body {
   color:#fff; z-index:2;
   box-shadow:0 0 0 4px var(--bg), 0 0 0 6px var(--green);
 }
-.tl-node .node-time { font-size:0.78rem; font-weight:800; }
+.tl-node .node-time { font-size:0.78rem; font-weight:800; direction:ltr; }
 
 /* Node colors per type */
 .tl-node.node-green  { background:var(--green); box-shadow:0 0 0 4px var(--bg), 0 0 0 6px var(--green); }
