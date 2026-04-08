@@ -172,7 +172,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v1.0.42';
+  ver.textContent = 'Harbi Reports v1.0.43';
   ver.onclick = function() { showChangelog(); };
   footer.appendChild(ver);
   root.appendChild(footer);
@@ -890,7 +890,7 @@ function showChangelog() {
   var existing = document.querySelector('.changelog-overlay');
   if (existing) { existing.classList.add('show'); return; }
 
-  fetch('changelog.json')
+  fetch('changelog.json?t=' + Date.now())
     .then(function(r) { return r.json(); })
     .then(function(releases) {
       var overlay = document.createElement('div');
