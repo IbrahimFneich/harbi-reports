@@ -204,12 +204,14 @@ body {
 }
 
 .siren-row {
-  display:flex; gap:12px; align-items:center;
+  display:flex; gap:12px; align-items:center; flex-wrap:wrap;
   padding:10px 16px; margin-bottom:6px;
   background:var(--surface); border:1px solid var(--border);
   border-right:3px solid var(--red); border-radius:8px;
   font-size:0.82rem;
 }
+.siren-row .txt-toggle,
+.siren-row .txt-full { flex-basis:100%; }
 .siren-row.highlighted {
   border-color:var(--red); background:var(--red-dim);
 }
