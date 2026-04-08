@@ -1,5 +1,38 @@
 [
   {
+    "version": "1.0.47",
+    "date": "2026-04-08",
+    "title": "Search Deep-Link",
+    "changes": [
+      "Clicking a search result scrolls to the exact card in the report",
+      "Gold border highlight on target card for 3 seconds",
+      "URL params: ?tab=&idx=&q= for direct deep-linking"
+    ]
+  },
+  {
+    "version": "1.0.44",
+    "date": "2026-04-08",
+    "title": "Global Spotlight Search",
+    "changes": [
+      "Press / or Ctrl+K to open search from any page",
+      "Searches across all 8+ daily reports instantly",
+      "Category filter pills (بيانات, صفارات, إعلام, إيران, فيديو, حلفاء)",
+      "Keyboard navigation: arrow keys + Enter to open result",
+      "Arabic normalization + English aliases (merkava, haifa, drone...)",
+      "Recent searches saved as suggestion chips"
+    ]
+  },
+  {
+    "version": "1.0.42",
+    "date": "2026-04-08",
+    "title": "Proper Semver + Git Tags",
+    "changes": [
+      "Changelog uses semver 1.0.0 through 1.0.N",
+      "Git tags created for all milestones (v1.0.0 to v1.0.41)",
+      "Cache-busting on changelog.json fetch"
+    ]
+  },
+  {
     "version": "1.0.41",
     "date": "2026-04-08",
     "title": "Clickable Changelog Modal",
