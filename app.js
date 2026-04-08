@@ -21,6 +21,10 @@
     .then(function(data) {
       document.title = 'تقرير ' + data.dateAr + ' — الإعلام الحربي';
       renderReport(data);
+      // Load enhancements AFTER DOM is fully built
+      var enhScript = document.createElement('script');
+      enhScript.src = 'report-enhancements.js';
+      document.body.appendChild(enhScript);
     })
     .catch(function() {
       document.getElementById('report-root').textContent = 'لا يوجد تقرير لهذا التاريخ';
@@ -73,16 +77,16 @@ function renderReport(data) {
   ];
 
   var statsBar = document.createElement('div');
-  statsBar.className = 'stats-bar';
+  statsBar.className = 'stats';
   for (var si = 0; si < statsConfig.length; si++) {
     var sc = statsConfig[si];
     var statBox = document.createElement('div');
     statBox.className = 'stat ' + sc.cls;
     var countSpan = document.createElement('span');
-    countSpan.className = 'stat-count';
+    countSpan.className = 'n';
     countSpan.textContent = data.stats[sc.key];
     var labelSpan = document.createElement('span');
-    labelSpan.className = 'stat-label';
+    labelSpan.className = 'l';
     labelSpan.textContent = sc.label;
     statBox.appendChild(countSpan);
     statBox.appendChild(labelSpan);
@@ -109,7 +113,7 @@ function renderReport(data) {
     tab.setAttribute('onclick', "switchTab('" + tc.id + "',this)");
     tab.textContent = tc.label + ' ';
     var badge = document.createElement('span');
-    badge.className = 'tab-badge';
+    badge.className = 'badge';
     badge.textContent = tc.count;
     tab.appendChild(badge);
     tabsBar.appendChild(tab);
@@ -173,6 +177,15 @@ function renderReport(data) {
   window._sirenPoints = data.sirenPoints || [];
 }
 
+function makePhase(text) {
+  var div = document.createElement('div');
+  div.className = 'phase';
+  var span = document.createElement('span');
+  span.textContent = text;
+  div.appendChild(span);
+  return div;
+}
+
 // ── 3. renderBayanat ────────────────────────────────────────
 
 function renderBayanat(container, items) {
@@ -200,10 +213,7 @@ function renderBayanat(container, items) {
     var phaseItems = grouped[phase.id];
     if (phaseItems.length === 0) continue;
 
-    var divider = document.createElement('div');
-    divider.className = 'phase';
-    divider.textContent = phase.label;
-    container.appendChild(divider);
+    container.appendChild(makePhase(phase.label));
 
     for (var bi = 0; bi < phaseItems.length; bi++) {
       var b = phaseItems[bi];
@@ -297,10 +307,7 @@ function renderBayanat(container, items) {
 // ── 4. renderSirens ─────────────────────────────────────────
 
 function renderSirens(container, items, sirenPoints) {
-  var divider = document.createElement('div');
-  divider.className = 'phase';
-  divider.textContent = items.length + ' صفارة إنذار عبر فلسطين المحتلة';
-  container.appendChild(divider);
+  container.appendChild(makePhase(items.length + ' صفارة إنذار عبر فلسطين المحتلة'));
 
   var mapTitle = document.createElement('div');
   mapTitle.className = 'siren-map-title';
@@ -336,22 +343,19 @@ function renderSirens(container, items, sirenPoints) {
 // ── 5. renderEnemy ──────────────────────────────────────────
 
 function renderEnemy(container, items) {
-  var divider = document.createElement('div');
-  divider.className = 'phase';
-  divider.textContent = items.length + ' تقرير إعلام العدو';
-  container.appendChild(divider);
+  container.appendChild(makePhase(items.length + ' تقرير إعلام العدو'));
 
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
     var card = document.createElement('div');
     card.className = 'enemy-row';
 
-    var eTime = document.createElement('span');
+    var eTime = document.createElement('div');
     eTime.className = 'e-time';
     eTime.textContent = item.time || '';
     card.appendChild(eTime);
 
-    var eText = document.createElement('span');
+    var eText = document.createElement('div');
     eText.className = 'e-text';
     eText.textContent = item.summary || '';
     card.appendChild(eText);
@@ -364,27 +368,26 @@ function renderEnemy(container, items) {
 // ── 6. renderIran ───────────────────────────────────────────
 
 function renderIran(container, items) {
-  var divider = document.createElement('div');
-  divider.className = 'phase';
-  divider.textContent = 'العمليات الإيرانية — ' + items.length + ' خبراً';
-  container.appendChild(divider);
+  container.appendChild(makePhase('العمليات الإيرانية — ' + items.length + ' خبراً'));
 
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
     var card = document.createElement('div');
     card.className = 'iran-card';
 
-    var iTime = document.createElement('span');
+    var iTime = document.createElement('div');
     iTime.className = 'i-time';
     iTime.textContent = item.time || '';
     card.appendChild(iTime);
 
-    var iSource = document.createElement('span');
-    iSource.className = 'i-source';
-    iSource.textContent = item.source || '';
-    card.appendChild(iSource);
+    if (item.source) {
+      var iSource = document.createElement('div');
+      iSource.className = 'i-source';
+      iSource.textContent = item.source;
+      card.appendChild(iSource);
+    }
 
-    var iText = document.createElement('span');
+    var iText = document.createElement('div');
     iText.className = 'i-text';
     iText.textContent = item.summary || '';
     card.appendChild(iText);
@@ -397,17 +400,14 @@ function renderIran(container, items) {
 // ── 7. renderVideos ─────────────────────────────────────────
 
 function renderVideos(container, items) {
-  var divider = document.createElement('div');
-  divider.className = 'phase';
-  divider.textContent = items.length + ' عمليات موثّقة بالفيديو';
-  container.appendChild(divider);
+  container.appendChild(makePhase(items.length + ' عمليات موثّقة بالفيديو'));
 
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
     var card = document.createElement('div');
     card.className = 'vid-card';
 
-    var vTime = document.createElement('span');
+    var vTime = document.createElement('div');
     vTime.className = 'v-time';
     vTime.textContent = (item.time || '') + ' ';
     var vidIcon = document.createElement('span');
@@ -416,7 +416,7 @@ function renderVideos(container, items) {
     vTime.appendChild(vidIcon);
     card.appendChild(vTime);
 
-    var vText = document.createElement('span');
+    var vText = document.createElement('div');
     vText.className = 'v-text';
     vText.textContent = item.description || '';
     card.appendChild(vText);
@@ -429,27 +429,24 @@ function renderVideos(container, items) {
 // ── 8. renderAllies ─────────────────────────────────────────
 
 function renderAllies(container, items) {
-  var divider = document.createElement('div');
-  divider.className = 'phase';
-  divider.textContent = 'اليمن والعراق';
-  container.appendChild(divider);
+  container.appendChild(makePhase('اليمن والعراق'));
 
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
     var card = document.createElement('div');
     card.className = 'ally-card';
 
-    var aFlag = document.createElement('span');
+    var aFlag = document.createElement('div');
     aFlag.className = 'a-flag';
     aFlag.textContent = item.flag || '';
     card.appendChild(aFlag);
 
-    var aTime = document.createElement('span');
+    var aTime = document.createElement('div');
     aTime.className = 'a-time';
     aTime.textContent = item.time || '';
     card.appendChild(aTime);
 
-    var aText = document.createElement('span');
+    var aText = document.createElement('div');
     aText.className = 'a-text';
     aText.textContent = item.summary || '';
     card.appendChild(aText);
