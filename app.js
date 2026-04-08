@@ -177,16 +177,128 @@ function renderReport(data) {
   window._sirenPoints = data.sirenPoints || [];
 }
 
-function makePhase(text) {
+function makePhase(text, count) {
   var div = document.createElement('div');
   div.className = 'phase';
   var span = document.createElement('span');
-  span.textContent = text;
+  var label = text;
+  if (count !== undefined && count !== null) {
+    label = label + ' \u2014 ' + count + ' عملية';
+  }
+  span.textContent = label;
   div.appendChild(span);
   return div;
 }
 
-// ── 3. renderBayanat ────────────────────────────────────────
+// ── 3. createTimelineCard helper ────────────────────────────
+
+function createTimelineCard(config) {
+  // config: { wrapClass, nodeTime, nodeColor, hasHit, tintColor, title,
+  //           chips:[], dots:[], hiddenEls:{}, fullText }
+  var wrap = document.createElement('div');
+  wrap.className = 'tl-wrap' + (config.wrapClass ? ' ' + config.wrapClass : '');
+
+  // Node
+  var node = document.createElement('div');
+  node.className = 'tl-node' + (config.nodeColor ? ' ' + config.nodeColor : '') + (config.hasHit ? ' has-hit' : '');
+  var nodeTime = document.createElement('span');
+  nodeTime.className = 'node-time';
+  nodeTime.textContent = config.nodeTime || '';
+  node.appendChild(nodeTime);
+  wrap.appendChild(node);
+
+  // Line
+  var line = document.createElement('div');
+  line.className = 'tl-line';
+  wrap.appendChild(line);
+
+  // Body
+  var body = document.createElement('div');
+  body.className = 'tl-body' + (config.tintColor ? ' ' + config.tintColor : '');
+
+  // Hidden elements for compatibility
+  if (config.hiddenEls) {
+    var keys = Object.keys(config.hiddenEls);
+    for (var hi = 0; hi < keys.length; hi++) {
+      var hKey = keys[hi];
+      var hDiv = document.createElement('div');
+      hDiv.className = hKey;
+      hDiv.style.display = 'none';
+      hDiv.textContent = config.hiddenEls[hKey];
+      body.appendChild(hDiv);
+    }
+  }
+
+  // Title
+  var titleEl = document.createElement('div');
+  titleEl.className = 'tl-title';
+  titleEl.textContent = config.title || '';
+  body.appendChild(titleEl);
+
+  // Chips
+  if (config.chips && config.chips.length > 0) {
+    var chipsWrap = document.createElement('div');
+    chipsWrap.className = 'tl-chips';
+    for (var ci = 0; ci < config.chips.length; ci++) {
+      var chipConf = config.chips[ci];
+      var chip = document.createElement('span');
+      chip.className = 'tl-chip' + (chipConf.cls ? ' ' + chipConf.cls : '');
+      if (chipConf.html) {
+        chip.innerHTML = chipConf.html;
+      } else {
+        chip.textContent = chipConf.text || '';
+      }
+      chipsWrap.appendChild(chip);
+    }
+    body.appendChild(chipsWrap);
+  }
+
+  // Dots
+  if (config.dots && config.dots.length > 0) {
+    var dotsWrap = document.createElement('div');
+    dotsWrap.className = 'tl-dots';
+    for (var di = 0; di < config.dots.length; di++) {
+      var dotConf = config.dots[di];
+      var dotSpan = document.createElement('span');
+      dotSpan.className = 'tl-dot';
+      var dotCircle = document.createElement('span');
+      dotCircle.className = 'dot';
+      dotCircle.style.background = dotConf.color || '#888';
+      dotSpan.appendChild(dotCircle);
+      dotSpan.appendChild(document.createTextNode(' ' + dotConf.label));
+      dotsWrap.appendChild(dotSpan);
+    }
+    body.appendChild(dotsWrap);
+  }
+
+  // Hidden tag spans (for enhancements.js)
+  if (config.hiddenTags) {
+    for (var ti = 0; ti < config.hiddenTags.length; ti++) {
+      var tagSpan = document.createElement('span');
+      tagSpan.className = 'bayan-tag';
+      tagSpan.style.display = 'none';
+      tagSpan.textContent = config.hiddenTags[ti];
+      body.appendChild(tagSpan);
+    }
+  }
+
+  // Optional tl-text for long summaries
+  if (config.tlText) {
+    var tlTextEl = document.createElement('div');
+    tlTextEl.className = 'tl-text';
+    tlTextEl.textContent = config.tlText;
+    body.appendChild(tlTextEl);
+  }
+
+  wrap.appendChild(body);
+
+  // addToggle appends inside tl-body via the updated function
+  addToggle(wrap, config.fullText);
+
+  return wrap;
+}
+
+// ── 4. renderBayanat ────────────────────────────────────────
 
 function renderBayanat(container, items) {
   var phases = [
@@ -208,107 +320,98 @@ function renderBayanat(container, items) {
     else grouped.masaa.push(item);
   }
 
+  var tagColorMap = {
+    'في إطار التحذير': '#a855f7',
+    'إصابة مباشرة': '#ef4444',
+    'إصابة مؤكّدة': '#ef4444',
+    'ضربة عمق': '#3b82f6',
+    'ردّاً على': '#f97316'
+  };
+
+  var badgeNodeMap = {
+    'settlement': 'node-purple',
+    'tank': 'node-orange',
+    'deep': 'node-blue',
+    'multi': 'node-accent'
+  };
+
+  var badgeTintMap = {
+    'settlement': 'tint-purple',
+    'tank': 'tint-orange',
+    'deep': 'tint-blue'
+  };
+
   for (var pi = 0; pi < phases.length; pi++) {
     var phase = phases[pi];
     var phaseItems = grouped[phase.id];
     if (phaseItems.length === 0) continue;
 
-    container.appendChild(makePhase(phase.label));
+    container.appendChild(makePhase(phase.label, phaseItems.length));
 
     for (var bi = 0; bi < phaseItems.length; bi++) {
       var b = phaseItems[bi];
-      var card = document.createElement('div');
-      card.className = 'bayan' + (b.badge ? ' ' + b.badge : '');
 
-      // Header
-      var bHeader = document.createElement('div');
-      bHeader.className = 'bayan-header';
-
-      var bNum = document.createElement('div');
-      bNum.className = 'bayan-num';
-      bNum.textContent = b.num || '+';
-      bHeader.appendChild(bNum);
-
-      var bTimes = document.createElement('div');
-      bTimes.className = 'bayan-times';
-
-      var postLabel = document.createElement('span');
-      postLabel.className = 't-label';
-      postLabel.textContent = 'نُشر';
-      bTimes.appendChild(postLabel);
-      bTimes.appendChild(document.createTextNode(' '));
-      var postVal = document.createElement('span');
-      postVal.className = 't-val';
-      postVal.textContent = b.postTime || '';
-      bTimes.appendChild(postVal);
-      bTimes.appendChild(document.createTextNode('\u00A0'));
-      var opLabel = document.createElement('span');
-      opLabel.className = 't-label';
-      opLabel.textContent = 'نُفّذ';
-      bTimes.appendChild(opLabel);
-      bTimes.appendChild(document.createTextNode(' '));
-      var opVal = document.createElement('span');
-      opVal.className = 't-val';
-      opVal.textContent = b.opTime || '';
-      bTimes.appendChild(opVal);
-
-      bHeader.appendChild(bTimes);
-      card.appendChild(bHeader);
-
-      // Target
-      var bTarget = document.createElement('div');
-      bTarget.className = 'bayan-target';
-      bTarget.textContent = b.target || '';
-      card.appendChild(bTarget);
-
-      // Weapon
-      if (b.weapon) {
-        var bDetails = document.createElement('div');
-        bDetails.className = 'bayan-details';
-        var detailInner = document.createElement('div');
-        var weaponLabel = document.createElement('span');
-        weaponLabel.className = 'detail-label';
-        weaponLabel.textContent = 'السلاح';
-        detailInner.appendChild(weaponLabel);
-        detailInner.appendChild(document.createElement('br'));
-        var weaponVal = document.createElement('span');
-        weaponVal.className = 'detail-val';
-        weaponVal.textContent = b.weapon;
-        detailInner.appendChild(weaponVal);
-        bDetails.appendChild(detailInner);
-        card.appendChild(bDetails);
+      // Determine node color and tint
+      var nodeColor = 'node-green';
+      var tintColor = '';
+      if (b.badge && badgeNodeMap[b.badge]) {
+        nodeColor = badgeNodeMap[b.badge];
+      }
+      if (b.badge && badgeTintMap[b.badge]) {
+        tintColor = badgeTintMap[b.badge];
       }
 
-      // Tags
+      // Build chips
+      var chips = [];
+      if (b.weapon) {
+        chips.push({ cls: 'weapon-chip', text: b.weapon });
+      }
+      chips.push({ cls: 'ref-chip', text: 'بيان #' + (b.num || '+') });
+
+      // Build dots and determine hasHit
+      var dots = [];
+      var hasHit = false;
+      var hiddenTags = [];
       if (b.tags && b.tags.length > 0) {
-        var tagMap = {
-          'في إطار التحذير': 'tag-warning',
-          'إصابة مباشرة': 'tag-hit',
-          'إصابة مؤكّدة': 'tag-hit',
-          'ضربة عمق': 'tag-deep',
-          'ردّاً على': 'tag-retaliation'
-        };
         for (var tgi = 0; tgi < b.tags.length; tgi++) {
           var tagText = b.tags[tgi];
-          var tagClass = tagMap[tagText] || '';
-          var tagSpan = document.createElement('span');
-          tagSpan.className = 'bayan-tag' + (tagClass ? ' ' + tagClass : '');
-          tagSpan.textContent = tagText;
-          card.appendChild(tagSpan);
+          hiddenTags.push(tagText);
+          var dotColor = tagColorMap[tagText] || '#888';
+          dots.push({ color: dotColor, label: tagText });
+          if (tagText === 'إصابة مباشرة' || tagText === 'إصابة مؤكّدة') {
+            hasHit = true;
+          }
         }
       }
 
-      addToggle(card, b.fullText);
+      // Wrap class
+      var wrapClass = 'bayan' + (b.badge ? ' ' + b.badge : '');
+
+      var card = createTimelineCard({
+        wrapClass: wrapClass,
+        nodeTime: b.opTime || b.postTime || '',
+        nodeColor: nodeColor,
+        hasHit: hasHit,
+        tintColor: tintColor,
+        title: b.target || '',
+        chips: chips,
+        dots: dots,
+        hiddenEls: {
+          'bayan-target': b.target || '',
+          'bayan-num': b.num || '+'
+        },
+        hiddenTags: hiddenTags,
+        fullText: b.fullText
+      });
+
       container.appendChild(card);
     }
   }
 }
 
-// ── 4. renderSirens ─────────────────────────────────────────
+// ── 5. renderSirens ─────────────────────────────────────────
 
 function renderSirens(container, items, sirenPoints) {
-  container.appendChild(makePhase(items.length + ' صفارة إنذار عبر فلسطين المحتلة'));
-
   var mapTitle = document.createElement('div');
   mapTitle.className = 'siren-map-title';
   mapTitle.textContent = 'خريطة انتشار صفارات الإنذار';
@@ -320,143 +423,157 @@ function renderSirens(container, items, sirenPoints) {
 
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
-    var row = document.createElement('div');
-    row.className = 'siren-row';
 
-    var sTime = document.createElement('span');
-    sTime.className = 's-time';
-    sTime.textContent = item.time || '';
-    row.appendChild(sTime);
+    var card = createTimelineCard({
+      wrapClass: 'siren-row',
+      nodeTime: item.time || '',
+      nodeColor: 'node-red',
+      hasHit: false,
+      tintColor: 'tint-red',
+      title: item.location || '',
+      chips: [],
+      dots: [],
+      hiddenEls: {
+        's-time': item.time || '',
+        's-loc': item.location || ''
+      },
+      fullText: item.fullText
+    });
 
-    var sLoc = document.createElement('span');
-    sLoc.className = 's-loc';
-    sLoc.textContent = item.location || '';
-    row.appendChild(sLoc);
-
-    addToggle(row, item.fullText);
-    container.appendChild(row);
+    container.appendChild(card);
   }
 
   window._sirenPoints = sirenPoints;
 }
 
-// ── 5. renderEnemy ──────────────────────────────────────────
+// ── 6. renderEnemy ──────────────────────────────────────────
 
 function renderEnemy(container, items) {
   container.appendChild(makePhase(items.length + ' تقرير إعلام العدو'));
 
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
-    var card = document.createElement('div');
-    card.className = 'enemy-row';
+    var summary = item.summary || '';
+    var shortTitle = summary.length > 80 ? summary.substring(0, 80) + '...' : summary;
+    var tlText = summary.length > 80 ? summary : null;
 
-    var eTime = document.createElement('div');
-    eTime.className = 'e-time';
-    eTime.textContent = item.time || '';
-    card.appendChild(eTime);
+    var card = createTimelineCard({
+      wrapClass: 'enemy-row',
+      nodeTime: item.time || '',
+      nodeColor: 'node-orange',
+      hasHit: false,
+      tintColor: '',
+      title: shortTitle,
+      chips: [],
+      dots: [],
+      hiddenEls: {
+        'e-time': item.time || '',
+        'e-text': summary
+      },
+      tlText: tlText,
+      fullText: item.fullText
+    });
 
-    var eText = document.createElement('div');
-    eText.className = 'e-text';
-    eText.textContent = item.summary || '';
-    card.appendChild(eText);
-
-    addToggle(card, item.fullText);
     container.appendChild(card);
   }
 }
 
-// ── 6. renderIran ───────────────────────────────────────────
+// ── 7. renderIran ───────────────────────────────────────────
 
 function renderIran(container, items) {
   container.appendChild(makePhase('العمليات الإيرانية — ' + items.length + ' خبراً'));
 
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
-    var card = document.createElement('div');
-    card.className = 'iran-card';
+    var summary = item.summary || '';
+    var shortTitle = summary.length > 80 ? summary.substring(0, 80) + '...' : summary;
 
-    var iTime = document.createElement('div');
-    iTime.className = 'i-time';
-    iTime.textContent = item.time || '';
-    card.appendChild(iTime);
-
+    var chips = [];
     if (item.source) {
-      var iSource = document.createElement('div');
-      iSource.className = 'i-source';
-      iSource.textContent = item.source;
-      card.appendChild(iSource);
+      chips.push({ cls: 'source-chip', text: item.source });
     }
 
-    var iText = document.createElement('div');
-    iText.className = 'i-text';
-    iText.textContent = item.summary || '';
-    card.appendChild(iText);
+    var card = createTimelineCard({
+      wrapClass: 'iran-card',
+      nodeTime: item.time || '',
+      nodeColor: 'node-purple',
+      hasHit: false,
+      tintColor: 'tint-purple',
+      title: shortTitle,
+      chips: chips,
+      dots: [],
+      hiddenEls: {
+        'i-time': item.time || '',
+        'i-source': item.source || '',
+        'i-text': summary
+      },
+      fullText: item.fullText
+    });
 
-    addToggle(card, item.fullText);
     container.appendChild(card);
   }
 }
 
-// ── 7. renderVideos ─────────────────────────────────────────
+// ── 8. renderVideos ─────────────────────────────────────────
 
 function renderVideos(container, items) {
   container.appendChild(makePhase(items.length + ' عمليات موثّقة بالفيديو'));
 
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
-    var card = document.createElement('div');
-    card.className = 'vid-card';
 
-    var vTime = document.createElement('div');
-    vTime.className = 'v-time';
-    vTime.textContent = (item.time || '') + ' ';
-    var vidIcon = document.createElement('span');
-    vidIcon.className = 'vid-icon';
-    vidIcon.textContent = '\u25B6';
-    vTime.appendChild(vidIcon);
-    card.appendChild(vTime);
+    var card = createTimelineCard({
+      wrapClass: 'vid-card',
+      nodeTime: item.time || '',
+      nodeColor: 'node-cyan',
+      hasHit: false,
+      tintColor: 'tint-cyan',
+      title: item.description || '',
+      chips: [{ cls: 'play-chip', html: '&#9654; فيديو' }],
+      dots: [],
+      hiddenEls: {
+        'v-time': item.time || '',
+        'v-text': item.description || ''
+      },
+      fullText: item.fullText
+    });
 
-    var vText = document.createElement('div');
-    vText.className = 'v-text';
-    vText.textContent = item.description || '';
-    card.appendChild(vText);
-
-    addToggle(card, item.fullText);
     container.appendChild(card);
   }
 }
 
-// ── 8. renderAllies ─────────────────────────────────────────
+// ── 9. renderAllies ─────────────────────────────────────────
 
 function renderAllies(container, items) {
   container.appendChild(makePhase('اليمن والعراق'));
 
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
-    var card = document.createElement('div');
-    card.className = 'ally-card';
+    var summary = item.summary || '';
+    var shortTitle = summary.length > 80 ? summary.substring(0, 80) + '...' : summary;
 
-    var aFlag = document.createElement('div');
-    aFlag.className = 'a-flag';
-    aFlag.textContent = item.flag || '';
-    card.appendChild(aFlag);
+    var card = createTimelineCard({
+      wrapClass: 'ally-card',
+      nodeTime: item.time || '',
+      nodeColor: 'node-cyan',
+      hasHit: false,
+      tintColor: 'tint-cyan',
+      title: shortTitle,
+      chips: [{ cls: 'flag-chip', text: item.flag || '' }],
+      dots: [],
+      hiddenEls: {
+        'a-flag': item.flag || '',
+        'a-time': item.time || '',
+        'a-text': summary
+      },
+      fullText: item.fullText
+    });
 
-    var aTime = document.createElement('div');
-    aTime.className = 'a-time';
-    aTime.textContent = item.time || '';
-    card.appendChild(aTime);
-
-    var aText = document.createElement('div');
-    aText.className = 'a-text';
-    aText.textContent = item.summary || '';
-    card.appendChild(aText);
-
-    addToggle(card, item.fullText);
     container.appendChild(card);
   }
 }
 
-// ── 9. switchTab ────────────────────────────────────────────
+// ── 10. switchTab ───────────────────────────────────────────
 
 function switchTab(id, el) {
   document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.remove('active'); });
@@ -469,7 +586,7 @@ function switchTab(id, el) {
   }
 }
 
-// ── 10. toggleText + addToggle ──────────────────────────────
+// ── 11. toggleText + addToggle ──────────────────────────────
 
 function toggleText(btn) {
   var ft = btn.nextElementSibling;
@@ -480,6 +597,7 @@ function toggleText(btn) {
 
 function addToggle(card, text) {
   if (!text) return;
+  var target = card.querySelector('.tl-body') || card;
   var btn = document.createElement('span');
   btn.className = 'txt-toggle';
   btn.textContent = 'النص الكامل ▼';
@@ -487,11 +605,11 @@ function addToggle(card, text) {
   var div = document.createElement('div');
   div.className = 'txt-full';
   div.textContent = text;
-  card.appendChild(btn);
-  card.appendChild(div);
+  target.appendChild(btn);
+  target.appendChild(div);
 }
 
-// ── 11. Search engine ───────────────────────────────────────
+// ── 12. Search engine ───────────────────────────────────────
 
 var aliases = {
   'merkava': 'ميركافا', 'tank': 'ميركافا', 'دبابة': 'ميركافا', 'دبابه': 'ميركافا',
@@ -525,7 +643,7 @@ function normalizeAr(s) {
     .replace(/[\u064B-\u065F\u0670]/g, '').toLowerCase();
 }
 
-var CARD_SEL = '.bayan, .siren-row, .enemy-row, .iran-card, .vid-card, .ally-card';
+var CARD_SEL = '.tl-wrap';
 var tabNames = { bayanat: 'بيانات', sirens: 'صفارات', enemy: 'إعلام', iran: 'إيران', videos: 'فيديو', allies: 'حلفاء' };
 var _searchTimer = null;
 
@@ -673,7 +791,7 @@ function performSearch(query) {
   }
 }
 
-// ── 12. Siren map (Leaflet) ────────────────────────────────
+// ── 13. Siren map (Leaflet) ────────────────────────────────
 
 window._mapInited = false;
 window._sirenPoints = [];
