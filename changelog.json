@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.0.56",
+    "date": "2026-04-09",
+    "title": "Reports: March 21-27",
+    "changes": [
+      "Added 7 historical reports: March 21-27 (788 total events across the week)",
+      "Total coverage now spans 19 days (March 21 - April 8)"
+    ]
+  },
+  {
     "version": "1.0.55",
     "date": "2026-04-09",
     "title": "Reports: March 28-30",

@@ -178,7 +178,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v1.0.55';
+  ver.textContent = 'Harbi Reports v1.0.56';
   ver.onclick = function() { showChangelog(); };
   footer.appendChild(ver);
   root.appendChild(footer);
@@ -198,26 +198,30 @@ function renderReport(data) {
     var tabEl = document.querySelector('.tab[onclick*="' + targetTab + '"]');
     if (tabEl) switchTab(targetTab, tabEl);
 
-    // Scroll to the specific card
+    // Scroll to the specific card — wait for DOM to settle
     if (targetIdx !== null) {
       setTimeout(function() {
         var cards = document.querySelectorAll('#' + targetTab + ' .tl-wrap');
         var idx = parseInt(targetIdx);
-        if (cards[idx]) {
-          cards[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
-          // Highlight effect
-          var body = cards[idx].querySelector('.tl-body');
-          if (body) {
-            body.style.borderColor = 'var(--accent)';
-            body.style.boxShadow = '0 0 20px rgba(201,168,76,0.25)';
+        if (!cards[idx]) return;
+        var card = cards[idx];
+        // Add highlight class first so it renders at the right size
+        card.classList.add('search-target');
+        // Use rAF to ensure layout is computed before scrolling
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Remove highlight after 5s with fade transition
             setTimeout(function() {
-              body.style.borderColor = '';
-              body.style.boxShadow = '';
-            }, 3000);
-          }
-        }
-      }, 300);
-    }
+              card.classList.remove('search-target');
+              card.classList.add('search-target-fade');
+              setTimeout(function() {
+                card.classList.remove('search-target-fade');
+              }, 1000);
+            }, 5000);
+          });
+        });
+      }, 500);
   }
 }
 
