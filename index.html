@@ -349,10 +349,9 @@
   <div class="subtitle">أرشيف التقارير اليومية — التغطية الإخبارية</div>
 </div>
 
-<div class="global-search">
-  <input type="text" id="gsInput" placeholder="بحث شامل عبر كل التقارير... (ميركافا، كريات شمونة، كمين، FPV)" autocomplete="off">
-  <div class="gs-stats" id="gsStats"></div>
-  <button class="gs-clear" id="gsClear">مسح</button>
+<div class="global-search" onclick="openSpotlight()" style="cursor:pointer">
+  <input type="text" placeholder="بحث في جميع التقارير... (اضغط /)" readonly style="cursor:pointer">
+  <span style="font-size:0.6rem;padding:2px 8px;border-radius:4px;background:var(--surface2);border:1px solid var(--border);color:var(--text-dim);direction:ltr;font-family:monospace">/</span>
 </div>
 
 <div class="gs-overlay" id="gsOverlay">
@@ -387,7 +386,7 @@
 <div class="footer">
   <div>مصدر: <a href="https://t.me/C_Military1" target="_blank" rel="noopener">قناة الإعلام الحربي — التغطية الإخبارية</a></div>
   <div style="margin-top:8px;font-size:0.65rem;color:var(--text-muted);">هذا الموقع غير رسمي ولا يمثّل قناة الإعلام الحربي. المحتوى منقول من القناة لأغراض التوثيق والأرشفة فقط.</div>
-  <span style="display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v1.0.43</span>
+  <span style="display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v1.0.44</span>
 </div>
 
 <script>
@@ -819,5 +818,6 @@ function gsSearch(raw) {
 </script>
 
 <script src="report-enhancements.js"></script>
+<script src="search.js"></script>
 </body>
 </html>
