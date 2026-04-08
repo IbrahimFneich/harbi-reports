@@ -1,5 +1,16 @@
 [
   {
+    "version": "1.0.59",
+    "date": "2026-04-09",
+    "title": "Reports: Feb 28 - Mar 6",
+    "changes": [
+      "Added 7 reports covering the war's opening days (Feb 28 - Mar 6)",
+      "Feb 28-Mar 1: Pre-Hezbollah strike (Iran+sirens, 181 and 154 events)",
+      "Mar 2: First Hezbollah strike, Mar 3: 13 bayanat day, Mar 5: 9 bayanat + Radwan assault",
+      "Total coverage: 40 days (Feb 28 - Apr 8)"
+    ]
+  },
+  {
     "version": "1.0.58",
     "date": "2026-04-09",
     "title": "Bug fixes + README",
