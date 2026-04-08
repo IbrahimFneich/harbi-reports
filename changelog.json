@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.57",
+    "date": "2026-04-09",
+    "title": "Reports: March 7-20",
+    "changes": [
+      "Added 14 historical reports: March 7-20 (1,664 total events across two weeks)",
+      "Total coverage now spans 33 days (March 7 - April 8)",
+      "Notable: Mar 11 had 74 sirens (highest single-day), Mar 12 had 23 Iran entries"
+    ]
+  },
+  {
     "version": "1.0.56",
     "date": "2026-04-09",
     "title": "Reports: March 21-27",

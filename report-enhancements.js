@@ -6,7 +6,7 @@
 // ═══════════════════════════════════════════════════════════
 
 // Reports list for navigation
-var ALL_REPORTS = ['2026-03-21','2026-03-22','2026-03-23','2026-03-24','2026-03-25','2026-03-26','2026-03-27','2026-03-28','2026-03-29','2026-03-30','2026-03-31','2026-04-01','2026-04-02','2026-04-03','2026-04-04','2026-04-05','2026-04-06','2026-04-07','2026-04-08'];
+var ALL_REPORTS = ['2026-03-07','2026-03-08','2026-03-09','2026-03-10','2026-03-11','2026-03-12','2026-03-13','2026-03-14','2026-03-15','2026-03-16','2026-03-17','2026-03-18','2026-03-19','2026-03-20','2026-03-21','2026-03-22','2026-03-23','2026-03-24','2026-03-25','2026-03-26','2026-03-27','2026-03-28','2026-03-29','2026-03-30','2026-03-31','2026-04-01','2026-04-02','2026-04-03','2026-04-04','2026-04-05','2026-04-06','2026-04-07','2026-04-08'];
 var arabicMonthNames = {1:'كانون الثاني',2:'شباط',3:'آذار',4:'نيسان',5:'أيار',6:'حزيران',7:'تموز',8:'آب',9:'أيلول',10:'تشرين الأول',11:'تشرين الثاني',12:'كانون الأول'};
 var arabicDayNames = {0:'الأحد',1:'الإثنين',2:'الثلاثاء',3:'الأربعاء',4:'الخميس',5:'الجمعة',6:'السبت'};
 
@@ -338,7 +338,8 @@ var barColors = ['#e74c3c','#e67e22','#f39c12','#2ecc71','#3498db','#9b59b6','#1
   cards.forEach(function(card) {
     var cls = card.className || '';
     var targetText = (card.querySelector('.bayan-target') || {}).textContent || '';
-    var detailText = (card.querySelector('.bayan-details') || {}).textContent || '';
+    var weaponChip = card.querySelector('.weapon-chip');
+    var weaponText = weaponChip ? weaponChip.textContent.trim() : '';
     var tagText = '';
     card.querySelectorAll('.bayan-tag').forEach(function(t) { tagText += ' ' + t.textContent; });
 
@@ -349,13 +350,11 @@ var barColors = ['#e74c3c','#e67e22','#f39c12','#2ecc71','#3498db','#9b59b6','#1
     else types.troops++;
 
     var w = '';
-    if (detailText.indexOf('صلي') !== -1 || (detailText.indexOf('صاروخ') !== -1 && detailText.indexOf('أرض') === -1 && detailText.indexOf('موجّه') === -1)) w = 'صليات صاروخية';
-    else if (detailText.indexOf('مدفع') !== -1) w = 'مدفعية';
-    else if (detailText.indexOf('مسيّر') !== -1 || detailText.indexOf('انقضاض') !== -1) w = 'مسيّرات';
-    else if (detailText.indexOf('محلّق') !== -1) w = 'محلّقات';
-    else if (detailText.indexOf('أرض') !== -1) w = 'صاروخ أرض-جو';
-    else if (detailText.indexOf('موجّه') !== -1) w = 'صاروخ موجّه';
-    else w = 'أخرى';
+    if (weaponText) {
+      w = weaponText;
+    } else {
+      w = 'أخرى';
+    }
     weapons[w] = (weapons[w] || 0) + 1;
 
     if (tagText.indexOf('إصابة') !== -1) hits++;
@@ -364,9 +363,9 @@ var barColors = ['#e74c3c','#e67e22','#f39c12','#2ecc71','#3498db','#9b59b6','#1
       if (targetText.indexOf(locNames[n]) !== -1) { targets[locNames[n]] = (targets[locNames[n]] || 0) + 1; break; }
     }
 
-    var timeEls = card.querySelectorAll('.t-val');
-    if (timeEls.length >= 2) {
-      var h = parseInt(timeEls[1].textContent.trim().split(':')[0]);
+    var nodeTimeEl = card.querySelector('.node-time');
+    if (nodeTimeEl) {
+      var h = parseInt(nodeTimeEl.textContent.trim().split(':')[0]);
       if (!isNaN(h) && h >= 0 && h < 24) hours[h]++;
     }
   });
@@ -470,7 +469,6 @@ function filterBayanatAuto(filter, btn) {
   tab.querySelectorAll('.bayan').forEach(function(card){
     var cls = card.className||'';
     var tt = (card.querySelector('.bayan-target')||{}).textContent||'';
-    var dt = (card.querySelector('.bayan-details')||{}).textContent||'';
     var tg = ''; card.querySelectorAll('.bayan-tag').forEach(function(t){ tg+=' '+t.textContent; });
     var show = filter==='all' ||
       (filter==='settlement' && cls.indexOf('settlement')!==-1) ||
