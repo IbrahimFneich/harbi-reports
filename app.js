@@ -224,6 +224,7 @@ function renderReport(data) {
       }, 500);
   }
 }
+}
 
 function makePhase(text, count) {
   var div = document.createElement('div');

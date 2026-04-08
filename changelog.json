@@ -1,5 +1,16 @@
 [
   {
+    "version": "1.0.58",
+    "date": "2026-04-09",
+    "title": "Bug fixes + README",
+    "changes": [
+      "Fix: reports stuck on loading screen (missing closing brace in renderReport)",
+      "Fix: weapon chart always showing 'أخرى' (stale .bayan-details selector → .weapon-chip)",
+      "Fix: empty hourly operations chart (stale .t-val selector → .node-time)",
+      "Added project README.md"
+    ]
+  },
+  {
     "version": "1.0.57",
     "date": "2026-04-09",
     "title": "Reports: March 7-20",
