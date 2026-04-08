@@ -169,6 +169,10 @@ function renderReport(data) {
   var footer = document.createElement('div');
   footer.className = 'footer';
   footer.textContent = 'مصدر: قناة الإعلام الحربي — التغطية الإخبارية (Telegram) \u2022 ' + data.dayAr + ' ' + data.dateAr;
+  var ver = document.createElement('div');
+  ver.style.cssText = 'margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;';
+  ver.textContent = 'Harbi Reports v2.0.0';
+  footer.appendChild(ver);
   root.appendChild(footer);
 
   // Init search and siren map lazy loading
