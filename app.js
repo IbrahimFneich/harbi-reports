@@ -53,9 +53,15 @@ function renderReport(data) {
   h1.textContent = 'الإعلام الحربي — التغطية الإخبارية';
   header.appendChild(h1);
 
+  // Compute day name from date (don't trust JSON — may have inherited wrong values)
+  var _dayNames = {0:'الأحد',1:'الإثنين',2:'الثلاثاء',3:'الأربعاء',4:'الخميس',5:'الجمعة',6:'السبت'};
+  var _dp = data.date.split('-');
+  var _dt = new Date(parseInt(_dp[0]), parseInt(_dp[1]) - 1, parseInt(_dp[2]));
+  var computedDay = _dayNames[_dt.getDay()];
+
   var dateDiv = document.createElement('div');
   dateDiv.className = 'date';
-  var dateText = document.createTextNode(data.dayAr + ' ');
+  var dateText = document.createTextNode(computedDay + ' ');
   dateDiv.appendChild(dateText);
   var dateSpan = document.createElement('span');
   dateSpan.textContent = data.dateAr;
@@ -168,11 +174,11 @@ function renderReport(data) {
   // Footer
   var footer = document.createElement('div');
   footer.className = 'footer';
-  footer.textContent = 'مصدر: قناة الإعلام الحربي — التغطية الإخبارية (Telegram) \u2022 ' + data.dayAr + ' ' + data.dateAr;
+  footer.textContent = 'مصدر: قناة الإعلام الحربي — التغطية الإخبارية (Telegram) \u2022 ' + computedDay + ' ' + data.dateAr;
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v1.0.49';
+  ver.textContent = 'Harbi Reports v1.0.50';
   ver.onclick = function() { showChangelog(); };
   footer.appendChild(ver);
   root.appendChild(footer);
