@@ -536,7 +536,7 @@ function renderCalendar() {
       var a = document.createElement('a');
       a.className = 'cal-day has-report';
       if (isToday) a.className += ' today';
-      a.href = 'report-' + dateStr + '.html';
+      a.href = 'report.html?date=' + dateStr;
 
       // Heatmap background color
       var stats = reportStats[dateStr];
@@ -721,7 +721,7 @@ function gsSearch(raw) {
 
     var card = document.createElement('a');
     card.className = 'gs-result-card';
-    card.href = 'report-' + r.d + '.html';
+    card.href = 'report.html?date=' + r.d;
 
     var dd = document.createElement('div');
     dd.className = 'gs-result-date';

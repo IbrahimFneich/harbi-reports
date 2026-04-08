@@ -13,8 +13,17 @@ var arabicDayNames = {0:'الأحد',1:'الإثنين',2:'الثلاثاء',3:'
 function getCurrentReportDate() {
   var match = window.location.pathname.match(/report-(\d{4}-\d{2}-\d{2})/);
   if (match) return match[1];
-  var titleMatch = document.title.match(/(\d{4})/);
+  var params = new URLSearchParams(window.location.search);
+  var dateParam = params.get('date');
+  if (dateParam && dateParam.match(/^\d{4}-\d{2}-\d{2}$/)) return dateParam;
   return null;
+}
+
+function reportUrl(date) {
+  if (window.location.pathname.indexOf('report.html') !== -1) {
+    return 'report.html?date=' + date;
+  }
+  return 'report-' + date + '.html';
 }
 
 function formatDateAr(dateStr) {
@@ -84,7 +93,7 @@ function formatDateAr(dateStr) {
   var prevBtn = document.createElement('a');
   prevBtn.className = 'day-nav-btn' + (idx === 0 ? ' disabled' : '');
   if (idx > 0) {
-    prevBtn.href = 'report-' + ALL_REPORTS[idx - 1] + '.html';
+    prevBtn.href = reportUrl(ALL_REPORTS[idx - 1]);
     prevBtn.textContent = '\u2192 ' + formatDateAr(ALL_REPORTS[idx - 1]);
   } else {
     prevBtn.textContent = '\u2192 السابق';
@@ -98,7 +107,7 @@ function formatDateAr(dateStr) {
   var nextBtn = document.createElement('a');
   nextBtn.className = 'day-nav-btn' + (idx === ALL_REPORTS.length - 1 ? ' disabled' : '');
   if (idx < ALL_REPORTS.length - 1) {
-    nextBtn.href = 'report-' + ALL_REPORTS[idx + 1] + '.html';
+    nextBtn.href = reportUrl(ALL_REPORTS[idx + 1]);
     nextBtn.textContent = formatDateAr(ALL_REPORTS[idx + 1]) + ' \u2190';
   } else {
     nextBtn.textContent = 'التالي \u2190';
