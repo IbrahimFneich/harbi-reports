@@ -13,7 +13,7 @@
     return;
   }
 
-  fetch('data/' + date + '.json')
+  fetch('data/' + date + '.json?t=' + Date.now())
     .then(function(res) {
       if (!res.ok) throw new Error(res.status);
       return res.json();
@@ -184,7 +184,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v1.0.69';
+  ver.textContent = 'Harbi Reports v1.0.70';
   ver.onclick = function() { showChangelog(); };
   footer.appendChild(ver);
   root.appendChild(footer);

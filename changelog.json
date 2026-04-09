@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.0.70",
+    "date": "2026-04-10",
+    "title": "Cache-bust data JSON fetches",
+    "changes": [
+      "app.js now appends ?t=Date.now() to data/YYYY-MM-DD.json fetches (matching the existing changelog.json pattern) — without this, GitHub Pages served stale JSON after a report override, so tab counts stayed frozen on the old stub values",
+      "Fix surfaced when regenerating Apr 9: JSON had b:50/s:34/e:19 but browser kept rendering 3/2/1 from the cached stub"
+    ]
+  },
+  {
     "version": "1.0.69",
     "date": "2026-04-10",
     "title": "Add full report for 2026-04-09",
