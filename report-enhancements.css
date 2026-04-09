@@ -60,7 +60,7 @@ body.light .leaflet-popup-tip {
 .theme-toggle {
   position: absolute;
   top: 14px;
-  left: 16px;
+  right: 16px;
   z-index: 10;
   background: rgba(201,168,76,0.12);
   border: 1px solid rgba(201,168,76,0.3);
@@ -81,6 +81,17 @@ body.light .leaflet-popup-tip {
 body.light .theme-toggle {
   background: rgba(154,123,45,0.10);
   border-color: rgba(154,123,45,0.3);
+}
+
+/* ═══════════════ Deep Search Target (light mode) ═══════════════ */
+body.light .search-target .tl-body {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 24px rgba(154,123,45,0.18), 0 0 0 2px var(--accent);
+  background: rgba(154,123,45,0.06);
+}
+body.light .search-target .tl-body::before {
+  color: var(--accent);
+  background: rgba(154,123,45,0.12);
 }
 
 /* ═══════════════ Categorization Dashboard (shared) ═══════════════ */

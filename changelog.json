@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.64",
+    "date": "2026-04-09",
+    "title": "UI: swap header buttons + clickable title",
+    "changes": [
+      "Swapped positions of home button and theme toggle in report header",
+      "Home button (الرئيسية) now on the left, theme toggle (sun/moon) now on the right",
+      "Made page title 'الإعلام الحربي — التغطية الإخبارية' clickable → navigates home"
+    ]
+  },
+  {
     "version": "1.0.63",
     "date": "2026-04-09",
     "title": "Fix: empty bayan titles + day cutoff at 13:00",

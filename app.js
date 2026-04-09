@@ -50,7 +50,13 @@ function renderReport(data) {
   header.appendChild(homeBtn);
 
   var h1 = document.createElement('h1');
-  h1.textContent = 'الإعلام الحربي — التغطية الإخبارية';
+  var h1Link = document.createElement('a');
+  h1Link.href = 'index.html';
+  h1Link.textContent = 'الإعلام الحربي — التغطية الإخبارية';
+  h1Link.style.color = 'inherit';
+  h1Link.style.textDecoration = 'none';
+  h1Link.style.cursor = 'pointer';
+  h1.appendChild(h1Link);
   header.appendChild(h1);
 
   // Compute day name from date (don't trust JSON — may have inherited wrong values)
@@ -178,7 +184,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v1.0.63';
+  ver.textContent = 'Harbi Reports v1.0.64';
   ver.onclick = function() { showChangelog(); };
   footer.appendChild(ver);
   root.appendChild(footer);
