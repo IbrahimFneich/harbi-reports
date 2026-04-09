@@ -1,5 +1,17 @@
 [
   {
+    "version": "1.0.67",
+    "date": "2026-04-09",
+    "title": "Bayan cards: tracking column + clock strip",
+    "changes": [
+      "Bayan number promoted from a faded chip to a monospace pill (#42) sitting directly under the time node — forms a twin-anchor tracking column in the right gutter",
+      "نُشر / نُفّذ timestamps moved from an orphaned footer into mini clock boxes next to the card title (dual instrument panel layout)",
+      "Fixed RTL direction bug where 'نُشر' and 'نُفّذ' labels were appearing after their values instead of before",
+      "Clock strip stacks under the title on mobile so long Arabic target names are not crushed",
+      "Other tabs (sirens, enemy, iran, videos, allies) untouched — change is opt-in via new refNum/meta config fields on createTimelineCard"
+    ]
+  },
+  {
     "version": "1.0.66",
     "date": "2026-04-09",
     "title": "Fix: empty bayan titles across all days",

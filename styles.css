@@ -150,6 +150,24 @@ body {
   width:2px; background:var(--border);
 }
 
+/* Reference number pill — sits below the time node in the right column.
+   Only rendered for cards that pass config.refNum (bayanat). Forms a
+   twin-anchor "tracking column" with the time node above it. */
+.tl-num-pill {
+  position:absolute; right:0; top:52px;
+  min-width:44px; padding:4px 8px; text-align:center;
+  font-family:"SF Mono",Menlo,Consolas,monospace;
+  font-size:0.72rem; font-weight:800;
+  color:var(--accent); background:var(--bg);
+  border:1.5px solid var(--accent); border-radius:10px;
+  direction:ltr; letter-spacing:0.5px;
+  z-index:2;
+}
+
+/* When a ref pill is present, push the connector line down past it. */
+.tl-wrap.has-ref .tl-line { top:92px; }
+.tl-wrap.has-ref { padding-bottom:20px; }
+
 .tl-body {
   position:relative;
   background:var(--surface); border:1px solid var(--border);
@@ -184,7 +202,7 @@ body {
 }
 .tl-chip b { color:var(--text); font-weight:600; }
 .tl-chip.weapon-chip { border-color:rgba(201,168,76,0.2); color:var(--accent); }
-.tl-chip.ref-chip { font-size:0.58rem; color:var(--text-dim); opacity:0.7; }
+/* .tl-chip.ref-chip retired — bayan number now lives in .tl-num-pill */
 .tl-chip.source-chip { border-color:rgba(155,89,182,0.2); color:var(--purple); }
 .tl-chip.flag-chip { border-color:rgba(26,188,156,0.2); color:var(--cyan); font-weight:700; }
 .tl-chip.play-chip { border-color:rgba(26,188,156,0.2); color:var(--cyan); }
@@ -204,6 +222,39 @@ body {
 /* Summary text (for enemy, iran, allies, videos) */
 .tl-text {
   font-size:0.84rem; margin-top:4px; line-height:1.8;
+}
+
+/* Title row — holds the target/headline together with the clock strip.
+   Only used for bayanat (when config.meta is present). Other tabs keep
+   rendering the plain .tl-title directly without the row wrapper. */
+.tl-title-row {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  gap:14px; margin-bottom:6px;
+}
+.tl-title-row > .tl-title {
+  flex:1 1 auto; min-width:0; margin-bottom:0;
+}
+
+/* Clock strip — dual boxes showing نُشر / نُفّذ as mini instrument panels.
+   Sits to the LEFT of the title in RTL (the "end" of the flex row). */
+.clock-strip {
+  display:flex; gap:6px; flex-shrink:0; align-items:stretch;
+}
+.clock-box {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:4px 9px; min-width:46px;
+  background:var(--bg); border:1px solid var(--border);
+  border-radius:7px; line-height:1.1;
+}
+.clock-box .lbl {
+  font-size:0.54rem; font-weight:700; color:var(--text-dim);
+  opacity:0.8; margin-bottom:2px; letter-spacing:0.3px;
+}
+.clock-box b {
+  color:var(--accent);
+  font-family:"SF Mono",Menlo,Consolas,monospace;
+  font-size:0.74rem; font-weight:800;
+  direction:ltr; line-height:1;
 }
 
 /* Compatibility: keep old class names queryable by enhancements.js */
@@ -417,4 +468,14 @@ body {
   .tl-title { font-size:0.88rem; }
   .tl-chip { font-size:0.6rem; padding:2px 8px; }
   .phase span { font-size:0.72rem; padding:3px 14px; }
+  /* Ref pill — follow the smaller node */
+  .tl-num-pill { top:42px; min-width:36px; font-size:0.64rem; padding:3px 6px; }
+  .tl-wrap.has-ref .tl-line { top:78px; }
+  /* Clock strip — stack under the title on narrow screens */
+  .tl-title-row { flex-direction:column; align-items:flex-end; gap:6px; }
+  .tl-title-row > .tl-title { align-self:stretch; }
+  .clock-strip { align-self:flex-end; gap:5px; }
+  .clock-box { min-width:42px; padding:3px 7px; }
+  .clock-box .lbl { font-size:0.5rem; }
+  .clock-box b { font-size:0.68rem; }
 }

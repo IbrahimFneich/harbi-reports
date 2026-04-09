@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>نُشر / نُفّذ — Placement Options</title>
+<style>
+  :root{
+    --bg:#0b1220; --surface:#111a2e; --surface2:#172338; --border:#223252;
+    --text:#e7ecf5; --text-dim:#8ea0bb;
+    --green:#22c55e; --accent:#c9a84c;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:32px 24px 80px;
+    background:linear-gradient(180deg,#0a1020 0%,#0b1220 100%);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Arabic","Segoe UI","Helvetica Neue",sans-serif;
+    direction:rtl;
+  }
+  h1{font-size:1.4rem; margin:0 0 8px; color:var(--accent); letter-spacing:0.5px}
+  .sub{color:var(--text-dim); font-size:0.85rem; margin-bottom:40px; max-width:720px; line-height:1.7}
+  .variant{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:24px 28px 28px;
+    margin-bottom:28px;
+    max-width:720px;
+  }
+  .variant-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom:6px; padding-bottom:10px; border-bottom:1px dashed var(--border);
+  }
+  .variant-num{
+    font-size:0.7rem; color:var(--accent); font-weight:700;
+    background:rgba(201,168,76,0.1); padding:3px 10px; border-radius:4px;
+    letter-spacing:1px;
+  }
+  .variant-title{font-size:1rem; font-weight:700; color:var(--text)}
+  .variant-desc{font-size:0.78rem; color:var(--text-dim); margin:4px 0 22px; line-height:1.6}
+
+  /* ——— shared card scaffolding ——— */
+  .tl-wrap{position:relative; padding:0 60px 20px 0; margin-bottom:0}
+  .tl-node{
+    position:absolute; right:0; top:0;
+    width:44px; height:44px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.78rem; font-weight:800; color:#fff; z-index:2;
+    background:var(--green);
+    box-shadow:0 0 0 4px var(--surface), 0 0 0 6px var(--green);
+    direction:ltr;
+  }
+  .tl-num-pill{
+    position:absolute; right:0; top:52px;
+    min-width:44px; padding:4px 8px; text-align:center;
+    font-family:"SF Mono",Consolas,monospace;
+    font-size:0.72rem; font-weight:800;
+    color:var(--accent); background:var(--bg);
+    border:1.5px solid var(--accent); border-radius:10px;
+    direction:ltr; letter-spacing:0.5px;
+  }
+  .tl-line{
+    position:absolute; right:21px; top:92px; bottom:0;
+    width:2px; background:var(--border);
+  }
+  .tl-body{
+    background:var(--surface2); border:1px solid var(--border); border-radius:10px;
+    padding:12px 14px; position:relative; min-height:80px;
+  }
+  .tl-title{font-size:0.95rem; font-weight:800; color:var(--accent); margin-bottom:8px}
+  .tl-chips{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:6px}
+  .tl-chip{
+    font-size:0.65rem; font-weight:600; padding:3px 10px;
+    border-radius:6px; background:var(--surface); color:var(--text-dim);
+    border:1px solid var(--border);
+  }
+  .tl-chip.weapon{border-color:rgba(201,168,76,0.2); color:var(--accent)}
+  .txt-toggle{
+    display:inline-block; margin-top:8px; font-size:0.7rem;
+    color:var(--text-dim); cursor:pointer;
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     CURRENT — bottom-right footer strip (the broken version)
+     ══════════════════════════════════════════════════════════════ */
+  .cur .tl-meta-cur{
+    margin-top:10px; padding-top:8px;
+    border-top:1px dashed rgba(255,255,255,0.07);
+    display:flex; gap:14px; flex-wrap:wrap;
+    font-size:0.68rem; color:var(--text-dim);
+    direction:ltr; justify-content:flex-end;
+  }
+  .cur .tl-meta-cur b{color:var(--accent); font-family:"SF Mono",monospace; font-weight:800}
+
+  /* ════════════════════════════════════════════════════════════════
+     A — Caption under title (muted byline)
+     ══════════════════════════════════════════════════════════════ */
+  .a .meta-caption{
+    font-size:0.68rem; color:var(--text-dim); margin:-2px 0 8px;
+    display:flex; gap:12px; align-items:center;
+  }
+  .a .meta-caption span{display:inline-flex; align-items:center; gap:4px}
+  .a .meta-caption .lbl{opacity:0.65; font-size:0.62rem}
+  .a .meta-caption b{
+    color:var(--accent); font-family:"SF Mono",monospace;
+    font-weight:700; font-size:0.72rem; direction:ltr;
+  }
+  .a .meta-caption .sep{color:var(--border); margin:0 -4px}
+
+  /* ════════════════════════════════════════════════════════════════
+     B — Metadata chips inline with the weapon chip row
+     ══════════════════════════════════════════════════════════════ */
+  .b .tl-chip.meta-chip{
+    border-color:rgba(142,160,187,0.2); color:var(--text-dim);
+    padding:3px 8px 3px 10px;
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .b .tl-chip.meta-chip .lbl{font-size:0.58rem; opacity:0.7}
+  .b .tl-chip.meta-chip b{
+    color:var(--text); font-family:"SF Mono",monospace;
+    font-weight:800; font-size:0.7rem; direction:ltr;
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     C — Extended right rail (under the #12 pill)
+     ══════════════════════════════════════════════════════════════ */
+  .c .tl-wrap{padding-right:68px}
+  .c .tl-line{top:178px}
+  .c .rail-time{
+    position:absolute; right:0;
+    min-width:54px; text-align:center;
+    font-size:0.58rem; color:var(--text-dim);
+  }
+  .c .rail-time b{
+    display:block; font-family:"SF Mono",monospace;
+    color:var(--accent); font-size:0.72rem; font-weight:800;
+    direction:ltr; margin-top:1px;
+  }
+  .c .rail-pushr{top:108px}
+  .c .rail-pushd{top:148px}
+  .c .rail-time::before{
+    content:''; position:absolute; right:26px; top:-12px;
+    width:2px; height:10px; background:var(--border);
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     D — Inline clock strip in the title row (right side)
+     ══════════════════════════════════════════════════════════════ */
+  .d .title-row{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:14px; margin-bottom:6px;
+  }
+  .d .title-row .tl-title{margin-bottom:0; flex:1}
+  .d .clock-strip{
+    display:flex; gap:8px; flex-shrink:0;
+    font-size:0.62rem; color:var(--text-dim);
+  }
+  .d .clock-strip > div{
+    display:flex; flex-direction:column; align-items:center;
+    padding:3px 8px; background:var(--surface);
+    border:1px solid var(--border); border-radius:6px;
+    min-width:42px;
+  }
+  .d .clock-strip .lbl{font-size:0.52rem; opacity:0.75; margin-bottom:1px}
+  .d .clock-strip b{
+    color:var(--accent); font-family:"SF Mono",monospace;
+    font-size:0.72rem; font-weight:800; direction:ltr; line-height:1;
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     E — Subtitle style (single line right under title, minimal)
+     ══════════════════════════════════════════════════════════════ */
+  .e .subtitle-meta{
+    font-size:0.68rem; color:var(--text-dim);
+    margin:-4px 0 8px; font-weight:500;
+  }
+  .e .subtitle-meta b{
+    color:var(--accent); font-family:"SF Mono",monospace;
+    font-weight:800; font-size:0.72rem; direction:ltr;
+    padding:0 3px;
+  }
+</style>
+</head>
+<body>
+
+<h1>أين نضع <span style="color:var(--text)">نُشر</span> و <span style="color:var(--text)">نُفّذ</span>؟</h1>
+<div class="sub">
+  الحالة الحالية: تذييل في أسفل اليمين — يبدو معزولاً، الاتجاه مقلوب،
+  و"نُفّذ 10:00" يكرّر وقت العقدة نفسها.<br>
+  الخيارات التالية تعتمد نفس البيانات: <b style="color:var(--accent);font-family:monospace">نُشر 08:15</b> ·
+  <b style="color:var(--accent);font-family:monospace">نُفّذ 10:00</b>.
+</div>
+
+<!-- ══════════ CURRENT ══════════ -->
+<div class="variant cur" style="border-color:rgba(239,68,68,0.3); background:rgba(239,68,68,0.04)">
+  <div class="variant-head">
+    <div class="variant-title" style="color:#ef4444">الوضع الحالي (المشكلة)</div>
+    <div class="variant-num" style="background:rgba(239,68,68,0.15); color:#ef4444">NOW</div>
+  </div>
+  <div class="variant-desc">معزول في أسفل اليمين — الاتجاه مقلوب ("10:00 نُفّذ" بدل "نُفّذ 10:00")، ويكرّر وقت العقدة.</div>
+  <div class="tl-wrap">
+    <div class="tl-node">10:00</div>
+    <div class="tl-num-pill">#12</div>
+    <div class="tl-line"></div>
+    <div class="tl-body">
+      <div class="tl-title">تجمّع آليات وجنود عند بوابة فاطمة</div>
+      <div class="tl-chips">
+        <span class="tl-chip weapon">صليات صاروخية</span>
+      </div>
+      <div class="tl-meta-cur">
+        <span><span style="opacity:0.7">نُشر</span> <b>08:15</b></span>
+        <span><span style="opacity:0.7">نُفّذ</span> <b>10:00</b></span>
+      </div>
+      <span class="txt-toggle">النص الكامل ▼</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ A ══════════ -->
+<div class="variant a">
+  <div class="variant-head">
+    <div class="variant-title">أ — سطر تعريفي تحت العنوان (Byline)</div>
+    <div class="variant-num">A</div>
+  </div>
+  <div class="variant-desc">
+    سطر رفيع مباشرة تحت العنوان — مثل اسم الكاتب تحت عنوان مقال. يربط التوقيتات بالعنوان الذي تخصّه
+    ولا يضيف منطقة جديدة في البطاقة.
+  </div>
+  <div class="tl-wrap">
+    <div class="tl-node">10:00</div>
+    <div class="tl-num-pill">#12</div>
+    <div class="tl-line"></div>
+    <div class="tl-body">
+      <div class="tl-title">تجمّع آليات وجنود عند بوابة فاطمة</div>
+      <div class="meta-caption">
+        <span><span class="lbl">نُشر</span> <b>08:15</b></span>
+        <span class="sep">•</span>
+        <span><span class="lbl">نُفّذ</span> <b>10:00</b></span>
+      </div>
+      <div class="tl-chips">
+        <span class="tl-chip weapon">صليات صاروخية</span>
+      </div>
+      <span class="txt-toggle">النص الكامل ▼</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ B ══════════ -->
+<div class="variant b">
+  <div class="variant-head">
+    <div class="variant-title">ب — شرطات ضمن صف الأدوات</div>
+    <div class="variant-num">B</div>
+  </div>
+  <div class="variant-desc">
+    توقيتات على شكل شرطات بجانب شرطة السلاح — كلّ المعلومات الجدولية في صفّ واحد.
+    مضغوط، متّسق، ولا يُضيف صفاً جديداً.
+  </div>
+  <div class="tl-wrap">
+    <div class="tl-node">10:00</div>
+    <div class="tl-num-pill">#12</div>
+    <div class="tl-line"></div>
+    <div class="tl-body">
+      <div class="tl-title">تجمّع آليات وجنود عند بوابة فاطمة</div>
+      <div class="tl-chips">
+        <span class="tl-chip weapon">صليات صاروخية</span>
+        <span class="tl-chip meta-chip"><span class="lbl">نُشر</span> <b>08:15</b></span>
+        <span class="tl-chip meta-chip"><span class="lbl">نُفّذ</span> <b>10:00</b></span>
+      </div>
+      <span class="txt-toggle">النص الكامل ▼</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ C ══════════ -->
+<div class="variant c">
+  <div class="variant-head">
+    <div class="variant-title">ج — امتداد عمود التتبّع (تحت شرطة #12)</div>
+    <div class="variant-num">C</div>
+  </div>
+  <div class="variant-desc">
+    نُشر ونُفّذ يصبحان جزءاً من العمود الأيمن — تسلسل كامل: الوقت → رقم البيان → نُشر → نُفّذ.
+    كلّ معرّفات التتبّع في محور بصري واحد على اليمين.
+  </div>
+  <div class="tl-wrap">
+    <div class="tl-node">10:00</div>
+    <div class="tl-num-pill">#12</div>
+    <div class="rail-time rail-pushr"><span style="font-size:0.55rem;opacity:0.7">نُشر</span><b>08:15</b></div>
+    <div class="rail-time rail-pushd"><span style="font-size:0.55rem;opacity:0.7">نُفّذ</span><b>10:00</b></div>
+    <div class="tl-line"></div>
+    <div class="tl-body">
+      <div class="tl-title">تجمّع آليات وجنود عند بوابة فاطمة</div>
+      <div class="tl-chips">
+        <span class="tl-chip weapon">صليات صاروخية</span>
+      </div>
+      <span class="txt-toggle">النص الكامل ▼</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ D ══════════ -->
+<div class="variant d">
+  <div class="variant-head">
+    <div class="variant-title">د — ساعتان صغيرتان بمحاذاة العنوان</div>
+    <div class="variant-num">D</div>
+  </div>
+  <div class="variant-desc">
+    صندوقان مصغّران للتوقيتَين على يسار العنوان (في RTL يعني "جهة اليسار البصريّ") —
+    يعبّران عن التتبّع بصرياً كعدّادات منفصلة، لكنّها تزاحم العنوان بصرياً.
+  </div>
+  <div class="tl-wrap">
+    <div class="tl-node">10:00</div>
+    <div class="tl-num-pill">#12</div>
+    <div class="tl-line"></div>
+    <div class="tl-body">
+      <div class="title-row">
+        <div class="tl-title">تجمّع آليات وجنود عند بوابة فاطمة</div>
+        <div class="clock-strip">
+          <div><span class="lbl">نُشر</span><b>08:15</b></div>
+          <div><span class="lbl">نُفّذ</span><b>10:00</b></div>
+        </div>
+      </div>
+      <div class="tl-chips">
+        <span class="tl-chip weapon">صليات صاروخية</span>
+      </div>
+      <span class="txt-toggle">النص الكامل ▼</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ E ══════════ -->
+<div class="variant e">
+  <div class="variant-head">
+    <div class="variant-title">هـ — سطر عنوان فرعي (أبسط من أ)</div>
+    <div class="variant-num">E</div>
+  </div>
+  <div class="variant-desc">
+    سطر نصّي بسيط مثل العناوين الفرعية — بدون فواصل أو صناديق. الأكثر هدوءاً والأقل ضجيجاً بصرياً.
+  </div>
+  <div class="tl-wrap">
+    <div class="tl-node">10:00</div>
+    <div class="tl-num-pill">#12</div>
+    <div class="tl-line"></div>
+    <div class="tl-body">
+      <div class="tl-title">تجمّع آليات وجنود عند بوابة فاطمة</div>
+      <div class="subtitle-meta">
+        نُشر <b>08:15</b> — نُفّذ <b>10:00</b>
+      </div>
+      <div class="tl-chips">
+        <span class="tl-chip weapon">صليات صاروخية</span>
+      </div>
+      <span class="txt-toggle">النص الكامل ▼</span>
+    </div>
+  </div>
+</div>
+
+<div class="sub" style="margin-top:40px; padding-top:24px; border-top:1px solid var(--border)">
+  <strong style="color:var(--accent)">توصيتي:</strong><br>
+  <strong>أ (Byline)</strong> — الأفضل توازناً: يربط التوقيتات بالعنوان مباشرة كسطر تعريفي،
+  ولا يكسر صف الشرطات، ولا يعزل البيانات في تذييل منفصل.<br><br>
+  <strong>ج (عمود التتبّع)</strong> — الأقوى مفهوماً إن كان التتبّع هو الهدف الأساسي:
+  كلّ معرّفات التتبّع (الوقت، الرقم، نُشر، نُفّذ) في محور رأسي واحد.<br><br>
+  <strong>ب (شرطات)</strong> — مختار جيّد إن أردت الحدّ الأدنى من التغيير البصري، لكنّه يساوي الأسلحة بالتوقيتات في الأهمية.<br><br>
+  تجنّب <strong>د</strong> لأنّه يزاحم العنوان، و<strong>هـ</strong> غامض جداً بدون فواصل بصرية.
+</div>
+
+</body>
+</html>

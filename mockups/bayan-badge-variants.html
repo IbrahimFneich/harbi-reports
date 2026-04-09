@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bayan ID — Layout Variants</title>
+<style>
+  :root{
+    --bg:#0b1220; --surface:#111a2e; --surface2:#172338; --border:#223252;
+    --text:#e7ecf5; --text-dim:#8ea0bb;
+    --green:#22c55e; --purple:#a855f7; --orange:#f59e0b; --blue:#3b82f6;
+    --red:#ef4444; --cyan:#1abc9c; --accent:#c9a84c;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:32px 24px 80px;
+    background:linear-gradient(180deg,#0a1020 0%,#0b1220 100%);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Arabic","Segoe UI","Helvetica Neue",sans-serif;
+    direction:rtl;
+  }
+  h1{font-size:1.4rem; margin:0 0 8px; color:var(--accent); letter-spacing:0.5px}
+  .sub{color:var(--text-dim); font-size:0.85rem; margin-bottom:40px; max-width:720px; line-height:1.7}
+  .variant{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:24px 28px 28px;
+    margin-bottom:28px;
+    max-width:720px;
+  }
+  .variant-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom:6px; padding-bottom:10px; border-bottom:1px dashed var(--border);
+  }
+  .variant-num{
+    font-size:0.7rem; color:var(--accent); font-weight:700;
+    background:rgba(201,168,76,0.1); padding:3px 10px; border-radius:4px;
+    letter-spacing:1px;
+  }
+  .variant-title{font-size:1rem; font-weight:700; color:var(--text)}
+  .variant-desc{font-size:0.78rem; color:var(--text-dim); margin:4px 0 22px; line-height:1.6}
+
+  /* ——— shared timeline card scaffolding ——— */
+  .tl-wrap{position:relative; padding:0 60px 4px 0; margin-bottom:0}
+  .tl-node{
+    position:absolute; right:0; top:0;
+    width:44px; height:44px; border-radius:50%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    font-size:0.78rem; font-weight:800; line-height:1;
+    color:#fff; z-index:2;
+    background:var(--green);
+    box-shadow:0 0 0 4px var(--surface), 0 0 0 6px var(--green);
+  }
+  .tl-node.purple{background:var(--purple); box-shadow:0 0 0 4px var(--surface),0 0 0 6px var(--purple)}
+  .tl-node.orange{background:var(--orange); box-shadow:0 0 0 4px var(--surface),0 0 0 6px var(--orange)}
+  .tl-node.blue{background:var(--blue); box-shadow:0 0 0 4px var(--surface),0 0 0 6px var(--blue)}
+  .tl-line{
+    position:absolute; right:21px; top:44px; bottom:0; width:2px; background:var(--border);
+  }
+  .tl-body{
+    background:var(--surface2); border:1px solid var(--border); border-radius:10px;
+    padding:12px 14px; position:relative;
+  }
+  .tl-title{font-size:0.95rem; font-weight:700; color:var(--text); margin-bottom:8px}
+  .tl-chips{display:flex; gap:6px; flex-wrap:wrap}
+  .tl-chip{
+    font-size:0.65rem; font-weight:600; padding:3px 10px;
+    border-radius:6px; background:var(--surface2); color:var(--text-dim);
+    border:1px solid var(--border);
+  }
+  .tl-chip.weapon{border-color:rgba(201,168,76,0.2); color:var(--accent)}
+
+  /* ════════════════════════════════════════════════════════════════
+     VARIANT 1 — Twin stacked node (time on top, #num below)
+     ══════════════════════════════════════════════════════════════ */
+  .v1 .tl-node{top:0}
+  .v1 .tl-num-pill{
+    position:absolute; right:2px; top:52px;
+    min-width:40px; padding:4px 0; text-align:center;
+    font-family:"SF Mono",Consolas,monospace; font-size:0.72rem; font-weight:800;
+    color:var(--accent); background:var(--surface);
+    border:1.5px solid var(--accent); border-radius:10px;
+    direction:ltr; letter-spacing:0.5px;
+  }
+  .v1 .tl-line{top:92px}
+  .v1 .tl-wrap{padding-top:12px; padding-bottom:12px}
+
+  /* ════════════════════════════════════════════════════════════════
+     VARIANT 2 — Dual-line stamp node (one circle, time + # inside)
+     ══════════════════════════════════════════════════════════════ */
+  .v2 .tl-node{
+    width:52px; height:52px; gap:0;
+  }
+  .v2 .tl-node .line1{
+    font-size:0.74rem; font-weight:800;
+    padding-bottom:2px; margin-bottom:2px;
+    border-bottom:1px solid rgba(255,255,255,0.45);
+    width:32px; text-align:center; direction:ltr;
+  }
+  .v2 .tl-node .line2{
+    font-size:0.62rem; font-weight:700; opacity:0.95;
+    font-family:"SF Mono",monospace; direction:ltr;
+  }
+  .v2 .tl-wrap{padding-right:68px}
+  .v2 .tl-line{right:25px; top:52px}
+
+  /* ════════════════════════════════════════════════════════════════
+     VARIANT 3 — Ribbon tab on card edge (bookmark style)
+     ══════════════════════════════════════════════════════════════ */
+  .v3 .tl-body{padding-right:50px}
+  .v3 .tl-ribbon{
+    position:absolute; right:-1px; top:10px;
+    background:var(--accent); color:#0b1220;
+    padding:6px 10px 6px 14px; font-weight:800;
+    font-family:"SF Mono",monospace; font-size:0.78rem;
+    border-radius:6px 0 0 6px;
+    direction:ltr; letter-spacing:0.5px;
+    box-shadow:-2px 2px 8px rgba(0,0,0,0.3);
+  }
+  .v3 .tl-ribbon::before{
+    content:'بيان'; display:block; font-size:0.52rem;
+    font-weight:600; opacity:0.75; margin-bottom:1px;
+    font-family:inherit; direction:rtl;
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     VARIANT 4 — Leading ticket ID (monospace prefix in title row)
+     ══════════════════════════════════════════════════════════════ */
+  .v4 .tl-title{
+    display:flex; align-items:center; gap:10px;
+  }
+  .v4 .tl-ticket{
+    font-family:"SF Mono",Consolas,monospace;
+    font-size:0.82rem; font-weight:800;
+    color:var(--accent); background:rgba(201,168,76,0.1);
+    border:1px solid rgba(201,168,76,0.35);
+    padding:3px 9px; border-radius:5px;
+    direction:ltr; flex-shrink:0;
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     VARIANT 5 — Metadata footer strip (tracking info grouped)
+     ══════════════════════════════════════════════════════════════ */
+  .v5 .tl-meta{
+    margin-top:10px; padding-top:8px;
+    border-top:1px dashed rgba(255,255,255,0.07);
+    display:flex; gap:14px; flex-wrap:wrap;
+    font-size:0.68rem; color:var(--text-dim);
+    direction:ltr; justify-content:flex-end;
+  }
+  .v5 .tl-meta span{display:inline-flex; align-items:center; gap:4px}
+  .v5 .tl-meta b{
+    color:var(--accent); font-family:"SF Mono",monospace;
+    font-weight:800; font-size:0.74rem;
+  }
+  .v5 .tl-meta .lbl{
+    font-family:-apple-system,sans-serif; direction:rtl; font-size:0.62rem;
+    text-transform:uppercase; opacity:0.7;
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     VARIANT 6 — Corner seal (top-left ID badge, like doc stamp)
+     ══════════════════════════════════════════════════════════════ */
+  .v6 .tl-body{padding-top:36px}
+  .v6 .tl-seal{
+    position:absolute; top:-8px; left:12px;
+    background:var(--bg); border:1.5px solid var(--accent);
+    color:var(--accent); padding:4px 12px;
+    border-radius:12px; font-family:"SF Mono",monospace;
+    font-size:0.7rem; font-weight:800; direction:ltr;
+    letter-spacing:0.8px;
+  }
+  .v6 .tl-seal::before{
+    content:'●'; color:var(--accent); margin-left:6px; font-size:0.5rem;
+    vertical-align:middle;
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     VARIANT 7 — Spine rail (vertical number on right edge of card)
+     ══════════════════════════════════════════════════════════════ */
+  .v7 .tl-body{padding-right:42px; position:relative}
+  .v7 .tl-spine{
+    position:absolute; right:0; top:0; bottom:0;
+    width:32px;
+    background:linear-gradient(180deg,rgba(201,168,76,0.15),rgba(201,168,76,0.03));
+    border-right:3px solid var(--accent);
+    border-radius:0 10px 10px 0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:3px;
+  }
+  .v7 .tl-spine .lbl{
+    font-size:0.52rem; font-weight:700; color:var(--accent);
+    opacity:0.7; letter-spacing:1px;
+  }
+  .v7 .tl-spine .num{
+    font-family:"SF Mono",monospace; font-size:1rem; font-weight:800;
+    color:var(--accent); direction:ltr; line-height:1;
+  }
+</style>
+</head>
+<body>
+
+<h1>مقترحات عرض رقم البيان</h1>
+<div class="sub">
+  وقت البيان معروض كدائرة ملوّنة ٤٤ بكسل — واضح ومميّز.<br>
+  رقم البيان حالياً عبارة عن شرطة صغيرة <code style="background:#172338;padding:2px 6px;border-radius:4px;color:#8ea0bb">بيان #42</code> بحجم 0.58rem وشفافية 0.7 — مخفي تماماً.<br>
+  فيما يلي ٧ مقترحات لرفع رقم البيان إلى مستوى الوقت كمعرّف تتبّع.
+</div>
+
+<!-- ══════════ CURRENT STATE ══════════ -->
+<div class="variant" style="border-color:rgba(239,68,68,0.3); background:rgba(239,68,68,0.04)">
+  <div class="variant-head">
+    <div class="variant-title" style="color:#ef4444">الوضع الحالي</div>
+    <div class="variant-num" style="background:rgba(239,68,68,0.15); color:#ef4444">NOW</div>
+  </div>
+  <div class="variant-desc">رقم البيان مدفون ضمن شرطة ثانوية — لا يُرى ولا يُستعمل للتتبّع.</div>
+  <div class="tl-wrap">
+    <div class="tl-node">06:15</div>
+    <div class="tl-line"></div>
+    <div class="tl-body">
+      <div class="tl-title">قاعدة "رامات دافيد" الجوّية</div>
+      <div class="tl-chips">
+        <span class="tl-chip weapon">صواريخ بعيدة المدى</span>
+        <span class="tl-chip" style="font-size:0.58rem;opacity:0.7">بيان #42</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ VARIANT 1 ══════════ -->
+<div class="variant v1">
+  <div class="variant-head">
+    <div class="variant-title">١ — عمود مزدوج: وقت + رقم</div>
+    <div class="variant-num">V1</div>
+  </div>
+  <div class="variant-desc">
+    تحت دائرة الوقت نضيف حبّة مستطيلة تحمل رقم البيان بخط أحادي العرض.
+    يبقى الاثنان في نفس العمود على اليمين — تناظر بصري كامل.
+  </div>
+  <div class="tl-wrap">
+    <div class="tl-node">06:15</div>
+    <div class="tl-num-pill">#42</div>
+    <div class="tl-line"></div>
+    <div class="tl-body">
+      <div class="tl-title">قاعدة "رامات دافيد" الجوّية</div>
+      <div class="tl-chips">
+        <span class="tl-chip weapon">صواريخ بعيدة المدى</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ VARIANT 2 ══════════ -->
+<div class="variant v2">
+  <div class="variant-head">
+    <div class="variant-title">٢ — ختم ثنائي السطر داخل الدائرة</div>
+    <div class="variant-num">V2</div>
+  </div>
+  <div class="variant-desc">
+    تكبير الدائرة إلى ٥٢ بكسل، سطر الوقت في الأعلى وسطر الرقم أسفله مفصولَين بخط.
+    أصغر أثر مكاني — دائرة واحدة تحمل معرّفَي التتبّع معاً.
+  </div>
+  <div class="tl-wrap">
+    <div class="tl-node purple">
+      <span class="line1">06:15</span>
+      <span class="line2">#42</span>
+    </div>
+    <div class="tl-line"></div>
+    <div class="tl-body">
+      <div class="tl-title">مستوطنة "كريات شمونة"</div>
+      <div class="tl-chips">
+        <span class="tl-chip weapon">مسيّرات انقضاضية</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ VARIANT 3 ══════════ -->
+<div class="variant v3">
+  <div class="variant-head">
+    <div class="variant-title">٣ — شريط علاّمة على حافة البطاقة</div>
+    <div class="variant-num">V3</div>
+  </div>
+  <div class="variant-desc">
+    شريط ذهبي على الحافة اليمنى للبطاقة (مثل الإشارة المرجعية في كتاب) —
+    ظاهر فوراً عند المسح السريع، ولا يزاحم الوقت على عموده الخاص.
+  </div>
+  <div class="tl-wrap">
+    <div class="tl-node orange">06:15</div>
+    <div class="tl-line"></div>
+    <div class="tl-body">
+      <div class="tl-ribbon">#42</div>
+      <div class="tl-title">دبابة "ميركافا" قرب المطلة</div>
+      <div class="tl-chips">
+        <span class="tl-chip weapon">صاروخ موجّه مضاد للدروع</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ VARIANT 4 ══════════ -->
+<div class="variant v4">
+  <div class="variant-head">
+    <div class="variant-title">٤ — معرّف رئيسي في سطر العنوان</div>
+    <div class="variant-num">V4</div>
+  </div>
+  <div class="variant-desc">
+    الرقم يصبح بادئة العنوان — شبيه بمعرّف التذكرة في Jira.
+    بسيط، قابل للنسخ، ويقرأه العين أوّلاً قبل الهدف.
+  </div>
+  <div class="tl-wrap">
+    <div class="tl-node blue">06:15</div>
+    <div class="tl-line"></div>
+    <div class="tl-body">
+      <div class="tl-title">
+        <span class="tl-ticket">#42</span>
+        قاعدة "رامات دافيد" الجوّية
+      </div>
+      <div class="tl-chips">
+        <span class="tl-chip weapon">صواريخ بعيدة المدى</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ VARIANT 5 ══════════ -->
+<div class="variant v5">
+  <div class="variant-head">
+    <div class="variant-title">٥ — شريط بيانات في تذييل البطاقة</div>
+    <div class="variant-num">V5</div>
+  </div>
+  <div class="variant-desc">
+    كل معلومات التتبّع (رقم البيان، وقت النشر، وقت التنفيذ) تُجمع في تذييل موحّد.
+    الوقت يبقى في الدائرة، والتذييل يقدّم السجل الكامل للمحقّق الدقيق.
+  </div>
+  <div class="tl-wrap">
+    <div class="tl-node">06:15</div>
+    <div class="tl-line"></div>
+    <div class="tl-body">
+      <div class="tl-title">قاعدة "رامات دافيد" الجوّية</div>
+      <div class="tl-chips">
+        <span class="tl-chip weapon">صواريخ بعيدة المدى</span>
+      </div>
+      <div class="tl-meta">
+        <span><span class="lbl">بيان</span> <b>#42</b></span>
+        <span><span class="lbl">نُشر</span> <b>06:15</b></span>
+        <span><span class="lbl">نُفّذ</span> <b>05:42</b></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ VARIANT 6 ══════════ -->
+<div class="variant v6">
+  <div class="variant-head">
+    <div class="variant-title">٦ — ختم الزاوية (شارة خارجة من حافة البطاقة)</div>
+    <div class="variant-num">V6</div>
+  </div>
+  <div class="variant-desc">
+    كبسولة ذهبية تبرز خارج الحافة العلوية للبطاقة — توحي بـ "ختم رسمي" على وثيقة.
+    ثابتة في نفس المكان لكل بطاقة — سهلة الالتقاط بالعين.
+  </div>
+  <div class="tl-wrap">
+    <div class="tl-node">06:15</div>
+    <div class="tl-line"></div>
+    <div class="tl-body">
+      <div class="tl-seal">BAYAN 42</div>
+      <div class="tl-title">قاعدة "رامات دافيد" الجوّية</div>
+      <div class="tl-chips">
+        <span class="tl-chip weapon">صواريخ بعيدة المدى</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ VARIANT 7 ══════════ -->
+<div class="variant v7">
+  <div class="variant-head">
+    <div class="variant-title">٧ — شريط جانبي (كعب الكتاب)</div>
+    <div class="variant-num">V7</div>
+  </div>
+  <div class="variant-desc">
+    شريط رأسي ذهبي على يسار البطاقة (نظراً للـ RTL) يحمل الرقم بخط كبير واضح.
+    يمنح كل بطاقة "كعباً" للفهرسة — مثالي للمسح الطولي السريع.
+  </div>
+  <div class="tl-wrap">
+    <div class="tl-node">06:15</div>
+    <div class="tl-line"></div>
+    <div class="tl-body">
+      <div class="tl-spine">
+        <span class="lbl">بيان</span>
+        <span class="num">42</span>
+      </div>
+      <div class="tl-title">قاعدة "رامات دافيد" الجوّية</div>
+      <div class="tl-chips">
+        <span class="tl-chip weapon">صواريخ بعيدة المدى</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sub" style="margin-top:40px; padding-top:24px; border-top:1px solid var(--border)">
+  <strong style="color:var(--accent)">توصيتي:</strong>
+  V1 (العمود المزدوج) أو V2 (الختم ثنائي السطر) — لأنّهما يحافظان على التناظر البصري مع الوقت،
+  ويضعان معرّفَي التتبّع في نفس العمود الثابت على اليمين.<br>
+  V3 (الشريط) و V6 (الختم) جيّدان للأثر البصري لكنّهما يكسران عمود التتبّع.<br>
+  V5 (التذييل) هو الأنسب إن أردت إضافة <em>نُشر/نُفّذ</em> أيضاً.
+</div>
+
+</body>
+</html>
