@@ -1,5 +1,17 @@
 [
   {
+    "version": "1.0.66",
+    "date": "2026-04-09",
+    "title": "Fix: empty bayan titles across all days",
+    "changes": [
+      "Resolved 117 bayans with empty target fields across 26 report days (Mar 3 → Mar 30)",
+      "Rewrote categorize.py extract_target() with priority-ordered location patterns instead of a single regex",
+      "Handles direct-object strikes (قاعدة/ثكنة/موقع/مقرّ/مصفاة/مجمّع/شركة/مستوطنة), direction markers (باتجاه/نحو/فوق/محيط), cardinal + landmark (شرق معتقل/شمال مشروع), between-villages, air defense, multi-settlement lists, و-suffixed verbs (استهدفها/استهدفهما), and more",
+      "Preamble stripper improved to drop 'ردًّا على العدوان...' and weekday/time noise without leaving orphaned connectives",
+      "Tatweel (ـ) characters now normalized so elongated names like 'قــــاعدة عيــن شيمر' match"
+    ]
+  },
+  {
     "version": "1.0.65",
     "date": "2026-04-09",
     "title": "Add list view with sorting",

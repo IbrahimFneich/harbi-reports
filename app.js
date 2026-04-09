@@ -184,7 +184,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v1.0.65';
+  ver.textContent = 'Harbi Reports v1.0.66';
   ver.onclick = function() { showChangelog(); };
   footer.appendChild(ver);
   root.appendChild(footer);
@@ -249,9 +249,12 @@ function makePhase(text, count) {
 
 function createTimelineCard(config) {
   // config: { wrapClass, nodeTime, nodeColor, hasHit, tintColor, title,
-  //           chips:[], dots:[], hiddenEls:{}, fullText }
+  //           chips:[], dots:[], hiddenEls:{}, fullText, refNum, meta }
   var wrap = document.createElement('div');
   wrap.className = 'tl-wrap' + (config.wrapClass ? ' ' + config.wrapClass : '');
+  if (config.refNum !== undefined && config.refNum !== null && config.refNum !== '') {
+    wrap.classList.add('has-ref');
+  }
 
   // Node
   var node = document.createElement('div');
@@ -261,6 +264,14 @@ function createTimelineCard(config) {
   nodeTime.textContent = config.nodeTime || '';
   node.appendChild(nodeTime);
   wrap.appendChild(node);
+
+  // Ref number pill (V1 — sits below the node in the right column)
+  if (config.refNum !== undefined && config.refNum !== null && config.refNum !== '') {
+    var pill = document.createElement('div');
+    pill.className = 'tl-num-pill';
+    pill.textContent = '#' + config.refNum;
+    wrap.appendChild(pill);
+  }
 
   // Line
   var line = document.createElement('div');
@@ -284,11 +295,40 @@ function createTimelineCard(config) {
     }
   }
 
-  // Title
+  // Title — optionally wrapped in a row with a clock strip (نُشر / نُفّذ)
   var titleEl = document.createElement('div');
   titleEl.className = 'tl-title';
   titleEl.textContent = config.title || '';
-  body.appendChild(titleEl);
+
+  var hasMeta = config.meta && config.meta.length > 0;
+  if (hasMeta) {
+    var titleRow = document.createElement('div');
+    titleRow.className = 'tl-title-row';
+    titleRow.appendChild(titleEl);
+
+    var clockStrip = document.createElement('div');
+    clockStrip.className = 'clock-strip';
+    for (var mi = 0; mi < config.meta.length; mi++) {
+      var metaItem = config.meta[mi];
+      if (!metaItem || !metaItem.value) continue;
+      var clockBox = document.createElement('div');
+      clockBox.className = 'clock-box';
+      var clockLbl = document.createElement('span');
+      clockLbl.className = 'lbl';
+      clockLbl.textContent = metaItem.label;
+      var clockVal = document.createElement('b');
+      clockVal.textContent = metaItem.value;
+      clockBox.appendChild(clockLbl);
+      clockBox.appendChild(clockVal);
+      clockStrip.appendChild(clockBox);
+    }
+    if (clockStrip.childNodes.length > 0) {
+      titleRow.appendChild(clockStrip);
+    }
+    body.appendChild(titleRow);
+  } else {
+    body.appendChild(titleEl);
+  }
 
   // Chips
   if (config.chips && config.chips.length > 0) {
@@ -421,7 +461,6 @@ function renderBayanat(container, items) {
       if (b.weapon) {
         chips.push({ cls: 'weapon-chip', text: b.weapon });
       }
-      chips.push({ cls: 'ref-chip', text: 'بيان #' + (b.num || '+') });
 
       // Build dots and determine hasHit
       var dots = [];
@@ -442,15 +481,24 @@ function renderBayanat(container, items) {
       // Wrap class
       var wrapClass = 'bayan' + (b.badge ? ' ' + b.badge : '');
 
+      // Footer meta — always show نُشر + نُفّذ when available (tracking data).
+      // The node only shows one of them; the footer surfaces both explicitly.
+      var nodeTimeVal = b.opTime || b.postTime || '';
+      var metaArr = [];
+      if (b.postTime) metaArr.push({ label: 'نُشر', value: b.postTime });
+      if (b.opTime)   metaArr.push({ label: 'نُفّذ', value: b.opTime });
+
       var card = createTimelineCard({
         wrapClass: wrapClass,
-        nodeTime: b.opTime || b.postTime || '',
+        nodeTime: nodeTimeVal,
         nodeColor: nodeColor,
         hasHit: hasHit,
         tintColor: tintColor,
         title: b.target || '',
         chips: chips,
         dots: dots,
+        refNum: (b.num || b.num === 0) ? b.num : '+',
+        meta: metaArr,
         hiddenEls: {
           'bayan-target': b.target || '',
           'bayan-num': b.num || '+'

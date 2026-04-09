@@ -294,49 +294,193 @@ def parse_bayan(msg):
         'fullText': text
     }
 
-def extract_target(text):
-    """Extract clean target location from bayan text."""
-    # Find the main action sentence.
-    # Terminators: any weapon prefix (بصلي/بسرب/بصاروخ/بالصواريخ/بمسيّرات/...) OR period at end.
-    body_m = re.search(
-        r'(?:استهدف|قصف|فجّر|تصدّ|دكّ).*?(?:في|عند|على|باتّجاه|نحو)\s+(.*?)'
-        r'(?:'
-        r'بصلي|بسرب|بقذائف|بقذيفة|بمحلّق|بمحلّقات|'
-        r'بصاروخ|بالصاروخ|بالصواريخ|بصواريخ|بصلية|بصلياتٍ|بصليات|'
-        r'بالأسلحة|بأسلحة|بسلاح|بعبوة|بعبوات|'
-        r'بمسيّرة|بمسيّرات|بسربٍ|بسربِ|'
-        r'برشقة|برشقات|بالرشّاشات|بالرشاشات|برشّاش|'
-        r'بالمدفعيّة|بالمدفعية|بمدفعية|'
-        r'بكمية|بكميات|بالكميات|'
-        r'\.\s*$'
-        r')',
-        text, re.DOTALL
+def _clean_body_for_target(text):
+    """Strip Quran verses, dates, times, weekdays, and the common preamble."""
+    body = text
+    # Strip Arabic tatweel (letter-elongation character) used for emphasis
+    body = body.replace('ـ', '')
+    # Remove Quran verses in braces
+    body = re.sub(r'﴿[^﴾]*﴾', ' ', body)
+    body = re.sub(r'صَدَقَ اللهُ[^\n]*', ' ', body)
+    body = re.sub(r'بِسْمِ اللَّـهِ[^\n]*', ' ', body)
+    # Remove Hijri date line
+    body = re.sub(r'\d+\s+(?:شوال|شعبان|رمضان|ذي القعدة|ذي الحجة|محرم|صفر|ربيع الأول|ربيع الثاني|جمادى الأولى|جمادى الثانية|رجب)\s+\d+\s+هـ', ' ', body)
+    # Remove numeric dates
+    body = re.sub(r'\d{1,2}[-/]\d{1,2}[-/]\d{4}', ' ', body)
+    # Remove time references ("عند الساعة 17:30" — strip "عند" with it)
+    body = re.sub(r'(?:عند\s+)?الس[ّ]?اعة\s*\d{1,2}:\d{2}', ' ', body)
+    # Strip "الواقع فيه" (date-of connective)
+    body = re.sub(r'الواقع\s+فيه', ' ', body)
+    # Strip the common preamble up to "ضاحية بيروت الجنوبيّة،"
+    body = re.sub(
+        r'رد[ًّا]*\s+على\s+العدوان\s+الإسرائيل[يّ]{0,3}\s+المجرم[^،]*?ضاحية\s+بيروت\s+الجنوبي[ّة]{0,3}[،,]?',
+        ' ', body
     )
-    if body_m:
-        target = body_m.group(1).strip()
-        # Strip time + date patterns first
-        target = re.sub(r'الس[ّ]?اعة\s*\d{2}:\d{2}\s*', '', target)
-        target = re.sub(r'\d{2}-\d{2}-\d{4}', '', target)
-        target = re.sub(r'(?:الثلاثاء|الأربعاء|الخميس|الجمعة|السبت|الأحد|الإثنين)\s*', '', target)
-        # Clean object prefixes (keep just location)
-        target = re.sub(r'^(?:مستوطنة|مستوطنتي|مستوطنتَي|مستوطنات)\s+', '', target)
-        target = re.sub(r'^تجمّع(?:ًا|ات)?\s+.*?(?:في|عند|قرب|قبالة)\s+', '', target)
-        target = re.sub(r'^أجهزة\s+.*?(?:في|عند|قرب)\s+', '', target)
-        target = re.sub(r'^موكب(?:ًا)?\s+.*?(?:في|عند|قرب)\s+', '', target)
-        target = re.sub(r'^حاجز(?:ًا)?\s+.*?(?:في|عند|قرب)\s+', '', target)
-        target = re.sub(r'^منظومة\s+.*?(?:في|عند|قرب)\s+', '', target)
-        # Tank object prefixes (singular/dual/plural) + preposition (في/عند/قرب/قبالة/على)
-        target = re.sub(
-            r'^(?:دبّابتَي|دبّابتَين|دبّابتي|دبّابتين|دبّابة|دبّاباتٍ|دبّابات)'
-            r'(?:\s+ميركافا)?\s+(?:في|عند|على|قرب|قبالة)\s+',
-            '', target
-        )
-        target = re.sub(r'^نقطة\s+.*?(?:في|عند|قرب)\s+', '', target)
-        target = re.sub(r'\s+', ' ', target).strip()
-        # Truncate if too long
-        if len(target) > 100:
-            target = target[:100].rsplit(' ', 1)[0]
-        return target
+    # Strip "دفاعًا عن لبنان وشعبه،"
+    body = re.sub(r'دفاع[اً]+\s+عن\s+لبنان\s+وشعبه[،,]?', ' ', body)
+    # Strip "من بعد/من فجر/من ظهر/من صباح/..." FIRST (before individual word strip)
+    body = re.sub(r'من\s+(?:بعد\s+)?(?:ظهر|فجر|صباح|عصر|ليل|مساء)\s+(?:اليوم|أمس)?\s*', ' ', body)
+    body = re.sub(r'من\s+(?:بعد\s+)?(?:ظهر|فجر|صباح|عصر|ليل|مساء)', ' ', body)
+    # Strip weekday names
+    body = re.sub(
+        r'(?:الإثنين|الاثنين|الثلاثاء|الأربعاء|الخميس|الجمعة|السبت|الأحد)\s*',
+        ' ', body
+    )
+    # Strip time-of-day words and "أمس/اليوم/غدًا"
+    body = re.sub(
+        r'(?:\bأمس\b|\bاليوم\b|\bغد[اًّ]?\b|\bمساء\b|\bصباح\b|\bظهر\b|\bفجر\b|\bليل\b|\bعصر\b)',
+        ' ', body
+    )
+    # Normalize whitespace
+    body = re.sub(r'\s+', ' ', body).strip()
+    return body
+
+
+def _clean_location(loc):
+    """Clean a captured location string."""
+    loc = re.sub(r'^[\s،,و]+', '', loc)
+    loc = re.sub(r'[\s،,و]+$', '', loc)
+    loc = re.sub(r'\s+', ' ', loc).strip()
+    # Strip leading "من " (source marker, not a target)
+    loc = re.sub(r'^(?:من|مِن)\s+', '', loc)
+    # Drop trailing connective clauses
+    loc = re.sub(
+        r'\s+(?:المحتلّ?ة|المُحتلّ?ة|والتي|التي|وما|وقد|حيث|بعد|باتجاه)\s*.*$',
+        '', loc
+    )
+    # Balance parentheses — if unbalanced, drop from the unmatched paren onward
+    if loc.count('(') > loc.count(')'):
+        idx = loc.rfind('(')
+        loc = loc[:idx].strip()
+    if loc.count(')') > loc.count('('):
+        idx = loc.find(')')
+        loc = loc[:idx].strip()
+    if len(loc) > 80:
+        loc = loc[:80].rsplit(' ', 1)[0]
+    return loc.strip()
+
+
+def extract_target(text):
+    """Extract clean target location from bayan text.
+
+    Strategy: scan the cleaned body for location markers in priority order.
+    Each pattern captures everything up to the next comma/period/weapon phrase.
+    """
+    body = _clean_body_for_target(text)
+
+    # Special case: broad warning strikes on border settlements
+    if re.search(r'المستوطنات\s+التي\s+سبق\s+التحذير', body) or \
+       re.search(r'المستوطنات\s+الّ?تي\s+حُذّرت', body):
+        return 'المستوطنات الحدودية'
+
+    # Terminator: punctuation, weapon-prefix word, result-clause conjunction, or end
+    weapon_term = (
+        r'ب[ِ]?صلي|ب[ِ]?سرب|ب[ِ]?قذائف|ب[ِ]?قذيفة|ب[ِ]?محلّق|ب[ِ]?محلّقات|'
+        r'ب[ِ]?صاروخ|بالصاروخ|بالصواريخ|ب[ِ]?صواريخ|ب[ِ]?صلية|ب[ِ]?صلياتٍ|ب[ِ]?صليات|'
+        r'بالأسلحة|ب[ِ]?أسلحة|ب[ِ]?سلاح|ب[ِ]?عبوة|ب[ِ]?عبوات|'
+        r'ب[ِ]?مسيّرة|ب[ِ]?مسيّرات|ب[ِ]?مسيرة|ب[ِ]?مسيرات|ب[ِ]?سربٍ|ب[ِ]?سربِ|'
+        r'ب[ِ]?رشقة|ب[ِ]?رشقات|بالرشّاشات|بالرشاشات|ب[ِ]?رشّاش|'
+        r'بالمدفعيّة|بالمدفعية|ب[ِ]?مدفعية|'
+        r'ب[ِ]?كمية|ب[ِ]?كميات|بالكميات|ب[ِ]?تفجير|بالاشتباك|ب[ِ]?هدف'
+    )
+    # Result-clause conjunctions: "وحقّقوا/وأجبروا/وتمّ/وشوهدت/..." introduce outcome text
+    result_term = (
+        r'و(?:حقّق|أجبر|تدمير|شوهد|شُوهد|تمّ|تم|ما\s+زال|أسفر|هدف)'
+    )
+    TERM = r'(?=[،,.؛\n(]|\s+(?:' + weapon_term + r')|\s+' + result_term + r'|$)'
+
+    # Priority-ordered location patterns. First match wins.
+    patterns = [
+        # Airspace — "في أجواء [مدينة] X"
+        r'في\s+أجواء\s+(?:مدينة|بلدة|قرية|منطقة)?\s*([^،,.؛\n]+?)' + TERM,
+        # Above — "فوق [بلدة/مدينة] X" (aircraft shootdowns)
+        r'فوق\s+(?:بلدة|مدينة|قرية|منطقة|سماء)\s+([^،,.؛\n]+?)' + TERM,
+        # Vicinity — "في محيط/جوار X"
+        r'في\s+(?:محيط|جوار)\s+(?:مدينة|بلدة|قرية|مستوطنة)?\s*([^،,.؛\n]+?)' + TERM,
+        # Outskirts — "عند أطراف [بلدة] X"
+        r'عند\s+أطراف\s+(?:بلدة|مدينة|قرية|مستوطنة)\s+([^،,.؛\n]+?)' + TERM,
+        r'عند\s+أطراف\s+([^،,.؛\n]+?)' + TERM,
+        # Quarter of town — "في الأطراف (الغربيّة) لبلدة X"
+        r'في\s+الأطراف\s+(?:الجنوبيّ?ة|الشماليّ?ة|الشرقيّ?ة|الغربيّ?ة)\s+ل?(?:بلدة|مدينة|قرية|مستوطنة)\s+([^،,.؛\n]+?)' + TERM,
+        # Junction — "عند تقاطع X"
+        r'عند\s+تقاطع\s+([^،,.؛\n]+?)' + TERM,
+        # Triangle junction — "عند مثلّث X"
+        r'عند\s+مثلّث\s+([^،,.؛\n]+?)' + TERM,
+        # Direction — "باتجاه [الحارة ... ل][مدينة/بلدة] X"
+        r'باتّ?جاه\s+(?:الحارة\s+(?:الجنوبيّ?ة|الشماليّ?ة|الشرقيّ?ة|الغربيّ?ة)\s+ل)?(?:مدينة|بلدة|قرية|مستوطنة|موقع|تلّة|تلة)?\s*([^،,.؛\n]+?)' + TERM,
+        r'نحو\s+(?:مدينة|بلدة|قرية|مستوطنة)?\s*([^،,.؛\n]+?)' + TERM,
+        # Project/road — "في مشروع X" / "على طريق X"
+        r'في\s+مشروع\s+([^،,.؛\n]+?)' + TERM,
+        r'على\s+طريق\s+([^،,.؛\n]+?)' + TERM,
+        # "Southern quarter of city X" — "الحارة الجنوبيّة لمدينة X"
+        r'في\s+الحارة\s+(?:الجنوبيّ?ة|الشماليّ?ة|الشرقيّ?ة|الغربيّ?ة)\s+ل?(?:مدينة|بلدة|قرية)?\s*([^،,.؛\n]+?)' + TERM,
+        # Attack target — "هجومًا ... على قاعدة/موقع/ثكنة X"
+        r'على\s+(قاعدة\s+[^،,.؛\n(]+?)' + TERM,
+        r'على\s+(ثكنت?[َي]?ي?\s+[^،,.؛\n(]+?)' + TERM,
+        r'على\s+موقع\s+([^،,.؛\n(]+?)' + TERM,
+        r'على\s+(?:مواقع|تجمّعات)\s+[^،,.؛\n]{0,60}?في\s+([^،,.؛\n]+?)' + TERM,
+        # Near landmark — "قرب حسينيّة/معتقل/موقع/... X"
+        r'قرب\s+(?:حسينيّ?ة|معتقل|موقع|قاعدة|ثكنة|مستوطنة|مدينة|بلدة|قرية|مركز|مشفى)\s+(?:بلدة|مدينة)?\s*([^،,.؛\n]+?)' + TERM,
+        # Surroundings — "محيط [معتقل/موقع/...] X" (no "في" prefix)
+        r'محيط\s+(?:معتقل|موقع|قاعدة|ثكنة|مستوطنة|مدينة|بلدة|قرية|مركز|مشفى)\s+([^،,.؛\n]+?)' + TERM,
+        # Village entrance — "عند مدخل بلدة X"
+        r'(?:عند\s+)?مدخل\s+(?:بلدة|مدينة|قرية|مستوطنة)?\s*([^،,.؛\n]+?)' + TERM,
+        # Between two villages — "بين بلدتي X والY"
+        r'بين\s+بلدت[َي]?ي\s+([^.؛\n]+?)' + TERM,
+        # Between landmark and village — "بين مرتفع X والY"
+        r'بين\s+(?:مرتفع|تلّة|تلة|تلال|موقع|جبل|مزرعة|وادي)\s+([^.؛\n]+?)\s+و',
+        # Air defense in airspace — "في سماء X"
+        r'في\s+سماء\s+([^،,.؛\n]+?)' + TERM,
+        # Compound cardinal — "جنوب شرق X" / "شمال غرب X"
+        r'(?:جنوب|شمال)\s+(?:شرق|غرب)\s+([^،,.؛\n]+?)' + TERM,
+        # "ل[مستوطنة/مدينة] X" — warning addressed to settlement (single or dual)
+        r'ل(?:مستوطنة|مستوطنتي|مستوطنتَي|مستوطنتين|مدينة|بلدة|قرية|موقع|قاعدة|ثكنة)\s+([^.؛\n]+?)' + TERM,
+        # Cardinal direction + landmark — "شرق/شمال/غرب/جنوب معتقل/مشروع/... X"
+        r'(?:شرق|شمال|غرب|جنوب|شماليّ?|جنوبيّ?|شرقيّ?|غربيّ?)\s+(?:معتقل|مشروع|موقع|مدينة|بلدة|قرية|مستوطنة|قاعدة|ثكنة|معسكر)\s+([^،,.؛\n]+?)' + TERM,
+        # Movement destination — "إلى بلدة X"
+        r'إلى\s+(?:بلدة|مدينة|قرية|مستوطنة|موقع|قاعدة)\s+([^،,.؛\n]+?)' + TERM,
+        # Direct object after verb — "استهدف ... قاعدة X" (buffer may cross commas)
+        r'(?:استهدف|دكّ|قصف|قصفت|دكّت)[هاهمكنت]*\s+(?:[^.؛\n]{0,120}?\s+)?(قاعدة\s+[^،,.؛\n(]+?)' + TERM,
+        r'(?:استهدف|دكّ|قصف)[هاهمكنت]*\s+(?:[^.؛\n]{0,120}?\s+)?(ثكنة\s+[^،,.؛\n(]+?)' + TERM,
+        # Direct object after verb — "استهدف ... موقع X"
+        r'(?:استهدف|دكّ|قصف|قصفت|دكّت)[هاهمكنت]*\s+(?:[^.؛\n]{0,120}?\s+)?(موقع\s+[^،,.؛\n(]+?)' + TERM,
+        r'(?:استهدف|قصف|قصفت|دكّ)[هاهمكنت]*\s+(?:[^.؛\n]{0,120}?\s+)?(مستوطنة\s+[^،,.؛\n(]+?)' + TERM,
+        # Direct object — "استهدف ... مقرّ/مصفاة/مجمّع X"
+        r'(?:استهدف|دكّ|قصف)[هاهمكنت]*\s+(?:[^.؛\n]{0,120}?\s+)?(مقرّ\s+[^،,.؛\n(]+?)' + TERM,
+        r'(?:استهدف|دكّ|قصف)[هاهمكنت]*\s+(?:[^.؛\n]{0,120}?\s+)?(مصفاة\s+[^،,.؛\n(]+?)' + TERM,
+        r'(?:استهدف|دكّ|قصف)[هاهمكنت]*\s+(?:[^.؛\n]{0,120}?\s+)?(مجمّع\s+[^،,.؛\n(]+?)' + TERM,
+        # Multi-settlement strike — "مستوطنات: A، B، C..." or "مستوطنتي X وY"
+        r'مستوطنات\s*:\s*([^.؛\n]+?)' + TERM,
+        r'(?:استهدف|قصف|دكّ)[هاهمكنت]*\s+(?:[^.؛\n]{0,120}?\s+)?(مستوطنتي?\s+[^.؛\n(]+?)' + TERM,
+        r'(?:استهدف|قصف|دكّ)[هاهمكنت]*\s+(?:[^.؛\n]{0,120}?\s+)?(مستوطنات\s+[^.؛\n(]+?)' + TERM,
+        # Military camp / system / company — "معسكر X" / "منظومة X" / "شركة X"
+        r'(?:استهدف|قصف|دكّ)[هاهمكنت]*\s+(?:[^.؛\n]{0,120}?\s+)?(معسكر\s+[^،,.؛\n(]+?)' + TERM,
+        r'(?:استهدف|قصف|دكّ)[هاهمكنت]*\s+(?:[^.؛\n]{0,120}?\s+)?(منظومة\s+[^.؛\n(]+?)' + TERM,
+        r'(?:استهدف|قصف|دكّ)[هاهمكنت]*\s+(?:[^.؛\n]{0,120}?\s+)?(شركة\s+[^،,.؛\n(]+?)' + TERM,
+        r'(?:استهدف|قصف|دكّ)[هاهمكنت]*\s+(?:[^.؛\n]{0,120}?\s+)?(مصنع\s+[^،,.؛\n(]+?)' + TERM,
+        # Dual village — "في بلدتَي X وY"
+        r'في\s+بلدت[َي]?ي\s+([^.؛\n]+?)' + TERM,
+        # Generic "في [noun] X" — explicit place nouns only
+        r'في\s+(?:مستوطنة|مستوطنتي|مستوطنتَي|مستوطنات|مدينة|بلدة|قرية|منطقة|تلّة|تلة|موقع|قاعدة|ثكنة|مزرعة|مزارع|حيّ|حي)\s+([^،,.؛\n]+?)' + TERM,
+        # Original verb→prep→target fallback (buffer may cross commas)
+        r'(?:استهدف|قصف|فجّر|تصدّ|دكّ|أسقط|رصد|اشتبك|شنّ|نفّذ)[هاهمكنت]*\s+(?:[^.؛\n]{0,120}?\s+)?(?:في|عند|على|باتّجاه|نحو|قرب|قبالة|فوق)\s+([^،,.؛\n]+?)' + TERM,
+        # Cardinal side — "جنوب/شمال بلدة X"
+        r'(?:جنوب|شمال|شرق|غرب|جنوبيّ?|شماليّ?|شرقيّ?|غربيّ?)\s+(?:مدينة|بلدة|قرية|مستوطنة)\s+([^،,.؛\n]+?)' + TERM,
+    ]
+
+    for pat in patterns:
+        m = re.search(pat, body)
+        if m:
+            loc = _clean_location(m.group(1))
+            # Strip residual object-prefixes that leaked through
+            loc = re.sub(r'^(?:مستوطنة|مستوطنتي|مستوطنتَي|مستوطنات|مدينة|بلدة|قرية)\s+', '', loc)
+            loc = loc.strip()
+            if len(loc) >= 3:
+                return loc
+
+    # Air defense fallback — "تصدّى ... لطائرة حربية"
+    if re.search(r'تصدّ[ىا].*?لطائرة\s+حربيّ?ة', body):
+        return 'طائرة حربية إسرائيلية'
 
     return ''
 
