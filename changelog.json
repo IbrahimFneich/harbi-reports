@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.69",
+    "date": "2026-04-10",
+    "title": "Add full report for 2026-04-09",
+    "changes": [
+      "Replaced stub stats for Apr 9 (b:3, s:2, e:1) with full dataset (b:50, s:34, e:19, ir:5, v:13)",
+      "Generated data/2026-04-09.json from 135 Telegram messages with 9 siren map points",
+      "Refreshed search index keywords for Apr 9 with actual targets, locations, and weapon types"
+    ]
+  },
+  {
     "version": "1.0.68",
     "date": "2026-04-09",
     "title": "List view: Western digits + mobile re-layout",
