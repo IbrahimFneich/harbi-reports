@@ -261,7 +261,7 @@ def parse_bayan(msg):
     num = int(num_m.group(1)) if num_m else 0
 
     # Operation time
-    op_time_m = re.search(r'عند الساعة\s*(\d{2}:\d{2})', text)
+    op_time_m = re.search(r'عند\s+الس[ّ]?اعة\s*(\d{2}:\d{2})', text)
     op_time = op_time_m.group(1) if op_time_m else ''
 
     # Target - extract from the statement body
@@ -301,7 +301,7 @@ def extract_target(text):
     if body_m:
         target = body_m.group(1).strip()
         # Strip time + date patterns first
-        target = re.sub(r'الساعة\s*\d{2}:\d{2}\s*', '', target)
+        target = re.sub(r'الس[ّ]?اعة\s*\d{2}:\d{2}\s*', '', target)
         target = re.sub(r'\d{2}-\d{2}-\d{4}', '', target)
         target = re.sub(r'(?:الثلاثاء|الأربعاء|الخميس|الجمعة|السبت|الأحد|الإثنين)\s*', '', target)
         # Clean object prefixes (keep just location)

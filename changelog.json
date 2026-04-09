@@ -1,5 +1,16 @@
 [
   {
+    "version": "1.0.60",
+    "date": "2026-04-09",
+    "title": "Report: Apr 9 (escalation resumes)",
+    "changes": [
+      "Added Apr 9 report: 3 bayanat, 2 sirens, 1 enemy report",
+      "Hezbollah resumes operations citing Israeli ceasefire violation",
+      "Targets: Manara settlement (rocket salvo), Tayba (Namera vehicle + Israeli force)",
+      "Fixed categorize.py shadda regex (السّاعة) for opTime + target extraction"
+    ]
+  },
+  {
     "version": "1.0.59",
     "date": "2026-04-09",
     "title": "Reports: Feb 28 - Mar 6",
