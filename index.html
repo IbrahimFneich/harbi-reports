@@ -299,6 +299,93 @@
     padding-bottom: 40px;
   }
   .calendar-section.hidden { display: none; }
+  .list-section { display: none; padding: 0 20px 40px; max-width: 1100px; margin: 0 auto; }
+  .list-section.active { display: block; }
+
+  /* ── View Toggle ── */
+  .view-toggle {
+    display: flex; justify-content: center; gap: 6px;
+    padding: 14px 16px 0; max-width: 1100px; margin: 0 auto;
+  }
+  .view-toggle button {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text-dim); padding: 8px 18px; border-radius: 10px;
+    font-family: inherit; font-size: 0.78rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .view-toggle button:hover { color: var(--accent); border-color: rgba(201,168,76,0.4); }
+  .view-toggle button.active {
+    background: var(--accent-dim); border-color: var(--accent); color: var(--accent);
+  }
+
+  /* ── List View ── */
+  .list-summary {
+    display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+    padding: 16px 20px; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 12px; margin-bottom: 14px;
+  }
+  .list-summary .item { text-align: center; }
+  .list-summary .item .n { display: block; font-size: 1.4rem; font-weight: 900; color: var(--accent); }
+  .list-summary .item .l { font-size: 0.68rem; color: var(--text-dim); margin-top: 2px; }
+
+  .list-sort-bar {
+    display: flex; gap: 10px; align-items: center; justify-content: flex-end;
+    padding: 10px 4px 14px; font-size: 0.74rem; color: var(--text-dim);
+  }
+  .list-sort-bar label { font-weight: 700; }
+  .list-sort-bar select {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+    padding: 7px 12px; border-radius: 8px; font-family: inherit; font-size: 0.74rem;
+    cursor: pointer;
+  }
+  .list-sort-bar select:focus { outline: none; border-color: var(--accent); }
+  .list-sort-bar .dir-btn {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--accent);
+    width: 34px; height: 32px; border-radius: 8px; cursor: pointer;
+    font-size: 0.9rem; font-weight: 900; transition: all 0.15s;
+  }
+  .list-sort-bar .dir-btn:hover { border-color: var(--accent); background: var(--accent-dim); }
+
+  .list-grid { display: flex; flex-direction: column; gap: 10px; }
+  .list-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 80px;
+    gap: 14px; align-items: center;
+    padding: 14px 18px; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 12px;
+    text-decoration: none; color: inherit;
+    transition: all 0.15s;
+  }
+  .list-row:hover {
+    border-color: var(--accent); background: var(--surface3);
+    transform: translateX(3px);
+  }
+  .list-row .date-col .d { font-size: 0.95rem; font-weight: 800; color: var(--text); }
+  .list-row .date-col .dn { font-size: 0.66rem; color: var(--text-dim); margin-top: 2px; }
+  .list-row .pills-col { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .list-row .pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 9px; border-radius: 999px;
+    font-size: 0.66rem; font-weight: 700;
+  }
+  .list-row .pill.b  { background: rgba(46,204,113,0.12);  color: #2ecc71; }
+  .list-row .pill.s  { background: rgba(231,76,60,0.12);   color: #e74c3c; }
+  .list-row .pill.e  { background: rgba(243,156,18,0.12);  color: #f39c12; }
+  .list-row .pill.ir { background: rgba(155,89,182,0.12);  color: #9b59b6; }
+  .list-row .pill.v  { background: rgba(26,188,156,0.12);  color: #1abc9c; }
+  .list-row .keywords {
+    flex-basis: 100%; font-size: 0.66rem; color: var(--text-dim);
+    margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    direction: rtl;
+  }
+  .list-row .total-col {
+    text-align: center; padding: 8px 10px;
+    background: var(--accent-dim); border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 10px;
+  }
+  .list-row .total-col .n { display: block; font-size: 1.15rem; font-weight: 900; color: var(--accent); }
+  .list-row .total-col .l { font-size: 0.56rem; color: var(--text-dim); margin-top: 1px; }
 
   @media (max-width: 600px) {
     .header { padding: 30px 16px 20px; }
@@ -339,6 +426,25 @@
     .gs-match-tag { font-size: 0.58rem; padding: 1px 6px; }
 
     .footer { padding: 16px; font-size: 0.65rem; }
+
+    .view-toggle button { padding: 6px 12px; font-size: 0.7rem; }
+    .list-section { padding: 0 10px 30px; }
+    .list-summary { gap: 14px; padding: 12px 10px; }
+    .list-summary .item .n { font-size: 1.1rem; }
+    .list-summary .item .l { font-size: 0.58rem; }
+    .list-sort-bar { font-size: 0.66rem; gap: 6px; }
+    .list-sort-bar select { padding: 5px 8px; font-size: 0.66rem; }
+    .list-row {
+      grid-template-columns: 92px 1fr 60px;
+      gap: 8px; padding: 10px 12px;
+    }
+    .list-row .date-col .d { font-size: 0.78rem; }
+    .list-row .date-col .dn { font-size: 0.58rem; }
+    .list-row .pill { font-size: 0.58rem; padding: 2px 7px; }
+    .list-row .keywords { font-size: 0.58rem; }
+    .list-row .total-col { padding: 5px 6px; }
+    .list-row .total-col .n { font-size: 0.9rem; }
+    .list-row .total-col .l { font-size: 0.48rem; }
   }
 </style>
 </head>
@@ -356,6 +462,29 @@
 
 <div class="gs-overlay" id="gsOverlay">
   <div class="gs-results" id="gsResults"></div>
+</div>
+
+<div class="view-toggle">
+  <button id="viewCalBtn" class="active" onclick="setView('cal')">📅 التقويم</button>
+  <button id="viewListBtn" onclick="setView('list')">📋 القائمة</button>
+</div>
+
+<div class="list-section" id="listSection">
+  <div class="list-summary" id="listSummary"></div>
+  <div class="list-sort-bar">
+    <label for="listSort">ترتيب حسب:</label>
+    <select id="listSort" onchange="renderList()">
+      <option value="date">التاريخ</option>
+      <option value="total">الإجمالي</option>
+      <option value="b">البيانات العسكرية</option>
+      <option value="s">صفارات الإنذار</option>
+      <option value="e">إعلام العدو</option>
+      <option value="ir">إيران</option>
+      <option value="v">الفيديوهات</option>
+    </select>
+    <button class="dir-btn" id="listDirBtn" onclick="toggleListDir()" title="تبديل الاتجاه">↓</button>
+  </div>
+  <div class="list-grid" id="listGrid"></div>
 </div>
 
 <div class="calendar-section" id="calSection">
@@ -386,7 +515,7 @@
 <div class="footer">
   <div>مصدر: <a href="https://t.me/C_Military1" target="_blank" rel="noopener">قناة الإعلام الحربي — التغطية الإخبارية</a></div>
   <div style="margin-top:8px;font-size:0.65rem;color:var(--text-muted);">هذا الموقع غير رسمي ولا يمثّل قناة الإعلام الحربي. المحتوى منقول من القناة لأغراض التوثيق والأرشفة فقط.</div>
-  <span style="display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v1.0.64</span>
+  <span style="display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v1.0.65</span>
 </div>
 
 <script>
@@ -745,6 +874,148 @@ function changeMonth(dir) {
 
 renderCalendar();
 
+// ═══════════════ VIEW TOGGLE + LIST VIEW ═══════════════
+
+var listDir = 'desc';
+
+function _clearNode(el) {
+  while (el.firstChild) el.removeChild(el.firstChild);
+}
+
+function setView(view) {
+  var calSec = document.getElementById('calSection');
+  var listSec = document.getElementById('listSection');
+  var calBtn = document.getElementById('viewCalBtn');
+  var listBtn = document.getElementById('viewListBtn');
+  if (view === 'list') {
+    calSec.classList.add('hidden');
+    listSec.classList.add('active');
+    calBtn.classList.remove('active');
+    listBtn.classList.add('active');
+    renderList();
+  } else {
+    calSec.classList.remove('hidden');
+    listSec.classList.remove('active');
+    calBtn.classList.add('active');
+    listBtn.classList.remove('active');
+  }
+  try { localStorage.setItem('harbi-view', view); } catch (e) {}
+}
+
+function toggleListDir() {
+  listDir = (listDir === 'desc') ? 'asc' : 'desc';
+  document.getElementById('listDirBtn').textContent = (listDir === 'desc') ? '↓' : '↑';
+  renderList();
+}
+
+function renderList() {
+  var sortField = document.getElementById('listSort').value;
+  var dates = Object.keys(reportStats);
+
+  var rows = dates.map(function(d) {
+    var s = reportStats[d];
+    var si = (typeof searchIndex !== 'undefined' && searchIndex[d]) ? searchIndex[d] : {};
+    return {
+      date: d,
+      b: s.b || 0, s: s.s || 0, e: s.e || 0, ir: s.ir || 0, v: s.v || 0,
+      total: s.total || 0,
+      kw: si.kw || ''
+    };
+  });
+
+  rows.sort(function(a, b) {
+    var av, bv;
+    if (sortField === 'date') { av = a.date; bv = b.date; }
+    else { av = a[sortField] || 0; bv = b[sortField] || 0; }
+    if (av < bv) return listDir === 'asc' ? -1 : 1;
+    if (av > bv) return listDir === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  var totalEvents = 0;
+  for (var i = 0; i < rows.length; i++) totalEvents += rows[i].total;
+  var avg = rows.length ? Math.round(totalEvents / rows.length) : 0;
+  var summary = document.getElementById('listSummary');
+  _clearNode(summary);
+  var items = [
+    { n: rows.length, l: 'تقرير' },
+    { n: totalEvents.toLocaleString('ar-EG'), l: 'مجموع الأحداث' },
+    { n: avg, l: 'معدّل / يوم' }
+  ];
+  items.forEach(function(it) {
+    var div = document.createElement('div');
+    div.className = 'item';
+    var n = document.createElement('span'); n.className = 'n'; n.textContent = it.n;
+    var l = document.createElement('span'); l.className = 'l'; l.textContent = it.l;
+    div.appendChild(n); div.appendChild(l);
+    summary.appendChild(div);
+  });
+
+  var dayNames = {0:'الأحد',1:'الإثنين',2:'الثلاثاء',3:'الأربعاء',4:'الخميس',5:'الجمعة',6:'السبت'};
+  var monthNames = {1:'يناير',2:'فبراير',3:'مارس',4:'أبريل',5:'مايو',6:'يونيو',7:'يوليو',8:'أغسطس',9:'سبتمبر',10:'أكتوبر',11:'نوفمبر',12:'ديسمبر'};
+  var grid = document.getElementById('listGrid');
+  _clearNode(grid);
+
+  rows.forEach(function(r) {
+    var a = document.createElement('a');
+    a.className = 'list-row';
+    a.href = 'report.html?date=' + r.date;
+
+    var dp = r.date.split('-');
+    var dt = new Date(parseInt(dp[0]), parseInt(dp[1]) - 1, parseInt(dp[2]));
+
+    var dc = document.createElement('div');
+    dc.className = 'date-col';
+    var dLine = document.createElement('div');
+    dLine.className = 'd';
+    dLine.textContent = parseInt(dp[2]) + ' ' + monthNames[parseInt(dp[1])] + ' ' + dp[0];
+    var dnLine = document.createElement('div');
+    dnLine.className = 'dn';
+    dnLine.textContent = dayNames[dt.getDay()];
+    dc.appendChild(dLine);
+    dc.appendChild(dnLine);
+
+    var pc = document.createElement('div');
+    pc.className = 'pills-col';
+    var pillDefs = [
+      { k: 'b',  label: 'بيان',    v: r.b },
+      { k: 's',  label: 'صفارة',   v: r.s },
+      { k: 'e',  label: 'عدو',     v: r.e },
+      { k: 'ir', label: 'إيران',   v: r.ir },
+      { k: 'v',  label: 'فيديو',   v: r.v }
+    ];
+    pillDefs.forEach(function(p) {
+      if (p.v > 0) {
+        var pill = document.createElement('span');
+        pill.className = 'pill ' + p.k;
+        pill.textContent = p.v + ' ' + p.label;
+        pc.appendChild(pill);
+      }
+    });
+    if (r.kw) {
+      var kw = document.createElement('div');
+      kw.className = 'keywords';
+      var words = r.kw.split(/\s+/).filter(Boolean).slice(0, 10).join(' · ');
+      kw.textContent = words;
+      pc.appendChild(kw);
+    }
+
+    var tc = document.createElement('div');
+    tc.className = 'total-col';
+    var tn = document.createElement('span'); tn.className = 'n'; tn.textContent = r.total;
+    var tl = document.createElement('span'); tl.className = 'l'; tl.textContent = 'إجمالي';
+    tc.appendChild(tn);
+    tc.appendChild(tl);
+
+    a.appendChild(dc);
+    a.appendChild(pc);
+    a.appendChild(tc);
+    grid.appendChild(a);
+  });
+}
+
+// Auto-restore runs at end of script after searchIndex is defined
+
 // ═══════════════ GLOBAL SEARCH ═══════════════
 
 var searchIndex = {
@@ -914,6 +1185,12 @@ function gsSearch(raw) {
     gsResults.appendChild(card);
   });
 }
+
+// ── Restore saved view preference (runs after searchIndex is defined) ──
+try {
+  var savedView = localStorage.getItem('harbi-view');
+  if (savedView === 'list') setView('list');
+} catch (e) {}
 </script>
 
 <script src="report-enhancements.js"></script>

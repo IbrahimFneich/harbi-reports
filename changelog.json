@@ -1,5 +1,18 @@
 [
   {
+    "version": "1.0.65",
+    "date": "2026-04-09",
+    "title": "Add list view with sorting",
+    "changes": [
+      "New toggle at top of homepage: 📅 Calendar | 📋 List (calendar remains default)",
+      "List view shows each report as a row with date, day name, colored stat pills, keyword preview, and total badge",
+      "Sort dropdown: date, total, bayanat, sirens, enemy, iran, videos — with asc/desc direction toggle",
+      "Summary strip: report count, total events, daily average",
+      "Whole row is clickable → opens the report",
+      "View preference saved in localStorage"
+    ]
+  },
+  {
     "version": "1.0.64",
     "date": "2026-04-09",
     "title": "UI: swap header buttons + clickable title",
