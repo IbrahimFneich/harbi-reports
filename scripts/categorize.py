@@ -165,7 +165,9 @@ def categorize(messages):
         time = msg['time']
 
         # ── Bayanat (resistance statements) ──
-        if 'بيان صادر عن المقاومة الإسلامية' in text or 'بيـان صادر عن غرفة عمليّـات' in text:
+        if ('بيان صادر عن المقاومة الإسلامية' in text
+                or 'بيـان صادر عن غرفة عمليّـات' in text
+                or 'بيان صادر عن حزب الله' in text):
             bayan = parse_bayan(msg)
             bayanat.append(bayan)
             continue
@@ -191,19 +193,28 @@ def categorize(messages):
             desc = text
             desc = re.sub(r'#\S+', '', desc).strip()
             desc = re.sub(r'⭕️?', '', desc).strip()
+            # Strip quality suffix for dedup key
+            desc_key = re.sub(r'\s*جودة\s+(?:عالية|متوسطة|منخفضة|مرتفعة|عاديّة)\s*', ' ', desc).strip()
+            desc_key = re.sub(r'\s+', ' ', desc_key)
+            # Dedup: same time + same description (quality stripped) = same operation
+            dup = next((v for v in videos if v.get('_key') == (time, desc_key)), None)
+            if dup:
+                continue
             videos.append({
                 'time': time,
-                'description': desc[:200],
-                'fullText': text
+                'description': desc_key[:200],
+                'fullText': text,
+                '_key': (time, desc_key),
             })
             continue
 
         # ── Iran ──
-        if any(kw in text for kw in ['الجمهورية الإسلامية', 'حرس الثورة', 'الجيش الإيراني',
-                                       'الجيش الايراني', 'خاتم الأنبياء', '#الجمهورية_الإسلامية']):
+        if any(kw in text for kw in ['الجمهورية الإسلامية', 'حرس الثورة', 'الحرس الثوري',
+                                       'الجيش الإيراني', 'الجيش الايراني', 'خاتم الأنبياء',
+                                       '#الجمهورية_الإسلامية', '#إيران', 'الوعد الصادق']):
             source = 'إيران'
-            for src in ['حرس الثورة الإسلامية', 'الجيش الإيراني', 'الجيش الايراني',
-                        'خاتم الأنبياء', 'القوة البحرية', 'القوة الجوفضائية']:
+            for src in ['حرس الثورة الإسلامية', 'الحرس الثوري', 'الجيش الإيراني',
+                        'الجيش الايراني', 'خاتم الأنبياء', 'القوة البحرية', 'القوة الجوفضائية']:
                 if src in text:
                     source = src
                     break
@@ -237,7 +248,12 @@ def categorize(messages):
             continue
 
         # ── Iraq ──
-        if 'المقاومة الإسلامية في العراق' in text or 'كتائب سيد الشهداء' in text:
+        if ('المقاومة الإسلامية في العراق' in text
+                or 'المقاومة الاسلامية في العراق' in text
+                or 'كتائب سيد الشهداء' in text
+                or 'حركة النجباء' in text
+                or 'أكرم الكعبي' in text
+                or '#العراق' in text):
             allies.append({
                 'flag': 'العراق',
                 'time': time,
@@ -249,6 +265,10 @@ def categorize(messages):
         # ── Other (skip) ──
         other.append(msg)
 
+    # Strip dedup helper keys before returning
+    for v in videos:
+        v.pop('_key', None)
+
     return bayanat, sirens, enemy, iran, videos, allies
 
 def parse_bayan(msg):
@@ -259,6 +279,25 @@ def parse_bayan(msg):
     # Statement number
     num_m = re.search(r'بيان صادر عن المقاومة الإسلامية\s*\((\d+)\)', text)
     num = int(num_m.group(1)) if num_m else 0
+
+    # Hezbollah general communique (no number) — short-circuit with descriptive title
+    if 'بيان صادر عن حزب الله' in text and not num_m:
+        if 'مجازر' in text or 'مجزرة' in text or 'المدنيين' in text:
+            target_h = 'بيان حول مجازر العدو بحق المدنيين'
+        elif 'وقف إطلاق النار' in text or 'القرى والبلدات' in text:
+            target_h = 'بيان إلى أهالي الجنوب والبقاع والضاحية'
+        else:
+            target_h = 'بيان عام لحزب الله'
+        return {
+            'num': 0,
+            'postTime': time,
+            'opTime': '',
+            'target': target_h,
+            'weapon': '',
+            'badge': 'communique',
+            'tags': ['بيان عام'],
+            'fullText': text,
+        }
 
     # Operation time
     op_time_m = re.search(r'عند\s+الس[ّ]?اعة\s*(\d{2}:\d{2})', text)

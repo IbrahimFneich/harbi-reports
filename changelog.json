@@ -1,5 +1,18 @@
 [
   {
+    "version": "1.0.71",
+    "date": "2026-04-10",
+    "title": "Regenerate Apr 8 report with full categorization",
+    "changes": [
+      "Override-regenerated 2026-04-08 — categorizer was missing Hezbollah communiques (showing b:0 for a day with 2 major communiques about ceasefire and civilian massacres)",
+      "categorize.py: recognize 'بيان صادر عن حزب الله' as bayanat with badge='communique' and content-derived target",
+      "categorize.py: extend Iran filter to catch 'الحرس الثوري' / '#إيران' / 'الوعد الصادق' (caught Iranian Wa'd Sadiq statement #56)",
+      "categorize.py: extend Iraq filter to catch 'حركة النجباء' / 'أكرم الكعبي' / '#العراق' / 'الاسلامية' spelling variant (caught Najaba statement and Sarayya Awliya al-Dam video)",
+      "categorize.py: dedupe video posts by stripping quality suffix (جودة عالية/متوسطة/منخفضة) and matching on (time, description) — Apr 8 collapsed 9→3 video entries",
+      "Apr 8 final stats: b:2 s:6 e:12 ir:2 v:3 al:4 (was b:0 s:6 e:12 ir:1 v:9)"
+    ]
+  },
+  {
     "version": "1.0.70",
     "date": "2026-04-10",
     "title": "Cache-bust data JSON fetches",
