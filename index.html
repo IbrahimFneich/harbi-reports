@@ -435,16 +435,39 @@
     .list-sort-bar { font-size: 0.66rem; gap: 6px; }
     .list-sort-bar select { padding: 5px 8px; font-size: 0.66rem; }
     .list-row {
-      grid-template-columns: 92px 1fr 60px;
-      gap: 8px; padding: 10px 12px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        "date  total"
+        "pills pills";
+      gap: 8px 10px;
+      padding: 12px 14px;
     }
-    .list-row .date-col .d { font-size: 0.78rem; }
-    .list-row .date-col .dn { font-size: 0.58rem; }
-    .list-row .pill { font-size: 0.58rem; padding: 2px 7px; }
-    .list-row .keywords { font-size: 0.58rem; }
-    .list-row .total-col { padding: 5px 6px; }
-    .list-row .total-col .n { font-size: 0.9rem; }
-    .list-row .total-col .l { font-size: 0.48rem; }
+    .list-row .date-col { grid-area: date; align-self: center; }
+    .list-row .total-col { grid-area: total; align-self: center; }
+    .list-row .pills-col {
+      grid-area: pills;
+      gap: 5px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+    }
+    .list-row .date-col .d { font-size: 0.85rem; }
+    .list-row .date-col .dn { font-size: 0.6rem; color: var(--accent); font-weight: 700; }
+    .list-row .pill {
+      font-size: 0.6rem;
+      padding: 3px 8px;
+      flex-shrink: 0;
+    }
+    .list-row .keywords { display: none; }
+    .list-row .total-col {
+      padding: 5px 12px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .list-row .total-col .n { display: inline; font-size: 0.95rem; }
+    .list-row .total-col .l { font-size: 0.55rem; }
   }
 </style>
 </head>
@@ -515,7 +538,7 @@
 <div class="footer">
   <div>مصدر: <a href="https://t.me/C_Military1" target="_blank" rel="noopener">قناة الإعلام الحربي — التغطية الإخبارية</a></div>
   <div style="margin-top:8px;font-size:0.65rem;color:var(--text-muted);">هذا الموقع غير رسمي ولا يمثّل قناة الإعلام الحربي. المحتوى منقول من القناة لأغراض التوثيق والأرشفة فقط.</div>
-  <span style="display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v1.0.67</span>
+  <span style="display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v1.0.68</span>
 </div>
 
 <script>
@@ -939,7 +962,7 @@ function renderList() {
   _clearNode(summary);
   var items = [
     { n: rows.length, l: 'تقرير' },
-    { n: totalEvents.toLocaleString('ar-EG'), l: 'مجموع الأحداث' },
+    { n: totalEvents.toLocaleString('en-US'), l: 'مجموع الأحداث' },
     { n: avg, l: 'معدّل / يوم' }
   ];
   items.forEach(function(it) {

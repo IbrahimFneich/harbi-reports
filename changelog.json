@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.68",
+    "date": "2026-04-09",
+    "title": "List view: Western digits + mobile re-layout",
+    "changes": [
+      "List summary 'مجموع الأحداث' total now renders in Western digits (was 'ar-EG' which produced Arabic-Indic numerals out-of-sync with the other two stats)",
+      "Mobile list rows redesigned: switched from a 3-column grid (date | pills | total) that crushed every column to a 2-row grid — date+total badge on top, pills wrap freely on a second row separated by a dashed divider",
+      "Hidden the keyword strip on mobile (it was wrapping into 2-3 lines and inflating row heights inconsistently)"
+    ]
+  },
+  {
     "version": "1.0.67",
     "date": "2026-04-09",
     "title": "Bayan cards: tracking column + clock strip",
