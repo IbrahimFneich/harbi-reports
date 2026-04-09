@@ -1,5 +1,19 @@
 [
   {
+    "version": "1.0.63",
+    "date": "2026-04-09",
+    "title": "Fix: empty bayan titles + day cutoff at 13:00",
+    "changes": [
+      "Fixed extract_target regex: narrow weapon-prefix terminator list caused empty titles when bayan used بالصواريخ الموجّهة (bayan 39 on Mar 26 and others)",
+      "Extended terminators to cover بالصواريخ, بصواريخ, بمسيّرات, بسلاح, برشقة, بالمدفعية, بقذيفة, برشّاش",
+      "Broadened object-prefix strip for dual-form دبّابتَي/دبّابتين with قرب/قبالة prepositions",
+      "Fixed silent truncation: Telegram fetch limit was 200, cut busy days mid-afternoon — bumped to 2000",
+      "Re-fetched 18 truncated days (Feb 28, Mar 7/10/11/13/14/17-27, 29)",
+      "Regenerated all 40 data files — Mar 26 alone: 40→94 bayanat, 33→66 sirens, coverage 13:30→22:10",
+      "Rebuilt index.html reportStats from fresh data"
+    ]
+  },
+  {
     "version": "1.0.61",
     "date": "2026-04-09",
     "title": "Report: Apr 9 (escalation resumes)",
