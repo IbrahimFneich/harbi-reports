@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.79",
+    "date": "2026-04-10",
+    "title": "Fix sirens: map dots, missing fullText for Apr 1-7",
+    "changes": [
+      "Add missing sirenPoints to 5 data files (Apr 2-6) — map dots now render",
+      "Add missing fullText to sirens in 4 data files (Apr 1,3,4,7) — toggle button now shows",
+      "Computed sirenPoints from location names using SIREN_COORDS lookup"
+    ]
+  },
+  {
     "version": "1.0.78",
     "date": "2026-04-10",
     "title": "Fix global search navigating to wrong card",
