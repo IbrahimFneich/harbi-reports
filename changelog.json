@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.84",
+    "date": "2026-04-10",
+    "title": "Add reports for Oct 15-31, 2023 (Toufan Al-Aqsa weeks 2-3)",
+    "changes": [
+      "Add 17 historical reports covering Oct 15-31, 2023",
+      "Total: 1,243 messages — Hezbollah operations ramp up from Oct 20 onward",
+      "Bayanat begin appearing regularly as resistance operations formalize"
+    ]
+  },
+  {
     "version": "1.0.83",
     "date": "2026-04-10",
     "title": "Add reports for Oct 7-14, 2023 (Toufan Al-Aqsa week 1)",
