@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.83",
+    "date": "2026-04-10",
+    "title": "Add reports for Oct 7-14, 2023 (Toufan Al-Aqsa week 1)",
+    "changes": [
+      "Add 8 historical reports covering the first week of Toufan Al-Aqsa (Oct 7-14, 2023)",
+      "Total: 737 messages across 8 days — 148 messages on Oct 7 alone",
+      "Mostly enemy media coverage and siren alerts from the opening days of the war"
+    ]
+  },
+  {
     "version": "1.0.82",
     "date": "2026-04-10",
     "title": "Add report for Apr 10 + light theme default",
