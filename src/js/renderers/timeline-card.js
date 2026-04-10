@@ -22,6 +22,9 @@ export function createTimelineCard(config) {
   //           chips:[], dots:[], hiddenEls:{}, fullText, refNum, meta }
   var wrap = document.createElement('div');
   wrap.className = 'tl-wrap' + (config.wrapClass ? ' ' + config.wrapClass : '');
+  if (config.srcIdx !== undefined && config.srcIdx !== null) {
+    wrap.setAttribute('data-src-idx', String(config.srcIdx));
+  }
   if (config.refNum !== undefined && config.refNum !== null && config.refNum !== '') {
     wrap.classList.add('has-ref');
   }

@@ -1,12 +1,13 @@
 [
   {
-    "version": "1.0.77",
+    "version": "1.0.78",
     "date": "2026-04-10",
-    "title": "Fix global search navigation on mobile",
+    "title": "Fix global search navigating to wrong card",
     "changes": [
-      "Fix competing smooth scrolls causing search results to land on wrong section",
-      "Add skipScroll parameter to switchTab for deep-link navigation",
-      "Add in-place navigation for same-report spotlight results (no reload)"
+      "Fix search results landing on wrong card due to bayanat phase reordering",
+      "Add data-src-idx attribute to all cards for index-safe deep-linking",
+      "Fix competing smooth scrolls on mobile",
+      "Add in-place navigation for same-report spotlight results"
     ]
   },
   {

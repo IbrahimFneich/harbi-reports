@@ -383,10 +383,9 @@ function navTo(item) {
         tabEl.classList.add('active');
       }
     }
-    // Scroll to card
+    // Scroll to card (match by data-src-idx, not DOM position)
     setTimeout(function() {
-      var cards = document.querySelectorAll('#' + item.tab + ' .tl-wrap');
-      var card = cards[item.idx];
+      var card = document.querySelector('#' + item.tab + ' .tl-wrap[data-src-idx="' + item.idx + '"]');
       if (!card) return;
       // Remove any previous highlights
       var old = document.querySelectorAll('.search-target,.search-target-fade');

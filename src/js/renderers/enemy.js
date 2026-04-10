@@ -15,6 +15,7 @@ export function renderEnemy(container, items) {
 
     var card = createTimelineCard({
       wrapClass: 'enemy-row',
+      srcIdx: i,
       nodeTime: item.time || '',
       nodeColor: 'node-orange',
       hasHit: false,

@@ -14,6 +14,7 @@ export function renderAllies(container, items) {
 
     var card = createTimelineCard({
       wrapClass: 'ally-card',
+      srcIdx: i,
       nodeTime: item.time || '',
       nodeColor: 'node-cyan',
       hasHit: false,

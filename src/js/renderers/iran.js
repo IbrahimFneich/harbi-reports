@@ -19,6 +19,7 @@ export function renderIran(container, items) {
 
     var card = createTimelineCard({
       wrapClass: 'iran-card',
+      srcIdx: i,
       nodeTime: item.time || '',
       nodeColor: 'node-purple',
       hasHit: false,

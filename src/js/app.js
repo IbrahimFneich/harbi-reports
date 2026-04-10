@@ -142,7 +142,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v1.0.77';
+  ver.textContent = 'Harbi Reports v1.0.78';
   ver.onclick = function() { showChangelog(); };
   footer.appendChild(ver);
   root.appendChild(footer);
@@ -167,12 +167,10 @@ function renderReport(data) {
       var tabsBar = document.querySelector('.tabs');
       if (tabsBar) window.scrollTo(0, tabsBar.offsetTop);
 
-      // Then scroll to the specific card after DOM settles
+      // Then scroll to the specific card after DOM settles (match by data-src-idx)
       setTimeout(function() {
-        var cards = document.querySelectorAll('#' + targetTab + ' .tl-wrap');
-        var idx = parseInt(targetIdx);
-        if (!cards[idx]) return;
-        var card = cards[idx];
+        var card = document.querySelector('#' + targetTab + ' .tl-wrap[data-src-idx="' + targetIdx + '"]');
+        if (!card) return;
         card.classList.add('search-target');
         // Use rAF to ensure layout before scroll
         requestAnimationFrame(function() {

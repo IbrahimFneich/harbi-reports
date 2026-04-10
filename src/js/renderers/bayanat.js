@@ -16,6 +16,7 @@ export function renderBayanat(container, items) {
 
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
+    item._srcIdx = i;
     var timeStr = item.opTime || item.postTime || '00:00';
     var hour = parseInt(timeStr.split(':')[0], 10);
     if (hour < 5) grouped.fajr.push(item);
@@ -99,6 +100,7 @@ export function renderBayanat(container, items) {
 
       var card = createTimelineCard({
         wrapClass: wrapClass,
+        srcIdx: b._srcIdx,
         nodeTime: nodeTimeVal,
         nodeColor: nodeColor,
         hasHit: hasHit,

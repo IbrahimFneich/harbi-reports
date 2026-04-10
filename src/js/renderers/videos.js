@@ -12,6 +12,7 @@ export function renderVideos(container, items) {
 
     var card = createTimelineCard({
       wrapClass: 'vid-card',
+      srcIdx: i,
       nodeTime: item.time || '',
       nodeColor: 'node-cyan',
       hasHit: false,

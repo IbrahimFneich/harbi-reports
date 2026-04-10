@@ -19,6 +19,7 @@ export function renderSirens(container, items, sirenPoints) {
 
     var card = createTimelineCard({
       wrapClass: 'siren-row',
+      srcIdx: i,
       nodeTime: item.time || '',
       nodeColor: 'node-red',
       hasHit: false,
