@@ -1,5 +1,7 @@
 /* === src/js/analytics/controls.js — Filter and grouping state === */
 
+import { createDatePicker } from './datepicker.js';
+
 var _state = {
   dateStart: '',
   dateEnd: '',
@@ -20,8 +22,6 @@ export function getState() {
 
 /**
  * Build SQL WHERE clause + params from current state.
- * Returns {where: string, params: any[]}
- * The WHERE includes leading "WHERE".
  */
 export function buildWhere() {
   var clauses = [];
@@ -57,10 +57,6 @@ export function getGroupFormat() {
 
 /**
  * Initialize controls — bind DOM event handlers.
- * Expects the DOM to have:
- *   .a-ctrl[data-cat] for category toggles
- *   .a-ctrl[data-group] for grouping buttons
- *   .a-date-range for date display
  */
 export function initControls(onChange, dateRange) {
   _onChange = onChange;
@@ -68,26 +64,28 @@ export function initControls(onChange, dateRange) {
   _state.dateStart = dateRange.start;
   _state.dateEnd = dateRange.end;
 
-  // Date range inputs
-  var dateFrom = document.getElementById('dateFrom');
-  var dateTo = document.getElementById('dateTo');
-  if (dateFrom && dateTo) {
-    dateFrom.value = dateRange.start;
-    dateTo.value = dateRange.end;
-    dateFrom.min = dateRange.start;
-    dateFrom.max = dateRange.end;
-    dateTo.min = dateRange.start;
-    dateTo.max = dateRange.end;
+  // Custom date pickers
+  createDatePicker({
+    triggerId: 'dateFrom',
+    value: dateRange.start,
+    min: dateRange.start,
+    max: dateRange.end,
+    onChange: function(val) {
+      _state.dateStart = val;
+      if (_onChange) _onChange(getState());
+    }
+  });
 
-    dateFrom.addEventListener('change', function() {
-      _state.dateStart = dateFrom.value;
+  createDatePicker({
+    triggerId: 'dateTo',
+    value: dateRange.end,
+    min: dateRange.start,
+    max: dateRange.end,
+    onChange: function(val) {
+      _state.dateEnd = val;
       if (_onChange) _onChange(getState());
-    });
-    dateTo.addEventListener('change', function() {
-      _state.dateEnd = dateTo.value;
-      if (_onChange) _onChange(getState());
-    });
-  }
+    }
+  });
 
   // Category toggles
   var catBtns = document.querySelectorAll('.a-ctrl[data-cat]');
