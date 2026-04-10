@@ -1,5 +1,20 @@
 [
   {
+    "version": "1.0.73",
+    "date": "2026-04-10",
+    "title": "Full codebase restructure into ES modules",
+    "changes": [
+      "Split 3 monolithic JS files (2623 lines) into 22 focused ES modules under src/js/",
+      "Organized into src/js/renderers/, dashboards/, maps/, ui/, search/",
+      "Extracted inline CSS from index.html to src/css/index.css",
+      "Moved CSS to src/css/, Python to src/python/",
+      "Deleted 8 legacy report HTML files (~1.2MB) superseded by SPA",
+      "Replaced switchTab monkey-patching with clean onTabSwitch hook pattern",
+      "Added ESLint, Prettier, Ruff tooling configs",
+      "Fixed pre-push hook to use new src/js/app.js path"
+    ]
+  },
+  {
     "version": "1.0.71",
     "date": "2026-04-10",
     "title": "Regenerate Apr 8 report with full categorization",
