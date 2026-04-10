@@ -89,12 +89,22 @@ body.analytics {
   border-color: var(--accent); color: var(--accent);
 }
 .a-ctrl-sep { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
-.a-date-range {
+.a-date-range-wrap {
+  display: flex; align-items: center; gap: 6px; direction: ltr;
+}
+.a-date-label {
+  font-size: 0.56rem; color: var(--text-dim); font-weight: 600;
+}
+.a-date-input {
   font-family: 'Courier New', monospace; font-size: 0.62rem;
-  padding: 5px 12px; border-radius: 6px;
+  padding: 5px 10px; border-radius: 6px;
   border: 1px solid rgba(201,168,76,0.25); background: rgba(201,168,76,0.06);
   color: var(--accent); direction: ltr;
+  outline: none; cursor: pointer;
+  color-scheme: dark;
 }
+.a-date-input:focus { border-color: var(--accent); }
+body.analytics.light .a-date-input { color-scheme: light; background: rgba(154,123,45,0.06); }
 
 /* ── KPI Strip ── */
 .a-kpi-strip {

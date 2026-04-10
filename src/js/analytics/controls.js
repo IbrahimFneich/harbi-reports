@@ -68,10 +68,25 @@ export function initControls(onChange, dateRange) {
   _state.dateStart = dateRange.start;
   _state.dateEnd = dateRange.end;
 
-  // Date range display
-  var dateEl = document.querySelector('.a-date-range');
-  if (dateEl) {
-    dateEl.textContent = dateRange.start + ' \u2192 ' + dateRange.end;
+  // Date range inputs
+  var dateFrom = document.getElementById('dateFrom');
+  var dateTo = document.getElementById('dateTo');
+  if (dateFrom && dateTo) {
+    dateFrom.value = dateRange.start;
+    dateTo.value = dateRange.end;
+    dateFrom.min = dateRange.start;
+    dateFrom.max = dateRange.end;
+    dateTo.min = dateRange.start;
+    dateTo.max = dateRange.end;
+
+    dateFrom.addEventListener('change', function() {
+      _state.dateStart = dateFrom.value;
+      if (_onChange) _onChange(getState());
+    });
+    dateTo.addEventListener('change', function() {
+      _state.dateEnd = dateTo.value;
+      if (_onChange) _onChange(getState());
+    });
   }
 
   // Category toggles
