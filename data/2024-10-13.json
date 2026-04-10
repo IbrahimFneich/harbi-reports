@@ -4,12 +4,12 @@
   "dateAr": "١٣ تشرين الأول ٢٠٢٤",
   "hijri": "٠٩ ربيع الثاني ١٤٤٦ هـ.",
   "stats": {
-    "b": 39,
-    "s": 47,
-    "e": 57,
-    "ir": 0,
-    "v": 3,
-    "al": 5
+    "bayanat": 39,
+    "sirens": 47,
+    "enemy": 57,
+    "iran": 0,
+    "videos": 3,
+    "allies": 5
   },
   "bayanat": [
     {

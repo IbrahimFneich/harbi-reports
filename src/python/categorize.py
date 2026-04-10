@@ -627,12 +627,12 @@ def main():
 
     # Build output
     stats = {
-        'b': len(bayanat),
-        's': len(sirens),
-        'e': len(enemy),
-        'ir': len(iran),
-        'v': len(videos),
-        'al': len(allies)
+        'bayanat': len(bayanat),
+        'sirens': len(sirens),
+        'enemy': len(enemy),
+        'iran': len(iran),
+        'videos': len(videos),
+        'allies': len(allies)
     }
 
     data = {
@@ -656,8 +656,8 @@ def main():
     with open(output, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-    print('Output: {} — b:{} s:{} e:{} ir:{} v:{} al:{} sp:{}'.format(
-        output, stats['b'], stats['s'], stats['e'], stats['ir'], stats['v'], stats['al'],
+    print('Output: {} — bayanat:{} sirens:{} enemy:{} iran:{} videos:{} allies:{} sirenPoints:{}'.format(
+        output, stats['bayanat'], stats['sirens'], stats['enemy'], stats['iran'], stats['videos'], stats['allies'],
         len(siren_points)))
 
     # Rebuild derived indexes (spotlight-index.json, reports-meta.js, nav.js)
