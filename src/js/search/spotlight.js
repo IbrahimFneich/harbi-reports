@@ -367,6 +367,46 @@ function openSel() {
 }
 
 function navTo(item) {
+  // If already on this report, navigate in-place (no reload)
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('date') === item.date && document.getElementById(item.tab)) {
+    closeSL();
+    // Switch tab without competing scroll
+    var tabEl = document.querySelector('.tab[onclick*="' + item.tab + '"]');
+    if (tabEl) {
+      var switchFn = window.switchTab;
+      if (typeof switchFn === 'function') switchFn(item.tab, tabEl, true);
+      else {
+        document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.remove('active'); });
+        document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+        document.getElementById(item.tab).classList.add('active');
+        tabEl.classList.add('active');
+      }
+    }
+    // Scroll to card
+    setTimeout(function() {
+      var cards = document.querySelectorAll('#' + item.tab + ' .tl-wrap');
+      var card = cards[item.idx];
+      if (!card) return;
+      // Remove any previous highlights
+      var old = document.querySelectorAll('.search-target,.search-target-fade');
+      for (var i = 0; i < old.length; i++) {
+        old[i].classList.remove('search-target');
+        old[i].classList.remove('search-target-fade');
+      }
+      card.classList.add('search-target');
+      requestAnimationFrame(function() {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(function() {
+          card.classList.remove('search-target');
+          card.classList.add('search-target-fade');
+          setTimeout(function() { card.classList.remove('search-target-fade'); }, 1000);
+        }, 5000);
+      });
+    }, 150);
+    return;
+  }
+  // Different report — full navigation
   var url = 'report.html?date=' + item.date + '&tab=' + item.tab + '&idx=' + item.idx;
   if (_sInput && _sInput.value) url += '&q=' + encodeURIComponent(_sInput.value);
   window.location.href = url;

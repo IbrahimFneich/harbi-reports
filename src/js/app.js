@@ -142,7 +142,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v1.0.76';
+  ver.textContent = 'Harbi Reports v1.0.77';
   ver.onclick = function() { showChangelog(); };
   footer.appendChild(ver);
   root.appendChild(footer);
@@ -158,24 +158,26 @@ function renderReport(data) {
   var targetIdx = urlParams.get('idx');
 
   if (targetTab) {
-    // Switch to the target tab
+    // Switch to the target tab — skip its scroll so we can scroll to the card instead
     var tabEl = document.querySelector('.tab[onclick*="' + targetTab + '"]');
-    if (tabEl) switchTab(targetTab, tabEl);
+    if (tabEl) switchTab(targetTab, tabEl, true);
 
-    // Scroll to the specific card — wait for DOM to settle
     if (targetIdx !== null) {
+      // Instant-jump to tabs area first (no smooth — avoids scroll conflict)
+      var tabsBar = document.querySelector('.tabs');
+      if (tabsBar) window.scrollTo(0, tabsBar.offsetTop);
+
+      // Then scroll to the specific card after DOM settles
       setTimeout(function() {
         var cards = document.querySelectorAll('#' + targetTab + ' .tl-wrap');
         var idx = parseInt(targetIdx);
         if (!cards[idx]) return;
         var card = cards[idx];
-        // Add highlight class first so it renders at the right size
         card.classList.add('search-target');
-        // Use rAF to ensure layout is computed before scrolling
+        // Use rAF to ensure layout before scroll
         requestAnimationFrame(function() {
           requestAnimationFrame(function() {
             card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            // Remove highlight after 5s with fade transition
             setTimeout(function() {
               card.classList.remove('search-target');
               card.classList.add('search-target-fade');
@@ -185,7 +187,11 @@ function renderReport(data) {
             }, 5000);
           });
         });
-      }, 500);
+      }, 300);
+    } else {
+      // No card target — just scroll to tabs
+      var tabsBar = document.querySelector('.tabs');
+      if (tabsBar) window.scrollTo({ top: tabsBar.offsetTop, behavior: 'smooth' });
     }
   }
 

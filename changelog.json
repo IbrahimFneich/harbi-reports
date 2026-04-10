@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.77",
+    "date": "2026-04-10",
+    "title": "Fix global search navigation on mobile",
+    "changes": [
+      "Fix competing smooth scrolls causing search results to land on wrong section",
+      "Add skipScroll parameter to switchTab for deep-link navigation",
+      "Add in-place navigation for same-report spotlight results (no reload)"
+    ]
+  },
+  {
     "version": "1.0.73",
     "date": "2026-04-10",
     "title": "Full codebase restructure into ES modules",
