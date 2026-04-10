@@ -1,8 +1,8 @@
 /* === src/js/ui/hero.js === */
 
 export function initHero() {
-  var statsBar = document.querySelector('.stats');
-  if (!statsBar) return;
+  var header = document.querySelector('.header');
+  if (!header) return;
   var bayanat = document.querySelectorAll('#bayanat .bayan').length;
   if (bayanat === 0) return;
 
@@ -42,5 +42,5 @@ export function initHero() {
     hero.appendChild(chip);
   });
 
-  statsBar.parentNode.insertBefore(hero, statsBar.nextSibling);
+  header.parentNode.insertBefore(hero, header.nextSibling);
 }

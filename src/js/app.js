@@ -64,34 +64,6 @@ function renderReport(data) {
 
   root.appendChild(header);
 
-  // Stats bar
-  var statsConfig = [
-    { cls: 's1', label: '\u0628\u064A\u0627\u0646 \u0639\u0633\u0643\u0631\u064A', key: 'b' },
-    { cls: 's2', label: '\u0635\u0641\u0627\u0631\u0629 \u0625\u0646\u0630\u0627\u0631', key: 's' },
-    { cls: 's3', label: '\u062A\u0642\u0631\u064A\u0631 \u0625\u0639\u0644\u0627\u0645 \u0627\u0644\u0639\u062F\u0648', key: 'e' },
-    { cls: 's4', label: '\u0625\u064A\u0631\u0627\u0646', key: 'ir' },
-    { cls: 's5', label: '\u0641\u064A\u062F\u064A\u0648 \u0639\u0645\u0644\u064A\u0627\u062A', key: 'v' },
-    { cls: 's6', label: '\u064A\u0645\u0646 + \u0639\u0631\u0627\u0642', key: 'al' }
-  ];
-
-  var statsBar = document.createElement('div');
-  statsBar.className = 'stats';
-  for (var si = 0; si < statsConfig.length; si++) {
-    var sc = statsConfig[si];
-    var statBox = document.createElement('div');
-    statBox.className = 'stat ' + sc.cls;
-    var countSpan = document.createElement('span');
-    countSpan.className = 'n';
-    countSpan.textContent = data.stats[sc.key];
-    var labelSpan = document.createElement('span');
-    labelSpan.className = 'l';
-    labelSpan.textContent = sc.label;
-    statBox.appendChild(countSpan);
-    statBox.appendChild(labelSpan);
-    statsBar.appendChild(statBox);
-  }
-  root.appendChild(statsBar);
-
   // Tab bar
   var tabsConfig = [
     { id: 'bayanat', label: '\u0628\u064A\u0627\u0646\u0627\u062A \u0627\u0644\u0645\u0642\u0627\u0648\u0645\u0629', count: data.stats.b },
@@ -170,7 +142,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v1.0.74';
+  ver.textContent = 'Harbi Reports v1.0.75';
   ver.onclick = function() { showChangelog(); };
   footer.appendChild(ver);
   root.appendChild(footer);

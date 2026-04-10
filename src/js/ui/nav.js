@@ -67,8 +67,8 @@ export function initNav() {
   nav.appendChild(center);
   nav.appendChild(nextBtn);
 
-  // Insert after hero or stats
+  // Insert after hero or header
   var hero = document.querySelector('.day-hero');
-  var ref = hero || document.querySelector('.stats');
+  var ref = hero || document.querySelector('.header');
   if (ref) ref.parentNode.insertBefore(nav, ref.nextSibling);
 }
