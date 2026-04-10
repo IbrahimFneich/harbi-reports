@@ -93,12 +93,13 @@ export function initSirensDash() {
   listTitle.className = 'siren-list-title';
   listTitle.textContent = '\u0627\u0644\u0642\u0627\u0626\u0645\u0629 \u0627\u0644\u0643\u0627\u0645\u0644\u0629';
 
-  // Insert dashboard + filters + list title BEFORE the first siren card (after map)
-  var firstCard = rows[0];
-  if (firstCard) {
-    container.insertBefore(listTitle, firstCard);
-    container.insertBefore(filterDiv, listTitle);
-    container.insertBefore(dash, filterDiv);
+  // Insert after the map: map → dash → filterDiv → listTitle → cards
+  var mapEl = document.getElementById('sirenMap');
+  var insertRef = mapEl ? mapEl.nextElementSibling : rows[0];
+  if (insertRef) {
+    container.insertBefore(dash, insertRef);
+    container.insertBefore(filterDiv, insertRef);
+    container.insertBefore(listTitle, insertRef);
   }
 
   buildTimeline('autoSirenTimeline', hours, '#e74c3c');

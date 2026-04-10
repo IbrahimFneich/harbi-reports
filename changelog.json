@@ -1,11 +1,11 @@
 [
   {
-    "version": "1.0.80",
+    "version": "1.0.81",
     "date": "2026-04-10",
     "title": "Fix first siren card appearing above dashboard",
     "changes": [
-      "Fix siren dashboard insertion: first card no longer renders above the dashboard",
-      "Dashboard, filters, and list title now insert before first card (after map)"
+      "Fix siren dashboard insertion: anchor to sirenMap element instead of first card",
+      "Dashboard, filters, and list title now insert between map and first card"
     ]
   },
   {
