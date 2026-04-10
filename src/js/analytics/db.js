@@ -8,28 +8,40 @@ var _dbReady = null;
  * Returns a promise that resolves when the DB is ready.
  * Subsequent calls return the cached promise.
  */
+function waitForSqlJs() {
+  return new Promise(function(resolve, reject) {
+    if (typeof initSqlJs !== 'undefined') { resolve(); return; }
+    var attempts = 0;
+    var check = setInterval(function() {
+      attempts++;
+      if (typeof initSqlJs !== 'undefined') {
+        clearInterval(check);
+        resolve();
+      } else if (attempts > 100) {
+        clearInterval(check);
+        reject(new Error('sql.js failed to load from CDN'));
+      }
+    }, 100);
+  });
+}
+
 export function initDB() {
   if (_dbReady) return _dbReady;
 
-  _dbReady = new Promise(function(resolve, reject) {
-    if (typeof initSqlJs === 'undefined') {
-      reject(new Error('sql.js not loaded'));
-      return;
-    }
-
-    initSqlJs({
+  _dbReady = waitForSqlJs().then(function() {
+    return initSqlJs({
       locateFile: function(file) {
         return 'https://sql.js.org/dist/' + file;
       }
-    }).then(function(SQL) {
-      return fetch('data/harbi.db').then(function(r) {
-        if (!r.ok) throw new Error('Failed to fetch harbi.db: ' + r.status);
-        return r.arrayBuffer();
-      }).then(function(buf) {
-        _db = new SQL.Database(new Uint8Array(buf));
-        resolve(_db);
-      });
-    }).catch(reject);
+    });
+  }).then(function(SQL) {
+    return fetch('data/harbi.db').then(function(r) {
+      if (!r.ok) throw new Error('Failed to fetch harbi.db: ' + r.status);
+      return r.arrayBuffer();
+    }).then(function(buf) {
+      _db = new SQL.Database(new Uint8Array(buf));
+      return _db;
+    });
   });
 
   return _dbReady;

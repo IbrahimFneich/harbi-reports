@@ -1,8 +1,26 @@
 /* === analytics.css — Command Center dashboard styles === */
 
+/* Force dark theme for analytics — override enhancements.css light defaults */
 body.analytics {
+  --bg: #0a0f18;
+  --surface: #0f1520;
+  --surface2: #151d2b;
+  --surface3: #1a2436;
+  --border: #1e2d3d;
+  --text: #dfe6ee;
+  --text-dim: #6b7d92;
+  --text-muted: #3d5068;
+  --accent: #c9a84c;
+  --accent-dim: rgba(201,168,76,0.12);
+  --green: #2ecc71;
+  --red: #e74c3c;
+  --orange: #e67e22;
+  --purple: #9b59b6;
+  --teal: #1abc9c;
+  --blue: #3498db;
+
   font-family: 'Noto Kufi Arabic', sans-serif;
-  background: var(--bg, #0a0f18);
+  background: var(--bg);
   color: var(--text);
   margin: 0;
   min-height: 100vh;
