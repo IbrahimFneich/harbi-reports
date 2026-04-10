@@ -53,12 +53,34 @@ export function createDatePicker(opts) {
     return d.d + ' ' + MONTHS_AR[d.m] + ' ' + d.y;
   }
 
+  function formatNumeric(d) {
+    return pad(d.d) + '/' + pad(d.m + 1) + '/' + d.y;
+  }
+
+  function isValidDate(y, m, d) {
+    var dt = new Date(y, m, d);
+    return dt.getFullYear() === y && dt.getMonth() === m && dt.getDate() === d;
+  }
+
+  function isInRange(y, m, d) {
+    var dt = new Date(y, m, d);
+    var mn = new Date(minD.y, minD.m, minD.d);
+    var mx = new Date(maxD.y, maxD.m, maxD.d);
+    return dt >= mn && dt <= mx;
+  }
+
+  function selectDate(y, m, d) {
+    current = { y: y, m: m, d: d };
+    trigger.textContent = formatDisplay(current);
+    if (opts.onChange) opts.onChange(toStr(y, m, d));
+    close();
+  }
+
   function open() {
     if (popup) popup.remove();
 
     popup = document.createElement('div');
     popup.className = 'dp-popup';
-
     popup.addEventListener('click', function(e) { e.stopPropagation(); });
 
     render();
@@ -71,23 +93,16 @@ export function createDatePicker(opts) {
     var winW = window.innerWidth;
     var winH = window.innerHeight;
 
-    // Vertical: prefer below, flip above if clipped
     var top = rect.bottom + 6;
-    if (top + popH > winH - 10) {
-      top = rect.top - popH - 6;
-    }
+    if (top + popH > winH - 10) top = rect.top - popH - 6;
     if (top < 10) top = 10;
 
-    // Horizontal: prefer aligned to trigger left, shift if clipped
     var left = rect.left;
-    if (left + popW > winW - 10) {
-      left = winW - popW - 10;
-    }
+    if (left + popW > winW - 10) left = winW - popW - 10;
     if (left < 10) left = 10;
 
     popup.style.top = top + 'px';
     popup.style.left = left + 'px';
-
     isOpen = true;
 
     setTimeout(function() {
@@ -107,7 +122,45 @@ export function createDatePicker(opts) {
     if (!popup) return;
     popup.textContent = '';
 
-    // Header: month/year nav
+    // ── Manual input row ──
+    var inputRow = document.createElement('div');
+    inputRow.className = 'dp-input-row';
+
+    var inputField = document.createElement('input');
+    inputField.className = 'dp-manual-input';
+    inputField.type = 'text';
+    inputField.placeholder = 'DD/MM/YYYY';
+    inputField.value = formatNumeric(current);
+    inputField.maxLength = 10;
+
+    inputField.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        var val = inputField.value.trim();
+        var parts = val.split('/');
+        if (parts.length === 3) {
+          var d = parseInt(parts[0], 10);
+          var m = parseInt(parts[1], 10) - 1;
+          var y = parseInt(parts[2], 10);
+          if (isValidDate(y, m, d) && isInRange(y, m, d)) {
+            selectDate(y, m, d);
+            return;
+          }
+        }
+        inputField.classList.add('dp-input-error');
+        setTimeout(function() { inputField.classList.remove('dp-input-error'); }, 600);
+      }
+    });
+
+    inputRow.appendChild(inputField);
+    popup.appendChild(inputRow);
+
+    // ── Numeric date display ──
+    var numericDisplay = document.createElement('div');
+    numericDisplay.className = 'dp-numeric';
+    numericDisplay.textContent = formatNumeric(current);
+    popup.appendChild(numericDisplay);
+
+    // ── Header: month/year nav ──
     var header = document.createElement('div');
     header.className = 'dp-header';
 
@@ -138,7 +191,7 @@ export function createDatePicker(opts) {
     header.appendChild(nextBtn);
     popup.appendChild(header);
 
-    // Day-of-week headers
+    // ── Day-of-week headers ──
     var dowRow = document.createElement('div');
     dowRow.className = 'dp-dow';
     DAYS_AR.forEach(function(d) {
@@ -148,39 +201,32 @@ export function createDatePicker(opts) {
     });
     popup.appendChild(dowRow);
 
-    // Calendar grid
+    // ── Calendar grid ──
     var grid = document.createElement('div');
     grid.className = 'dp-grid';
 
     var firstDay = new Date(viewYear, viewMonth, 1).getDay();
-    // Convert to Monday-first: Mon=0 ... Sun=6
     var startOffset = (firstDay + 6) % 7;
     var daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
 
-    // Empty cells
     for (var e = 0; e < startOffset; e++) {
       var empty = document.createElement('div');
       empty.className = 'dp-cell dp-empty';
       grid.appendChild(empty);
     }
 
-    // Day cells
+    var now = new Date();
     for (var day = 1; day <= daysInMonth; day++) {
       var cell = document.createElement('div');
       cell.className = 'dp-cell';
 
-      var dateVal = toStr(viewYear, viewMonth, day);
       var dateObj = new Date(viewYear, viewMonth, day);
       var minDate = new Date(minD.y, minD.m, minD.d);
       var maxDate = new Date(maxD.y, maxD.m, maxD.d);
 
       var isDisabled = dateObj < minDate || dateObj > maxDate;
       var isSelected = (viewYear === current.y && viewMonth === current.m && day === current.d);
-      var isToday = false;
-      var now = new Date();
-      if (viewYear === now.getFullYear() && viewMonth === now.getMonth() && day === now.getDate()) {
-        isToday = true;
-      }
+      var isToday = (viewYear === now.getFullYear() && viewMonth === now.getMonth() && day === now.getDate());
 
       if (isSelected) cell.classList.add('dp-selected');
       if (isToday) cell.classList.add('dp-today');
@@ -189,19 +235,40 @@ export function createDatePicker(opts) {
       cell.textContent = day;
 
       if (!isDisabled) {
-        (function(dv, dy) {
+        (function(dy) {
           cell.addEventListener('click', function() {
-            current = { y: viewYear, m: viewMonth, d: dy };
-            trigger.textContent = formatDisplay(current);
-            if (opts.onChange) opts.onChange(dv);
-            close();
+            selectDate(viewYear, viewMonth, dy);
           });
-        })(dateVal, day);
+        })(day);
       }
 
       grid.appendChild(cell);
     }
 
     popup.appendChild(grid);
+
+    // ── Footer: Today button ──
+    var footer = document.createElement('div');
+    footer.className = 'dp-footer';
+
+    var todayBtn = document.createElement('button');
+    todayBtn.className = 'dp-today-btn';
+    todayBtn.textContent = 'اليوم';
+
+    var todayInRange = isInRange(now.getFullYear(), now.getMonth(), now.getDate());
+    if (!todayInRange) {
+      todayBtn.disabled = true;
+      todayBtn.classList.add('dp-disabled');
+    }
+
+    todayBtn.onclick = function() {
+      if (!todayInRange) return;
+      viewYear = now.getFullYear();
+      viewMonth = now.getMonth();
+      selectDate(now.getFullYear(), now.getMonth(), now.getDate());
+    };
+
+    footer.appendChild(todayBtn);
+    popup.appendChild(footer);
   }
 }
