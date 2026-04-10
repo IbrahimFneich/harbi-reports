@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.85",
+    "date": "2026-04-10",
+    "title": "Add reports for Nov 2023 - Jan 2024 (92 days)",
+    "changes": [
+      "Add 92 historical reports covering Nov 1, 2023 through Jan 31, 2024",
+      "6,669 messages total — ceasefire visible Nov 24-30 (low activity)",
+      "Hezbollah bayanat peak at 22/day (Nov 23) before temporary truce"
+    ]
+  },
+  {
     "version": "1.0.84",
     "date": "2026-04-10",
     "title": "Add reports for Oct 15-31, 2023 (Toufan Al-Aqsa weeks 2-3)",
