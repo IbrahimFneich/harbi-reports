@@ -163,10 +163,61 @@ body.analytics {
   background: var(--accent); color: #000; font-weight: 800;
 }
 .dp-cell.dp-today:not(.dp-selected) { border: 1px solid var(--accent); }
+/* Date picker: manual input row */
+.dp-input-row {
+  margin-bottom: 8px;
+}
+.dp-manual-input {
+  width: 100%; font-family: 'Noto Kufi Arabic', monospace;
+  font-size: 0.68rem; font-weight: 600;
+  padding: 7px 10px; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--text); outline: none;
+  text-align: center; direction: ltr;
+  transition: all 0.15s;
+}
+.dp-manual-input::placeholder { color: var(--text-muted); }
+.dp-manual-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
+}
+.dp-manual-input.dp-input-error {
+  border-color: var(--red); box-shadow: 0 0 0 2px rgba(231,76,60,0.2);
+}
+
+/* Date picker: numeric display */
+.dp-numeric {
+  text-align: center; font-size: 0.52rem; font-weight: 600;
+  color: var(--text-muted); margin-bottom: 10px;
+  direction: ltr; font-family: monospace; letter-spacing: 0.04em;
+}
+
+/* Date picker: footer with Today button */
+.dp-footer {
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: center;
+}
+.dp-today-btn {
+  font-family: 'Noto Kufi Arabic', sans-serif;
+  font-size: 0.6rem; font-weight: 700;
+  padding: 5px 20px; border-radius: 6px;
+  border: 1px solid var(--accent); background: var(--accent-dim);
+  color: var(--accent); cursor: pointer;
+  transition: all 0.15s;
+}
+.dp-today-btn:hover:not(:disabled) {
+  background: var(--accent); color: #000;
+}
+.dp-today-btn:disabled {
+  opacity: 0.3; cursor: default;
+}
+
 body.analytics.light .dp-popup {
   background: var(--surface); box-shadow: 0 12px 40px rgba(0,0,0,0.12);
 }
 body.analytics.light .dp-cell.dp-selected { color: #fff; }
+body.analytics.light .dp-today-btn:hover:not(:disabled) { color: #fff; }
 
 /* ── KPI Strip ── */
 .a-kpi-strip {
