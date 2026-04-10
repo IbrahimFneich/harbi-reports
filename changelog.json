@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.0.82",
+    "date": "2026-04-10",
+    "title": "Add report for Apr 10 + light theme default",
+    "changes": [
+      "Add report for 2026-04-10: 32 bayanat, 13 sirens, 11 enemy media, 3 videos",
+      "Light theme is now the default for new visitors (dark still available via toggle)"
+    ]
+  },
+  {
     "version": "1.0.81",
     "date": "2026-04-10",
     "title": "Fix first siren card appearing above dashboard",
