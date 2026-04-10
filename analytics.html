@@ -19,11 +19,12 @@
 
 <!-- Header -->
 <div class="a-header">
-  <a href="index.html" class="home-link">← الرئيسية</a>
+  <a href="index.html" class="home-link">\u2190 الرئيسية</a>
   <h1>مركز التحليلات <span>HARBI ANALYTICS</span></h1>
   <div class="a-status">
     <span><span class="dot"></span> <span id="statusText">جارٍ التحميل...</span></span>
   </div>
+  <button class="theme-toggle" id="themeBtn">\u2600</button>
 </div>
 
 <!-- Controls -->
@@ -74,5 +75,20 @@
 
 <script src="https://sql.js.org/dist/sql-wasm.js"></script>
 <script type="module" src="src/js/analytics/dashboard.js"></script>
+<script>
+(function() {
+  var saved = localStorage.getItem('harbi-theme');
+  if (saved === 'light') document.body.classList.add('light');
+  var btn = document.getElementById('themeBtn');
+  if (!btn) return;
+  btn.textContent = document.body.classList.contains('light') ? '\u263E' : '\u2600';
+  btn.onclick = function() {
+    document.body.classList.toggle('light');
+    var isLight = document.body.classList.contains('light');
+    btn.textContent = isLight ? '\u263E' : '\u2600';
+    localStorage.setItem('harbi-theme', isLight ? 'light' : 'dark');
+  };
+})();
+</script>
 </body>
 </html>
