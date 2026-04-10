@@ -1,5 +1,16 @@
 [
   {
+    "version": "1.0.88",
+    "date": "2026-04-10",
+    "title": "Performance: pre-built search index + externalized data",
+    "changes": [
+      "Spotlight search loads 1 pre-built index instead of 159 fetches (~450KB gzipped vs ~7.8MB)",
+      "Externalize reports/stats/searchIndex from index.html to cached reports-meta.js (81KB → 25KB)",
+      "Add build_index.py — auto-generates all derived indexes from data/*.json",
+      "categorize.py now auto-calls build_index.py — no manual index edits needed"
+    ]
+  },
+  {
     "version": "1.0.85",
     "date": "2026-04-10",
     "title": "Add reports for Nov 2023 - Jan 2024 (92 days)",

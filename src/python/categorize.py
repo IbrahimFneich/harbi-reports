@@ -660,5 +660,12 @@ def main():
         output, stats['b'], stats['s'], stats['e'], stats['ir'], stats['v'], stats['al'],
         len(siren_points)))
 
+    # Rebuild derived indexes (spotlight-index.json, reports-meta.js, nav.js)
+    build_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'build_index.py')
+    if os.path.exists(build_script):
+        import subprocess
+        print('Rebuilding indexes...')
+        subprocess.run([sys.executable, build_script], check=True)
+
 if __name__ == '__main__':
     main()

@@ -1,7 +1,7 @@
 /* ============================================================
    spotlight.js — Global Spotlight Search (Ctrl+K or /)
    ES module version of search.js
-   Loads all data/*.json, builds a flat search index,
+   Loads pre-built data/spotlight-index.json (single fetch),
    searches with Arabic normalization + English aliases.
    Note: All data is locally-generated static content from
    trusted Telegram channel posts. No user input is rendered
@@ -59,74 +59,24 @@ function fmtDate(d) {
   return parseInt(p[2]) + ' ' + (MONTH_NAMES_S[parseInt(p[1])] || '') + ' ' + p[0];
 }
 
-// ── Build index from all JSON files ───────────────────────
-// ALL_REPORTS global comes from enhancements.js
+// ── Load pre-built index (single fetch) ──────────────────
 function loadSIdx(cb) {
   if (_sLoaded) { cb(); return; }
-  var dates = [];
-  if (typeof ALL_REPORTS !== 'undefined') {
-    dates = ALL_REPORTS.slice();
-  } else if (typeof reportStats !== 'undefined') {
-    dates = Object.keys(reportStats);
-  }
-  if (dates.length === 0) { cb(); return; }
-
-  var done = 0;
-  var total = dates.length;
-  for (var i = 0; i < dates.length; i++) {
-    (function(date) {
-      fetch('data/' + date + '.json?t=' + Date.now())
-        .then(function(r) { return r.ok ? r.json() : null; })
-        .then(function(data) {
-          if (data) idxDay(data);
-          done++;
-          if (done === total) { _sLoaded = true; cb(); }
-        })
-        .catch(function() { done++; if (done === total) { _sLoaded = true; cb(); } });
-    })(dates[i]);
-  }
-}
-
-function idxDay(data) {
-  var date = data.date;
-  var dl = fmtDate(date);
-  var cats = [
-    { key: 'bayanat', items: data.bayanat || [], fn: function(b) {
-      return { title: b.target || '', sub: 'بيان #' + b.num, time: b.opTime || b.postTime || '',
-        text: (b.target||'') + ' ' + (b.weapon||'') + ' ' + (b.fullText||''), tab: 'bayanat' };
-    }},
-    { key: 'sirens', items: data.sirens || [], fn: function(s) {
-      return { title: s.location || '', sub: '', time: s.time || '',
-        text: (s.location||'') + ' ' + (s.fullText||''), tab: 'sirens' };
-    }},
-    { key: 'enemy', items: data.enemy || [], fn: function(e) {
-      return { title: (e.summary||'').substring(0,80), sub: '', time: e.time || '',
-        text: (e.summary||'') + ' ' + (e.fullText||''), tab: 'enemy' };
-    }},
-    { key: 'iran', items: data.iran || [], fn: function(r) {
-      return { title: (r.summary||'').substring(0,80), sub: r.source || '', time: r.time || '',
-        text: (r.source||'') + ' ' + (r.summary||'') + ' ' + (r.fullText||''), tab: 'iran' };
-    }},
-    { key: 'videos', items: data.videos || [], fn: function(v) {
-      return { title: (v.description||'').substring(0,80), sub: '', time: v.time || '',
-        text: (v.description||'') + ' ' + (v.fullText||''), tab: 'videos' };
-    }},
-    { key: 'allies', items: data.allies || [], fn: function(a) {
-      return { title: (a.summary||'').substring(0,80), sub: a.flag || '', time: a.time || '',
-        text: (a.flag||'') + ' ' + (a.summary||'') + ' ' + (a.fullText||''), tab: 'allies' };
-    }}
-  ];
-  for (var ci = 0; ci < cats.length; ci++) {
-    var c = cats[ci];
-    for (var ii = 0; ii < c.items.length; ii++) {
-      var r = c.fn(c.items[ii]);
-      _sIdx.push({
-        cat: c.key, date: date, dateLabel: dl,
-        time: r.time, title: r.title, subtitle: r.sub,
-        norm: sNorm(r.text), tab: r.tab, idx: ii
-      });
-    }
-  }
+  fetch('data/spotlight-index.json')
+    .then(function(r) { return r.ok ? r.json() : []; })
+    .then(function(entries) {
+      for (var i = 0; i < entries.length; i++) {
+        var e = entries[i];
+        _sIdx.push({
+          cat: e.c, date: e.d, dateLabel: fmtDate(e.d),
+          time: e.t, title: e.tt, subtitle: e.st,
+          norm: e.n, tab: e.c, idx: e.i
+        });
+      }
+      _sLoaded = true;
+      cb();
+    })
+    .catch(function() { _sLoaded = true; cb(); });
 }
 
 // ── Search ────────────────────────────────────────────────
