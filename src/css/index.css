@@ -224,6 +224,40 @@
   .footer a { color: var(--accent); text-decoration: none; }
   .footer a:hover { text-decoration: underline; }
 
+  /* Analytics Banner */
+  .analytics-banner {
+    display: flex; align-items: center; gap: 14px;
+    margin: 12px auto 0; padding: 14px 20px;
+    max-width: 520px; border-radius: 12px;
+    background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.03) 100%);
+    border: 1px solid rgba(201,168,76,0.2);
+    text-decoration: none; color: var(--text);
+    transition: all 0.25s; cursor: pointer;
+  }
+  .analytics-banner:hover {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, rgba(201,168,76,0.14) 0%, rgba(201,168,76,0.06) 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(201,168,76,0.08);
+  }
+  .ab-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .ab-content { flex: 1; }
+  .ab-title {
+    font-size: 0.78rem; font-weight: 800; color: var(--accent);
+    letter-spacing: -0.01em;
+  }
+  .ab-desc {
+    font-size: 0.58rem; color: var(--text-dim); margin-top: 2px;
+    line-height: 1.4;
+  }
+  .ab-arrow {
+    font-size: 1.1rem; color: var(--accent); opacity: 0.5;
+    transition: all 0.2s; flex-shrink: 0;
+  }
+  .analytics-banner:hover .ab-arrow {
+    opacity: 1; transform: translateX(-4px);
+  }
+
   /* Global Search */
   .global-search {
     position: sticky; top: 0; z-index: 100;

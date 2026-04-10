@@ -128,12 +128,18 @@ function refresh() {
 }
 
 
-// ── Init on page load ──
-window.addEventListener('DOMContentLoaded', function() {
+// ── Init ──
+// Modules are deferred, so DOMContentLoaded may have already fired.
+// Use a helper that works either way.
+function onReady(fn) {
+  if (document.readyState !== 'loading') { fn(); }
+  else { document.addEventListener('DOMContentLoaded', fn); }
+}
+
+onReady(function() {
   var loader = document.getElementById('loader');
 
   initDB().then(function() {
-    // Get date range from DB
     var minDate = queryOne('SELECT MIN(date) FROM reports', []);
     var maxDate = queryOne('SELECT MAX(date) FROM reports', []);
 
@@ -146,7 +152,9 @@ window.addEventListener('DOMContentLoaded', function() {
     refresh();
   }).catch(function(err) {
     if (loader) {
-      loader.textContent = '\u062E\u0637\u0623 \u0641\u064A \u062A\u062D\u0645\u064A\u0644 \u0642\u0627\u0639\u062F\u0629 \u0627\u0644\u0628\u064A\u0627\u0646\u0627\u062A: ' + err.message;
+      loader.querySelector('.load-text').textContent =
+        '\u062E\u0637\u0623: ' + err.message;
+      loader.querySelector('.spinner').style.display = 'none';
     }
     console.error('DB init failed:', err);
   });
