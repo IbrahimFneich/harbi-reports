@@ -59,14 +59,35 @@ export function createDatePicker(opts) {
     popup = document.createElement('div');
     popup.className = 'dp-popup';
 
-    var rect = trigger.getBoundingClientRect();
-    popup.style.top = (rect.bottom + 6) + 'px';
-    popup.style.left = rect.left + 'px';
-
     popup.addEventListener('click', function(e) { e.stopPropagation(); });
 
     render();
     document.body.appendChild(popup);
+
+    // Position after appending so we can measure the popup size
+    var rect = trigger.getBoundingClientRect();
+    var popW = popup.offsetWidth;
+    var popH = popup.offsetHeight;
+    var winW = window.innerWidth;
+    var winH = window.innerHeight;
+
+    // Vertical: prefer below, flip above if clipped
+    var top = rect.bottom + 6;
+    if (top + popH > winH - 10) {
+      top = rect.top - popH - 6;
+    }
+    if (top < 10) top = 10;
+
+    // Horizontal: prefer aligned to trigger left, shift if clipped
+    var left = rect.left;
+    if (left + popW > winW - 10) {
+      left = winW - popW - 10;
+    }
+    if (left < 10) left = 10;
+
+    popup.style.top = top + 'px';
+    popup.style.left = left + 'px';
+
     isOpen = true;
 
     setTimeout(function() {
@@ -92,7 +113,7 @@ export function createDatePicker(opts) {
 
     var prevBtn = document.createElement('button');
     prevBtn.className = 'dp-nav';
-    prevBtn.textContent = '→';
+    prevBtn.textContent = '\u2039';
     prevBtn.onclick = function() {
       viewMonth--;
       if (viewMonth < 0) { viewMonth = 11; viewYear--; }
@@ -101,7 +122,7 @@ export function createDatePicker(opts) {
 
     var nextBtn = document.createElement('button');
     nextBtn.className = 'dp-nav';
-    nextBtn.textContent = '←';
+    nextBtn.textContent = '\u203A';
     nextBtn.onclick = function() {
       viewMonth++;
       if (viewMonth > 11) { viewMonth = 0; viewYear++; }
@@ -112,9 +133,9 @@ export function createDatePicker(opts) {
     title.className = 'dp-title';
     title.textContent = MONTHS_AR[viewMonth] + ' ' + viewYear;
 
-    header.appendChild(nextBtn);
-    header.appendChild(title);
     header.appendChild(prevBtn);
+    header.appendChild(title);
+    header.appendChild(nextBtn);
     popup.appendChild(header);
 
     // Day-of-week headers
