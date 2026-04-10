@@ -12,7 +12,7 @@ export function initBayanatMap() {
   var container = bayanatTab.querySelector('.container');
   if (!container) return;
   var cards = container.querySelectorAll('.bayan');
-  if (cards.length < 3) return;
+  if (cards.length < 1) return;
   if (container.querySelector('.auto-bayan-map')) return;
 
   var opCoords = {
@@ -72,7 +72,7 @@ export function initBayanatMap() {
   });
 
   var locs = Object.keys(locData).sort(function(a,b){ return locData[b].count - locData[a].count; });
-  if (locs.length < 2) return;
+  if (locs.length < 1) return;
 
   // Assign barColors by rank (same order as the dashboard chart)
   var locColorMap = {};
