@@ -66,12 +66,12 @@ function renderReport(data) {
 
   // Tab bar
   var tabsConfig = [
-    { id: 'bayanat', label: '\u0628\u064A\u0627\u0646\u0627\u062A \u0627\u0644\u0645\u0642\u0627\u0648\u0645\u0629', count: data.stats.b },
-    { id: 'sirens', label: '\u0635\u0641\u0627\u0631\u0627\u062A \u0627\u0644\u0625\u0646\u0630\u0627\u0631', count: data.stats.s },
-    { id: 'enemy', label: '\u0625\u0639\u0644\u0627\u0645 \u0627\u0644\u0639\u062F\u0648', count: data.stats.e },
-    { id: 'iran', label: '\u0625\u064A\u0631\u0627\u0646', count: data.stats.ir },
-    { id: 'videos', label: '\u0641\u064A\u062F\u064A\u0648\u0647\u0627\u062A', count: data.stats.v },
-    { id: 'allies', label: '\u0627\u0644\u064A\u0645\u0646 \u0648\u0627\u0644\u0639\u0631\u0627\u0642', count: data.stats.al }
+    { id: 'bayanat', label: '\u0628\u064A\u0627\u0646\u0627\u062A \u0627\u0644\u0645\u0642\u0627\u0648\u0645\u0629', count: data.stats.bayanat },
+    { id: 'sirens', label: '\u0635\u0641\u0627\u0631\u0627\u062A \u0627\u0644\u0625\u0646\u0630\u0627\u0631', count: data.stats.sirens },
+    { id: 'enemy', label: '\u0625\u0639\u0644\u0627\u0645 \u0627\u0644\u0639\u062F\u0648', count: data.stats.enemy },
+    { id: 'iran', label: '\u0625\u064A\u0631\u0627\u0646', count: data.stats.iran },
+    { id: 'videos', label: '\u0641\u064A\u062F\u064A\u0648\u0647\u0627\u062A', count: data.stats.videos },
+    { id: 'allies', label: '\u0627\u0644\u064A\u0645\u0646 \u0648\u0627\u0644\u0639\u0631\u0627\u0642', count: data.stats.allies }
   ];
 
   var tabsBar = document.createElement('div');

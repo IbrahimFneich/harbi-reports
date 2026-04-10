@@ -109,7 +109,7 @@ def main():
         else:
             # Print just the stats line
             for line in result.stdout.strip().split('\n'):
-                if 'Output:' in line or 'b:' in line:
+                if 'Output:' in line or 'bayanat:' in line:
                     print('    {}'.format(line.strip()))
 
     if not dry_run:

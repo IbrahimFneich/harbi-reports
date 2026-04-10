@@ -38,11 +38,11 @@
     <select id="listSort" onchange="renderList()">
       <option value="date">التاريخ</option>
       <option value="total">الإجمالي</option>
-      <option value="b">البيانات العسكرية</option>
-      <option value="s">صفارات الإنذار</option>
-      <option value="e">إعلام العدو</option>
-      <option value="ir">إيران</option>
-      <option value="v">الفيديوهات</option>
+      <option value="bayanat">البيانات العسكرية</option>
+      <option value="sirens">صفارات الإنذار</option>
+      <option value="enemy">إعلام العدو</option>
+      <option value="iran">إيران</option>
+      <option value="videos">الفيديوهات</option>
     </select>
     <button class="dir-btn" id="listDirBtn" onclick="toggleListDir()" title="تبديل الاتجاه">↓</button>
   </div>
@@ -316,7 +316,7 @@ function renderCalendar() {
         tipDate.textContent = d + ' ' + arabicMonths[month] + ' — ' + arabicDays[dt.getDay()];
         var tipStats = document.createElement('div');
         tipStats.className = 'tt-stats';
-        tipStats.textContent = stats.b + ' بيان \u2022 ' + stats.s + ' صفارة \u2022 ' + stats.e + ' إعلام \u2022 ' + stats.ir + ' إيران';
+        tipStats.textContent = stats.bayanat + ' بيان \u2022 ' + stats.sirens + ' صفارة \u2022 ' + stats.enemy + ' إعلام \u2022 ' + stats.iran + ' إيران';
         tip.appendChild(tipDate);
         tip.appendChild(tipStats);
         a.appendChild(tip);
@@ -392,7 +392,7 @@ function renderList() {
     var si = (typeof searchIndex !== 'undefined' && searchIndex[d]) ? searchIndex[d] : {};
     return {
       date: d,
-      b: s.b || 0, s: s.s || 0, e: s.e || 0, ir: s.ir || 0, v: s.v || 0,
+      bayanat: s.bayanat || 0, sirens: s.sirens || 0, enemy: s.enemy || 0, iran: s.iran || 0, videos: s.videos || 0,
       total: s.total || 0,
       kw: si.kw || ''
     };
@@ -453,11 +453,11 @@ function renderList() {
     var pc = document.createElement('div');
     pc.className = 'pills-col';
     var pillDefs = [
-      { k: 'b',  label: 'بيان',    v: r.b },
-      { k: 's',  label: 'صفارة',   v: r.s },
-      { k: 'e',  label: 'عدو',     v: r.e },
-      { k: 'ir', label: 'إيران',   v: r.ir },
-      { k: 'v',  label: 'فيديو',   v: r.v }
+      { k: 'bayanat', label: 'بيان',    v: r.bayanat },
+      { k: 'sirens',  label: 'صفارة',   v: r.sirens },
+      { k: 'enemy',   label: 'عدو',     v: r.enemy },
+      { k: 'iran',    label: 'إيران',   v: r.iran },
+      { k: 'videos',  label: 'فيديو',   v: r.videos }
     ];
     pillDefs.forEach(function(p) {
       if (p.v > 0) {
@@ -598,7 +598,7 @@ function gsSearch(raw) {
 
     var sd = document.createElement('div');
     sd.className = 'gs-result-stats';
-    sd.textContent = r.st.b + ' \u0628\u064A\u0627\u0646 \u2022 ' + r.st.s + ' \u0635\u0641\u0627\u0631\u0629 \u2022 ' + r.st.e + ' \u0625\u0639\u0644\u0627\u0645 \u2022 ' + r.st.ir + ' \u0625\u064A\u0631\u0627\u0646';
+    sd.textContent = r.st.bayanat + ' \u0628\u064A\u0627\u0646 \u2022 ' + r.st.sirens + ' \u0635\u0641\u0627\u0631\u0629 \u2022 ' + r.st.enemy + ' \u0625\u0639\u0644\u0627\u0645 \u2022 ' + r.st.iran + ' \u0625\u064A\u0631\u0627\u0646';
     card.appendChild(sd);
 
     if (r.m.length > 0) {

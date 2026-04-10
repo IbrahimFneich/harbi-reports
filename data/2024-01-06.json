@@ -2,14 +2,14 @@
   "date": "2024-01-06",
   "dayAr": "السبت",
   "dateAr": "٦ كانون الثاني ٢٠٢٤",
-  "hijri": "٢٤ جمادى الثانية ١٤٤٥ هـ",
+  "hijri": "",
   "stats": {
-    "b": 7,
-    "s": 13,
-    "e": 22,
-    "ir": 0,
-    "v": 1,
-    "al": 1
+    "bayanat": 7,
+    "sirens": 13,
+    "enemy": 22,
+    "iran": 0,
+    "videos": 1,
+    "allies": 1
   },
   "bayanat": [
     {

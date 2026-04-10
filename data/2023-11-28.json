@@ -2,14 +2,14 @@
   "date": "2023-11-28",
   "dayAr": "الثلاثاء",
   "dateAr": "٢٨ تشرين الثاني ٢٠٢٣",
-  "hijri": "١٤ جمادى الأولى ١٤٤٥ هـ",
+  "hijri": "",
   "stats": {
-    "b": 0,
-    "s": 0,
-    "e": 14,
-    "ir": 0,
-    "v": 1,
-    "al": 0
+    "bayanat": 0,
+    "sirens": 0,
+    "enemy": 14,
+    "iran": 0,
+    "videos": 1,
+    "allies": 0
   },
   "bayanat": [],
   "sirens": [],
