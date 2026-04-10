@@ -19,17 +19,22 @@
 
 <!-- Header -->
 <div class="a-header">
-  <a href="index.html" class="home-link">\u2190 الرئيسية</a>
+  <a href="index.html" class="home-link">&#8592; الرئيسية</a>
   <h1>مركز التحليلات <span>HARBI ANALYTICS</span></h1>
   <div class="a-status">
     <span><span class="dot"></span> <span id="statusText">جارٍ التحميل...</span></span>
   </div>
-  <button class="theme-toggle" id="themeBtn">\u2600</button>
+  <button class="theme-toggle" id="themeBtn">&#9728;</button>
 </div>
 
 <!-- Controls -->
 <div class="a-controls">
-  <div class="a-date-range">...</div>
+  <div class="a-date-range-wrap">
+    <label class="a-date-label">من</label>
+    <input type="date" id="dateFrom" class="a-date-input">
+    <label class="a-date-label">إلى</label>
+    <input type="date" id="dateTo" class="a-date-input">
+  </div>
   <div class="a-ctrl-sep"></div>
   <button class="a-ctrl on" data-cat="bayanat">بيانات</button>
   <button class="a-ctrl on" data-cat="sirens">صفارات</button>
