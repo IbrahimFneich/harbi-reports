@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.0.80",
+    "date": "2026-04-10",
+    "title": "Fix first siren card appearing above dashboard",
+    "changes": [
+      "Fix siren dashboard insertion: first card no longer renders above the dashboard",
+      "Dashboard, filters, and list title now insert before first card (after map)"
+    ]
+  },
+  {
     "version": "1.0.79",
     "date": "2026-04-10",
     "title": "Fix sirens: map dots, missing fullText for Apr 1-7",

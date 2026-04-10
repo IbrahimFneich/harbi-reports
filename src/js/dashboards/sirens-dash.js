@@ -93,12 +93,12 @@ export function initSirensDash() {
   listTitle.className = 'siren-list-title';
   listTitle.textContent = '\u0627\u0644\u0642\u0627\u0626\u0645\u0629 \u0627\u0644\u0643\u0627\u0645\u0644\u0629';
 
-  var mapEl = document.getElementById('sirenMap');
-  var ref = mapEl ? mapEl.nextSibling : (container.querySelector('.phase') || rows[0]);
-  if (ref) {
-    ref.parentNode.insertBefore(dash, ref.nextSibling || ref);
-    dash.parentNode.insertBefore(filterDiv, dash.nextSibling);
-    filterDiv.parentNode.insertBefore(listTitle, filterDiv.nextSibling);
+  // Insert dashboard + filters + list title BEFORE the first siren card (after map)
+  var firstCard = rows[0];
+  if (firstCard) {
+    container.insertBefore(listTitle, firstCard);
+    container.insertBefore(filterDiv, listTitle);
+    container.insertBefore(dash, filterDiv);
   }
 
   buildTimeline('autoSirenTimeline', hours, '#e74c3c');
