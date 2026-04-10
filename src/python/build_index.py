@@ -342,6 +342,13 @@ export function initNav() {{
 
     print('Written {} ({} dates)'.format(nav_path, len(dates_asc)))
 
+    # ── 4. Build SQLite database ──
+    build_db_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'build_db.py')
+    if os.path.exists(build_db_script):
+        import subprocess
+        print('\nBuilding SQLite database...')
+        subprocess.run([sys.executable, build_db_script], check=True)
+
     # Summary
     total_items = len(spotlight_entries)
     print('\nDone: {} reports, {} spotlight items'.format(len(dates_desc), total_items))

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مركز التحليلات — الإعلام الحربي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="src/css/enhancements.css">
+<link rel="stylesheet" href="src/css/analytics.css">
+</head>
+<body class="analytics">
+
+<!-- Loading overlay -->
+<div class="analytics-loader" id="loader">
+  <div class="spinner"></div>
+  <div class="load-text">جارٍ تحميل قاعدة البيانات...</div>
+</div>
+
+<!-- Header -->
+<div class="a-header">
+  <a href="index.html" class="home-link">← الرئيسية</a>
+  <h1>مركز التحليلات <span>HARBI ANALYTICS</span></h1>
+  <div class="a-status">
+    <span><span class="dot"></span> <span id="statusText">جارٍ التحميل...</span></span>
+  </div>
+</div>
+
+<!-- Controls -->
+<div class="a-controls">
+  <div class="a-date-range">...</div>
+  <div class="a-ctrl-sep"></div>
+  <button class="a-ctrl on" data-cat="bayanat">بيانات</button>
+  <button class="a-ctrl on" data-cat="sirens">صفارات</button>
+  <button class="a-ctrl on" data-cat="enemy">إعلام العدو</button>
+  <button class="a-ctrl on" data-cat="iran">إيران</button>
+  <button class="a-ctrl on" data-cat="videos">فيديو</button>
+  <button class="a-ctrl on" data-cat="allies">حلفاء</button>
+  <div class="a-ctrl-sep"></div>
+  <button class="a-ctrl" data-group="daily">يومي</button>
+  <button class="a-ctrl on" data-group="monthly">شهري</button>
+  <button class="a-ctrl" data-group="weekly">أسبوعي</button>
+</div>
+
+<!-- KPI Strip -->
+<div class="a-kpi-strip" id="kpiStrip"></div>
+
+<!-- Main Grid -->
+<div class="a-grid">
+  <!-- Line chart -->
+  <div class="a-panel">
+    <div class="a-panel-title">الأحداث بمرور الوقت</div>
+    <div class="a-line-chart" id="lineChart"></div>
+  </div>
+
+  <!-- Heatmap -->
+  <div class="a-panel">
+    <div class="a-panel-title">كثافة حسب الساعة</div>
+    <div id="heatmapPanel"></div>
+  </div>
+
+  <!-- Data table -->
+  <div class="a-panel">
+    <div class="a-panel-title">أكثر الأيام نشاطاً</div>
+    <div id="dataTable"></div>
+  </div>
+
+  <!-- Bar chart -->
+  <div class="a-panel">
+    <div class="a-panel-title">أكثر المواقع استهدافاً</div>
+    <div id="barChart"></div>
+  </div>
+</div>
+
+<script src="https://sql.js.org/dist/sql-wasm.js"></script>
+<script type="module" src="src/js/analytics/dashboard.js"></script>
+</body>
+</html>

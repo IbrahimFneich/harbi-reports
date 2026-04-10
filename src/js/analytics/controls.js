@@ -1,0 +1,104 @@
+/* === src/js/analytics/controls.js — Filter and grouping state === */
+
+var _state = {
+  dateStart: '',
+  dateEnd: '',
+  categories: ['bayanat', 'sirens', 'enemy', 'iran', 'videos', 'allies'],
+  grouping: 'monthly'
+};
+
+var _onChange = null;
+
+export function getState() {
+  return {
+    dateStart: _state.dateStart,
+    dateEnd: _state.dateEnd,
+    categories: _state.categories.slice(),
+    grouping: _state.grouping
+  };
+}
+
+/**
+ * Build SQL WHERE clause + params from current state.
+ * Returns {where: string, params: any[]}
+ * The WHERE includes leading "WHERE".
+ */
+export function buildWhere() {
+  var clauses = [];
+  var params = [];
+
+  if (_state.dateStart) {
+    clauses.push('date >= ?');
+    params.push(_state.dateStart);
+  }
+  if (_state.dateEnd) {
+    clauses.push('date <= ?');
+    params.push(_state.dateEnd);
+  }
+
+  if (_state.categories.length > 0 && _state.categories.length < 6) {
+    var placeholders = _state.categories.map(function() { return '?'; }).join(',');
+    clauses.push('category IN (' + placeholders + ')');
+    _state.categories.forEach(function(c) { params.push(c); });
+  }
+
+  var where = clauses.length > 0 ? 'WHERE ' + clauses.join(' AND ') : '';
+  return { where: where, params: params };
+}
+
+/**
+ * Get the strftime format for current grouping.
+ */
+export function getGroupFormat() {
+  if (_state.grouping === 'daily') return '%Y-%m-%d';
+  if (_state.grouping === 'weekly') return '%Y-W%W';
+  return '%Y-%m';
+}
+
+/**
+ * Initialize controls — bind DOM event handlers.
+ * Expects the DOM to have:
+ *   .a-ctrl[data-cat] for category toggles
+ *   .a-ctrl[data-group] for grouping buttons
+ *   .a-date-range for date display
+ */
+export function initControls(onChange, dateRange) {
+  _onChange = onChange;
+
+  _state.dateStart = dateRange.start;
+  _state.dateEnd = dateRange.end;
+
+  // Date range display
+  var dateEl = document.querySelector('.a-date-range');
+  if (dateEl) {
+    dateEl.textContent = dateRange.start + ' \u2192 ' + dateRange.end;
+  }
+
+  // Category toggles
+  var catBtns = document.querySelectorAll('.a-ctrl[data-cat]');
+  catBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var cat = btn.getAttribute('data-cat');
+      var idx = _state.categories.indexOf(cat);
+      if (idx >= 0) {
+        _state.categories.splice(idx, 1);
+        btn.classList.remove('on');
+      } else {
+        _state.categories.push(cat);
+        btn.classList.add('on');
+      }
+      if (_onChange) _onChange(getState());
+    });
+  });
+
+  // Grouping toggles
+  var grpBtns = document.querySelectorAll('.a-ctrl[data-group]');
+  grpBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      _state.grouping = btn.getAttribute('data-group');
+      grpBtns.forEach(function(b) { b.classList.remove('on'); });
+      btn.classList.add('on');
+      if (_onChange) _onChange(getState());
+    });
+  });
+}
