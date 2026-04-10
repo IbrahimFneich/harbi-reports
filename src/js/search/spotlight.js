@@ -1,5 +1,6 @@
 /* ============================================================
-   search.js — Global Spotlight Search (Ctrl+K or /)
+   spotlight.js — Global Spotlight Search (Ctrl+K or /)
+   ES module version of search.js
    Loads all data/*.json, builds a flat search index,
    searches with Arabic normalization + English aliases.
    Note: All data is locally-generated static content from
@@ -59,6 +60,7 @@ function fmtDate(d) {
 }
 
 // ── Build index from all JSON files ───────────────────────
+// ALL_REPORTS global comes from enhancements.js
 function loadSIdx(cb) {
   if (_sLoaded) { cb(); return; }
   var dates = [];
@@ -371,7 +373,7 @@ function navTo(item) {
 }
 
 // ── Open/Close ────────────────────────────────────────────
-function openSpotlight() {
+export function openSpotlight() {
   buildSO();
   _sOverlay.style.display = 'flex';
   _sInput.value = '';
@@ -380,7 +382,7 @@ function openSpotlight() {
   loadSIdx(function() { renderSR(''); _sInput.focus(); });
 }
 
-function closeSL() {
+export function closeSL() {
   if (_sOverlay) _sOverlay.style.display = 'none';
 }
 
@@ -393,5 +395,6 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
+// Attach to window for non-module consumers
 window.openSpotlight = openSpotlight;
 window.closeSL = closeSL;

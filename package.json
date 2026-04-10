@@ -1,0 +1,18 @@
+{
+  "name": "harbi-reports",
+  "version": "1.0.72",
+  "private": true,
+  "description": "Daily military news reports from Telegram",
+  "scripts": {
+    "lint": "eslint src/js/",
+    "lint:fix": "eslint src/js/ --fix",
+    "format": "prettier --write 'src/**/*.{js,css}'",
+    "format:check": "prettier --check 'src/**/*.{js,css}'",
+    "lint:py": "ruff check src/python/",
+    "lint:py:fix": "ruff check src/python/ --fix"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.0"
+  }
+}
