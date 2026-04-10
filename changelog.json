@@ -1,5 +1,17 @@
 [
   {
+    "version": "1.0.89",
+    "date": "2026-04-10",
+    "title": "Add 732 reports: Feb 2024 - Jan 2026",
+    "changes": [
+      "Add 213 reports for Feb-Aug 2024 (Lebanon border front: 1,609 bayanat, 1,617 sirens)",
+      "Add 153 reports for Sep 2024-Jan 2025 (ground war peak: Oct 929 sirens, Nov ceasefire)",
+      "Add 366 reports for Feb 2025-Jan 2026 (ceasefire period, Jun 2025 Iran escalation)",
+      "Archive now spans 890 reports from Oct 7, 2023 to Apr 10, 2026",
+      "Add batch_split.py utility for efficient multi-day report generation"
+    ]
+  },
+  {
     "version": "1.0.88",
     "date": "2026-04-10",
     "title": "Performance: pre-built search index + externalized data",
