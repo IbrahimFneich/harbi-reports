@@ -297,6 +297,44 @@ export function formatDateAr(dateStr) {{
   var m = parseInt(p[1]);
   return d + ' ' + (arabicMonthNames[m] || '');
 }}
+
+export function initNav() {{
+  var current = getCurrentReportDate();
+  if (!current) return;
+  var idx = ALL_REPORTS.indexOf(current);
+  if (idx === -1) return;
+
+  var header = document.querySelector('.header');
+  if (!header) return;
+
+  var nav = document.createElement('div');
+  nav.className = 'day-nav';
+
+  // Next (newer) — appears on the right in RTL
+  var nextDate = idx < ALL_REPORTS.length - 1 ? ALL_REPORTS[idx + 1] : null;
+  var nextBtn = document.createElement('a');
+  nextBtn.className = 'day-nav-btn' + (nextDate ? '' : ' disabled');
+  nextBtn.textContent = '\\u2192 ' + (nextDate ? formatDateAr(nextDate) : '');
+  if (nextDate) nextBtn.href = reportUrl(nextDate);
+  nav.appendChild(nextBtn);
+
+  // Current date label
+  var cur = document.createElement('span');
+  cur.className = 'day-nav-current';
+  cur.textContent = (idx + 1) + ' / ' + ALL_REPORTS.length;
+  nav.appendChild(cur);
+
+  // Previous (older) — appears on the left in RTL
+  var prevDate = idx > 0 ? ALL_REPORTS[idx - 1] : null;
+  var prevBtn = document.createElement('a');
+  prevBtn.className = 'day-nav-btn' + (prevDate ? '' : ' disabled');
+  prevBtn.textContent = (prevDate ? formatDateAr(prevDate) : '') + ' \\u2190';
+  if (prevDate) prevBtn.href = reportUrl(prevDate);
+  nav.appendChild(prevBtn);
+
+  // Insert after header
+  header.parentNode.insertBefore(nav, header.nextSibling);
+}}
 """.format(all_reports=all_reports_str)
 
     with open(nav_path, 'w', encoding='utf-8') as f:

@@ -19,13 +19,18 @@ window.filterSirensAuto = filterSirensAuto;
 window.filterEnemyAuto = filterEnemyAuto;
 window.filterIranAuto = filterIranAuto;
 
-// Run everything in order
-initHero();
-initNav();
-initTheme();
-initBayanatDash();
-initSirensDash();
-initEnemyDash();
-initIranDash();
-initBayanatMap();
-initAutoSirenMap();
+// Run everything in order — each wrapped so one failure doesn't kill the rest
+var _inits = [
+  ['hero', initHero],
+  ['nav', initNav],
+  ['theme', initTheme],
+  ['bayanatDash', initBayanatDash],
+  ['sirensDash', initSirensDash],
+  ['enemyDash', initEnemyDash],
+  ['iranDash', initIranDash],
+  ['bayanatMap', initBayanatMap],
+  ['sirenMap', initAutoSirenMap]
+];
+for (var _i = 0; _i < _inits.length; _i++) {
+  try { _inits[_i][1](); } catch (e) { console.warn('[enhancements] ' + _inits[_i][0] + ' failed:', e); }
+}
