@@ -1,5 +1,13 @@
 [
   {
+    "version": "2.0.6",
+    "date": "2026-04-12",
+    "title": "Add barija/warship/battleship/ship/naval aliases",
+    "changes": [
+      "Add barija, warship, battleship, ship, naval to alias dictionary"
+    ]
+  },
+  {
     "version": "2.0.5",
     "date": "2026-04-11",
     "title": "Heatmap labels aligned in fullscreen + rich tooltip",
