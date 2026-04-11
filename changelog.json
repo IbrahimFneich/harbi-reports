@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.8.7",
+    "date": "2026-04-11",
+    "title": "Update report for Apr 10 — full day (155 messages)",
+    "changes": [
+      "Re-fetch Apr 10 with full day coverage (was mid-day only)",
+      "62 bayanat, 38 sirens, 21 enemy media, 2 Iran, 4 videos"
+    ]
+  },
+  {
     "version": "1.8.6",
     "date": "2026-04-11 23:45",
     "title": "Clean up .gitignore — ignore generated artifacts",

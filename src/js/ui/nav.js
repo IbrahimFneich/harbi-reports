@@ -52,7 +52,7 @@ export function initNav() {
   // Current date label
   var cur = document.createElement('span');
   cur.className = 'day-nav-current';
-  cur.textContent = ALL_REPORTS.length + ' / ' + (idx + 1);
+  cur.textContent = (idx + 1) + ' / ' + ALL_REPORTS.length;
   nav.appendChild(cur);
 
   // Previous (older) — appears on the left in RTL
