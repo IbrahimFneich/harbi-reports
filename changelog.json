@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.0.1",
+    "date": "2026-04-11",
+    "title": "Spotlight polish — suggestions, date format, filter pills",
+    "changes": [
+      "Replace search history with shuffled suggestions (8 random from 28 curated entries)",
+      "Detail pane date now shows Arabic month name + small DD/MM/YYYY hint",
+      "Fix spotlight stuck on loading — debounce now awaits DB ready",
+      "Polished filter pills with elevated background and count badges",
+      "Trailer version tag updated to match"
+    ]
+  },
+  {
     "version": "2.0.0",
     "date": "2026-04-11",
     "title": "Smart Spotlight Search — complete rewrite with split-pane UI",
