@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.0.95",
+    "date": "2026-04-11",
+    "title": "Fix datepicker trigger showing Arabic format instead of dd/mm/yyyy",
+    "changes": [
+      "Restore dd/mm/yyyy numeric format after datepicker init overwrites trigger text",
+      "Datepicker trigger now consistently shows numeric date format"
+    ]
+  },
+  {
     "version": "1.0.94",
     "date": "2026-04-11",
     "title": "Add datepicker to report header for quick date navigation",

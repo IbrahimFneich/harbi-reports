@@ -70,6 +70,7 @@ function renderReport(data) {
 
   // Init datepicker after DOM is ready
   setTimeout(function() {
+    var numericText = dp[2] + '/' + dp[1] + '/' + dp[0];
     createDatePicker({
       triggerId: 'reportDatePicker',
       value: data.date,
@@ -79,6 +80,8 @@ function renderReport(data) {
         window.location.href = 'report.html?date=' + newDate;
       }
     });
+    // Restore dd/mm/yyyy format (createDatePicker sets Arabic format)
+    dpTrigger.textContent = numericText;
   }, 0);
 
   // Tab bar
