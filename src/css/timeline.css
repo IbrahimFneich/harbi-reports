@@ -87,11 +87,6 @@
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   transition: background 0.4s, box-shadow 0.3s;
-  opacity: 0; transform: translateY(-20px);
-}
-.pn-wrap.vis {
-  opacity: 1; transform: translateY(0);
-  transition: opacity 0.5s, transform 0.5s, background 0.4s;
 }
 .pn-wrap.scrolled {
   box-shadow: 0 4px 20px rgba(0,0,0,0.25);
