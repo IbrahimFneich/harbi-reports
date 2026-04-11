@@ -85,6 +85,9 @@ body.analytics {
 .a-date-label {
   font-size: 0.56rem; color: var(--text-dim); font-weight: 700;
 }
+.a-date-arrow {
+  font-size: 0.7rem; color: var(--text-muted); opacity: 0.5; direction: ltr;
+}
 .a-date-trigger {
   font-family: 'Noto Kufi Arabic', sans-serif;
   font-size: 0.62rem; font-weight: 600;

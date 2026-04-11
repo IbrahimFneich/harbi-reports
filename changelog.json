@@ -1,5 +1,14 @@
 [
   {
+    "version": "2.0.4",
+    "date": "2026-04-11",
+    "title": "Analytics heatmap full day names + date range arrow layout",
+    "changes": [
+      "Heatmap day labels: full Arabic names (الأحد, الإثنين, ...) with fixed-width alignment",
+      "Date range: replaced من/إلى labels with fromDate → toDate arrow layout"
+    ]
+  },
+  {
     "version": "2.0.3",
     "date": "2026-04-11",
     "title": "Fix analytics default to daily granularity",

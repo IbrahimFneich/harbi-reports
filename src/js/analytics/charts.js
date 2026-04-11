@@ -21,7 +21,7 @@ function svgText(x, y, text, attrs) {
   return el;
 }
 
-var DAY_NAMES = ['\u0623\u062D\u062F', '\u0625\u062B\u0646', '\u062B\u0644\u0627', '\u0623\u0631\u0628', '\u062E\u0645\u064A', '\u062C\u0645\u0639', '\u0633\u0628\u062A'];
+var DAY_NAMES = ['\u0627\u0644\u0623\u062D\u062F', '\u0627\u0644\u0625\u062B\u0646\u064A\u0646', '\u0627\u0644\u062B\u0644\u0627\u062B\u0627\u0621', '\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621', '\u0627\u0644\u062E\u0645\u064A\u0633', '\u0627\u0644\u062C\u0645\u0639\u0629', '\u0627\u0644\u0633\u0628\u062A'];
 
 /* ═══════════ FULLSCREEN UTILITY ═══════════ */
 
@@ -299,7 +299,7 @@ export function renderHeatmap(containerId, data) {
   dayCol.style.cssText = 'display:flex;flex-direction:column;gap:2px;justify-content:center';
   for (var di = 0; di < 7; di++) {
     var dayLabel = document.createElement('div');
-    dayLabel.style.cssText = 'font-size:0.44rem;color:var(--text-muted);text-align:right;display:flex;align-items:center;min-height:14px;white-space:nowrap';
+    dayLabel.style.cssText = 'font-size:0.44rem;color:var(--text-muted);text-align:right;display:flex;align-items:center;justify-content:flex-end;min-height:14px;white-space:nowrap;width:42px';
     dayLabel.textContent = DAY_NAMES[di];
     dayCol.appendChild(dayLabel);
   }
