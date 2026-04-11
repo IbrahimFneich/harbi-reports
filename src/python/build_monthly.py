@@ -234,9 +234,11 @@ def tp_label_ar(index):
     return labels[index] if index < len(labels) else f'رقم {index + 1}'
 
 
-def generate_month_picker(all_months, current_ym):
-    """Generate a month picker grid grouped by year."""
+def generate_month_picker(all_months, current_ym, month_stats=None):
+    """Generate a month picker grid grouped by year with hover tooltips."""
     from collections import OrderedDict
+    if month_stats is None:
+        month_stats = {}
     years = OrderedDict()
     for ym in all_months:
         y = ym[:4]
@@ -252,14 +254,19 @@ def generate_month_picker(all_months, current_ym):
             m_ar = ARABIC_MONTHS[m_num]
             if ym_key in yms:
                 cls = 'mc-picker-btn current' if ym_key == current_ym else 'mc-picker-btn'
-                html += f'<a class="{cls}" href="{ym_key}.html">{m_ar}</a>\n'
+                st = month_stats.get(ym_key, {})
+                days_count = st.get('days', 0)
+                b = st.get('bayanat', 0)
+                s = st.get('sirens', 0)
+                tooltip = f'{b} بيان · {s} صفارة'
+                html += f'<a class="{cls}" href="{ym_key}.html" data-tip="{tooltip}">{m_ar}<span class="mc-picker-sub">{ym_key}</span></a>\n'
             else:
                 html += f'<span class="mc-picker-btn disabled">{m_ar}</span>\n'
         html += '</div>\n'
     return html
 
 
-def render_page(year, month, days, totals, turning_points, prev_month, next_month, prev_totals=None, prev_num_days=0, all_months=None):
+def render_page(year, month, days, totals, turning_points, prev_month, next_month, prev_totals=None, prev_num_days=0, all_months=None, month_stats=None):
     month_ar = ARABIC_MONTHS[month]
     month_en = ENGLISH_MONTHS[month]
     war_month = month_number(year, month)
@@ -270,7 +277,7 @@ def render_page(year, month, days, totals, turning_points, prev_month, next_mont
 
     # Month picker
     current_ym = f'{year}-{month:02d}'
-    picker_html = generate_month_picker(all_months or [], current_ym)
+    picker_html = generate_month_picker(all_months or [], current_ym, month_stats)
 
     # Build turning point HTML blocks
     tp_blocks = []
@@ -409,8 +416,8 @@ def render_page(year, month, days, totals, turning_points, prev_month, next_mont
 {nav_html}
 
 <div class="mc-picker mc-rv">
-  <button class="mc-picker-toggle" onclick="var g=document.getElementById('mcPickerGrid');g.classList.toggle('open');this.textContent=g.classList.contains('open')?'\u0625\u062e\u0641\u0627\u0621':'\u0627\u0644\u0627\u0646\u062a\u0642\u0627\u0644 \u0625\u0644\u0649 \u0634\u0647\u0631 \u0622\u062e\u0631';">\u0627\u0644\u0627\u0646\u062a\u0642\u0627\u0644 \u0625\u0644\u0649 \u0634\u0647\u0631 \u0622\u062e\u0631</button>
-  <div class="mc-picker-grid" id="mcPickerGrid">
+  <button class="mc-picker-toggle" onclick="var g=document.getElementById('mcPickerGrid');g.classList.toggle('open');this.textContent=g.classList.contains('open')?'\u0625\u062e\u0641\u0627\u0621':'\u0627\u0644\u0627\u0646\u062a\u0642\u0627\u0644 \u0625\u0644\u0649 \u0634\u0647\u0631 \u0622\u062e\u0631';">\u0625\u062e\u0641\u0627\u0621</button>
+  <div class="mc-picker-grid open" id="mcPickerGrid">
     {picker_html}
   </div>
 </div>
@@ -445,20 +452,31 @@ def main():
     all_months = sorted(months.keys())
     print(f'Found {len(all_months)} months to process')
 
-    prev_totals = None
-    prev_num_days = 0
-
+    # First pass: collect stats for picker tooltips
+    month_data_cache = {}
+    month_stats = {}
     for ym in all_months:
         year, month = int(ym[:4]), int(ym[5:])
         days = load_month_data(year, month)
         if not days:
             continue
-
         totals = aggregate_stats(days)
+        month_data_cache[ym] = (days, totals)
+        month_stats[ym] = {'days': len(days), **totals}
+
+    # Second pass: generate pages
+    prev_totals = None
+    prev_num_days = 0
+
+    for ym in all_months:
+        if ym not in month_data_cache:
+            continue
+        year, month = int(ym[:4]), int(ym[5:])
+        days, totals = month_data_cache[ym]
         turning_points = detect_turning_points(days, max_points=4)
         prev_month, next_month = get_adjacent_months(year, month, all_months)
 
-        html = render_page(year, month, days, totals, turning_points, prev_month, next_month, prev_totals, prev_num_days, all_months)
+        html = render_page(year, month, days, totals, turning_points, prev_month, next_month, prev_totals, prev_num_days, all_months, month_stats)
 
         prev_totals = totals
         prev_num_days = len(days)

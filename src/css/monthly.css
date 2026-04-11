@@ -300,6 +300,24 @@ body.light .mc-ribbon { background: rgba(201,168,76,0.06); }
 .mc-picker-btn.disabled {
   opacity: 0.2; pointer-events: none;
 }
+.mc-picker-sub {
+  display: block; font-size: 9px; color: var(--text-muted);
+  margin-top: 2px; direction: ltr;
+}
+/* Styled tooltip */
+a.mc-picker-btn { position: relative; }
+a.mc-picker-btn::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%); white-space: nowrap;
+  background: var(--surface2); color: var(--text);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 6px 12px; font-size: 11px; font-weight: 600;
+  pointer-events: none; opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 10; direction: rtl;
+}
+a.mc-picker-btn:hover::after { opacity: 1; }
 @media (max-width: 600px) {
   .mc-picker-months { grid-template-columns: repeat(3, 1fr); }
   .mc-picker-btn:nth-child(4n) { border-left: 1px solid var(--border); }
