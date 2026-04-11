@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.8.9",
+    "date": "2026-04-11",
+    "title": "Analytics defaults to current month",
+    "changes": [
+      "Default date range is now current month instead of entire dataset",
+      "Date pickers still allow navigating the full range"
+    ]
+  },
+  {
     "version": "1.8.8",
     "date": "2026-04-11",
     "title": "Full data consistency sweep — fix 918 days",

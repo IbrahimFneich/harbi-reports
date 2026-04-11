@@ -61,6 +61,10 @@ export function getGroupFormat() {
 export function initControls(onChange, dateRange) {
   _onChange = onChange;
 
+  // start/end = initial selection; min/max = picker navigation bounds
+  var pickerMin = dateRange.min || dateRange.start;
+  var pickerMax = dateRange.max || dateRange.end;
+
   _state.dateStart = dateRange.start;
   _state.dateEnd = dateRange.end;
 
@@ -68,8 +72,8 @@ export function initControls(onChange, dateRange) {
   createDatePicker({
     triggerId: 'dateFrom',
     value: dateRange.start,
-    min: dateRange.start,
-    max: dateRange.end,
+    min: pickerMin,
+    max: pickerMax,
     onChange: function(val) {
       _state.dateStart = val;
       if (_onChange) _onChange(getState());
@@ -79,8 +83,8 @@ export function initControls(onChange, dateRange) {
   createDatePicker({
     triggerId: 'dateTo',
     value: dateRange.end,
-    min: dateRange.start,
-    max: dateRange.end,
+    min: pickerMin,
+    max: pickerMax,
     onChange: function(val) {
       _state.dateEnd = val;
       if (_onChange) _onChange(getState());

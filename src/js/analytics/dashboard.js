@@ -183,9 +183,21 @@ onReady(function() {
     var minDate = queryOne('SELECT MIN(date) FROM reports', []);
     var maxDate = queryOne('SELECT MAX(date) FROM reports', []);
 
+    // Default view: current month only (not the entire dataset)
+    var now = new Date();
+    var yy = now.getFullYear();
+    var mm = String(now.getMonth() + 1).padStart(2, '0');
+    var monthStart = yy + '-' + mm + '-01';
+    var monthEnd = yy + '-' + mm + '-' + String(new Date(yy, now.getMonth() + 1, 0).getDate()).padStart(2, '0');
+    // Clamp to available data range
+    var defaultStart = monthStart < (minDate || monthStart) ? minDate : monthStart;
+    var defaultEnd = monthEnd > (maxDate || monthEnd) ? maxDate : monthEnd;
+
     initControls(function() { refresh(); }, {
-      start: minDate || '2023-10-07',
-      end: maxDate || '2026-04-10'
+      min: minDate || '2023-10-07',
+      max: maxDate || '2026-04-10',
+      start: defaultStart,
+      end: defaultEnd
     });
 
     if (loader) loader.style.display = 'none';
