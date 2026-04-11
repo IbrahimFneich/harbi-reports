@@ -108,10 +108,10 @@ body.light .pn-wrap.scrolled {
 }
 .pn-track::-webkit-scrollbar { display: none; }
 .pn-item {
-  flex-shrink: 0; padding: 14px 20px;
+  flex-shrink: 0; padding: 14px 20px 10px;
   cursor: pointer; text-align: center;
   min-width: 120px; text-decoration: none;
-  color: inherit;
+  color: inherit; position: relative;
   border-bottom: 3px solid transparent;
   transition: all 0.3s;
 }
@@ -127,6 +127,18 @@ body.light .pn-wrap.scrolled {
   color: var(--text-dim); white-space: nowrap;
 }
 .pn-item.active .pn-label { color: var(--text); }
+.pn-item.done .pn-label { color: var(--text-dim); }
+.pn-item.done .pn-num { color: var(--text-dim); }
+
+/* Progress fill bar under each nav item */
+.pn-fill {
+  position: absolute;
+  bottom: 0; right: 0;
+  height: 3px; width: 0%;
+  border-radius: 0 0 2px 2px;
+  transition: width 0.15s linear;
+}
+.pn-item.done .pn-fill { width: 100% !important; opacity: 0.5; }
 
 /* ── Chapters Container ── */
 .tl-chapters {

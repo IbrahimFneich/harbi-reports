@@ -5,10 +5,6 @@
 
   /* ── Scroll Progress Bar ── */
   var progressBar = document.querySelector('.tl-progress');
-  window.addEventListener('scroll', function () {
-    var h = document.documentElement.scrollHeight - window.innerHeight;
-    if (h > 0) progressBar.style.width = (window.scrollY / h * 100) + '%';
-  });
 
   /* ── Scroll Reveal (IntersectionObserver) ── */
   var revealEls = document.querySelectorAll('.rv, .rv-r, .rv-l, .rv-scale');
@@ -35,29 +31,8 @@
     navShowObs.observe(hero);
   }
 
-  /* ── Phase Navigator: highlight active chapter on scroll ── */
-  var chapters = document.querySelectorAll('.tl-ch');
-  var navItems = document.querySelectorAll('.pn-item');
-  var colors = [
-    'var(--accent)', 'var(--red)', 'var(--orange)',
-    'var(--purple)', 'var(--green)', 'var(--blue)'
-  ];
-
-  var chapterObs = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) {
-        var id = e.target.id;
-        navItems.forEach(function (item, i) {
-          var isActive = item.getAttribute('href') === '#' + id;
-          item.classList.toggle('active', isActive);
-          item.style.borderBottomColor = isActive ? colors[i] : 'transparent';
-        });
-      }
-    });
-  }, { threshold: 0.3, rootMargin: '-80px 0px -50% 0px' });
-  chapters.forEach(function (ch) { chapterObs.observe(ch); });
-
   /* ── Phase Navigator: smooth scroll on click ── */
+  var navItems = document.querySelectorAll('.pn-item');
   navItems.forEach(function (item) {
     item.addEventListener('click', function (e) {
       e.preventDefault();
@@ -66,8 +41,87 @@
     });
   });
 
-  /* ── Phase Navigator: shadow on scroll ── */
+  /* ── Phase Navigator: scroll tracking with per-chapter progress ── */
+  var chapters = document.querySelectorAll('.tl-ch');
+  var fills = document.querySelectorAll('.pn-fill');
+  var ticking = false;
+
+  function updateNavProgress() {
+    var scrollY = window.scrollY;
+    var winH = window.innerHeight;
+    var docH = document.documentElement.scrollHeight;
+    var activeIdx = -1;
+
+    // Update global progress bar
+    var totalProgress = docH - winH;
+    if (totalProgress > 0) progressBar.style.width = (scrollY / totalProgress * 100) + '%';
+
+    // Shadow
+    if (phaseNav) phaseNav.classList.toggle('scrolled', scrollY > 100);
+
+    // Calculate per-chapter progress
+    chapters.forEach(function (ch, i) {
+      var rect = ch.getBoundingClientRect();
+      var chTop = rect.top;
+      var chH = rect.height;
+
+      // How far through this chapter (0 to 1)
+      // Chapter starts being "entered" when its top reaches 80% of viewport
+      // Chapter is "done" when its bottom passes 30% of viewport
+      var enterLine = winH * 0.8;
+      var exitLine = winH * 0.3;
+
+      var progress = 0;
+      if (chTop < enterLine && chTop + chH > exitLine) {
+        // Currently in this chapter
+        progress = Math.min(1, Math.max(0, (enterLine - chTop) / chH));
+        activeIdx = i;
+      } else if (chTop + chH <= exitLine) {
+        // Past this chapter
+        progress = 1;
+      }
+
+      // Update fill bar width
+      if (fills[i]) fills[i].style.width = (progress * 100) + '%';
+
+      // Mark done chapters
+      navItems[i].classList.toggle('done', progress >= 1 && activeIdx !== i);
+    });
+
+    // Highlight active nav item
+    navItems.forEach(function (item, i) {
+      var isActive = i === activeIdx;
+      item.classList.toggle('active', isActive);
+
+      if (isActive) {
+        item.style.borderBottomColor = 'transparent'; // fill bar handles color
+      } else if (!item.classList.contains('done')) {
+        item.style.borderBottomColor = 'transparent';
+      }
+    });
+
+    // Auto-scroll nav to keep active item visible
+    if (activeIdx >= 0 && navItems[activeIdx]) {
+      var track = document.querySelector('.pn-track');
+      var activeItem = navItems[activeIdx];
+      var trackRect = track.getBoundingClientRect();
+      var itemRect = activeItem.getBoundingClientRect();
+
+      if (itemRect.right > trackRect.right - 20 || itemRect.left < trackRect.left + 20) {
+        activeItem.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+    }
+
+    ticking = false;
+  }
+
   window.addEventListener('scroll', function () {
-    if (phaseNav) phaseNav.classList.toggle('scrolled', window.scrollY > 100);
+    if (!ticking) {
+      requestAnimationFrame(updateNavProgress);
+      ticking = true;
+    }
   });
+
+  // Initial call
+  updateNavProgress();
 })();
