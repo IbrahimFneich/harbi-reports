@@ -1,5 +1,16 @@
 [
   {
+    "version": "1.9.3",
+    "date": "2026-04-11",
+    "title": "Fix phase nav visibility — proper z-index and offset",
+    "changes": [
+      "Phase nav z-index raised to 199 (just below main navbar at 200)",
+      "Top offset corrected to 58px (navbar 56px + 2px border)",
+      "Gold accent bottom border for clear visual separation",
+      "Stronger shadow for depth"
+    ]
+  },
+  {
     "version": "1.9.2",
     "date": "2026-04-11",
     "title": "Timeline phase nav — prominent sticky bar with scroll tracking",
