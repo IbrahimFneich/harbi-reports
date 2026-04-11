@@ -576,7 +576,16 @@ function renderDetail(item) {
     dateEl.appendChild(timeNode);
     dateEl.appendChild(document.createTextNode(' \u2022 '));
   }
-  dateEl.appendChild(document.createTextNode(fmtDate(item.date)));
+  // Arabic date: "10 نيسان"
+  var dp = item.date.split('-');
+  var dayNum = parseInt(dp[2], 10);
+  var monthName = MONTH_NAMES[parseInt(dp[1], 10)] || '';
+  dateEl.appendChild(document.createTextNode(dayNum + ' ' + monthName));
+  // Small styled ISO date: "10/04/2026"
+  var isoHint = document.createElement('span');
+  isoHint.style.cssText = 'font-size:9px;opacity:0.5;margin-right:6px;margin-left:6px';
+  isoHint.textContent = dp[2] + '/' + dp[1] + '/' + dp[0];
+  dateEl.appendChild(isoHint);
   badgeRow.appendChild(dateEl);
 
   _detailPane.appendChild(badgeRow);
