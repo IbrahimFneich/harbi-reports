@@ -1,5 +1,16 @@
 [
   {
+    "version": "1.9.2",
+    "date": "2026-04-11",
+    "title": "Timeline phase nav — prominent sticky bar with scroll tracking",
+    "changes": [
+      "Phase nav background changed to surface color with shadow + border",
+      "Larger padding and font sizes for better visibility",
+      "Active item highlighted with bold text and surface2 background",
+      "Glowing progress fill bars track scroll position per chapter"
+    ]
+  },
+  {
     "version": "1.9.1",
     "date": "2026-04-11",
     "title": "Fix timeline phase nav — visible scroll-tracking progress bars",
