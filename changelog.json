@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.97",
+    "date": "2026-04-11",
+    "title": "Clean up report header: remove title, fix badges, compact search",
+    "changes": [
+      "Remove redundant h1 headline from report header",
+      "Fix tab badge counts using correct JSON stat keys (b/s/e/ir/v/al)",
+      "Move search bar into tabs row as a compact inline input"
+    ]
+  },
+  {
     "version": "1.0.96",
     "date": "2026-04-11",
     "title": "Fix datepicker trigger not clickable due to header overlay",

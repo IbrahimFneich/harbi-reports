@@ -31,16 +31,6 @@ function renderReport(data) {
   var header = document.createElement('div');
   header.className = 'header';
 
-  var h1 = document.createElement('h1');
-  var h1Link = document.createElement('a');
-  h1Link.href = 'index.html';
-  h1Link.textContent = '\u0627\u0644\u0625\u0639\u0644\u0627\u0645 \u0627\u0644\u062D\u0631\u0628\u064A \u2014 \u0627\u0644\u062A\u063A\u0637\u064A\u0629 \u0627\u0644\u0625\u062E\u0628\u0627\u0631\u064A\u0629';
-  h1Link.style.color = 'inherit';
-  h1Link.style.textDecoration = 'none';
-  h1Link.style.cursor = 'pointer';
-  h1.appendChild(h1Link);
-  header.appendChild(h1);
-
   // Compute day name from date (don't trust JSON — may have inherited wrong values)
   var _dayNames = {0:'\u0627\u0644\u0623\u062D\u062F',1:'\u0627\u0644\u0625\u062B\u0646\u064A\u0646',2:'\u0627\u0644\u062B\u0644\u0627\u062B\u0627\u0621',3:'\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621',4:'\u0627\u0644\u062E\u0645\u064A\u0633',5:'\u0627\u0644\u062C\u0645\u0639\u0629',6:'\u0627\u0644\u0633\u0628\u062A'};
   var _dp = data.date.split('-');
@@ -86,12 +76,12 @@ function renderReport(data) {
 
   // Tab bar
   var tabsConfig = [
-    { id: 'bayanat', label: '\u0628\u064A\u0627\u0646\u0627\u062A \u0627\u0644\u0645\u0642\u0627\u0648\u0645\u0629', count: data.stats.bayanat },
-    { id: 'sirens', label: '\u0635\u0641\u0627\u0631\u0627\u062A \u0627\u0644\u0625\u0646\u0630\u0627\u0631', count: data.stats.sirens },
-    { id: 'enemy', label: '\u0625\u0639\u0644\u0627\u0645 \u0627\u0644\u0639\u062F\u0648', count: data.stats.enemy },
-    { id: 'iran', label: '\u0625\u064A\u0631\u0627\u0646', count: data.stats.iran },
-    { id: 'videos', label: '\u0641\u064A\u062F\u064A\u0648\u0647\u0627\u062A', count: data.stats.videos },
-    { id: 'allies', label: '\u0627\u0644\u064A\u0645\u0646 \u0648\u0627\u0644\u0639\u0631\u0627\u0642', count: data.stats.allies }
+    { id: 'bayanat', label: '\u0628\u064A\u0627\u0646\u0627\u062A \u0627\u0644\u0645\u0642\u0627\u0648\u0645\u0629', count: data.stats.b },
+    { id: 'sirens', label: '\u0635\u0641\u0627\u0631\u0627\u062A \u0627\u0644\u0625\u0646\u0630\u0627\u0631', count: data.stats.s },
+    { id: 'enemy', label: '\u0625\u0639\u0644\u0627\u0645 \u0627\u0644\u0639\u062F\u0648', count: data.stats.e },
+    { id: 'iran', label: '\u0625\u064A\u0631\u0627\u0646', count: data.stats.ir },
+    { id: 'videos', label: '\u0641\u064A\u062F\u064A\u0648\u0647\u0627\u062A', count: data.stats.v },
+    { id: 'allies', label: '\u0627\u0644\u064A\u0645\u0646 \u0648\u0627\u0644\u0639\u0631\u0627\u0642', count: data.stats.al }
   ];
 
   var tabsBar = document.createElement('div');
@@ -108,32 +98,33 @@ function renderReport(data) {
     tab.appendChild(badge);
     tabsBar.appendChild(tab);
   }
-  root.appendChild(tabsBar);
 
-  // Search bar
-  var searchBar = document.createElement('div');
-  searchBar.className = 'search-bar';
+  // Compact search inside tabs bar
+  var searchWrap = document.createElement('div');
+  searchWrap.className = 'tab-search-wrap';
 
   var searchInput = document.createElement('input');
   searchInput.type = 'text';
   searchInput.id = 'searchInput';
-  searchInput.placeholder = '\u0628\u062D\u062B... (\u0645\u062B\u0644\u0627\u064B: \u0645\u064A\u0631\u0643\u0627\u0641\u0627\u060C \u0643\u0631\u064A\u0627\u062A \u0634\u0645\u0648\u0646\u0629\u060C \u0645\u0633\u064A\u0651\u0631\u0629\u060C \u062A\u0644 \u0623\u0628\u064A\u0628)';
+  searchInput.className = 'tab-search-input';
+  searchInput.placeholder = '\u0628\u062D\u062B...';
   searchInput.setAttribute('autocomplete', 'off');
-  searchBar.appendChild(searchInput);
+  searchWrap.appendChild(searchInput);
 
   var searchStats = document.createElement('div');
   searchStats.className = 'search-stats';
   searchStats.id = 'searchStats';
-  searchBar.appendChild(searchStats);
+  searchWrap.appendChild(searchStats);
 
   var clearBtn = document.createElement('button');
   clearBtn.className = 'search-clear';
   clearBtn.id = 'searchClear';
-  clearBtn.textContent = '\u0645\u0633\u062D';
+  clearBtn.textContent = '\u00d7';
   clearBtn.onclick = function() { clearSearch(); };
-  searchBar.appendChild(clearBtn);
+  searchWrap.appendChild(clearBtn);
 
-  root.appendChild(searchBar);
+  tabsBar.appendChild(searchWrap);
+  root.appendChild(tabsBar);
 
   // Tab content divs
   var tabIds = ['bayanat', 'sirens', 'enemy', 'iran', 'videos', 'allies'];
@@ -162,7 +153,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v1.7.9';
+  ver.textContent = 'Harbi Reports v1.8.0';
   ver.onclick = function() { showChangelog(); };
   footer.appendChild(ver);
   root.appendChild(footer);
