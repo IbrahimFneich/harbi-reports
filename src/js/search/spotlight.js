@@ -88,11 +88,14 @@ function fmtDate(d) {
 
 // ── Backend loading ───────────────────────────────────────
 function loadBackend() {
-  if (_backendPromise) return _backendPromise;
-  _backendPromise = initDB().then(function() {
+  if (_backendPromise) { console.log('[spotlight] loadBackend: returning cached promise, _dbReady=', _dbReady); return _backendPromise; }
+  console.log('[spotlight] loadBackend: starting initDB...');
+  _backendPromise = initDB().then(function(db) {
     _dbReady = true;
+    console.log('[spotlight] DB loaded successfully, _dbReady=true, db=', !!db);
   }).catch(function(err) {
-    console.error('[spotlight] DB init failed:', err);
+    console.error('[spotlight] DB init FAILED:', err);
+    _dbReady = false;
   });
   return _backendPromise;
 }
@@ -157,7 +160,8 @@ function doSearch(rawQuery) {
 }
 
 function queryDB(words, dateFilter) {
-  if (!_dbReady) return [];
+  console.log('[spotlight] queryDB called, _dbReady=', _dbReady, 'words=', words);
+  if (!_dbReady) { console.warn('[spotlight] queryDB: DB not ready, returning empty'); return []; }
 
   var srcIdxExpr = '(SELECT COUNT(*) FROM events e2 WHERE e2.date = e.date AND e2.category = e.category AND e2.id < e.id)';
   var selectCols = 'e.id, e.category as cat, e.date, e.time, e.op_time, e.title, e.subtitle, e.badge, e.tags, e.location, e.full_text, e.lat, e.lng, ' + srcIdxExpr + ' as src_idx';
@@ -1054,11 +1058,14 @@ function bindEvents() {
       }
 
       // Wait for DB to be ready before searching
+      console.log('[spotlight] debounce fired, query="' + q + '", _dbReady=', _dbReady);
       loadBackend().then(function() {
+        console.log('[spotlight] loadBackend resolved, _dbReady=', _dbReady);
         var bl = document.getElementById('slBackendLabel');
         if (bl) bl.textContent = _dbReady ? 'SQLite FTS5' : '\u0641\u0634\u0644 \u0627\u0644\u062A\u062D\u0645\u064A\u0644';
 
         var searchResult = doSearch(q);
+        console.log('[spotlight] doSearch returned', searchResult.results.length, 'results, translitMode=', searchResult.translitMode);
         _activeFlt = 'all';
         renderResults(searchResult);
 
