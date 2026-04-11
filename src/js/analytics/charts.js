@@ -13,16 +13,43 @@ function svgEl(tag, attrs) {
   return el;
 }
 
+function svgText(x, y, text, attrs) {
+  var el = svgEl('text', Object.assign({
+    x: String(x), y: String(y),
+    'font-size': '9', fill: 'var(--text-dim, #6b7d92)',
+    'font-family': 'monospace'
+  }, attrs || {}));
+  el.textContent = text;
+  return el;
+}
+
+var DAY_NAMES = ['\u0623\u062D\u062F', '\u0625\u062B\u0646', '\u062B\u0644\u0627', '\u0623\u0631\u0628', '\u062E\u0645\u064A', '\u062C\u0645\u0639', '\u0633\u0628\u062A'];
+
 /**
- * Multi-series line chart with area fills.
+ * Multi-series line chart with area fills, legend, and axis labels.
  * datasets: [{data: number[], color: string, label: string}]
+ * opts.xLabels: string[] — labels for x-axis ticks
  */
-export function renderLineChart(containerId, datasets, height) {
+export function renderLineChart(containerId, datasets, height, opts) {
   var el = document.getElementById(containerId);
   if (!el) return;
-  var w = el.offsetWidth || 600;
-  var h = height || 200;
-  var pad = 6;
+  el.textContent = '';
+
+  var xLabels = (opts && opts.xLabels) || [];
+
+  // Wrapper for SVG + legend
+  var wrapper = document.createElement('div');
+  wrapper.style.cssText = 'position:relative';
+
+  var chartW = el.offsetWidth || 600;
+  var marginL = 40; // space for Y axis
+  var marginB = 24; // space for X axis
+  var marginR = 6;
+  var marginT = 6;
+  var w = chartW;
+  var h = (height || 200) + marginB;
+  var plotW = w - marginL - marginR;
+  var plotH = h - marginT - marginB;
 
   var allMax = 0;
   datasets.forEach(function(ds) {
@@ -30,19 +57,59 @@ export function renderLineChart(containerId, datasets, height) {
   });
   if (allMax === 0) allMax = 1;
 
-  var svg = svgEl('svg', { viewBox: '0 0 ' + w + ' ' + h, preserveAspectRatio: 'none' });
+  var svg = svgEl('svg', { viewBox: '0 0 ' + w + ' ' + h, preserveAspectRatio: 'none', style: 'width:100%;height:' + h + 'px' });
 
+  // Y-axis grid lines + labels (5 ticks)
+  for (var yi = 0; yi <= 4; yi++) {
+    var yVal = Math.round(allMax * yi / 4);
+    var yPos = marginT + plotH - (yi / 4) * plotH;
+
+    // Grid line
+    svg.appendChild(svgEl('line', {
+      x1: String(marginL), y1: String(yPos),
+      x2: String(w - marginR), y2: String(yPos),
+      stroke: 'var(--border, #1e2d3d)', 'stroke-width': '0.5', 'stroke-dasharray': yi === 0 ? 'none' : '3,3'
+    }));
+
+    // Y label
+    svg.appendChild(svgText(marginL - 4, yPos + 3, yVal, { 'text-anchor': 'end', 'font-size': '8' }));
+  }
+
+  // X-axis labels
+  if (xLabels.length > 0) {
+    var maxXLabels = Math.min(xLabels.length, 12);
+    var step = Math.max(1, Math.floor(xLabels.length / maxXLabels));
+    for (var xi = 0; xi < xLabels.length; xi += step) {
+      var xPos = marginL + (xi / Math.max(xLabels.length - 1, 1)) * plotW;
+      var label = xLabels[xi];
+      // Shorten: '2024-03' → '03/24', '2024-W12' → 'W12', '2024-03-15' → '03/15'
+      if (label.length === 7) label = label.substring(5) + '/' + label.substring(2, 4);
+      else if (label.length === 10) label = label.substring(5);
+      else if (label.indexOf('-W') > 0) label = 'W' + label.split('W')[1];
+
+      svg.appendChild(svgText(xPos, h - 4, label, { 'text-anchor': 'middle', 'font-size': '7.5' }));
+
+      // Tick mark
+      svg.appendChild(svgEl('line', {
+        x1: String(xPos), y1: String(marginT + plotH),
+        x2: String(xPos), y2: String(marginT + plotH + 4),
+        stroke: 'var(--border, #1e2d3d)', 'stroke-width': '0.5'
+      }));
+    }
+  }
+
+  // Data lines
   datasets.forEach(function(ds) {
     var pts = [];
     var n = ds.data.length;
     for (var i = 0; i < n; i++) {
-      var x = pad + (i / Math.max(n - 1, 1)) * (w - pad * 2);
-      var y = h - pad - (ds.data[i] / allMax) * (h - pad * 2);
+      var x = marginL + (i / Math.max(n - 1, 1)) * plotW;
+      var y = marginT + plotH - (ds.data[i] / allMax) * plotH;
       pts.push(x.toFixed(1) + ',' + y.toFixed(1));
     }
 
     var areaD = 'M' + pts[0] + ' L' + pts.join(' L') +
-      ' L' + (w - pad) + ',' + h + ' L' + pad + ',' + h + ' Z';
+      ' L' + (marginL + plotW) + ',' + (marginT + plotH) + ' L' + marginL + ',' + (marginT + plotH) + ' Z';
     svg.appendChild(svgEl('path', { d: areaD, fill: ds.color, opacity: '0.08' }));
     svg.appendChild(svgEl('polyline', {
       points: pts.join(' '), fill: 'none', stroke: ds.color,
@@ -50,8 +117,28 @@ export function renderLineChart(containerId, datasets, height) {
     }));
   });
 
-  el.textContent = '';
-  el.appendChild(svg);
+  wrapper.appendChild(svg);
+
+  // Legend below chart
+  var legend = document.createElement('div');
+  legend.style.cssText = 'display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px';
+  datasets.forEach(function(ds) {
+    var item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:5px;font-size:0.54rem;color:var(--text-dim)';
+
+    var dot = document.createElement('div');
+    dot.style.cssText = 'width:8px;height:3px;border-radius:2px;background:' + ds.color;
+
+    var txt = document.createElement('span');
+    txt.textContent = ds.label || '';
+
+    item.appendChild(dot);
+    item.appendChild(txt);
+    legend.appendChild(item);
+  });
+  wrapper.appendChild(legend);
+
+  el.appendChild(wrapper);
 }
 
 /**
@@ -98,7 +185,7 @@ export function renderBarChart(containerId, items, barColor) {
 }
 
 /**
- * Hour-of-day x day-of-week heatmap.
+ * Hour-of-day x day-of-week heatmap with row/column labels.
  * data: [{hour: 0-23, dow: 0-6, count: number}]
  */
 export function renderHeatmap(containerId, data) {
@@ -114,6 +201,25 @@ export function renderHeatmap(containerId, data) {
     if (grid[key] > maxVal) maxVal = grid[key];
   });
 
+  // Wrapper with day labels on the left
+  var wrapper = document.createElement('div');
+  wrapper.style.cssText = 'display:flex;gap:6px;direction:ltr';
+
+  // Day-of-week labels (Y axis)
+  var dayCol = document.createElement('div');
+  dayCol.style.cssText = 'display:flex;flex-direction:column;gap:2px;justify-content:center';
+  for (var di = 0; di < 7; di++) {
+    var dayLabel = document.createElement('div');
+    dayLabel.style.cssText = 'font-size:0.44rem;color:var(--text-muted);text-align:right;height:100%;display:flex;align-items:center;min-height:14px;white-space:nowrap';
+    dayLabel.textContent = DAY_NAMES[di];
+    dayCol.appendChild(dayLabel);
+  }
+  wrapper.appendChild(dayCol);
+
+  // Grid
+  var gridWrap = document.createElement('div');
+  gridWrap.style.cssText = 'flex:1';
+
   var container = document.createElement('div');
   container.className = 'a-heatmap';
 
@@ -124,13 +230,13 @@ export function renderHeatmap(containerId, data) {
       var cell = document.createElement('div');
       cell.className = 'a-hm-cell';
       cell.style.background = 'rgba(231,76,60,' + (0.03 + intensity * 0.7) + ')';
-      cell.title = col + ':00';
+      cell.title = DAY_NAMES[row] + ' ' + col + ':00 \u2014 ' + val + ' \u062D\u062F\u062B';
       container.appendChild(cell);
     }
   }
+  gridWrap.appendChild(container);
 
-  el.appendChild(container);
-
+  // Hour labels (X axis)
   var labels = document.createElement('div');
   labels.className = 'a-hm-labels';
   for (var h = 0; h < 24; h++) {
@@ -138,19 +244,30 @@ export function renderHeatmap(containerId, data) {
     lbl.textContent = h % 3 === 0 ? h + ':00' : '';
     labels.appendChild(lbl);
   }
-  el.appendChild(labels);
+  gridWrap.appendChild(labels);
 
+  wrapper.appendChild(gridWrap);
+  el.appendChild(wrapper);
+
+  // Legend
   var legend = document.createElement('div');
-  legend.style.cssText = 'margin-top:12px;font-size:0.5rem;color:var(--text-muted);display:flex;justify-content:space-between;direction:ltr';
+  legend.style.cssText = 'margin-top:10px;font-size:0.5rem;color:var(--text-muted);display:flex;align-items:center;gap:8px;direction:ltr';
+
   var lo = document.createElement('span');
-  lo.textContent = 'Low';
+  lo.textContent = '\u0623\u0642\u0644';
   var bar = document.createElement('div');
-  bar.style.cssText = 'flex:1;height:8px;margin:0 8px;border-radius:4px;background:linear-gradient(90deg,var(--surface2),var(--red))';
+  bar.style.cssText = 'flex:1;max-width:120px;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--surface2),var(--red))';
   var hi = document.createElement('span');
-  hi.textContent = 'High';
+  hi.textContent = '\u0623\u0643\u062B\u0631';
+
+  var countLabel = document.createElement('span');
+  countLabel.style.cssText = 'margin-right:auto;font-size:0.46rem;color:var(--text-muted);direction:ltr';
+  countLabel.textContent = '\u0627\u0644\u0623\u0639\u0644\u0649: ' + maxVal;
+
   legend.appendChild(lo);
   legend.appendChild(bar);
   legend.appendChild(hi);
+  legend.appendChild(countLabel);
   el.appendChild(legend);
 }
 

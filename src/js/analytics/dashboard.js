@@ -77,7 +77,7 @@ function refresh() {
       };
     });
 
-  renderLineChart('lineChart', datasets, 220);
+  renderLineChart('lineChart', datasets, 220, { xLabels: periodSet });
 
   // ── Heatmap (hour x day-of-week) ──
   var hmRows = queryRows(
