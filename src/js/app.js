@@ -37,6 +37,9 @@ function renderReport(data) {
   var _dt = new Date(parseInt(_dp[0]), parseInt(_dp[1]) - 1, parseInt(_dp[2]));
   var computedDay = _dayNames[_dt.getDay()];
 
+  var dateRow = document.createElement('div');
+  dateRow.className = 'date-row';
+
   var dateDiv = document.createElement('div');
   dateDiv.className = 'date';
   var dateText = document.createTextNode(computedDay + ' ');
@@ -46,7 +49,7 @@ function renderReport(data) {
   dateDiv.appendChild(dateSpan);
   var dateSuffix = document.createTextNode(' \u2014 ' + data.hijri);
   dateDiv.appendChild(dateSuffix);
-  header.appendChild(dateDiv);
+  dateRow.appendChild(dateDiv);
 
   // dd/mm/yyyy date picker trigger
   var dpTrigger = document.createElement('span');
@@ -54,7 +57,9 @@ function renderReport(data) {
   dpTrigger.id = 'reportDatePicker';
   var dp = data.date.split('-');
   dpTrigger.textContent = dp[2] + '/' + dp[1] + '/' + dp[0];
-  header.appendChild(dpTrigger);
+  dateRow.appendChild(dpTrigger);
+
+  header.appendChild(dateRow);
 
   root.appendChild(header);
 
