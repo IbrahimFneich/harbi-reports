@@ -1,6 +1,6 @@
 {
   "name": "harbi-reports",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "private": true,
   "description": "Daily military news reports from Telegram",
   "scripts": {

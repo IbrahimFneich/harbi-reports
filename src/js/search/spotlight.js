@@ -72,15 +72,17 @@ function resolveAliases(q) {
 }
 
 // ── Init DB (try sql.js, fallback to JSON) ──────────────
+var _backendPromise = null;
+
 function loadSearchBackend(cb) {
   if (_dbReady || _jsonFallback) { cb(); return; }
+  if (_backendPromise) { _backendPromise.then(cb); return; }
 
-  initDB().then(function() {
+  _backendPromise = initDB().then(function() {
     _dbReady = true;
-    cb();
   }).catch(function() {
     // Fallback: load JSON index
-    fetch('data/spotlight-index.json')
+    return fetch('data/spotlight-index.json')
       .then(function(r) { return r.ok ? r.json() : []; })
       .then(function(entries) {
         for (var i = 0; i < entries.length; i++) {
@@ -92,10 +94,11 @@ function loadSearchBackend(cb) {
           });
         }
         _jsonFallback = true;
-        cb();
       })
-      .catch(function() { _jsonFallback = true; cb(); });
+      .catch(function() { _jsonFallback = true; });
   });
+
+  _backendPromise.then(cb);
 }
 
 // ── Search ────────────────────────────────────────────────
@@ -216,8 +219,9 @@ function buildSO() {
 
   // Backend indicator
   var backendTag = document.createElement('div');
+  backendTag.id = 'spotlightBackend';
   backendTag.style.cssText = 'padding:4px 18px;font-size:0.46rem;color:var(--text-muted,#3d5068);direction:ltr;';
-  backendTag.textContent = _dbReady ? 'SQLite FTS5' : 'JSON fallback';
+  backendTag.textContent = (_dbReady || _jsonFallback) ? (_dbReady ? 'SQLite FTS5' : 'JSON index') : 'loading...';
   m.appendChild(backendTag);
 
   var fl = document.createElement('div');
@@ -240,7 +244,10 @@ function buildSO() {
   var deb = null;
   inp.addEventListener('input', function() {
     clearTimeout(deb);
-    deb = setTimeout(function() { renderSR(inp.value); }, 120);
+    deb = setTimeout(function() {
+      // Ensure backend is loaded before searching
+      loadSearchBackend(function() { renderSR(inp.value); });
+    }, 120);
   });
   inp.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') { closeSL(); return; }
@@ -446,7 +453,12 @@ export function openSpotlight() {
   _sInput.value = '';
   _activeFlt = 'all';
   _selIdx = -1;
-  loadSearchBackend(function() { renderSR(''); _sInput.focus(); });
+  loadSearchBackend(function() {
+    var tag = document.getElementById('spotlightBackend');
+    if (tag) tag.textContent = _dbReady ? 'SQLite FTS5' : 'JSON index';
+    renderSR('');
+    _sInput.focus();
+  });
 }
 
 export function closeSL() {
