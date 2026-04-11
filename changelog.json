@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.8.5",
+    "date": "2026-04-11 23:30",
+    "title": "Fix tab badge counts on all 917 reports",
+    "changes": [
+      "Fix JS to read full stat key names (bayanat/sirens/enemy/iran/videos/allies) matching JSON data",
+      "Normalize 9 short-key JSON files to consistent full key format",
+      "Rebuild database with correct counts"
+    ]
+  },
+  {
     "version": "1.8.4",
     "date": "2026-04-11 23:00",
     "title": "Inline header dates on same line",
