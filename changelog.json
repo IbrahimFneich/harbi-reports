@@ -1,5 +1,13 @@
 [
   {
+    "version": "2.0.3",
+    "date": "2026-04-11",
+    "title": "Fix analytics default to daily granularity",
+    "changes": [
+      "Fix daily button not pre-selected — moved HTML 'on' class from monthly to daily"
+    ]
+  },
+  {
     "version": "2.0.2",
     "date": "2026-04-11",
     "title": "Analytics default grouping set to daily",
