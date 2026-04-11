@@ -1,5 +1,18 @@
 [
   {
+    "version": "1.9.0",
+    "date": "2026-04-11",
+    "title": "New Timeline page — scroll-driven war chronicle",
+    "changes": [
+      "Add timeline.html with 6 chapters covering Oct 2023 to present",
+      "Scroll-driven storytelling: hero, sticky phase navigator, reveal animations",
+      "Horizontal event strips + vertical step-by-step breakdowns per chapter",
+      "Scroll progress bar, hover effects, staggered reveals",
+      "Full dark/light theme support and mobile responsive",
+      "Add timeline link to navbar between home and analytics"
+    ]
+  },
+  {
     "version": "1.8.9",
     "date": "2026-04-11",
     "title": "Analytics defaults to current month",

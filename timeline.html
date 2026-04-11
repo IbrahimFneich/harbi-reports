@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>التسلسل الزمني — الإعلام الحربي</title>
+<link rel="stylesheet" href="src/css/enhancements.css"/>
+<link rel="stylesheet" href="src/css/timeline.css"/>
+<link rel="stylesheet" href="src/css/navbar.css"/>
+<script>
+  if (localStorage.getItem('harbi-theme') !== 'dark') document.body.classList.add('light');
+</script>
+</head>
+<body>
+
+<!-- Scroll Progress -->
+<div class="tl-progress"></div>
+
+<!-- ════════════��══════════════════
+     HERO
+     ═══════════════════════════════ -->
+<section class="tl-hero">
+  <div class="tl-hero-date">7 OCT 2023</div>
+  <div class="tl-hero-title">بدأت القصة هنا</div>
+  <div class="tl-hero-sub">
+    تسلسل زمني لأبرز المحطات — من طوفان الأقصى إلى اليوم.
+    <br>كل مرحلة فصلٌ في رواية لم تنتهِ بعد.
+  </div>
+  <div class="tl-hero-hint">
+    <span>مرّر للأسفل</span>
+    <div class="arrow"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     STICKY PHASE NAVIGATOR
+     ═══════════════════════════════ -->
+<div class="pn-wrap" id="phaseNav">
+  <div class="pn-track">
+    <a class="pn-item active" href="#ch1" style="border-bottom-color:var(--accent);">
+      <div class="pn-num">01</div><div class="pn-label">طوفان الأقصى</div>
+    </a>
+    <a class="pn-item" href="#ch2">
+      <div class="pn-num">02</div><div class="pn-label">اجتياح غزة</div>
+    </a>
+    <a class="pn-item" href="#ch3">
+      <div class="pn-num">03</div><div class="pn-label">الجبهات الإقليمية</div>
+    </a>
+    <a class="pn-item" href="#ch4">
+      <div class="pn-num">04</div><div class="pn-label">حرب لبنان</div>
+    </a>
+    <a class="pn-item" href="#ch5">
+      <div class="pn-num">05</div><div class="pn-label">ما بعد وقف النار</div>
+    </a>
+    <a class="pn-item" href="#ch6">
+      <div class="pn-num">06</div><div class="pn-label">هدنات هشّة</div>
+    </a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     CHAPTERS
+     ═══════════════════════════════ -->
+<div class="tl-chapters">
+
+  <!-- ─────── CHAPTER 1: Tufan Al-Aqsa ─────── -->
+  <section class="tl-ch" id="ch1">
+    <div class="tl-ch-head rv">
+      <div class="tl-ch-badge bg-gold"><span>1</span></div>
+      <div>
+        <div class="tl-ch-date c-gold">7 October 2023</div>
+        <div class="tl-ch-title">طوفان الأقصى</div>
+        <div class="tl-ch-dur">اليوم الأول — الساعات التي غيّرت كل شيء</div>
+      </div>
+    </div>
+
+    <div class="tl-narr rv-r" style="border-color:var(--accent);">
+      <strong>فجر السبت.</strong> المقاومة الفلسطينية تخترق غلاف غزة في عملية هي الأكبر منذ عقود — برية وبحرية وجوية.
+      خلال ساعات، أعلنت إسرائيل حالة الحرب. بدأ القصف المكثّف على القطاع.
+      وفي اليوم التالي، <strong>حزب الله فتح جبهة الإسناد</strong> من جنوب لبنان.
+    </div>
+
+    <div class="tl-ev-label rv">أبرز الأحداث ←</div>
+    <div class="tl-ev-strip stagger">
+      <div class="tl-ev rv">
+        <div class="tl-ev-bar bg-gold"></div>
+        <div class="tl-ev-date c-gold">7 Oct — Dawn</div>
+        <div class="tl-ev-title">اقتحام غلاف غزة</div>
+        <div class="tl-ev-desc">عملية برية وبحرية وجوية متزامنة — اختراق الجدار الأمني</div>
+      </div>
+      <div class="tl-ev rv">
+        <div class="tl-ev-bar bg-red"></div>
+        <div class="tl-ev-date c-red">7 Oct — Evening</div>
+        <div class="tl-ev-title">إعلان حالة الحرب</div>
+        <div class="tl-ev-desc">إسرائيل تعلن الحرب رسمياً — الغارات تبدأ على غزة</div>
+      </div>
+      <div class="tl-ev rv">
+        <div class="tl-ev-bar bg-green"></div>
+        <div class="tl-ev-date c-green">8 Oct</div>
+        <div class="tl-ev-title">جبهة الإسناد اللبنانية</div>
+        <div class="tl-ev-desc">حزب الله يبدأ عمليات يومية على الحدود الشمالية</div>
+      </div>
+    </div>
+
+    <div class="tl-stats rv">
+      <div class="tl-stat"><div class="tl-stat-val c-gold">1</div><div class="tl-stat-lbl">يوم</div></div>
+      <div class="tl-stat"><div class="tl-stat-val c-red">3</div><div class="tl-stat-lbl">جبهات فُتحت</div></div>
+    </div>
+  </section>
+
+  <div class="tl-conn rv-scale"><div class="tl-conn-line" style="background:linear-gradient(var(--accent),var(--red));"></div></div>
+
+  <!-- ─────── CHAPTER 2: Gaza Ground Invasion ─────── -->
+  <section class="tl-ch" id="ch2">
+    <div class="tl-ch-head rv">
+      <div class="tl-ch-badge bg-red"><span>2</span></div>
+      <div>
+        <div class="tl-ch-date c-red">Oct – Dec 2023</div>
+        <div class="tl-ch-title">الاجتياح البري لغزة</div>
+        <div class="tl-ch-dur">~3 أشهر — شمال غزة ثم خان يونس</div>
+      </div>
+    </div>
+
+    <div class="tl-narr rv-l" style="border-color:var(--red);">
+      بعد أسابيع من القصف الجوي، بدأت القوات البرية التوغل في <strong>شمال غزة</strong>.
+      ثم توسعت العملية جنوباً نحو <strong>خان يونس</strong>.
+      خلال هذه الفترة، تم التوصل لـ<strong>هدنة إنسانية</strong> استمرت 7 أيام شملت تبادل أسرى.
+    </div>
+
+    <div class="tl-bd-label rv">التسلسل خطوة بخطوة</div>
+    <div class="tl-bd rv">
+      <div class="tl-bd-line" style="background:linear-gradient(var(--red),var(--green),var(--red));"></div>
+      <div class="tl-bd-step" style="color:var(--red);">
+        <div class="tl-bd-step-date c-red">27 Oct</div>
+        <div class="tl-bd-step-title">بدء التوغل البري</div>
+        <div class="tl-bd-step-desc">دخول شمال غزة — المرحلة الأولى من العملية البرية</div>
+      </div>
+      <div class="tl-bd-step" style="color:var(--green);">
+        <div class="tl-bd-step-date c-green">24–30 Nov</div>
+        <div class="tl-bd-step-title">الهدنة الإنسانية</div>
+        <div class="tl-bd-step-desc">7 أيام — تبادل أسرى ودخول مساعدات إنسانية</div>
+      </div>
+      <div class="tl-bd-step" style="color:var(--red);">
+        <div class="tl-bd-step-date c-red">Dec 2023</div>
+        <div class="tl-bd-step-title">التوسع نحو خان يونس</div>
+        <div class="tl-bd-step-desc">العملية تنتقل إلى جنوب القطاع</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="tl-conn rv-scale"><div class="tl-conn-line" style="background:linear-gradient(var(--red),var(--orange));"></div></div>
+
+  <!-- ─────── CHAPTER 3: Regional Fronts ─────── -->
+  <section class="tl-ch" id="ch3">
+    <div class="tl-ch-head rv">
+      <div class="tl-ch-badge bg-orange"><span>3</span></div>
+      <div>
+        <div class="tl-ch-date c-orange">Jan – Aug 2024</div>
+        <div class="tl-ch-title">توسع الجبهات الإقليمية</div>
+        <div class="tl-ch-dur">~8 أشهر — اليمن · العراق · إيران · لبنان</div>
+      </div>
+    </div>
+
+    <div class="tl-narr rv-r" style="border-color:var(--orange);">
+      الحرب تخرج من غزة. <strong>أنصار الله</strong> يغلقون البحر الأحمر. المقاومة العراقية تستهدف القواعد الأمريكية.
+      <strong>إيران تضرب إسرائيل مباشرة</strong> في عملية «الوعد الصادق».
+      الاغتيالات تتصاعد — <strong>العاروري</strong> في بيروت، <strong>شكر</strong> و<strong>هنية</strong> في يوليو.
+      عملية <strong>رفح</strong> تبدأ رغم أمر محكمة العدل الدولية.
+    </div>
+
+    <div class="tl-ev-label rv">أبرز الأحداث ←</div>
+    <div class="tl-ev-strip stagger">
+      <div class="tl-ev rv">
+        <div class="tl-ev-bar bg-cyan"></div>
+        <div class="tl-ev-date c-cyan">Nov 2023+</div>
+        <div class="tl-ev-title">هجمات البحر الأحمر</div>
+        <div class="tl-ev-desc">أنصار الله يستهدفون السفن — أمريكا وبريطانيا تضربان اليمن</div>
+      </div>
+      <div class="tl-ev rv">
+        <div class="tl-ev-bar bg-red"></div>
+        <div class="tl-ev-date c-red">2 Jan 2024</div>
+        <div class="tl-ev-title">اغتيال العاروري</div>
+        <div class="tl-ev-desc">ضاحية بيروت — أول اغتيال كبير خارج غزة</div>
+      </div>
+      <div class="tl-ev rv">
+        <div class="tl-ev-bar bg-purple"></div>
+        <div class="tl-ev-date c-purple">13 Apr 2024</div>
+        <div class="tl-ev-title">الوعد الصادق 1</div>
+        <div class="tl-ev-desc">إيران تضرب إسرائيل مباشرة لأول مرة — صواريخ ومسيّرات</div>
+      </div>
+      <div class="tl-ev rv">
+        <div class="tl-ev-bar bg-red"></div>
+        <div class="tl-ev-date c-red">May 2024</div>
+        <div class="tl-ev-title">عملية رفح</div>
+        <div class="tl-ev-desc">اجتياح رفح رغم قرار محكمة العدل الدولية</div>
+      </div>
+      <div class="tl-ev rv">
+        <div class="tl-ev-bar bg-orange"></div>
+        <div class="tl-ev-date c-orange">Jul 2024</div>
+        <div class="tl-ev-title">اغتيال شكر وهنية</div>
+        <div class="tl-ev-desc">فؤاد شكر في بيروت — إسماعيل هنية في طهران</div>
+      </div>
+    </div>
+
+    <div class="tl-tags rv">
+      <span class="tl-tag" style="background:rgba(26,188,156,0.12);color:var(--cyan);">اليمن</span>
+      <span class="tl-tag" style="background:rgba(231,76,60,0.12);color:var(--red);">غزة</span>
+      <span class="tl-tag" style="background:rgba(155,89,182,0.12);color:var(--purple);">إيران</span>
+      <span class="tl-tag" style="background:rgba(230,126,34,0.12);color:var(--orange);">العراق</span>
+      <span class="tl-tag" style="background:rgba(46,204,113,0.12);color:var(--green);">لبنان</span>
+    </div>
+  </section>
+
+  <div class="tl-conn rv-scale"><div class="tl-conn-line" style="background:linear-gradient(var(--orange),var(--purple));"></div></div>
+
+  <!-- ─────── CHAPTER 4: Lebanon War ─────── -->
+  <section class="tl-ch" id="ch4">
+    <div class="tl-ch-head rv">
+      <div class="tl-ch-badge bg-purple"><span>4</span></div>
+      <div>
+        <div class="tl-ch-date c-purple">Sep – Nov 2024</div>
+        <div class="tl-ch-title">حرب لبنان</div>
+        <div class="tl-ch-dur">~66 يوم حرب — البايجرات · الاغتيالات · التوغل · وقف النار</div>
+      </div>
+    </div>
+
+    <div class="tl-narr rv-l" style="border-color:var(--purple);">
+      <strong>17 سبتمبر.</strong> آلاف أجهزة البيجر تنفجر في وقت واحد. في اليوم التالي، اللاسلكي.
+      بعد أسبوع، <strong>الحملة الجوية الشاملة</strong> — مئات الغارات في يوم واحد.
+      <br><br>
+      <strong>27 سبتمبر:</strong> استشهاد الأمين العام <strong>حسن نصر الله</strong> في ضربة على الضاحية.
+      <br><br>
+      <strong>1 أكتوبر:</strong> التوغل البري يبدأ. إيران تطلق <strong>الوعد الصادق 2</strong>.
+      لشهرين، المعارك يومية. <strong>الإعلام الحربي</strong> ينشر العمليات يومياً.
+      حتى <strong>27 نوفمبر</strong> — وقف إطلاق النار.
+    </div>
+
+    <div class="tl-bd-label rv">التسلسل خطوة بخطوة</div>
+    <div class="tl-bd rv">
+      <div class="tl-bd-line" style="background:linear-gradient(var(--purple),var(--red),var(--orange),var(--green));"></div>
+      <div class="tl-bd-step" style="color:var(--purple);">
+        <div class="tl-bd-step-date c-purple">17–18 Sep</div>
+        <div class="tl-bd-step-title">تفجير البايجرات واللاسلكي</div>
+        <div class="tl-bd-step-desc">عملية استخبارية غير مسبوقة — أجهزة اتصال مفخخة تنفجر بآلاف العناصر</div>
+      </div>
+      <div class="tl-bd-step" style="color:var(--purple);">
+        <div class="tl-bd-step-date c-purple">23 Sep</div>
+        <div class="tl-bd-step-title">بداية الحملة الجوية على لبنان</div>
+        <div class="tl-bd-step-desc">مئات الغارات — فتح الجبهة رسمياً</div>
+      </div>
+      <div class="tl-bd-step" style="color:var(--red);">
+        <div class="tl-bd-step-date c-red">27 Sep</div>
+        <div class="tl-bd-step-title">اغتيال حسن نصر الله</div>
+        <div class="tl-bd-step-desc">ضربة على الضاحية الجنوبية — اغتيال الأمين العام لحزب الله</div>
+      </div>
+      <div class="tl-bd-step" style="color:var(--orange);">
+        <div class="tl-bd-step-date c-orange">1 Oct</div>
+        <div class="tl-bd-step-title">التوغل البري + الوعد الصادق 2</div>
+        <div class="tl-bd-step-desc">إسرائيل تدخل جنوب لبنان — إيران ترد بصواريخ باليستية</div>
+      </div>
+      <div class="tl-bd-step" style="color:var(--green);">
+        <div class="tl-bd-step-date c-green">Oct – Nov</div>
+        <div class="tl-bd-step-title">المعارك البرية اليومية</div>
+        <div class="tl-bd-step-desc">بنت جبيل، مارون الراس، عيتا الشعب، الخيام — الإعلام الحربي ينشر يومياً</div>
+      </div>
+      <div class="tl-bd-step" style="color:var(--green);">
+        <div class="tl-bd-step-date c-green">27 Nov</div>
+        <div class="tl-bd-step-title">وقف إطلاق النار</div>
+        <div class="tl-bd-step-desc">اتفاق بوساطة دولية — 60 يوماً للانسحاب الكامل</div>
+      </div>
+    </div>
+
+    <div class="tl-stats rv stagger">
+      <div class="tl-stat rv"><div class="tl-stat-val c-purple">~66</div><div class="tl-stat-lbl">يوم حرب</div></div>
+      <div class="tl-stat rv"><div class="tl-stat-val c-gold">900+</div><div class="tl-stat-lbl">بيان حربي</div></div>
+      <div class="tl-stat rv"><div class="tl-stat-val c-red">4</div><div class="tl-stat-lbl">قادة اغتيلوا</div></div>
+    </div>
+  </section>
+
+  <div class="tl-conn rv-scale"><div class="tl-conn-line" style="background:linear-gradient(var(--purple),var(--green));"></div></div>
+
+  <!-- ─────── CHAPTER 5: Post-Ceasefire ─────── -->
+  <section class="tl-ch" id="ch5">
+    <div class="tl-ch-head rv">
+      <div class="tl-ch-badge bg-green"><span>5</span></div>
+      <div>
+        <div class="tl-ch-date c-green">Dec 2024 – Mar 2025</div>
+        <div class="tl-ch-title">ما بعد وقف النار</div>
+        <div class="tl-ch-dur">~4 أشهر — انسحابات · هدنة غزة · سقوط الأسد</div>
+      </div>
+    </div>
+
+    <div class="tl-narr rv-r" style="border-color:var(--green);">
+      الانسحاب من جنوب لبنان يبدأ تدريجياً مع خروقات متكررة.
+      في <strong>ديسمبر 2024</strong>، تحوّل كبير — <strong>سقوط نظام الأسد</strong> في سوريا.
+      في غزة، تدخل <strong>المرحلة الأولى من وقف إطلاق النار</strong> — تبادل أسرى ومساعدات.
+    </div>
+
+    <div class="tl-ev-label rv">أبرز الأحداث ←</div>
+    <div class="tl-ev-strip stagger">
+      <div class="tl-ev rv">
+        <div class="tl-ev-bar bg-orange"></div>
+        <div class="tl-ev-date c-orange">Dec 2024</div>
+        <div class="tl-ev-title">سقوط الأسد</div>
+        <div class="tl-ev-desc">تحول جيوسياسي كبير — نهاية حكم عائلة الأسد في سوريا</div>
+      </div>
+      <div class="tl-ev rv">
+        <div class="tl-ev-bar bg-green"></div>
+        <div class="tl-ev-date c-green">19 Jan 2025</div>
+        <div class="tl-ev-title">هدنة غزة — المرحلة 1</div>
+        <div class="tl-ev-desc">وقف جزئي — تبادل أسرى ودخول مساعدات</div>
+      </div>
+      <div class="tl-ev rv">
+        <div class="tl-ev-bar bg-blue"></div>
+        <div class="tl-ev-date c-blue">Jan – Mar 2025</div>
+        <div class="tl-ev-title">الانسحاب من لبنان</div>
+        <div class="tl-ev-desc">تمديد مهلة الـ 60 يوماً — انسحاب تدريجي مع خروقات</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="tl-conn rv-scale"><div class="tl-conn-line" style="background:linear-gradient(var(--green),var(--blue));"></div></div>
+
+  <!-- ─────── CHAPTER 6: Fragile Ceasefires ─────── -->
+  <section class="tl-ch" id="ch6">
+    <div class="tl-ch-head rv">
+      <div class="tl-ch-badge bg-blue"><span>6</span></div>
+      <div>
+        <div class="tl-ch-date c-blue">Mar 2025 – Present</div>
+        <div class="tl-ch-title">هدنات هشّة</div>
+        <div class="tl-ch-dur">مستمر — مفاوضات وتصعيد متقطع</div>
+      </div>
+    </div>
+
+    <div class="tl-narr rv-l" style="border-color:var(--blue);">
+      مراحل الهدنة تُطبّق بشكل متفاوت. تصعيدات دورية ومفاوضات لحل دائم.
+      اليمن يواصل العمليات البحرية. إعادة الإعمار تُناقش.
+      <br><br>
+      <strong>الرواية لم تنتهِ بعد.</strong>
+    </div>
+
+    <div class="tl-ending rv">
+      <div class="tl-ending-dots">...</div>
+      <div class="tl-ending-text">يُتبع</div>
+    </div>
+  </section>
+
+</div>
+
+<div class="tl-footer">
+  مصدر: <a href="https://t.me/C_Military1" target="_blank" rel="noopener">قناة الإعلام الحربي — التغطية الإخبارية</a>
+  <br><span style="display:inline-block;margin-top:6px;direction:ltr;cursor:pointer;" onclick="window.location='index.html'">Harbi Reports v1.9.0</span>
+</div>
+
+<script type="module">
+  import { initNavbar } from './src/js/ui/navbar.js';
+  initNavbar();
+</script>
+<script src="src/js/timeline.js"></script>
+</body>
+</html>

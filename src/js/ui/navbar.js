@@ -7,6 +7,7 @@ export function initNavbar() {
   var page = 'index';
   if (path.indexOf('report') !== -1) page = 'report';
   if (path.indexOf('analytics') !== -1) page = 'analytics';
+  if (path.indexOf('timeline') !== -1) page = 'timeline';
 
   var nav = document.createElement('nav');
   nav.className = 'navbar';
@@ -21,6 +22,7 @@ export function initNavbar() {
   links.className = 'nav-links';
   var items = [
     { href: 'index.html', label: '\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629', id: 'index' },
+    { href: 'timeline.html', label: '\u0627\u0644\u062A\u0633\u0644\u0633\u0644 \u0627\u0644\u0632\u0645\u0646\u064A', id: 'timeline' },
     { href: 'analytics.html', label: '\u0627\u0644\u062A\u062D\u0644\u064A\u0644\u0627\u062A', id: 'analytics' }
   ];
   items.forEach(function(item) {
