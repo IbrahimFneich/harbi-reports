@@ -1,5 +1,14 @@
 [
   {
+    "version": "2.0.5",
+    "date": "2026-04-11",
+    "title": "Heatmap labels aligned in fullscreen + rich tooltip",
+    "changes": [
+      "Day labels use CSS grid matching heatmap rows — aligned perfectly in normal and fullscreen",
+      "Rich tooltip: time range (15:00–16:00), event count with % of total, intensity bar, day and hour totals"
+    ]
+  },
+  {
     "version": "2.0.4",
     "date": "2026-04-11",
     "title": "Analytics heatmap full day names + date range arrow layout",

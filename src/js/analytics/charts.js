@@ -283,30 +283,36 @@ export function renderHeatmap(containerId, data) {
 
   var grid = {};
   var maxVal = 1;
+  var totalAll = 0;
+  var dayTotals = [0, 0, 0, 0, 0, 0, 0];
+  var hourTotals = {};
   data.forEach(function(d) {
     var key = d.dow + '-' + d.hour;
     grid[key] = (grid[key] || 0) + d.count;
     if (grid[key] > maxVal) maxVal = grid[key];
+    totalAll += d.count;
+    dayTotals[d.dow] = (dayTotals[d.dow] || 0) + d.count;
+    hourTotals[d.hour] = (hourTotals[d.hour] || 0) + d.count;
   });
 
   var outerWrap = document.createElement('div');
   outerWrap.style.cssText = 'position:relative';
 
   var wrapper = document.createElement('div');
-  wrapper.style.cssText = 'display:flex;gap:6px;direction:ltr';
+  wrapper.style.cssText = 'display:grid;grid-template-columns:56px 1fr;gap:0 8px;direction:ltr';
 
+  // Day labels column — 7 rows matching the heatmap grid rows
   var dayCol = document.createElement('div');
-  dayCol.style.cssText = 'display:flex;flex-direction:column;gap:2px;justify-content:center';
+  dayCol.style.cssText = 'display:grid;grid-template-rows:repeat(7, 1fr);gap:2px';
   for (var di = 0; di < 7; di++) {
     var dayLabel = document.createElement('div');
-    dayLabel.style.cssText = 'font-size:0.44rem;color:var(--text-muted);text-align:right;display:flex;align-items:center;justify-content:flex-end;min-height:14px;white-space:nowrap;width:42px';
+    dayLabel.style.cssText = 'font-size:0.48rem;color:var(--text-muted);display:flex;align-items:center;justify-content:flex-end;white-space:nowrap;padding-right:4px';
     dayLabel.textContent = DAY_NAMES[di];
     dayCol.appendChild(dayLabel);
   }
   wrapper.appendChild(dayCol);
 
   var gridWrap = document.createElement('div');
-  gridWrap.style.cssText = 'flex:1';
 
   var container = document.createElement('div');
   container.className = 'a-heatmap';
@@ -334,13 +340,15 @@ export function renderHeatmap(containerId, data) {
     labels.appendChild(lbl);
   }
   gridWrap.appendChild(labels);
+
+  // Empty cell for the label column, then the grid
   wrapper.appendChild(gridWrap);
   outerWrap.appendChild(wrapper);
 
   // Tooltip
   var hmTip = document.createElement('div');
   hmTip.className = 'hm-tooltip';
-  hmTip.style.cssText = 'display:none;position:absolute;z-index:10;background:var(--surface,#0f1520);border:1px solid var(--border,#1e2d3d);border-radius:6px;padding:6px 10px;font-size:0.56rem;pointer-events:none;direction:rtl;box-shadow:0 4px 12px rgba(0,0,0,0.4);white-space:nowrap';
+  hmTip.style.cssText = 'display:none;position:absolute;z-index:10;background:var(--surface,#0f1520);border:1px solid var(--border,#1e2d3d);border-radius:8px;padding:8px 12px;font-size:0.54rem;pointer-events:none;direction:rtl;box-shadow:0 4px 16px rgba(0,0,0,0.5);line-height:1.7';
   outerWrap.appendChild(hmTip);
 
   container.addEventListener('mousemove', function(e) {
@@ -348,14 +356,50 @@ export function renderHeatmap(containerId, data) {
     if (!target.classList.contains('a-hm-cell')) return;
     var dow = parseInt(target.getAttribute('data-dow'));
     var hour = parseInt(target.getAttribute('data-hour'));
-    var v = target.getAttribute('data-val');
-    hmTip.textContent = DAY_NAMES[dow] + ' ' + hour + ':00 \u2014 ' + v + ' \u062D\u062F\u062B';
+    var v = parseInt(target.getAttribute('data-val'));
+    var nextHour = (hour + 1) % 24;
+    var pct = totalAll > 0 ? (v / totalAll * 100).toFixed(1) : '0';
+    var pctOfMax = maxVal > 0 ? Math.round(v / maxVal * 100) : 0;
+    var dayTotal = dayTotals[dow] || 0;
+    var hourTotal = hourTotals[hour] || 0;
+
+    hmTip.textContent = '';
+    // Line 1: day + time range
+    var line1 = document.createElement('div');
+    line1.style.cssText = 'font-weight:600;font-size:0.58rem;margin-bottom:2px';
+    line1.textContent = DAY_NAMES[dow] + ' \u2022 ' + String(hour).padStart(2, '0') + ':00 \u2013 ' + String(nextHour).padStart(2, '0') + ':00';
+    hmTip.appendChild(line1);
+    // Line 2: event count + percentage
+    var line2 = document.createElement('div');
+    line2.textContent = v + ' \u062D\u062F\u062B (' + pct + '% \u0645\u0646 \u0627\u0644\u0625\u062C\u0645\u0627\u0644\u064A)';
+    hmTip.appendChild(line2);
+    // Line 3: intensity bar
+    var line3 = document.createElement('div');
+    line3.style.cssText = 'display:flex;align-items:center;gap:6px;margin-top:3px';
+    var barBg = document.createElement('div');
+    barBg.style.cssText = 'flex:1;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;min-width:60px';
+    var barFill = document.createElement('div');
+    barFill.style.cssText = 'height:100%;border-radius:2px;background:rgba(231,76,60,0.8);width:' + pctOfMax + '%';
+    barBg.appendChild(barFill);
+    line3.appendChild(barBg);
+    var barLabel = document.createElement('span');
+    barLabel.style.cssText = 'font-size:0.46rem;opacity:0.6;direction:ltr';
+    barLabel.textContent = pctOfMax + '%';
+    line3.appendChild(barLabel);
+    hmTip.appendChild(line3);
+    // Line 4: day + hour totals
+    var line4 = document.createElement('div');
+    line4.style.cssText = 'font-size:0.46rem;color:var(--text-muted);margin-top:2px';
+    line4.textContent = '\u0625\u062C\u0645\u0627\u0644\u064A ' + DAY_NAMES[dow] + ': ' + dayTotal + ' \u2022 \u0625\u062C\u0645\u0627\u0644\u064A ' + String(hour).padStart(2, '0') + ':00: ' + hourTotal;
+    hmTip.appendChild(line4);
+
     hmTip.style.display = 'block';
     var rect = outerWrap.getBoundingClientRect();
     var cx = e.clientX - rect.left;
     var cy = e.clientY - rect.top;
-    hmTip.style.left = (cx + 12) + 'px';
-    hmTip.style.top = (cy - 24) + 'px';
+    // Keep tooltip within bounds
+    hmTip.style.left = Math.min(cx + 12, rect.width - 220) + 'px';
+    hmTip.style.top = (cy - 60) + 'px';
   });
   container.addEventListener('mouseleave', function() { hmTip.style.display = 'none'; });
 
