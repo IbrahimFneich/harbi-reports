@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.0.93",
+    "date": "2026-04-11",
+    "title": "Style MM/YYYY as subtle subtitle under month name",
+    "changes": [
+      "Move numeric date (MM/YYYY) to a smaller styled line below the Arabic month name",
+      "Muted gray color with letter-spacing for clean look"
+    ]
+  },
+  {
     "version": "1.0.92",
     "date": "2026-04-11",
     "title": "Add 27 missing Feb 2026 reports — zero gaps from Oct 7 2023",
