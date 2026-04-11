@@ -6,15 +6,6 @@ var MONTHS_AR = [
 ];
 var DAYS_AR = ['إثن', 'ثلا', 'أرب', 'خمي', 'جمع', 'سبت', 'أحد'];
 
-/**
- * Create a custom date picker attached to a trigger element.
- * @param {object} opts
- * @param {string} opts.triggerId — ID of the clickable element
- * @param {string} opts.value — initial YYYY-MM-DD
- * @param {string} opts.min — min date YYYY-MM-DD
- * @param {string} opts.max — max date YYYY-MM-DD
- * @param {function} opts.onChange — called with YYYY-MM-DD on selection
- */
 export function createDatePicker(opts) {
   var trigger = document.getElementById(opts.triggerId);
   if (!trigger) return;
@@ -28,7 +19,6 @@ export function createDatePicker(opts) {
   var popup = null;
   var isOpen = false;
 
-  // Set initial display
   trigger.textContent = formatDisplay(current);
 
   trigger.addEventListener('click', function(e) {
@@ -62,6 +52,15 @@ export function createDatePicker(opts) {
     return dt.getFullYear() === y && dt.getMonth() === m && dt.getDate() === d;
   }
 
+  function clampToRange(y, m, d) {
+    var dt = new Date(y, m, d);
+    var mn = new Date(minD.y, minD.m, minD.d);
+    var mx = new Date(maxD.y, maxD.m, maxD.d);
+    if (dt < mn) return { y: minD.y, m: minD.m, d: minD.d };
+    if (dt > mx) return { y: maxD.y, m: maxD.m, d: maxD.d };
+    return { y: y, m: m, d: d };
+  }
+
   function isInRange(y, m, d) {
     var dt = new Date(y, m, d);
     var mn = new Date(minD.y, minD.m, minD.d);
@@ -71,9 +70,31 @@ export function createDatePicker(opts) {
 
   function selectDate(y, m, d) {
     current = { y: y, m: m, d: d };
+    viewYear = y;
+    viewMonth = m;
     trigger.textContent = formatDisplay(current);
     if (opts.onChange) opts.onChange(toStr(y, m, d));
     close();
+  }
+
+  function applyManualInput(val) {
+    var parts = val.trim().split('/');
+    if (parts.length === 3) {
+      var d = parseInt(parts[0], 10);
+      var m = parseInt(parts[1], 10) - 1;
+      var y = parseInt(parts[2], 10);
+      if (isValidDate(y, m, d)) {
+        var clamped = clampToRange(y, m, d);
+        current = clamped;
+        viewYear = clamped.y;
+        viewMonth = clamped.m;
+        trigger.textContent = formatDisplay(current);
+        if (opts.onChange) opts.onChange(toStr(clamped.y, clamped.m, clamped.d));
+        render(); // refresh calendar to show new selection
+        return true;
+      }
+    }
+    return false;
   }
 
   function open() {
@@ -86,7 +107,6 @@ export function createDatePicker(opts) {
     render();
     document.body.appendChild(popup);
 
-    // Position after appending so we can measure the popup size
     var rect = trigger.getBoundingClientRect();
     var popW = popup.offsetWidth;
     var popH = popup.offsetHeight;
@@ -135,19 +155,18 @@ export function createDatePicker(opts) {
 
     inputField.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
-        var val = inputField.value.trim();
-        var parts = val.split('/');
-        if (parts.length === 3) {
-          var d = parseInt(parts[0], 10);
-          var m = parseInt(parts[1], 10) - 1;
-          var y = parseInt(parts[2], 10);
-          if (isValidDate(y, m, d) && isInRange(y, m, d)) {
-            selectDate(y, m, d);
-            return;
-          }
+        if (!applyManualInput(inputField.value)) {
+          inputField.classList.add('dp-input-error');
+          setTimeout(function() { inputField.classList.remove('dp-input-error'); }, 600);
         }
-        inputField.classList.add('dp-input-error');
-        setTimeout(function() { inputField.classList.remove('dp-input-error'); }, 600);
+      }
+    });
+
+    // Also apply on blur (when user clicks away from input but stays in popup)
+    inputField.addEventListener('blur', function() {
+      var val = inputField.value.trim();
+      if (val && val !== formatNumeric(current)) {
+        applyManualInput(val);
       }
     });
 
@@ -253,19 +272,15 @@ export function createDatePicker(opts) {
 
     var todayBtn = document.createElement('button');
     todayBtn.className = 'dp-today-btn';
-    todayBtn.textContent = 'اليوم';
-
-    var todayInRange = isInRange(now.getFullYear(), now.getMonth(), now.getDate());
-    if (!todayInRange) {
-      todayBtn.disabled = true;
-      todayBtn.classList.add('dp-disabled');
-    }
+    todayBtn.textContent = '\u0627\u0644\u064A\u0648\u0645';
 
     todayBtn.onclick = function() {
-      if (!todayInRange) return;
-      viewYear = now.getFullYear();
-      viewMonth = now.getMonth();
-      selectDate(now.getFullYear(), now.getMonth(), now.getDate());
+      var ty = now.getFullYear();
+      var tm = now.getMonth();
+      var td = now.getDate();
+      // Clamp to range — if today is past max, jump to max
+      var clamped = clampToRange(ty, tm, td);
+      selectDate(clamped.y, clamped.m, clamped.d);
     };
 
     footer.appendChild(todayBtn);

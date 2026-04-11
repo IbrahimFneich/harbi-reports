@@ -98,7 +98,17 @@ export function renderLineChart(containerId, datasets, height, opts) {
     }
   }
 
-  // Data lines
+  // Data lines + collect point positions for tooltips
+  var pointPositions = []; // [{x, values: [{label, value, color}]}]
+  var nPoints = datasets.length > 0 ? datasets[0].data.length : 0;
+  for (var pi = 0; pi < nPoints; pi++) {
+    pointPositions.push({
+      x: marginL + (pi / Math.max(nPoints - 1, 1)) * plotW,
+      period: xLabels[pi] || '',
+      values: []
+    });
+  }
+
   datasets.forEach(function(ds) {
     var pts = [];
     var n = ds.data.length;
@@ -106,6 +116,9 @@ export function renderLineChart(containerId, datasets, height, opts) {
       var x = marginL + (i / Math.max(n - 1, 1)) * plotW;
       var y = marginT + plotH - (ds.data[i] / allMax) * plotH;
       pts.push(x.toFixed(1) + ',' + y.toFixed(1));
+      if (pointPositions[i]) {
+        pointPositions[i].values.push({ label: ds.label, value: ds.data[i], color: ds.color });
+      }
     }
 
     var areaD = 'M' + pts[0] + ' L' + pts.join(' L') +
@@ -117,7 +130,86 @@ export function renderLineChart(containerId, datasets, height, opts) {
     }));
   });
 
+  // Vertical hover line (initially hidden)
+  var hoverLine = svgEl('line', {
+    x1: '0', y1: String(marginT), x2: '0', y2: String(marginT + plotH),
+    stroke: 'var(--accent, #c9a84c)', 'stroke-width': '1', opacity: '0',
+    'stroke-dasharray': '3,3'
+  });
+  svg.appendChild(hoverLine);
+
   wrapper.appendChild(svg);
+
+  // Tooltip div
+  var tooltip = document.createElement('div');
+  tooltip.className = 'lc-tooltip';
+  tooltip.style.cssText = 'display:none;position:absolute;z-index:10;background:var(--surface,#0f1520);border:1px solid var(--border,#1e2d3d);border-radius:8px;padding:8px 12px;font-size:0.58rem;pointer-events:none;direction:ltr;min-width:120px;box-shadow:0 4px 16px rgba(0,0,0,0.4)';
+  wrapper.appendChild(tooltip);
+
+  // Mouse interaction on the SVG
+  var svgNode = svg;
+  svgNode.style.cursor = 'crosshair';
+  svgNode.addEventListener('mousemove', function(e) {
+    var rect = svgNode.getBoundingClientRect();
+    var mouseX = (e.clientX - rect.left) / rect.width * w;
+
+    // Find nearest point
+    var nearest = null;
+    var nearestDist = Infinity;
+    for (var idx = 0; idx < pointPositions.length; idx++) {
+      var dist = Math.abs(pointPositions[idx].x - mouseX);
+      if (dist < nearestDist) { nearestDist = dist; nearest = pointPositions[idx]; }
+    }
+
+    if (nearest && nearestDist < plotW / nPoints) {
+      hoverLine.setAttribute('x1', String(nearest.x));
+      hoverLine.setAttribute('x2', String(nearest.x));
+      hoverLine.setAttribute('opacity', '0.6');
+
+      // Build tooltip
+      tooltip.style.display = 'block';
+      tooltip.textContent = '';
+
+      var header = document.createElement('div');
+      header.style.cssText = 'font-weight:700;color:var(--accent,#c9a84c);margin-bottom:4px;font-size:0.6rem';
+      header.textContent = nearest.period;
+      tooltip.appendChild(header);
+
+      nearest.values.forEach(function(v) {
+        var row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;gap:6px;padding:1px 0';
+
+        var dot = document.createElement('span');
+        dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + v.color;
+
+        var name = document.createElement('span');
+        name.style.cssText = 'flex:1;color:var(--text-dim,#6b7d92)';
+        name.textContent = v.label;
+
+        var val = document.createElement('span');
+        val.style.cssText = 'font-weight:700;color:var(--text,#dfe6ee)';
+        val.textContent = v.value;
+
+        row.appendChild(dot);
+        row.appendChild(name);
+        row.appendChild(val);
+        tooltip.appendChild(row);
+      });
+
+      // Position tooltip
+      var tipX = e.clientX - rect.left + 14;
+      if (tipX + tooltip.offsetWidth > rect.width - 10) {
+        tipX = e.clientX - rect.left - tooltip.offsetWidth - 14;
+      }
+      tooltip.style.left = tipX + 'px';
+      tooltip.style.top = '10px';
+    }
+  });
+
+  svgNode.addEventListener('mouseleave', function() {
+    hoverLine.setAttribute('opacity', '0');
+    tooltip.style.display = 'none';
+  });
 
   // Legend below chart
   var legend = document.createElement('div');
