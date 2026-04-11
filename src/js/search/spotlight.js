@@ -28,8 +28,7 @@ var CAT_KEYS = Object.keys(CATEGORIES);
 var MAX_RESULTS = 80;
 var MAX_VISIBLE = 40;
 var DEBOUNCE_MS = 100;
-var MAX_RECENT = 10;
-var RECENT_KEY = 'sl_recent_searches';
+var SUGGESTION_COUNT = 8;
 
 var MONTH_NAMES = {
   1: '\u0643\u0627\u0646\u0648\u0646 \u0627\u0644\u062B\u0627\u0646\u064A',
@@ -803,6 +802,47 @@ function highlightText(text, terms) {
   return frag;
 }
 
+// ── Suggestions pool (shuffled on each open) ─────────────
+var SUGGESTIONS = [
+  { en: 'merkava', ar: '\u0645\u064A\u0631\u0643\u0627\u0641\u0627', icon: '\uD83D\uDEE1' },
+  { en: 'drone', ar: '\u0645\u0633\u064A\u0651\u0631\u0629', icon: '\u2708' },
+  { en: 'haifa', ar: '\u062D\u064A\u0641\u0627', icon: '\uD83D\uDCCD' },
+  { en: 'tel aviv', ar: '\u062A\u0644 \u0623\u0628\u064A\u0628', icon: '\uD83D\uDCCD' },
+  { en: 'gaza', ar: '\u063A\u0632\u0629', icon: '\uD83D\uDCCD' },
+  { en: 'hezbollah', ar: '\u062D\u0632\u0628 \u0627\u0644\u0644\u0647', icon: '\u2694' },
+  { en: 'qassam', ar: '\u0627\u0644\u0642\u0633\u0627\u0645', icon: '\u2694' },
+  { en: 'missile', ar: '\u0635\u0627\u0631\u0648\u062E', icon: '\uD83D\uDE80' },
+  { en: 'siren', ar: '\u0635\u0641\u0627\u0631\u0627\u062A', icon: '\uD83D\uDD14' },
+  { en: 'ambush', ar: '\u0643\u0645\u064A\u0646', icon: '\u2694' },
+  { en: 'mortar', ar: '\u0647\u0627\u0648\u0646', icon: '\uD83D\uDCA5' },
+  { en: 'killed', ar: '\u0642\u062A\u0644\u0649', icon: '\u26A0' },
+  { en: 'netzarim', ar: '\u0646\u062A\u0633\u0627\u0631\u064A\u0645', icon: '\uD83D\uDCCD' },
+  { en: 'rafah', ar: '\u0631\u0641\u062D', icon: '\uD83D\uDCCD' },
+  { en: 'jenin', ar: '\u062C\u0646\u064A\u0646', icon: '\uD83D\uDCCD' },
+  { en: 'airstrike', ar: '\u063A\u0627\u0631\u0629 \u062C\u0648\u064A\u0629', icon: '\uD83D\uDCA5' },
+  { en: 'iron dome', ar: '\u0627\u0644\u0642\u0628\u0629 \u0627\u0644\u062D\u062F\u064A\u062F\u064A\u0629', icon: '\uD83D\uDEE1' },
+  { en: 'beirut', ar: '\u0628\u064A\u0631\u0648\u062A', icon: '\uD83D\uDCCD' },
+  { en: 'sniper', ar: '\u0642\u0646\u0635', icon: '\uD83C\uDFAF' },
+  { en: 'ceasefire', ar: '\u0648\u0642\u0641 \u0625\u0637\u0644\u0627\u0642 \u0627\u0644\u0646\u0627\u0631', icon: '\u270B' },
+  { en: 'today', ar: '\u0627\u0644\u064A\u0648\u0645', icon: '\uD83D\uDCC5' },
+  { en: 'yesterday', ar: '\u0623\u0645\u0633', icon: '\uD83D\uDCC5' },
+  { en: 'last week', ar: '\u0627\u0644\u0623\u0633\u0628\u0648\u0639 \u0627\u0644\u0645\u0627\u0636\u064A', icon: '\uD83D\uDCC5' },
+  { en: 'kornet', ar: '\u0643\u0648\u0631\u0646\u064A\u062A', icon: '\uD83D\uDCA5' },
+  { en: 'golan', ar: '\u0627\u0644\u062C\u0648\u0644\u0627\u0646', icon: '\uD83D\uDCCD' },
+  { en: 'houthis', ar: '\u0623\u0646\u0635\u0627\u0631 \u0627\u0644\u0644\u0647', icon: '\u2694' },
+  { en: 'settlement', ar: '\u0645\u0633\u062A\u0648\u0637\u0646\u0629', icon: '\uD83C\uDFD8' },
+  { en: 'artillery', ar: '\u0645\u062F\u0641\u0639\u064A\u0629', icon: '\uD83D\uDCA5' }
+];
+
+function shuffleArray(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
 function renderEmpty() {
   _resultsList.textContent = '';
   _filtersEl.textContent = '';
@@ -813,82 +853,50 @@ function renderEmpty() {
   _fltResults = [];
   _selIdx = -1;
 
-  var recent = getRecent();
+  var sugDiv = document.createElement('div');
+  sugDiv.className = 'sl-recent';
 
-  if (recent.length > 0) {
-    var recentDiv = document.createElement('div');
-    recentDiv.className = 'sl-recent';
+  var sugLabel = document.createElement('div');
+  sugLabel.className = 'sl-recent-label';
+  sugLabel.textContent = '\u062C\u0631\u0651\u0628 \u0627\u0644\u0628\u062D\u062B \u0639\u0646';
+  sugDiv.appendChild(sugLabel);
 
-    var recentLabel = document.createElement('div');
-    recentLabel.className = 'sl-recent-label';
-    recentLabel.textContent = '\u0639\u0645\u0644\u064A\u0627\u062A \u0628\u062D\u062B \u0633\u0627\u0628\u0642\u0629';
-    recentDiv.appendChild(recentLabel);
+  var picked = shuffleArray(SUGGESTIONS).slice(0, SUGGESTION_COUNT);
+  for (var si = 0; si < picked.length; si++) {
+    var item = picked[si];
+    var row = document.createElement('div');
+    row.className = 'sl-recent-item';
 
-    for (var ri = 0; ri < recent.length; ri++) {
-      var recentItem = document.createElement('div');
-      recentItem.className = 'sl-recent-item';
+    var icon = document.createElement('span');
+    icon.className = 'sl-recent-icon';
+    icon.textContent = item.icon;
+    row.appendChild(icon);
 
-      var recentIcon = document.createElement('span');
-      recentIcon.className = 'sl-recent-icon';
-      recentIcon.textContent = '\uD83D\uDD70';
-      recentItem.appendChild(recentIcon);
+    var label = document.createElement('span');
+    label.style.cssText = 'flex:1';
+    label.textContent = item.ar;
+    row.appendChild(label);
 
-      recentItem.appendChild(document.createTextNode(recent[ri]));
+    var hint = document.createElement('span');
+    hint.style.cssText = 'font-size:10px;color:var(--sl-text-muted);direction:ltr;font-family:monospace';
+    hint.textContent = item.en;
+    row.appendChild(hint);
 
-      (function(q) {
-        recentItem.addEventListener('click', function() {
-          _input.value = q;
-          _input.dispatchEvent(new Event('input'));
-        });
-      })(recent[ri]);
+    (function(q) {
+      row.addEventListener('click', function() {
+        _input.value = q;
+        _input.dispatchEvent(new Event('input'));
+      });
+    })(item.en);
 
-      recentDiv.appendChild(recentItem);
-    }
-
-    _resultsList.appendChild(recentDiv);
-  } else {
-    var emptyDiv = document.createElement('div');
-    emptyDiv.className = 'sl-empty';
-
-    var emptyIcon = document.createElement('div');
-    emptyIcon.className = 'sl-empty-icon';
-    emptyIcon.textContent = '\uD83D\uDD0D';
-    emptyDiv.appendChild(emptyIcon);
-
-    var emptyTitle = document.createElement('div');
-    emptyTitle.className = 'sl-empty-title';
-    emptyTitle.textContent = '\u0627\u0643\u062A\u0628 \u0644\u0644\u0628\u062D\u062B \u0641\u064A \u062C\u0645\u064A\u0639 \u0627\u0644\u062A\u0642\u0627\u0631\u064A\u0631';
-    emptyDiv.appendChild(emptyTitle);
-
-    _resultsList.appendChild(emptyDiv);
+    sugDiv.appendChild(row);
   }
 
+  _resultsList.appendChild(sugDiv);
   renderDetailEmpty();
 }
 
-// ── Recent searches ───────────────────────────────────────
-
-function getRecent() {
-  try {
-    var stored = localStorage.getItem(RECENT_KEY);
-    if (stored) return JSON.parse(stored);
-  } catch (ex) { /* ignore */ }
-  return [];
-}
-
-function saveRecent(query) {
-  if (!query || query.trim().length < 2) return;
-  var q = query.trim();
-  var recent = getRecent();
-  // Dedupe
-  var idx = recent.indexOf(q);
-  if (idx !== -1) recent.splice(idx, 1);
-  recent.unshift(q);
-  if (recent.length > MAX_RECENT) recent = recent.slice(0, MAX_RECENT);
-  try {
-    localStorage.setItem(RECENT_KEY, JSON.stringify(recent));
-  } catch (ex) { /* ignore */ }
-}
+// (search history removed — using shuffled suggestions instead)
 
 // ── Keyboard navigation & selection ───────────────────────
 
@@ -1071,9 +1079,7 @@ function bindEvents() {
         _activeFlt = 'all';
         renderResults(searchResult);
 
-        if (searchResult.results.length > 0) {
-          saveRecent(q);
-        }
+        // suggestions shown instead of history
       });
     }, DEBOUNCE_MS);
   });
