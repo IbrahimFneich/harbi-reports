@@ -1,23 +1,33 @@
 [
   {
-    "version": "1.0.99",
-    "date": "2026-04-11",
+    "version": "1.8.3",
+    "date": "2026-04-11 22:30",
+    "title": "Fix changelog versions and footer version sync",
+    "changes": [
+      "Align all changelog versions with actual git tags (1.7.6–1.8.2)",
+      "Add timestamps to changelog dates",
+      "Fix footer version to match latest deploy"
+    ]
+  },
+  {
+    "version": "1.8.2",
+    "date": "2026-04-11 22:15",
     "title": "Fix report counter order — swap values for RTL rendering",
     "changes": [
       "Swap counter values so RTL bidi renders as current/total (e.g. 909/917)"
     ]
   },
   {
-    "version": "1.0.98",
-    "date": "2026-04-11",
+    "version": "1.8.1",
+    "date": "2026-04-11 22:10",
     "title": "Fix report counter display order in RTL",
     "changes": [
       "Add direction:ltr to day-nav-current so 910/917 reads left-to-right correctly"
     ]
   },
   {
-    "version": "1.0.97",
-    "date": "2026-04-11",
+    "version": "1.8.0",
+    "date": "2026-04-11 21:50",
     "title": "Clean up report header: remove title, fix badges, compact search",
     "changes": [
       "Remove redundant h1 headline from report header",
@@ -26,35 +36,26 @@
     ]
   },
   {
-    "version": "1.0.96",
-    "date": "2026-04-11",
+    "version": "1.7.9",
+    "date": "2026-04-11 21:30",
     "title": "Fix datepicker trigger not clickable due to header overlay",
     "changes": [
       "Add position:relative and z-index:1 to datepicker trigger so it sits above header::before overlay"
     ]
   },
   {
-    "version": "1.0.95",
-    "date": "2026-04-11",
-    "title": "Fix datepicker trigger showing Arabic format instead of dd/mm/yyyy",
-    "changes": [
-      "Restore dd/mm/yyyy numeric format after datepicker init overwrites trigger text",
-      "Datepicker trigger now consistently shows numeric date format"
-    ]
-  },
-  {
-    "version": "1.0.94",
-    "date": "2026-04-11",
+    "version": "1.7.8",
+    "date": "2026-04-11 21:20",
     "title": "Add datepicker to report header for quick date navigation",
     "changes": [
       "Add clickable dd/mm/yyyy below the Arabic date in report header",
       "Reuse analytics datepicker with calendar popup, manual input, and today button",
-      "Selecting a date navigates directly to that report"
+      "Fix datepicker trigger showing Arabic format — restore dd/mm/yyyy after init"
     ]
   },
   {
-    "version": "1.0.93",
-    "date": "2026-04-11",
+    "version": "1.7.7",
+    "date": "2026-04-11 20:50",
     "title": "Style MM/YYYY as subtle subtitle under month name",
     "changes": [
       "Move numeric date (MM/YYYY) to a smaller styled line below the Arabic month name",
@@ -62,8 +63,8 @@
     ]
   },
   {
-    "version": "1.0.92",
-    "date": "2026-04-11",
+    "version": "1.7.6",
+    "date": "2026-04-11 20:30",
     "title": "Add 27 missing Feb 2026 reports — zero gaps from Oct 7 2023",
     "changes": [
       "Add 27 reports for Feb 1-27, 2026 (ceasefire period, mostly enemy media and Iran news)",
@@ -72,8 +73,8 @@
     ]
   },
   {
-    "version": "1.0.91",
-    "date": "2026-04-11",
+    "version": "1.7.5",
+    "date": "2026-04-11 19:00",
     "title": "Fix: restore theme toggle, dashboards, maps, and nav on all reports",
     "changes": [
       "Fix missing initNav export that silently broke all enhancements (theme, dashboards, maps)",
