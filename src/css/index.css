@@ -15,6 +15,16 @@
     --green-dim: rgba(46,204,113,0.08);
     --red: #e74c3c;
     --red-dim: rgba(231,76,60,0.10);
+    --orange: #e67e22;
+    --orange-dim: rgba(230,126,34,0.08);
+    --blue: #3498db;
+    --blue-dim: rgba(52,152,219,0.08);
+    --purple: #9b59b6;
+    --purple-dim: rgba(155,89,182,0.08);
+    --cyan: #1abc9c;
+    --cyan-dim: rgba(26,188,156,0.06);
+    --pink: #e84393;
+    --pink-dim: rgba(232,67,147,0.06);
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
