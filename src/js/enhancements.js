@@ -23,7 +23,7 @@ window.filterIranAuto = filterIranAuto;
 var _inits = [
   ['hero', initHero],
   ['nav', initNav],
-  ['theme', initTheme],
+  // theme toggle now handled by navbar.js
   ['bayanatDash', initBayanatDash],
   ['sirensDash', initSirensDash],
   ['enemyDash', initEnemyDash],

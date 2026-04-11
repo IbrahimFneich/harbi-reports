@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="src/css/enhancements.css">
 <link rel="stylesheet" href="src/css/analytics.css">
+<link rel="stylesheet" href="src/css/navbar.css"/>
 </head>
 <body class="analytics">
 
@@ -17,14 +18,10 @@
   <div class="load-text">جارٍ تحميل قاعدة البيانات...</div>
 </div>
 
-<!-- Header -->
-<div class="a-header">
-  <a href="index.html" class="home-link">&#8592; الرئيسية</a>
-  <h1>مركز التحليلات <span>HARBI ANALYTICS</span></h1>
-  <div class="a-status">
-    <span><span class="dot"></span> <span id="statusText">جارٍ التحميل...</span></span>
-  </div>
-  <button class="theme-toggle" id="themeBtn">&#9728;</button>
+<!-- Status Bar -->
+<div class="a-status-bar">
+  <span class="a-page-title">مركز التحليلات</span>
+  <span><span class="dot"></span> <span id="statusText">جارٍ التحميل...</span></span>
 </div>
 
 <!-- Controls -->
@@ -80,20 +77,9 @@
 
 <script src="https://sql.js.org/dist/sql-wasm.js"></script>
 <script type="module" src="src/js/analytics/dashboard.js"></script>
-<script>
-(function() {
-  var saved = localStorage.getItem('harbi-theme');
-  if (saved === 'light') document.body.classList.add('light');
-  var btn = document.getElementById('themeBtn');
-  if (!btn) return;
-  btn.textContent = document.body.classList.contains('light') ? '\u263E' : '\u2600';
-  btn.onclick = function() {
-    document.body.classList.toggle('light');
-    var isLight = document.body.classList.contains('light');
-    btn.textContent = isLight ? '\u263E' : '\u2600';
-    localStorage.setItem('harbi-theme', isLight ? 'light' : 'dark');
-  };
-})();
+<script type="module">
+import { initNavbar } from './src/js/ui/navbar.js';
+initNavbar();
 </script>
 </body>
 </html>

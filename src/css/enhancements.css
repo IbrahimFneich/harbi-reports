@@ -56,33 +56,6 @@ body.light .leaflet-popup-tip {
   background: #ffffff !important;
 }
 
-/* ── Theme Toggle Button ── */
-.theme-toggle {
-  position: absolute;
-  top: 14px;
-  right: 16px;
-  z-index: 10;
-  background: rgba(201,168,76,0.12);
-  border: 1px solid rgba(201,168,76,0.3);
-  color: var(--accent);
-  cursor: pointer;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  line-height: 1;
-  transition: all 0.2s;
-}
-
-.theme-toggle:hover {
-  background: rgba(201,168,76,0.25);
-  border-color: var(--accent);
-}
-
-body.light .theme-toggle {
-  background: rgba(154,123,45,0.10);
-  border-color: rgba(154,123,45,0.3);
-}
-
 /* ═══════════════ Deep Search Target (light mode) ═══════════════ */
 body.light .search-target .tl-body {
   border-color: var(--accent) !important;
@@ -435,7 +408,7 @@ body.light .search-target .tl-body::before {
 /* ═══════════════ Print Styles ═══════════════ */
 @media print {
   .header, .stats, .day-hero, .day-nav, .action-bar, .tabs, .search-bar,
-  .cat-filter-bar, .theme-toggle, .home-btn, .footer { break-inside: avoid; }
+  .cat-filter-bar, .nav-theme-btn, .footer { break-inside: avoid; }
   .tab-content { display: block !important; page-break-before: always; }
   .auto-siren-map, .auto-bayan-map, #sirenMap { display: none; }
   body { background: #fff; color: #000; }

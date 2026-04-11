@@ -10,12 +10,14 @@ import { renderIran } from './renderers/iran.js';
 import { renderVideos } from './renderers/videos.js';
 import { renderAllies } from './renderers/allies.js';
 import { initSirenMap } from './maps/siren-map.js';
+import { swapAllMapTiles } from './maps/tiles.js';
 
 // Attach globals needed by onclick handlers
 window.switchTab = switchTab;
 window.initSirenMap = initSirenMap;
 window.showChangelog = showChangelog;
 window.clearSearch = clearSearch;
+window.swapAllMapTiles = swapAllMapTiles;
 
 // ── renderReport — master orchestrator ───────────────────
 
@@ -26,14 +28,6 @@ function renderReport(data) {
   // Header
   var header = document.createElement('div');
   header.className = 'header';
-
-  var homeBtn = document.createElement('a');
-  homeBtn.href = 'index.html';
-  homeBtn.className = 'home-btn';
-  homeBtn.textContent = '\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629 ';
-  var arrow = document.createTextNode('\u2190');
-  homeBtn.appendChild(arrow);
-  header.appendChild(homeBtn);
 
   var h1 = document.createElement('h1');
   var h1Link = document.createElement('a');

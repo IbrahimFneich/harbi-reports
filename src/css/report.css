@@ -395,9 +395,6 @@ body {
   border-top:1px solid var(--border); background:var(--surface);
 }
 
-.home-btn { position:absolute; top:14px; left:16px; z-index:10; background:rgba(201,168,76,0.12); border:1px solid rgba(201,168,76,0.3); color:#c9a84c; text-decoration:none; padding:6px 14px; border-radius:8px; font-family:inherit; font-size:0.75rem; font-weight:700; transition:all 0.2s; }
-.home-btn:hover { background:rgba(201,168,76,0.25); border-color:#c9a84c; }
-
 /* ═══════════════ CHANGELOG MODAL ═══════════════ */
 .changelog-overlay {
   display:none; position:fixed; top:0; left:0; right:0; bottom:0;

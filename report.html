@@ -7,8 +7,16 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link rel="stylesheet" href="src/css/report.css"/>
 <link rel="stylesheet" href="src/css/enhancements.css"/>
+<link rel="stylesheet" href="src/css/navbar.css"/>
 </head>
 <body>
+<script>
+  if (localStorage.getItem('harbi-theme') !== 'dark') document.body.classList.add('light');
+</script>
+<script type="module">
+import { initNavbar } from './src/js/ui/navbar.js';
+initNavbar();
+</script>
 <div id="report-root">
   <div class="header">
     <h1 style="position:relative">جارٍ التحميل...</h1>

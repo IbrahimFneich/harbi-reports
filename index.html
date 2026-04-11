@@ -6,31 +6,15 @@
 <title>الإعلام الحربي — أرشيف التقارير اليومية</title>
 <link rel="stylesheet" href="src/css/enhancements.css"/>
 <link rel="stylesheet" href="src/css/index.css"/>
+<link rel="stylesheet" href="src/css/navbar.css"/>
 <style>
   /* All layout styles in src/css/index.css */
 </style>
+<script>
+  if (localStorage.getItem('harbi-theme') !== 'dark') document.body.classList.add('light');
+</script>
 </head>
 <body>
-
-<div class="header">
-  <h1>الإعلام الحربي</h1>
-  <div class="subtitle">أرشيف التقارير اليومية — التغطية الإخبارية</div>
-</div>
-
-<a href="analytics.html" class="analytics-banner">
-  <div class="ab-icon">📊</div>
-  <div class="ab-content">
-    <div class="ab-title">مركز التحليلات</div>
-    <div class="ab-desc">رسوم بيانية، خرائط حرارية، وإحصائيات شاملة لجميع التقارير</div>
-  </div>
-  <div class="ab-arrow">←</div>
-</a>
-
-<div class="global-search" onclick="openSpotlight()" style="cursor:pointer">
-  <input type="text" placeholder="بحث في جميع التقارير... (اضغط /)" readonly style="cursor:pointer">
-  <span style="font-size:0.6rem;padding:2px 8px;border-radius:4px;background:var(--surface2);border:1px solid var(--border);color:var(--text-dim);direction:ltr;font-family:monospace">/</span>
-</div>
-
 
 <div class="view-toggle">
   <button id="viewCalBtn" class="active" onclick="setView('cal')">📅 التقويم</button>
@@ -504,24 +488,9 @@ try {
 
 <script src="https://sql.js.org/dist/sql-wasm.js"></script>
 <script type="module" src="src/js/search/spotlight.js"></script>
-<script>
-// Theme toggle for landing page
-(function() {
-  var saved = localStorage.getItem('harbi-theme');
-  if (saved !== 'dark') document.body.classList.add('light');
-  var header = document.querySelector('.header');
-  if (!header) return;
-  var btn = document.createElement('button');
-  btn.className = 'theme-toggle';
-  btn.textContent = document.body.classList.contains('light') ? '\u263E' : '\u2600';
-  btn.onclick = function() {
-    document.body.classList.toggle('light');
-    var isLight = document.body.classList.contains('light');
-    btn.textContent = isLight ? '\u263E' : '\u2600';
-    localStorage.setItem('harbi-theme', isLight ? 'light' : 'dark');
-  };
-  header.appendChild(btn);
-})();
+<script type="module">
+import { initNavbar } from './src/js/ui/navbar.js';
+initNavbar();
 </script>
 </body>
 </html>

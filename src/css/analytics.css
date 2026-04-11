@@ -41,27 +41,15 @@ body.analytics {
   font-size: 0.72rem; color: var(--text-dim);
 }
 
-/* ── Header ── */
-.a-header {
-  padding: 20px 24px 16px;
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+/* ── Status Bar ── */
+.a-status-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 24px; border-bottom: 1px solid var(--border);
+  font-size: 0.65rem; color: var(--text-dim);
 }
-.a-header h1 {
-  font-size: 1rem; font-weight: 800; color: var(--accent);
-  letter-spacing: -0.02em; margin: 0;
+.a-status-bar .a-page-title {
+  font-size: 0.85rem; font-weight: 800; color: var(--accent);
 }
-.a-header h1 span {
-  color: var(--text-dim); font-weight: 400; font-size: 0.7rem; margin-right: 8px;
-}
-.a-header .home-link {
-  font-size: 0.62rem; color: var(--text-dim); text-decoration: none;
-  padding: 4px 12px; border-radius: 6px; border: 1px solid var(--border);
-  background: var(--surface2); transition: all 0.15s;
-  margin-right: auto; /* push to left in RTL */
-  order: 10; /* render last (leftmost in RTL) */
-}
-.a-header .home-link:hover { border-color: var(--accent); color: var(--accent); }
 .a-status {
   display: flex; gap: 12px; direction: ltr;
 }
@@ -392,20 +380,13 @@ body.analytics.light .a-kpi .num {
   background: linear-gradient(135deg, #1a1a1a, #6b6b6b);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
-body.analytics.light .a-header { border-bottom-color: var(--border); }
 body.analytics.light .a-controls { border-bottom-color: rgba(212,207,196,0.5); }
 body.analytics.light .a-table tr:hover td { background: rgba(154,123,45,0.06); }
-body.analytics.light .theme-toggle {
-  background: rgba(154,123,45,0.10);
-  border-color: rgba(154,123,45,0.3);
-}
 
 /* ── Mobile ── */
 @media (max-width: 768px) {
   .a-kpi-strip { grid-template-columns: repeat(3, 1fr); }
   .a-grid { grid-template-columns: 1fr; }
-  .a-header { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .a-status { margin-right: 0; }
   .a-controls { padding: 10px 16px; }
   .a-panel { padding: 12px; }
   .a-bar-label { width: 60px; font-size: 0.56rem; }
