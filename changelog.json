@@ -1,5 +1,30 @@
 [
   {
+    "version": "2.0.0",
+    "date": "2026-04-11",
+    "title": "Smart Spotlight Search — complete rewrite with split-pane UI",
+    "changes": [
+      "Split-pane spotlight (Ctrl+K): results list + live detail preview like macOS Spotlight",
+      "310-entry English→Arabic alias dictionary (weapons, locations, groups, military terms)",
+      "Keyboard layout transliteration: forgot to switch keyboard? Type English keys, get Arabic",
+      "Phonetic transliteration: type 'haifa' and find حيفا",
+      "Natural language date search: 'today', 'yesterday', 'Oct 7 2024', '3 days ago', 'last week'",
+      "Date + keyword combo: '2024-10-07 drone' filters results to that day",
+      "Category-specific detail pane: badge/weapon/tags for bayanat, location for sirens, source for iran",
+      "Search term highlighting in results and full text preview",
+      "Related events: see 3 nearby events from the same day",
+      "Search history persisted in localStorage (last 10 searches)",
+      "Stats bar shows live per-category result counts as you type",
+      "EN→AR mode indicator shows when transliteration is active",
+      "Tab key cycles through category filters",
+      "Cmd+Enter opens result in new tab",
+      "Loading skeleton while database initializes",
+      "SQLite FTS5 only — faster, more consistent search",
+      "Mobile responsive: full-screen on small screens",
+      "Spotlight now available on analytics page"
+    ]
+  },
+  {
     "version": "1.9.3",
     "date": "2026-04-11",
     "title": "Fix phase nav visibility — proper z-index and offset",
