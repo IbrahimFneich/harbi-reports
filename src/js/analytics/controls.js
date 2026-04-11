@@ -6,7 +6,7 @@ var _state = {
   dateStart: '',
   dateEnd: '',
   categories: ['bayanat', 'sirens', 'enemy', 'iran', 'videos', 'allies'],
-  grouping: 'monthly'
+  grouping: 'daily'
 };
 
 var _onChange = null;
