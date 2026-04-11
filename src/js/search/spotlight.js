@@ -124,8 +124,9 @@ function doSrch(q) {
 }
 
 function doSrchDB(terms) {
-  var nq = sNorm(terms);
-  var words = nq.split(/\s+/).filter(function(w) { return w.length > 0; });
+  // DB stores original text — do NOT normalize (ة→ه etc.)
+  // Only split into words and trim
+  var words = terms.trim().split(/\s+/).filter(function(w) { return w.length > 0; });
   if (words.length === 0) return [];
 
   var results;
@@ -147,7 +148,7 @@ function doSrchDB(terms) {
     }
   }
 
-  // Fallback: LIKE search
+  // Fallback: LIKE search (also uses original text, not normalized)
   var likeClauses = words.map(function() {
     return "(title LIKE ? OR location LIKE ? OR subtitle LIKE ? OR full_text LIKE ?)";
   });
