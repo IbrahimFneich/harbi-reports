@@ -373,25 +373,34 @@ export function renderHeatmap(containerId, data) {
     var line2 = document.createElement('div');
     line2.textContent = v + ' \u062D\u062F\u062B (' + pct + '% \u0645\u0646 \u0627\u0644\u0625\u062C\u0645\u0627\u0644\u064A)';
     hmTip.appendChild(line2);
-    // Line 3: intensity bar
+    // Line 3: intensity relative to peak
     var line3 = document.createElement('div');
     line3.style.cssText = 'display:flex;align-items:center;gap:6px;margin-top:3px';
+    var barLabelPre = document.createElement('span');
+    barLabelPre.style.cssText = 'font-size:0.46rem;color:var(--text-muted);white-space:nowrap';
+    barLabelPre.textContent = '\u0627\u0644\u062D\u062F\u0651\u0629: ';
+    line3.appendChild(barLabelPre);
     var barBg = document.createElement('div');
-    barBg.style.cssText = 'flex:1;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;min-width:60px';
+    barBg.style.cssText = 'flex:1;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;min-width:50px';
     var barFill = document.createElement('div');
     barFill.style.cssText = 'height:100%;border-radius:2px;background:rgba(231,76,60,0.8);width:' + pctOfMax + '%';
     barBg.appendChild(barFill);
     line3.appendChild(barBg);
     var barLabel = document.createElement('span');
     barLabel.style.cssText = 'font-size:0.46rem;opacity:0.6;direction:ltr';
-    barLabel.textContent = pctOfMax + '%';
+    barLabel.textContent = pctOfMax + '% \u0645\u0646 \u0627\u0644\u0630\u0631\u0648\u0629';
     line3.appendChild(barLabel);
     hmTip.appendChild(line3);
-    // Line 4: day + hour totals
+    // Line 4: day total
     var line4 = document.createElement('div');
-    line4.style.cssText = 'font-size:0.46rem;color:var(--text-muted);margin-top:2px';
-    line4.textContent = '\u0625\u062C\u0645\u0627\u0644\u064A ' + DAY_NAMES[dow] + ': ' + dayTotal + ' \u2022 \u0625\u062C\u0645\u0627\u0644\u064A ' + String(hour).padStart(2, '0') + ':00: ' + hourTotal;
+    line4.style.cssText = 'font-size:0.46rem;color:var(--text-muted);margin-top:3px';
+    line4.textContent = '\u0643\u0644 \u0623\u064A\u0627\u0645 ' + DAY_NAMES[dow] + ': ' + dayTotal + ' \u062D\u062F\u062B';
     hmTip.appendChild(line4);
+    // Line 5: hour total
+    var line5 = document.createElement('div');
+    line5.style.cssText = 'font-size:0.46rem;color:var(--text-muted)';
+    line5.textContent = '\u0643\u0644 \u0627\u0644\u0623\u064A\u0627\u0645 \u0627\u0644\u0633\u0627\u0639\u0629 ' + String(hour).padStart(2, '0') + ':00: ' + hourTotal + ' \u062D\u062F\u062B';
+    hmTip.appendChild(line5);
 
     hmTip.style.display = 'block';
     var rect = outerWrap.getBoundingClientRect();

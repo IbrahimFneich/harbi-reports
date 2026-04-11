@@ -1,5 +1,15 @@
 [
   {
+    "version": "2.0.7",
+    "date": "2026-04-12",
+    "title": "Clearer heatmap tooltip labels",
+    "changes": [
+      "Intensity bar labeled 'الحدّة: 85% من الذروة' instead of bare percentage",
+      "Day total labeled 'كل أيام الخميس: 244 حدث' instead of 'إجمالي الخميس'",
+      "Hour total labeled 'كل الأيام الساعة 10:00: 81 حدث' on its own line"
+    ]
+  },
+  {
     "version": "2.0.6",
     "date": "2026-04-12",
     "title": "Add barija/warship/battleship/ship/naval aliases",
