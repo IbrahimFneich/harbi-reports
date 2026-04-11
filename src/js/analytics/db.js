@@ -3,11 +3,6 @@
 var _db = null;
 var _dbReady = null;
 
-/**
- * Initialize the SQLite database from data/harbi.db.
- * Returns a promise that resolves when the DB is ready.
- * Subsequent calls return the cached promise.
- */
 function waitForSqlJs() {
   return new Promise(function(resolve, reject) {
     if (typeof initSqlJs !== 'undefined') { resolve(); return; }

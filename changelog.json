@@ -1,5 +1,16 @@
 [
   {
+    "version": "1.8.6",
+    "date": "2026-04-11 23:45",
+    "title": "Clean up .gitignore — ignore generated artifacts",
+    "changes": [
+      "Ignore raw/ directory (772 JSON data files)",
+      "Ignore tmp/ directory (generated report PNGs/HTMLs)",
+      "Ignore report-hero and test-db.html one-off test files",
+      "Remove redundant JSDoc comment from db.js"
+    ]
+  },
+  {
     "version": "1.8.5",
     "date": "2026-04-11 23:30",
     "title": "Fix tab badge counts on all 917 reports",
