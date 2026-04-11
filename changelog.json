@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.0.99",
+    "date": "2026-04-11",
+    "title": "Fix report counter order — swap values for RTL rendering",
+    "changes": [
+      "Swap counter values so RTL bidi renders as current/total (e.g. 909/917)"
+    ]
+  },
+  {
     "version": "1.0.98",
     "date": "2026-04-11",
     "title": "Fix report counter display order in RTL",
