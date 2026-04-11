@@ -6,9 +6,7 @@ function svgEl(tag, attrs) {
   var el = document.createElementNS(NS, tag);
   if (attrs) {
     var keys = Object.keys(attrs);
-    for (var i = 0; i < keys.length; i++) {
-      el.setAttribute(keys[i], attrs[keys[i]]);
-    }
+    for (var i = 0; i < keys.length; i++) el.setAttribute(keys[i], attrs[keys[i]]);
   }
   return el;
 }
@@ -25,10 +23,38 @@ function svgText(x, y, text, attrs) {
 
 var DAY_NAMES = ['\u0623\u062D\u062F', '\u0625\u062B\u0646', '\u062B\u0644\u0627', '\u0623\u0631\u0628', '\u062E\u0645\u064A', '\u062C\u0645\u0639', '\u0633\u0628\u062A'];
 
+/* ═══════════ FULLSCREEN UTILITY ═══════════ */
+
+export function addFullscreenBtn(panelEl, onEnter, onExit) {
+  var btn = document.createElement('button');
+  btn.className = 'fs-btn';
+  btn.textContent = '\u26F6';
+  btn.title = '\u0645\u0644\u0621 \u0627\u0644\u0634\u0627\u0634\u0629';
+  var titleEl = panelEl.querySelector('.a-panel-title');
+  if (titleEl) titleEl.appendChild(btn);
+
+  btn.addEventListener('click', function() {
+    if (panelEl.classList.contains('a-panel-fs')) {
+      panelEl.classList.remove('a-panel-fs');
+      document.body.style.overflow = '';
+      btn.textContent = '\u26F6';
+      if (onExit) onExit();
+    } else {
+      panelEl.classList.add('a-panel-fs');
+      document.body.style.overflow = 'hidden';
+      btn.textContent = '\u2716';
+      if (onEnter) onEnter();
+    }
+  });
+  return btn;
+}
+
+/* ═══════════ LINE CHART ═══════════ */
+
 /**
- * Multi-series line chart with area fills, legend, and axis labels.
+ * Multi-series line chart with axes, legend toggle, tooltip, grouping badge.
  * datasets: [{data: number[], color: string, label: string}]
- * opts.xLabels: string[] — labels for x-axis ticks
+ * opts.xLabels, opts.grouping
  */
 export function renderLineChart(containerId, datasets, height, opts) {
   var el = document.getElementById(containerId);
@@ -36,207 +62,187 @@ export function renderLineChart(containerId, datasets, height, opts) {
   el.textContent = '';
 
   var xLabels = (opts && opts.xLabels) || [];
+  var grouping = (opts && opts.grouping) || '';
+  var hiddenSeries = {}; // track toggled-off series by index
 
-  // Wrapper for SVG + legend
   var wrapper = document.createElement('div');
   wrapper.style.cssText = 'position:relative';
 
-  var chartW = el.offsetWidth || 600;
-  var marginL = 40; // space for Y axis
-  var marginB = 24; // space for X axis
-  var marginR = 6;
-  var marginT = 6;
-  var w = chartW;
-  var h = (height || 200) + marginB;
-  var plotW = w - marginL - marginR;
-  var plotH = h - marginT - marginB;
+  function draw() {
+    // Remove previous SVG/legend but keep wrapper
+    var prevSvg = wrapper.querySelector('svg');
+    if (prevSvg) prevSvg.remove();
+    var prevLeg = wrapper.querySelector('.lc-legend');
+    if (prevLeg) prevLeg.remove();
+    var prevTip = wrapper.querySelector('.lc-tooltip');
+    if (prevTip) prevTip.remove();
 
-  var allMax = 0;
-  datasets.forEach(function(ds) {
-    ds.data.forEach(function(v) { if (v > allMax) allMax = v; });
-  });
-  if (allMax === 0) allMax = 1;
+    var visibleDS = datasets.filter(function(_, i) { return !hiddenSeries[i]; });
 
-  var svg = svgEl('svg', { viewBox: '0 0 ' + w + ' ' + h, preserveAspectRatio: 'none', style: 'width:100%;height:' + h + 'px' });
+    var chartW = el.offsetWidth || 600;
+    var marginL = 40, marginB = 24, marginR = 6, marginT = 6;
+    var w = chartW;
+    var h = (height || 200) + marginB;
+    var plotW = w - marginL - marginR;
+    var plotH = h - marginT - marginB;
 
-  // Y-axis grid lines + labels (5 ticks)
-  for (var yi = 0; yi <= 4; yi++) {
-    var yVal = Math.round(allMax * yi / 4);
-    var yPos = marginT + plotH - (yi / 4) * plotH;
-
-    // Grid line
-    svg.appendChild(svgEl('line', {
-      x1: String(marginL), y1: String(yPos),
-      x2: String(w - marginR), y2: String(yPos),
-      stroke: 'var(--border, #1e2d3d)', 'stroke-width': '0.5', 'stroke-dasharray': yi === 0 ? 'none' : '3,3'
-    }));
-
-    // Y label
-    svg.appendChild(svgText(marginL - 4, yPos + 3, yVal, { 'text-anchor': 'end', 'font-size': '8' }));
-  }
-
-  // X-axis labels
-  if (xLabels.length > 0) {
-    var maxXLabels = Math.min(xLabels.length, 12);
-    var step = Math.max(1, Math.floor(xLabels.length / maxXLabels));
-    for (var xi = 0; xi < xLabels.length; xi += step) {
-      var xPos = marginL + (xi / Math.max(xLabels.length - 1, 1)) * plotW;
-      var label = xLabels[xi];
-      // Shorten: '2024-03' → '03/24', '2024-W12' → 'W12', '2024-03-15' → '03/15'
-      if (label.length === 7) label = label.substring(5) + '/' + label.substring(2, 4);
-      else if (label.length === 10) label = label.substring(5);
-      else if (label.indexOf('-W') > 0) label = 'W' + label.split('W')[1];
-
-      svg.appendChild(svgText(xPos, h - 4, label, { 'text-anchor': 'middle', 'font-size': '7.5' }));
-
-      // Tick mark
-      svg.appendChild(svgEl('line', {
-        x1: String(xPos), y1: String(marginT + plotH),
-        x2: String(xPos), y2: String(marginT + plotH + 4),
-        stroke: 'var(--border, #1e2d3d)', 'stroke-width': '0.5'
-      }));
-    }
-  }
-
-  // Data lines + collect point positions for tooltips
-  var pointPositions = []; // [{x, values: [{label, value, color}]}]
-  var nPoints = datasets.length > 0 ? datasets[0].data.length : 0;
-  for (var pi = 0; pi < nPoints; pi++) {
-    pointPositions.push({
-      x: marginL + (pi / Math.max(nPoints - 1, 1)) * plotW,
-      period: xLabels[pi] || '',
-      values: []
+    var allMax = 0;
+    visibleDS.forEach(function(ds) {
+      ds.data.forEach(function(v) { if (v > allMax) allMax = v; });
     });
+    if (allMax === 0) allMax = 1;
+
+    var svg = svgEl('svg', { viewBox: '0 0 ' + w + ' ' + h, style: 'width:100%;height:' + h + 'px;display:block' });
+
+    // Y-axis
+    for (var yi = 0; yi <= 4; yi++) {
+      var yVal = Math.round(allMax * yi / 4);
+      var yPos = marginT + plotH - (yi / 4) * plotH;
+      svg.appendChild(svgEl('line', {
+        x1: String(marginL), y1: String(yPos), x2: String(w - marginR), y2: String(yPos),
+        stroke: 'var(--border, #1e2d3d)', 'stroke-width': '0.5', 'stroke-dasharray': yi === 0 ? 'none' : '3,3'
+      }));
+      svg.appendChild(svgText(marginL - 4, yPos + 3, yVal, { 'text-anchor': 'end', 'font-size': '8' }));
+    }
+
+    // X-axis
+    if (xLabels.length > 0) {
+      var maxXL = Math.min(xLabels.length, 12);
+      var step = Math.max(1, Math.floor(xLabels.length / maxXL));
+      for (var xi = 0; xi < xLabels.length; xi += step) {
+        var xPos = marginL + (xi / Math.max(xLabels.length - 1, 1)) * plotW;
+        var lbl = xLabels[xi];
+        if (lbl.length === 7) lbl = lbl.substring(5) + '/' + lbl.substring(2, 4);
+        else if (lbl.length === 10) lbl = lbl.substring(5);
+        else if (lbl.indexOf('-W') > 0) lbl = 'W' + lbl.split('W')[1];
+        svg.appendChild(svgText(xPos, h - 4, lbl, { 'text-anchor': 'middle', 'font-size': '7.5' }));
+        svg.appendChild(svgEl('line', {
+          x1: String(xPos), y1: String(marginT + plotH), x2: String(xPos), y2: String(marginT + plotH + 4),
+          stroke: 'var(--border, #1e2d3d)', 'stroke-width': '0.5'
+        }));
+      }
+    }
+
+    // Points + lines
+    var pointPositions = [];
+    var nPoints = visibleDS.length > 0 ? visibleDS[0].data.length : 0;
+    for (var pi = 0; pi < nPoints; pi++) {
+      pointPositions.push({ x: marginL + (pi / Math.max(nPoints - 1, 1)) * plotW, period: xLabels[pi] || '', values: [] });
+    }
+
+    visibleDS.forEach(function(ds) {
+      var pts = [];
+      for (var i = 0; i < ds.data.length; i++) {
+        var x = marginL + (i / Math.max(ds.data.length - 1, 1)) * plotW;
+        var y = marginT + plotH - (ds.data[i] / allMax) * plotH;
+        pts.push(x.toFixed(1) + ',' + y.toFixed(1));
+        if (pointPositions[i]) pointPositions[i].values.push({ label: ds.label, value: ds.data[i], color: ds.color });
+      }
+      var areaD = 'M' + pts[0] + ' L' + pts.join(' L') + ' L' + (marginL + plotW) + ',' + (marginT + plotH) + ' L' + marginL + ',' + (marginT + plotH) + ' Z';
+      svg.appendChild(svgEl('path', { d: areaD, fill: ds.color, opacity: '0.08' }));
+      svg.appendChild(svgEl('polyline', {
+        points: pts.join(' '), fill: 'none', stroke: ds.color,
+        'stroke-width': '2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round'
+      }));
+    });
+
+    // Hover line
+    var hoverLine = svgEl('line', {
+      x1: '0', y1: String(marginT), x2: '0', y2: String(marginT + plotH),
+      stroke: 'var(--accent, #c9a84c)', 'stroke-width': '1', opacity: '0', 'stroke-dasharray': '3,3'
+    });
+    svg.appendChild(hoverLine);
+    wrapper.insertBefore(svg, wrapper.firstChild);
+
+    // Tooltip
+    var tooltip = document.createElement('div');
+    tooltip.className = 'lc-tooltip';
+    tooltip.style.cssText = 'display:none;position:absolute;z-index:10;background:var(--surface,#0f1520);border:1px solid var(--border,#1e2d3d);border-radius:8px;padding:8px 12px;font-size:0.58rem;pointer-events:none;direction:ltr;min-width:120px;box-shadow:0 4px 16px rgba(0,0,0,0.4)';
+    wrapper.appendChild(tooltip);
+
+    svg.style.cursor = 'crosshair';
+    svg.addEventListener('mousemove', function(e) {
+      var rect = svg.getBoundingClientRect();
+      var mouseX = (e.clientX - rect.left) / rect.width * w;
+      var nearest = null, nearestDist = Infinity;
+      for (var idx = 0; idx < pointPositions.length; idx++) {
+        var dist = Math.abs(pointPositions[idx].x - mouseX);
+        if (dist < nearestDist) { nearestDist = dist; nearest = pointPositions[idx]; }
+      }
+      if (nearest && nearestDist < plotW / Math.max(nPoints, 1)) {
+        hoverLine.setAttribute('x1', String(nearest.x));
+        hoverLine.setAttribute('x2', String(nearest.x));
+        hoverLine.setAttribute('opacity', '0.6');
+        tooltip.style.display = 'block';
+        tooltip.textContent = '';
+        var hdr = document.createElement('div');
+        hdr.style.cssText = 'font-weight:700;color:var(--accent,#c9a84c);margin-bottom:4px;font-size:0.6rem';
+        hdr.textContent = nearest.period;
+        tooltip.appendChild(hdr);
+        nearest.values.forEach(function(v) {
+          var row = document.createElement('div');
+          row.style.cssText = 'display:flex;align-items:center;gap:6px;padding:1px 0';
+          var dot = document.createElement('span');
+          dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + v.color;
+          var nm = document.createElement('span');
+          nm.style.cssText = 'flex:1;color:var(--text-dim,#6b7d92)';
+          nm.textContent = v.label;
+          var vl = document.createElement('span');
+          vl.style.cssText = 'font-weight:700;color:var(--text,#dfe6ee)';
+          vl.textContent = v.value;
+          row.appendChild(dot); row.appendChild(nm); row.appendChild(vl);
+          tooltip.appendChild(row);
+        });
+        var tipX = e.clientX - rect.left + 14;
+        if (tipX + tooltip.offsetWidth > rect.width - 10) tipX = e.clientX - rect.left - tooltip.offsetWidth - 14;
+        tooltip.style.left = tipX + 'px';
+        tooltip.style.top = '10px';
+      }
+    });
+    svg.addEventListener('mouseleave', function() {
+      hoverLine.setAttribute('opacity', '0');
+      tooltip.style.display = 'none';
+    });
+
+    // Legend (clickable to toggle series)
+    var legend = document.createElement('div');
+    legend.className = 'lc-legend';
+    legend.style.cssText = 'display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px';
+
+    // Grouping badge
+    if (grouping) {
+      var badge = document.createElement('span');
+      badge.className = 'lc-group-badge';
+      var groupLabels = { daily: '\u064A\u0648\u0645\u064A', weekly: '\u0623\u0633\u0628\u0648\u0639\u064A', monthly: '\u0634\u0647\u0631\u064A' };
+      badge.textContent = groupLabels[grouping] || grouping;
+      legend.appendChild(badge);
+    }
+
+    datasets.forEach(function(ds, idx) {
+      var item = document.createElement('div');
+      item.style.cssText = 'display:flex;align-items:center;gap:5px;font-size:0.54rem;cursor:pointer;user-select:none;transition:opacity 0.15s;' +
+        (hiddenSeries[idx] ? 'opacity:0.3;text-decoration:line-through;' : 'color:var(--text-dim)');
+      var dot = document.createElement('div');
+      dot.style.cssText = 'width:8px;height:3px;border-radius:2px;background:' + ds.color + (hiddenSeries[idx] ? ';opacity:0.3' : '');
+      var txt = document.createElement('span');
+      txt.textContent = ds.label || '';
+      item.appendChild(dot);
+      item.appendChild(txt);
+      item.addEventListener('click', function() {
+        hiddenSeries[idx] = !hiddenSeries[idx];
+        draw();
+      });
+      legend.appendChild(item);
+    });
+    wrapper.appendChild(legend);
   }
 
-  datasets.forEach(function(ds) {
-    var pts = [];
-    var n = ds.data.length;
-    for (var i = 0; i < n; i++) {
-      var x = marginL + (i / Math.max(n - 1, 1)) * plotW;
-      var y = marginT + plotH - (ds.data[i] / allMax) * plotH;
-      pts.push(x.toFixed(1) + ',' + y.toFixed(1));
-      if (pointPositions[i]) {
-        pointPositions[i].values.push({ label: ds.label, value: ds.data[i], color: ds.color });
-      }
-    }
-
-    var areaD = 'M' + pts[0] + ' L' + pts.join(' L') +
-      ' L' + (marginL + plotW) + ',' + (marginT + plotH) + ' L' + marginL + ',' + (marginT + plotH) + ' Z';
-    svg.appendChild(svgEl('path', { d: areaD, fill: ds.color, opacity: '0.08' }));
-    svg.appendChild(svgEl('polyline', {
-      points: pts.join(' '), fill: 'none', stroke: ds.color,
-      'stroke-width': '2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round'
-    }));
-  });
-
-  // Vertical hover line (initially hidden)
-  var hoverLine = svgEl('line', {
-    x1: '0', y1: String(marginT), x2: '0', y2: String(marginT + plotH),
-    stroke: 'var(--accent, #c9a84c)', 'stroke-width': '1', opacity: '0',
-    'stroke-dasharray': '3,3'
-  });
-  svg.appendChild(hoverLine);
-
-  wrapper.appendChild(svg);
-
-  // Tooltip div
-  var tooltip = document.createElement('div');
-  tooltip.className = 'lc-tooltip';
-  tooltip.style.cssText = 'display:none;position:absolute;z-index:10;background:var(--surface,#0f1520);border:1px solid var(--border,#1e2d3d);border-radius:8px;padding:8px 12px;font-size:0.58rem;pointer-events:none;direction:ltr;min-width:120px;box-shadow:0 4px 16px rgba(0,0,0,0.4)';
-  wrapper.appendChild(tooltip);
-
-  // Mouse interaction on the SVG
-  var svgNode = svg;
-  svgNode.style.cursor = 'crosshair';
-  svgNode.addEventListener('mousemove', function(e) {
-    var rect = svgNode.getBoundingClientRect();
-    var mouseX = (e.clientX - rect.left) / rect.width * w;
-
-    // Find nearest point
-    var nearest = null;
-    var nearestDist = Infinity;
-    for (var idx = 0; idx < pointPositions.length; idx++) {
-      var dist = Math.abs(pointPositions[idx].x - mouseX);
-      if (dist < nearestDist) { nearestDist = dist; nearest = pointPositions[idx]; }
-    }
-
-    if (nearest && nearestDist < plotW / nPoints) {
-      hoverLine.setAttribute('x1', String(nearest.x));
-      hoverLine.setAttribute('x2', String(nearest.x));
-      hoverLine.setAttribute('opacity', '0.6');
-
-      // Build tooltip
-      tooltip.style.display = 'block';
-      tooltip.textContent = '';
-
-      var header = document.createElement('div');
-      header.style.cssText = 'font-weight:700;color:var(--accent,#c9a84c);margin-bottom:4px;font-size:0.6rem';
-      header.textContent = nearest.period;
-      tooltip.appendChild(header);
-
-      nearest.values.forEach(function(v) {
-        var row = document.createElement('div');
-        row.style.cssText = 'display:flex;align-items:center;gap:6px;padding:1px 0';
-
-        var dot = document.createElement('span');
-        dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + v.color;
-
-        var name = document.createElement('span');
-        name.style.cssText = 'flex:1;color:var(--text-dim,#6b7d92)';
-        name.textContent = v.label;
-
-        var val = document.createElement('span');
-        val.style.cssText = 'font-weight:700;color:var(--text,#dfe6ee)';
-        val.textContent = v.value;
-
-        row.appendChild(dot);
-        row.appendChild(name);
-        row.appendChild(val);
-        tooltip.appendChild(row);
-      });
-
-      // Position tooltip
-      var tipX = e.clientX - rect.left + 14;
-      if (tipX + tooltip.offsetWidth > rect.width - 10) {
-        tipX = e.clientX - rect.left - tooltip.offsetWidth - 14;
-      }
-      tooltip.style.left = tipX + 'px';
-      tooltip.style.top = '10px';
-    }
-  });
-
-  svgNode.addEventListener('mouseleave', function() {
-    hoverLine.setAttribute('opacity', '0');
-    tooltip.style.display = 'none';
-  });
-
-  // Legend below chart
-  var legend = document.createElement('div');
-  legend.style.cssText = 'display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px';
-  datasets.forEach(function(ds) {
-    var item = document.createElement('div');
-    item.style.cssText = 'display:flex;align-items:center;gap:5px;font-size:0.54rem;color:var(--text-dim)';
-
-    var dot = document.createElement('div');
-    dot.style.cssText = 'width:8px;height:3px;border-radius:2px;background:' + ds.color;
-
-    var txt = document.createElement('span');
-    txt.textContent = ds.label || '';
-
-    item.appendChild(dot);
-    item.appendChild(txt);
-    legend.appendChild(item);
-  });
-  wrapper.appendChild(legend);
-
+  draw();
   el.appendChild(wrapper);
 }
 
-/**
- * Horizontal bar chart.
- * items: [{name: string, value: number}]
- */
+/* ═══════════ BAR CHART ═══════════ */
+
 export function renderBarChart(containerId, items, barColor) {
   var el = document.getElementById(containerId);
   if (!el) return;
@@ -244,19 +250,15 @@ export function renderBarChart(containerId, items, barColor) {
   if (items.length === 0) return;
 
   var maxV = items[0].value;
-  for (var i = 1; i < items.length; i++) {
-    if (items[i].value > maxV) maxV = items[i].value;
-  }
+  for (var i = 1; i < items.length; i++) { if (items[i].value > maxV) maxV = items[i].value; }
   if (maxV === 0) maxV = 1;
 
   items.forEach(function(item) {
     var row = document.createElement('div');
     row.className = 'a-bar-row';
-
     var label = document.createElement('div');
     label.className = 'a-bar-label';
     label.textContent = item.name;
-
     var track = document.createElement('div');
     track.className = 'a-bar-track';
     var fill = document.createElement('div');
@@ -264,22 +266,16 @@ export function renderBarChart(containerId, items, barColor) {
     fill.style.width = (item.value / maxV * 100) + '%';
     fill.style.background = barColor || 'var(--accent)';
     track.appendChild(fill);
-
     var val = document.createElement('div');
     val.className = 'a-bar-val';
     val.textContent = item.value;
-
-    row.appendChild(label);
-    row.appendChild(track);
-    row.appendChild(val);
+    row.appendChild(label); row.appendChild(track); row.appendChild(val);
     el.appendChild(row);
   });
 }
 
-/**
- * Hour-of-day x day-of-week heatmap with row/column labels.
- * data: [{hour: 0-23, dow: 0-6, count: number}]
- */
+/* ═══════════ HEATMAP ═══════════ */
+
 export function renderHeatmap(containerId, data) {
   var el = document.getElementById(containerId);
   if (!el) return;
@@ -293,22 +289,22 @@ export function renderHeatmap(containerId, data) {
     if (grid[key] > maxVal) maxVal = grid[key];
   });
 
-  // Wrapper with day labels on the left
+  var outerWrap = document.createElement('div');
+  outerWrap.style.cssText = 'position:relative';
+
   var wrapper = document.createElement('div');
   wrapper.style.cssText = 'display:flex;gap:6px;direction:ltr';
 
-  // Day-of-week labels (Y axis)
   var dayCol = document.createElement('div');
   dayCol.style.cssText = 'display:flex;flex-direction:column;gap:2px;justify-content:center';
   for (var di = 0; di < 7; di++) {
     var dayLabel = document.createElement('div');
-    dayLabel.style.cssText = 'font-size:0.44rem;color:var(--text-muted);text-align:right;height:100%;display:flex;align-items:center;min-height:14px;white-space:nowrap';
+    dayLabel.style.cssText = 'font-size:0.44rem;color:var(--text-muted);text-align:right;display:flex;align-items:center;min-height:14px;white-space:nowrap';
     dayLabel.textContent = DAY_NAMES[di];
     dayCol.appendChild(dayLabel);
   }
   wrapper.appendChild(dayCol);
 
-  // Grid
   var gridWrap = document.createElement('div');
   gridWrap.style.cssText = 'flex:1';
 
@@ -322,95 +318,103 @@ export function renderHeatmap(containerId, data) {
       var cell = document.createElement('div');
       cell.className = 'a-hm-cell';
       cell.style.background = 'rgba(231,76,60,' + (0.03 + intensity * 0.7) + ')';
-      cell.title = DAY_NAMES[row] + ' ' + col + ':00 \u2014 ' + val + ' \u062D\u062F\u062B';
+      cell.setAttribute('data-dow', String(row));
+      cell.setAttribute('data-hour', String(col));
+      cell.setAttribute('data-val', String(val));
       container.appendChild(cell);
     }
   }
   gridWrap.appendChild(container);
 
-  // Hour labels (X axis)
   var labels = document.createElement('div');
   labels.className = 'a-hm-labels';
-  for (var h = 0; h < 24; h++) {
+  for (var hh = 0; hh < 24; hh++) {
     var lbl = document.createElement('span');
-    lbl.textContent = h % 3 === 0 ? h + ':00' : '';
+    lbl.textContent = hh % 3 === 0 ? hh + ':00' : '';
     labels.appendChild(lbl);
   }
   gridWrap.appendChild(labels);
-
   wrapper.appendChild(gridWrap);
-  el.appendChild(wrapper);
+  outerWrap.appendChild(wrapper);
+
+  // Tooltip
+  var hmTip = document.createElement('div');
+  hmTip.className = 'hm-tooltip';
+  hmTip.style.cssText = 'display:none;position:absolute;z-index:10;background:var(--surface,#0f1520);border:1px solid var(--border,#1e2d3d);border-radius:6px;padding:6px 10px;font-size:0.56rem;pointer-events:none;direction:rtl;box-shadow:0 4px 12px rgba(0,0,0,0.4);white-space:nowrap';
+  outerWrap.appendChild(hmTip);
+
+  container.addEventListener('mousemove', function(e) {
+    var target = e.target;
+    if (!target.classList.contains('a-hm-cell')) return;
+    var dow = parseInt(target.getAttribute('data-dow'));
+    var hour = parseInt(target.getAttribute('data-hour'));
+    var v = target.getAttribute('data-val');
+    hmTip.textContent = DAY_NAMES[dow] + ' ' + hour + ':00 \u2014 ' + v + ' \u062D\u062F\u062B';
+    hmTip.style.display = 'block';
+    var rect = outerWrap.getBoundingClientRect();
+    var cx = e.clientX - rect.left;
+    var cy = e.clientY - rect.top;
+    hmTip.style.left = (cx + 12) + 'px';
+    hmTip.style.top = (cy - 24) + 'px';
+  });
+  container.addEventListener('mouseleave', function() { hmTip.style.display = 'none'; });
 
   // Legend
   var legend = document.createElement('div');
   legend.style.cssText = 'margin-top:10px;font-size:0.5rem;color:var(--text-muted);display:flex;align-items:center;gap:8px;direction:ltr';
-
-  var lo = document.createElement('span');
-  lo.textContent = '\u0623\u0642\u0644';
+  var lo = document.createElement('span'); lo.textContent = '\u0623\u0642\u0644';
   var bar = document.createElement('div');
   bar.style.cssText = 'flex:1;max-width:120px;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--surface2),var(--red))';
-  var hi = document.createElement('span');
-  hi.textContent = '\u0623\u0643\u062B\u0631';
-
+  var hi = document.createElement('span'); hi.textContent = '\u0623\u0643\u062B\u0631';
   var countLabel = document.createElement('span');
   countLabel.style.cssText = 'margin-right:auto;font-size:0.46rem;color:var(--text-muted);direction:ltr';
   countLabel.textContent = '\u0627\u0644\u0623\u0639\u0644\u0649: ' + maxVal;
+  legend.appendChild(lo); legend.appendChild(bar); legend.appendChild(hi); legend.appendChild(countLabel);
+  outerWrap.appendChild(legend);
 
-  legend.appendChild(lo);
-  legend.appendChild(bar);
-  legend.appendChild(hi);
-  legend.appendChild(countLabel);
-  el.appendChild(legend);
+  el.appendChild(outerWrap);
 }
 
-/**
- * Render KPI strip.
- * kpis: [{value: number, label: string, color: string, trend: string|null}]
- */
+/* ═══════════ KPIs ═══════════ */
+
 export function renderKPIs(containerId, kpis) {
   var el = document.getElementById(containerId);
   if (!el) return;
   el.textContent = '';
-
   kpis.forEach(function(kpi) {
     var cell = document.createElement('div');
     cell.className = 'a-kpi';
-
     var num = document.createElement('div');
     num.className = 'num';
     num.textContent = kpi.value.toLocaleString('en-US');
-
     var label = document.createElement('div');
     label.className = 'label';
     label.textContent = kpi.label;
-
     var barEl = document.createElement('div');
     barEl.className = 'bar';
     barEl.style.background = kpi.color;
-
-    cell.appendChild(num);
-    cell.appendChild(label);
-
+    cell.appendChild(num); cell.appendChild(label);
     if (kpi.trend) {
       var trend = document.createElement('div');
       trend.className = 'trend ' + (kpi.trend.indexOf('+') === 0 ? 'up' : 'down');
       trend.textContent = kpi.trend;
       cell.appendChild(trend);
     }
-
     cell.appendChild(barEl);
     el.appendChild(cell);
   });
 }
 
+/* ═══════════ DATA TABLE (sortable, fullscreen-paginated) ═══════════ */
+
 /**
- * Render data table.
- * columns: [{key, label}], rows: [{key: value, ...}], colorMap: {key: color}
+ * columns: [{key, label}], rows, colorMap, opts: {onSort, sortKey, sortDir, isFullscreen, page, totalPages, onPage}
  */
-export function renderTable(containerId, columns, rows, colorMap) {
+export function renderTable(containerId, columns, rows, colorMap, opts) {
   var el = document.getElementById(containerId);
   if (!el) return;
   el.textContent = '';
+  opts = opts || {};
 
   var table = document.createElement('table');
   table.className = 'a-table';
@@ -419,7 +423,22 @@ export function renderTable(containerId, columns, rows, colorMap) {
   var headRow = document.createElement('tr');
   columns.forEach(function(col) {
     var th = document.createElement('th');
-    th.textContent = col.label;
+    th.style.cursor = 'pointer';
+    th.style.userSelect = 'none';
+
+    var label = document.createTextNode(col.label + ' ');
+    th.appendChild(label);
+
+    if (opts.sortKey === col.key) {
+      var arrow = document.createElement('span');
+      arrow.style.cssText = 'font-size:0.5rem;color:var(--accent)';
+      arrow.textContent = opts.sortDir === 'asc' ? '\u25B2' : '\u25BC';
+      th.appendChild(arrow);
+    }
+
+    th.addEventListener('click', function() {
+      if (opts.onSort) opts.onSort(col.key);
+    });
     headRow.appendChild(th);
   });
   thead.appendChild(headRow);
@@ -443,4 +462,29 @@ export function renderTable(containerId, columns, rows, colorMap) {
   });
   table.appendChild(tbody);
   el.appendChild(table);
+
+  // Pagination controls (fullscreen mode)
+  if (opts.isFullscreen && opts.totalPages > 1) {
+    var pager = document.createElement('div');
+    pager.className = 'a-pager';
+
+    var prevBtn = document.createElement('button');
+    prevBtn.className = 'a-pager-btn';
+    prevBtn.textContent = '\u2190 \u0627\u0644\u0633\u0627\u0628\u0642';
+    prevBtn.disabled = opts.page <= 1;
+    prevBtn.addEventListener('click', function() { if (opts.onPage) opts.onPage(opts.page - 1); });
+
+    var info = document.createElement('span');
+    info.className = 'a-pager-info';
+    info.textContent = opts.page + ' / ' + opts.totalPages;
+
+    var nextBtn = document.createElement('button');
+    nextBtn.className = 'a-pager-btn';
+    nextBtn.textContent = '\u0627\u0644\u062A\u0627\u0644\u064A \u2192';
+    nextBtn.disabled = opts.page >= opts.totalPages;
+    nextBtn.addEventListener('click', function() { if (opts.onPage) opts.onPage(opts.page + 1); });
+
+    pager.appendChild(prevBtn); pager.appendChild(info); pager.appendChild(nextBtn);
+    el.appendChild(pager);
+  }
 }

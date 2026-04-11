@@ -312,6 +312,55 @@ body.analytics.light .dp-today-btn:hover:not(:disabled) { color: #fff; }
 }
 .a-table tr:hover td { background: rgba(201,168,76,0.04); }
 .a-table .num-cell { font-weight: 700; font-family: monospace; }
+.a-table th:hover { color: var(--accent); }
+
+/* ── Fullscreen Panel ── */
+.a-panel { position: relative; }
+.fs-btn {
+  margin-right: auto; background: none; border: 1px solid var(--border);
+  color: var(--text-dim); cursor: pointer; font-size: 0.7rem;
+  width: 24px; height: 24px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; line-height: 1;
+}
+.fs-btn:hover { border-color: var(--accent); color: var(--accent); }
+.a-panel-fs {
+  position: fixed !important; top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 9998; padding: 24px !important;
+  background: var(--bg, #0a0f18) !important;
+  overflow-y: auto;
+}
+.a-panel-fs .a-line-chart,
+.a-panel-fs #heatmapPanel,
+.a-panel-fs #barChart,
+.a-panel-fs #dataTable { max-height: calc(100vh - 100px); overflow-y: auto; }
+
+/* ── Pagination ── */
+.a-pager {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; padding: 14px 0 4px; margin-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.a-pager-btn {
+  font-family: inherit; font-size: 0.6rem; font-weight: 600;
+  padding: 5px 14px; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--text-dim); cursor: pointer; transition: all 0.15s;
+}
+.a-pager-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.a-pager-btn:disabled { opacity: 0.3; cursor: default; }
+.a-pager-info {
+  font-size: 0.58rem; color: var(--text-dim); font-weight: 600;
+  direction: ltr;
+}
+
+/* ── Line Chart Grouping Badge ── */
+.lc-group-badge {
+  font-size: 0.5rem; font-weight: 700;
+  padding: 2px 10px; border-radius: 10px;
+  background: var(--accent-dim); border: 1px solid var(--accent);
+  color: var(--accent);
+}
 
 /* ── Animations ── */
 @keyframes fadeUp {
