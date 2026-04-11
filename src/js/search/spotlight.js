@@ -1041,7 +1041,7 @@ function bindEvents() {
     if (e.target === _overlay) closeSL();
   });
 
-  // Input with debounce
+  // Input with debounce — waits for DB before searching
   _input.addEventListener('input', function() {
     clearTimeout(_debounceTimer);
     _debounceTimer = setTimeout(function() {
@@ -1053,13 +1053,19 @@ function bindEvents() {
         return;
       }
 
-      var searchResult = doSearch(q);
-      _activeFlt = 'all';
-      renderResults(searchResult);
+      // Wait for DB to be ready before searching
+      loadBackend().then(function() {
+        var bl = document.getElementById('slBackendLabel');
+        if (bl) bl.textContent = _dbReady ? 'SQLite FTS5' : '\u0641\u0634\u0644 \u0627\u0644\u062A\u062D\u0645\u064A\u0644';
 
-      if (searchResult.results.length > 0) {
-        saveRecent(q);
-      }
+        var searchResult = doSearch(q);
+        _activeFlt = 'all';
+        renderResults(searchResult);
+
+        if (searchResult.results.length > 0) {
+          saveRecent(q);
+        }
+      });
     }, DEBOUNCE_MS);
   });
 
