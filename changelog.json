@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.92",
+    "date": "2026-04-11",
+    "title": "Add 27 missing Feb 2026 reports — zero gaps from Oct 7 2023",
+    "changes": [
+      "Add 27 reports for Feb 1-27, 2026 (ceasefire period, mostly enemy media and Iran news)",
+      "Complete coverage: 917 consecutive days from Oct 7 2023 to Apr 10 2026 with no gaps",
+      "Rebuild all indexes (reports-meta, spotlight, nav, harbi.db)"
+    ]
+  },
+  {
     "version": "1.0.91",
     "date": "2026-04-11",
     "title": "Fix: restore theme toggle, dashboards, maps, and nav on all reports",
