@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.0.98",
+    "date": "2026-04-11",
+    "title": "Fix report counter display order in RTL",
+    "changes": [
+      "Add direction:ltr to day-nav-current so 910/917 reads left-to-right correctly"
+    ]
+  },
+  {
     "version": "1.0.97",
     "date": "2026-04-11",
     "title": "Clean up report header: remove title, fix badges, compact search",

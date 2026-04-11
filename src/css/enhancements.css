@@ -357,7 +357,7 @@ body.light .search-target .tl-body::before {
 .day-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
 .day-nav-btn.disabled { opacity: 0.3; pointer-events: none; }
 .day-nav-current {
-  font-size: 0.72rem; color: var(--text-dim);
+  font-size: 0.72rem; color: var(--text-dim); direction: ltr; unicode-bidi: isolate;
 }
 
 /* ═══════════════ Combined Heatmap ═══════════════ */
