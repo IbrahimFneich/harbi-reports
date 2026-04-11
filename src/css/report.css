@@ -486,6 +486,7 @@ body {
   border: 1px solid var(--border); border-radius: 6px;
   background: var(--surface2);
   transition: all 0.15s; direction: ltr;
+  position: relative; z-index: 1;
 }
 .report-date-trigger:hover {
   border-color: var(--accent); color: var(--accent);

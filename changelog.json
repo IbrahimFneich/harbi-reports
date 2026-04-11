@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.0.96",
+    "date": "2026-04-11",
+    "title": "Fix datepicker trigger not clickable due to header overlay",
+    "changes": [
+      "Add position:relative and z-index:1 to datepicker trigger so it sits above header::before overlay"
+    ]
+  },
+  {
     "version": "1.0.95",
     "date": "2026-04-11",
     "title": "Fix datepicker trigger showing Arabic format instead of dd/mm/yyyy",
