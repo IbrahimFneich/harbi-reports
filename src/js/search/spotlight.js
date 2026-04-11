@@ -80,11 +80,17 @@ function loadSearchBackend(cb) {
 
   _backendPromise = initDB().then(function() {
     _dbReady = true;
-  }).catch(function() {
+    console.log('[spotlight] SQLite backend ready');
+  }).catch(function(err) {
+    console.log('[spotlight] SQLite failed:', err, '— falling back to JSON');
     // Fallback: load JSON index
     return fetch('data/spotlight-index.json')
-      .then(function(r) { return r.ok ? r.json() : []; })
+      .then(function(r) {
+        if (!r.ok) throw new Error('JSON fetch failed: ' + r.status);
+        return r.json();
+      })
       .then(function(entries) {
+        _sIdx = [];
         for (var i = 0; i < entries.length; i++) {
           var e = entries[i];
           _sIdx.push({
@@ -94,8 +100,12 @@ function loadSearchBackend(cb) {
           });
         }
         _jsonFallback = true;
+        console.log('[spotlight] JSON fallback ready:', _sIdx.length, 'entries');
       })
-      .catch(function() { _jsonFallback = true; });
+      .catch(function(err2) {
+        console.error('[spotlight] JSON fallback also failed:', err2);
+        _jsonFallback = true;
+      });
   });
 
   _backendPromise.then(cb);
@@ -455,7 +465,7 @@ export function openSpotlight() {
   _selIdx = -1;
   loadSearchBackend(function() {
     var tag = document.getElementById('spotlightBackend');
-    if (tag) tag.textContent = _dbReady ? 'SQLite FTS5' : 'JSON index';
+    if (tag) tag.textContent = _dbReady ? 'SQLite FTS5' : ('JSON index (' + _sIdx.length + ' entries)');
     renderSR('');
     _sInput.focus();
   });
