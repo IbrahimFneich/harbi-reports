@@ -11,6 +11,8 @@ import { renderVideos } from './renderers/videos.js';
 import { renderAllies } from './renderers/allies.js';
 import { initSirenMap } from './maps/siren-map.js';
 import { swapAllMapTiles } from './maps/tiles.js';
+import { createDatePicker } from './analytics/datepicker.js';
+import { ALL_REPORTS } from './ui/nav.js';
 
 // Attach globals needed by onclick handlers
 window.switchTab = switchTab;
@@ -56,7 +58,28 @@ function renderReport(data) {
   dateDiv.appendChild(dateSuffix);
   header.appendChild(dateDiv);
 
+  // dd/mm/yyyy date picker trigger
+  var dpTrigger = document.createElement('span');
+  dpTrigger.className = 'report-date-trigger';
+  dpTrigger.id = 'reportDatePicker';
+  var dp = data.date.split('-');
+  dpTrigger.textContent = dp[2] + '/' + dp[1] + '/' + dp[0];
+  header.appendChild(dpTrigger);
+
   root.appendChild(header);
+
+  // Init datepicker after DOM is ready
+  setTimeout(function() {
+    createDatePicker({
+      triggerId: 'reportDatePicker',
+      value: data.date,
+      min: ALL_REPORTS[0],
+      max: ALL_REPORTS[ALL_REPORTS.length - 1],
+      onChange: function(newDate) {
+        window.location.href = 'report.html?date=' + newDate;
+      }
+    });
+  }, 0);
 
   // Tab bar
   var tabsConfig = [
@@ -136,7 +159,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v1.7.7';
+  ver.textContent = 'Harbi Reports v1.7.8';
   ver.onclick = function() { showChangelog(); };
   footer.appendChild(ver);
   root.appendChild(footer);

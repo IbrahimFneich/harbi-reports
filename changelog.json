@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.94",
+    "date": "2026-04-11",
+    "title": "Add datepicker to report header for quick date navigation",
+    "changes": [
+      "Add clickable dd/mm/yyyy below the Arabic date in report header",
+      "Reuse analytics datepicker with calendar popup, manual input, and today button",
+      "Selecting a date navigates directly to that report"
+    ]
+  },
+  {
     "version": "1.0.93",
     "date": "2026-04-11",
     "title": "Style MM/YYYY as subtle subtitle under month name",

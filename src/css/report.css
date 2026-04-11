@@ -476,3 +476,119 @@ body {
   .clock-box .lbl { font-size:0.5rem; }
   .clock-box b { font-size:0.68rem; }
 }
+
+/* ── Date picker trigger (report header) ── */
+.report-date-trigger {
+  display: inline-block; cursor: pointer;
+  font-size: 0.75rem; font-weight: 600;
+  color: var(--text-muted); letter-spacing: 0.12em;
+  margin-top: 4px; padding: 3px 12px;
+  border: 1px solid var(--border); border-radius: 6px;
+  background: var(--surface2);
+  transition: all 0.15s; direction: ltr;
+}
+.report-date-trigger:hover {
+  border-color: var(--accent); color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* ── Date picker popup (shared with analytics) ── */
+.dp-popup {
+  position: fixed; z-index: 9999;
+  background: var(--surface, #0f1520);
+  border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  min-width: 280px; direction: ltr;
+  animation: dpFadeIn 0.15s ease;
+}
+@keyframes dpFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.dp-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.dp-title {
+  font-size: 0.78rem; font-weight: 800; color: var(--accent);
+  text-align: center; flex: 1;
+}
+.dp-nav {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text-dim); cursor: pointer;
+  font-size: 0.72rem; display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; font-family: inherit;
+}
+.dp-nav:hover { border-color: var(--accent); color: var(--accent); }
+.dp-dow {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
+  margin-bottom: 6px;
+}
+.dp-dow div {
+  text-align: center; font-size: 0.48rem; font-weight: 700;
+  color: var(--text-muted); padding: 4px 0;
+}
+.dp-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
+}
+.dp-cell {
+  text-align: center; font-size: 0.66rem; font-weight: 600;
+  padding: 7px 0; border-radius: 6px; cursor: pointer;
+  color: var(--text); transition: all 0.1s;
+}
+.dp-cell:hover:not(.dp-disabled):not(.dp-empty) {
+  background: var(--accent-dim); color: var(--accent);
+}
+.dp-cell.dp-empty { cursor: default; }
+.dp-cell.dp-disabled { color: var(--text-muted); opacity: 0.4; cursor: default; }
+.dp-cell.dp-selected {
+  background: var(--accent); color: #000; font-weight: 800;
+}
+.dp-cell.dp-today:not(.dp-selected) { border: 1px solid var(--accent); }
+.dp-input-row { margin-bottom: 8px; }
+.dp-manual-input {
+  width: 100%; font-family: 'Noto Kufi Arabic', monospace;
+  font-size: 0.68rem; font-weight: 600;
+  padding: 7px 10px; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--text); outline: none;
+  text-align: center; direction: ltr;
+  transition: all 0.15s;
+}
+.dp-manual-input::placeholder { color: var(--text-muted); }
+.dp-manual-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
+}
+.dp-manual-input.dp-input-error {
+  border-color: var(--red, #e74c3c); box-shadow: 0 0 0 2px rgba(231,76,60,0.2);
+}
+.dp-numeric {
+  text-align: center; font-size: 0.52rem; font-weight: 600;
+  color: var(--text-muted); margin-bottom: 10px;
+  direction: ltr; font-family: monospace; letter-spacing: 0.04em;
+}
+.dp-footer {
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: center;
+}
+.dp-today-btn {
+  font-family: 'Noto Kufi Arabic', sans-serif;
+  font-size: 0.6rem; font-weight: 700;
+  padding: 5px 20px; border-radius: 6px;
+  border: 1px solid var(--accent); background: var(--accent-dim);
+  color: var(--accent); cursor: pointer;
+  transition: all 0.15s;
+}
+.dp-today-btn:hover:not(:disabled) {
+  background: var(--accent); color: #000;
+}
+.dp-today-btn:disabled { opacity: 0.3; cursor: default; }
+body.light .dp-popup {
+  background: var(--surface); box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+body.light .dp-cell.dp-selected { color: #fff; }
+body.light .dp-today-btn:hover:not(:disabled) { color: #fff; }
