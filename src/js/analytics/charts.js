@@ -367,7 +367,7 @@ export function renderHeatmap(containerId, data) {
     // Line 1: day + time range
     var line1 = document.createElement('div');
     line1.style.cssText = 'font-weight:600;font-size:0.58rem;margin-bottom:2px';
-    line1.textContent = DAY_NAMES[dow] + ' \u2022 ' + String(hour).padStart(2, '0') + ':00 \u2013 ' + String(nextHour).padStart(2, '0') + ':00';
+    line1.textContent = DAY_NAMES[dow] + ' \u2022 ' + String(hour).padStart(2, '0') + ':00 \u2192 ' + String(nextHour).padStart(2, '0') + ':00';
     hmTip.appendChild(line1);
     // Line 2: event count + percentage
     var line2 = document.createElement('div');

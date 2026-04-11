@@ -1,5 +1,13 @@
 [
   {
+    "version": "2.0.8",
+    "date": "2026-04-12",
+    "title": "Heatmap tooltip time range uses arrow",
+    "changes": [
+      "Time range in tooltip now shows 09:00 → 10:00 instead of 09:00 – 10:00"
+    ]
+  },
+  {
     "version": "2.0.7",
     "date": "2026-04-12",
     "title": "Clearer heatmap tooltip labels",
