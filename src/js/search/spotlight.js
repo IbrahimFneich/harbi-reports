@@ -131,12 +131,15 @@ function doSrchDB(terms) {
 
   var results;
 
+  var srcIdxExpr = "(SELECT COUNT(*) FROM events e2 WHERE e2.date = e.date AND e2.category = e.category AND e2.id < e.id)";
+  var selectCols = "e.category as cat, e.date, e.time, e.title, e.subtitle, e.location, " + srcIdxExpr + " as src_idx";
+
   // Try FTS5 MATCH for longer queries
   if (words.every(function(w) { return w.length >= 3; })) {
     var ftsQuery = words.map(function(w) { return '"' + w + '"*'; }).join(' AND ');
     try {
       results = queryRows(
-        "SELECT e.category as cat, e.date, e.time, e.title, e.subtitle, e.location, e.id " +
+        "SELECT " + selectCols + " " +
         "FROM events_fts fts JOIN events e ON e.id = fts.rowid " +
         "WHERE events_fts MATCH ? " +
         "ORDER BY e.date DESC, e.time DESC LIMIT 50",
@@ -150,7 +153,7 @@ function doSrchDB(terms) {
 
   // Fallback: LIKE search (also uses original text, not normalized)
   var likeClauses = words.map(function() {
-    return "(title LIKE ? OR location LIKE ? OR subtitle LIKE ? OR full_text LIKE ?)";
+    return "(e.title LIKE ? OR e.location LIKE ? OR e.subtitle LIKE ? OR e.full_text LIKE ?)";
   });
   var params = [];
   words.forEach(function(w) {
@@ -159,9 +162,9 @@ function doSrchDB(terms) {
   });
 
   results = queryRows(
-    "SELECT category as cat, date, time, title, subtitle, location, id " +
-    "FROM events WHERE " + likeClauses.join(' AND ') +
-    " ORDER BY date DESC, time DESC LIMIT 50",
+    "SELECT " + selectCols + " " +
+    "FROM events e WHERE " + likeClauses.join(' AND ') +
+    " ORDER BY e.date DESC, e.time DESC LIMIT 50",
     params
   );
   return formatDBResults(results);
@@ -173,7 +176,7 @@ function formatDBResults(rows) {
     return {
       cat: r.cat, date: r.date, dateLabel: fmtDate(r.date),
       time: r.time || '', title: r.title || r.location || '',
-      subtitle: cat.label, tab: r.cat, idx: r.id
+      subtitle: cat.label, tab: r.cat, idx: r.src_idx
     };
   });
 }
