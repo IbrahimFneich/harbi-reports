@@ -1,13 +1,13 @@
 {
   "date": "2026-04-04",
-  "dayAr": "الجمعة",
-  "dateAr": "4 نيسان 2026",
+  "dayAr": "السبت",
+  "dateAr": "٤ نيسان ٢٠٢٦",
   "hijri": "16 شوال 1447 هـ",
   "stats": {
     "bayanat": 38,
-    "sirens": 37,
-    "enemy": 22,
-    "iran": 12,
+    "sirens": 34,
+    "enemy": 16,
+    "iran": 10,
     "videos": 3,
     "allies": 3
   },

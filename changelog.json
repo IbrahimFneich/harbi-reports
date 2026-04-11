@@ -1,5 +1,20 @@
 [
   {
+    "version": "1.8.8",
+    "date": "2026-04-11",
+    "title": "Full data consistency sweep — fix 918 days",
+    "changes": [
+      "Fix 43 bayan spillovers (late-night next-day posts moved to correct files)",
+      "Fix 36 stats mismatches (stats synced to actual array lengths)",
+      "Fix 12 wrong day names (dayAr) and date formats (dateAr)",
+      "Generate 85 missing siren map points across 68 days",
+      "Expand geocoding dictionary with 25 new locations (Gaza, Eilat, southern)",
+      "Create 2026-04-11.json for 3 spillover bayans from Apr 10",
+      "Add validate_data.py (12-check validator) and fix_data.py (auto-fixer)",
+      "Rebuild all indexes: reports-meta, spotlight, nav, harbi.db"
+    ]
+  },
+  {
     "version": "1.8.7",
     "date": "2026-04-11",
     "title": "Update report for Apr 10 — full day (155 messages)",
