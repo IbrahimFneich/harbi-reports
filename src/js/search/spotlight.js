@@ -8,7 +8,7 @@
    text highlighting uses safe DOM methods only.
    ============================================================ */
 
-import { initDB, queryRows } from '../analytics/db.js';
+import { initDB, queryRows } from '../analytics/db.js?v=2';
 import { SEARCH_ALIASES, ALIAS_KEYS_SORTED, resolveAliases } from './aliases.js';
 import { keyboardTransliterate, phoneticTransliterate, hasLatin } from './transliterate.js';
 import { parseDate } from './date-parser.js';
@@ -88,15 +88,23 @@ function fmtDate(d) {
 
 // ── Backend loading ───────────────────────────────────────
 function loadBackend() {
-  if (_backendPromise) { console.log('[spotlight] loadBackend: returning cached promise, _dbReady=', _dbReady); return _backendPromise; }
-  console.log('[spotlight] loadBackend: starting initDB...');
-  _backendPromise = initDB().then(function(db) {
-    _dbReady = true;
-    console.log('[spotlight] DB loaded successfully, _dbReady=true, db=', !!db);
-  }).catch(function(err) {
-    console.error('[spotlight] DB init FAILED:', err);
-    _dbReady = false;
-  });
+  if (_backendPromise) { return _backendPromise; }
+  console.log('[spotlight] loadBackend: calling initDB()...');
+  console.log('[spotlight] typeof initDB =', typeof initDB);
+  try {
+    var p = initDB();
+    console.log('[spotlight] initDB() returned:', p, 'isPromise=', p && typeof p.then === 'function');
+    _backendPromise = p.then(function(db) {
+      _dbReady = true;
+      console.log('[spotlight] DB loaded! _dbReady=true');
+    }).catch(function(err) {
+      console.error('[spotlight] DB FAILED:', err, err && err.stack);
+      _dbReady = false;
+    });
+  } catch (ex) {
+    console.error('[spotlight] initDB() THREW:', ex, ex && ex.stack);
+    _backendPromise = Promise.resolve();
+  }
   return _backendPromise;
 }
 
