@@ -83,7 +83,7 @@
 
 /* ── Sticky Phase Navigator ── */
 .pn-wrap {
-  position: sticky; top: 0; z-index: 100;
+  position: sticky; top: 56px; z-index: 100;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   transition: background 0.4s, box-shadow 0.3s;
@@ -98,6 +98,9 @@
 }
 body.light .pn-wrap.scrolled {
   box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+@media (max-width: 600px) {
+  .pn-wrap { top: 48px; }
 }
 .pn-track {
   display: flex; overflow-x: auto;
@@ -133,12 +136,16 @@ body.light .pn-wrap.scrolled {
 /* Progress fill bar under each nav item */
 .pn-fill {
   position: absolute;
-  bottom: 0; right: 0;
-  height: 3px; width: 0%;
-  border-radius: 0 0 2px 2px;
-  transition: width 0.15s linear;
+  bottom: -1px; right: 0;
+  height: 4px; width: 0%;
+  border-radius: 2px;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px currentColor;
 }
-.pn-item.done .pn-fill { width: 100% !important; opacity: 0.5; }
+.pn-item.active .pn-fill {
+  box-shadow: 0 0 12px currentColor;
+}
+.pn-item.done .pn-fill { width: 100% !important; opacity: 0.4; box-shadow: none; }
 
 /* ── Chapters Container ── */
 .tl-chapters {
@@ -151,7 +158,7 @@ body.light .pn-wrap.scrolled {
 .tl-ch {
   margin-bottom: 80px;
   position: relative;
-  scroll-margin-top: 80px;
+  scroll-margin-top: 120px;
 }
 
 /* Chapter Header */

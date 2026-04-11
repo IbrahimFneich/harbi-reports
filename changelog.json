@@ -1,5 +1,16 @@
 [
   {
+    "version": "1.9.1",
+    "date": "2026-04-11",
+    "title": "Fix timeline phase nav — visible scroll-tracking progress bars",
+    "changes": [
+      "Fix phase nav hidden behind main navbar (sticky top offset)",
+      "Add glowing per-chapter progress fill bars that track scroll position",
+      "Completed chapters show dimmed fill, active chapter shows live glow",
+      "Enriched all 6 chapters with comprehensive data and events"
+    ]
+  },
+  {
     "version": "1.9.0",
     "date": "2026-04-11",
     "title": "New Timeline page — scroll-driven war chronicle",
