@@ -1,5 +1,16 @@
 [
   {
+    "version": "2.1.0",
+    "date": "2026-04-12",
+    "title": "Monthly chronicle pages",
+    "changes": [
+      "Auto-generated War Chronicle page for each month (31 pages)",
+      "Narrative brief, turning-point cards, scroll effects, counter animations",
+      "Prev/next navigation between months",
+      "Linked from index calendar view"
+    ]
+  },
+  {
     "version": "2.0.8",
     "date": "2026-04-12",
     "title": "Heatmap tooltip time range uses arrow",

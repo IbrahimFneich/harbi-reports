@@ -48,6 +48,7 @@
   <div style="text-align:center">
     <div class="current-month" id="currentMonth"></div>
     <div id="currentMonthNum" style="font-size:0.85rem;color:#9ca3af;letter-spacing:0.15em;margin-top:2px"></div>
+    <a id="monthlyLink" href="#" style="font-size:0.75rem;color:var(--accent);text-decoration:none;margin-top:4px;display:inline-block;opacity:0.7;transition:opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">الوثيقة الشهرية &larr;</a>
   </div>
   <button class="btn" id="nextBtn" onclick="changeMonth(1)">الشهر التالي &rarr;</button>
 </div>
@@ -71,7 +72,7 @@
 <div class="footer">
   <div>مصدر: <a href="https://t.me/C_Military1" target="_blank" rel="noopener">قناة الإعلام الحربي — التغطية الإخبارية</a></div>
   <div style="margin-top:8px;font-size:0.65rem;color:var(--text-muted);">هذا الموقع غير رسمي ولا يمثّل قناة الإعلام الحربي. المحتوى منقول من القناة لأغراض التوثيق والأرشفة فقط.</div>
-  <span style="display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v2.0.8</span>
+  <span style="display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v2.1.0</span>
 </div>
 
 <script>
@@ -220,6 +221,7 @@ function renderCalendar() {
   var mm = String(month + 1).length < 2 ? '0' + (month + 1) : String(month + 1);
   document.getElementById('currentMonth').textContent = arabicMonths[month] + ' ' + year;
   document.getElementById('currentMonthNum').textContent = mm + ' / ' + year;
+  document.getElementById('monthlyLink').href = 'monthly/' + year + '-' + mm + '.html';
 
   // Update nav buttons
   document.getElementById('prevBtn').disabled = (currentIdx <= 0);
