@@ -21,31 +21,22 @@ function waitForSqlJs() {
 }
 
 export function initDB() {
-  if (_dbReady) { console.log('[db] initDB: returning cached promise'); return _dbReady; }
+  if (_dbReady) return _dbReady;
 
-  console.log('[db] initDB: starting...');
   _dbReady = waitForSqlJs().then(function() {
-    console.log('[db] sql.js global found, initializing WASM...');
     return initSqlJs({
       locateFile: function(file) {
         return 'https://sql.js.org/dist/' + file;
       }
     });
   }).then(function(SQL) {
-    console.log('[db] WASM loaded, fetching harbi.db...');
     return fetch('data/harbi.db').then(function(r) {
       if (!r.ok) throw new Error('Failed to fetch harbi.db: ' + r.status);
-      console.log('[db] harbi.db fetched, size:', r.headers.get('content-length'));
       return r.arrayBuffer();
     }).then(function(buf) {
-      console.log('[db] Creating SQL.Database from', buf.byteLength, 'bytes');
       _db = new SQL.Database(new Uint8Array(buf));
-      console.log('[db] DB ready!');
       return _db;
     });
-  }).catch(function(err) {
-    console.error('[db] initDB FAILED:', err);
-    throw err;
   });
 
   return _dbReady;

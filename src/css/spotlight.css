@@ -192,32 +192,49 @@
 }
 
 .sl-filter-pill {
-  padding:       5px 12px;
-  border-radius: 20px;
-  font-size:     11px;
+  padding:       6px 14px;
+  border-radius: 8px;
+  font-size:     12px;
+  font-weight:   500;
+  font-family:   inherit;
   border:        1px solid var(--sl-border);
-  background:    transparent;
+  background:    var(--sl-bg-elevated);
   color:         var(--sl-text-secondary);
   cursor:        pointer;
   white-space:   nowrap;
+  display:       inline-flex;
+  align-items:   center;
+  gap:           6px;
   transition:    border-color var(--sl-transition), background var(--sl-transition), color var(--sl-transition);
 }
 
 .sl-filter-pill.active {
-  background: var(--sl-accent);
+  background:   var(--sl-accent);
   border-color: var(--sl-accent);
-  color:      var(--sl-bg-deep);
+  color:        var(--sl-bg-deep);
+  font-weight:  600;
 }
 
 .sl-filter-pill:hover:not(.active) {
   border-color: var(--sl-border-focus);
   background:   var(--sl-bg-hover);
+  color:        var(--sl-text);
 }
 
 .sl-filter-count {
-  font-family: monospace;
-  font-size:   10px;
-  opacity:     0.75;
+  font-family:  'JetBrains Mono', 'SF Mono', monospace;
+  font-size:    10px;
+  opacity:      0.6;
+  background:   rgba(255, 255, 255, 0.08);
+  padding:      1px 5px;
+  border-radius: 4px;
+  min-width:    18px;
+  text-align:   center;
+}
+
+.sl-filter-pill.active .sl-filter-count {
+  background:   rgba(0, 0, 0, 0.15);
+  opacity:      0.85;
 }
 
 /* ── Split Pane ─────────────────────────────────────────────────────── */

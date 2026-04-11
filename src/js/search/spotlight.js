@@ -8,7 +8,7 @@
    text highlighting uses safe DOM methods only.
    ============================================================ */
 
-import { initDB, queryRows } from '../analytics/db.js?v=2';
+import { initDB, queryRows } from '../analytics/db.js';
 import { SEARCH_ALIASES, ALIAS_KEYS_SORTED, resolveAliases } from './aliases.js';
 import { keyboardTransliterate, phoneticTransliterate, hasLatin } from './transliterate.js';
 import { parseDate } from './date-parser.js';
@@ -88,21 +88,16 @@ function fmtDate(d) {
 
 // ── Backend loading ───────────────────────────────────────
 function loadBackend() {
-  if (_backendPromise) { return _backendPromise; }
-  console.log('[spotlight] loadBackend: calling initDB()...');
-  console.log('[spotlight] typeof initDB =', typeof initDB);
+  if (_backendPromise) return _backendPromise;
   try {
-    var p = initDB();
-    console.log('[spotlight] initDB() returned:', p, 'isPromise=', p && typeof p.then === 'function');
-    _backendPromise = p.then(function(db) {
+    _backendPromise = initDB().then(function() {
       _dbReady = true;
-      console.log('[spotlight] DB loaded! _dbReady=true');
     }).catch(function(err) {
-      console.error('[spotlight] DB FAILED:', err, err && err.stack);
+      console.error('[spotlight] DB init failed:', err);
       _dbReady = false;
     });
   } catch (ex) {
-    console.error('[spotlight] initDB() THREW:', ex, ex && ex.stack);
+    console.error('[spotlight] initDB threw:', ex);
     _backendPromise = Promise.resolve();
   }
   return _backendPromise;
@@ -168,8 +163,7 @@ function doSearch(rawQuery) {
 }
 
 function queryDB(words, dateFilter) {
-  console.log('[spotlight] queryDB called, _dbReady=', _dbReady, 'words=', words);
-  if (!_dbReady) { console.warn('[spotlight] queryDB: DB not ready, returning empty'); return []; }
+  if (!_dbReady) return [];
 
   var srcIdxExpr = '(SELECT COUNT(*) FROM events e2 WHERE e2.date = e.date AND e2.category = e.category AND e2.id < e.id)';
   var selectCols = 'e.id, e.category as cat, e.date, e.time, e.op_time, e.title, e.subtitle, e.badge, e.tags, e.location, e.full_text, e.lat, e.lng, ' + srcIdxExpr + ' as src_idx';
@@ -577,10 +571,13 @@ function renderDetail(item) {
 
   var dateEl = document.createElement('span');
   dateEl.className = 'sl-detail-date';
-  var dateText = fmtDate(item.date);
-  if (item.time) dateText += ' \u2022 ' + item.time;
-  if (item.op_time) dateText += ' (' + item.op_time + ')';
-  dateEl.textContent = dateText;
+  if (item.time) {
+    var timeNode = document.createElement('span');
+    timeNode.textContent = item.time;
+    dateEl.appendChild(timeNode);
+    dateEl.appendChild(document.createTextNode(' \u2022 '));
+  }
+  dateEl.appendChild(document.createTextNode(fmtDate(item.date)));
   badgeRow.appendChild(dateEl);
 
   _detailPane.appendChild(badgeRow);
@@ -1066,14 +1063,11 @@ function bindEvents() {
       }
 
       // Wait for DB to be ready before searching
-      console.log('[spotlight] debounce fired, query="' + q + '", _dbReady=', _dbReady);
       loadBackend().then(function() {
-        console.log('[spotlight] loadBackend resolved, _dbReady=', _dbReady);
         var bl = document.getElementById('slBackendLabel');
         if (bl) bl.textContent = _dbReady ? 'SQLite FTS5' : '\u0641\u0634\u0644 \u0627\u0644\u062A\u062D\u0645\u064A\u0644';
 
         var searchResult = doSearch(q);
-        console.log('[spotlight] doSearch returned', searchResult.results.length, 'results, translitMode=', searchResult.translitMode);
         _activeFlt = 'all';
         renderResults(searchResult);
 
