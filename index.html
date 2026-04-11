@@ -213,7 +213,8 @@ function renderCalendar() {
   var month = cm.month;
 
   // Update month title
-  document.getElementById('currentMonth').textContent = arabicMonths[month] + ' ' + year;
+  var mm = String(month + 1).length < 2 ? '0' + (month + 1) : String(month + 1);
+  document.getElementById('currentMonth').textContent = arabicMonths[month] + ' ' + year + '  (' + mm + '/' + year + ')';
 
   // Update nav buttons
   document.getElementById('prevBtn').disabled = (currentIdx <= 0);
