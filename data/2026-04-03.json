@@ -4,12 +4,12 @@
   "dateAr": "3 نيسان 2026",
   "hijri": "15 شوال 1447 هـ",
   "stats": {
-    "b": 38,
-    "s": 47,
-    "e": 39,
-    "ir": 12,
-    "v": 3,
-    "al": 0
+    "bayanat": 38,
+    "sirens": 47,
+    "enemy": 39,
+    "iran": 12,
+    "videos": 3,
+    "allies": 0
   },
   "bayanat": [
     {
