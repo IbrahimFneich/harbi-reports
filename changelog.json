@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.8.4",
+    "date": "2026-04-11 23:00",
+    "title": "Inline header dates on same line",
+    "changes": [
+      "Place Arabic date and Gregorian dd/mm/yyyy picker on the same row using flex layout"
+    ]
+  },
+  {
     "version": "1.8.3",
     "date": "2026-04-11 22:30",
     "title": "Fix changelog versions and footer version sync",
