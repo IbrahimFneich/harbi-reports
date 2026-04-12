@@ -1,5 +1,15 @@
 [
   {
+    "version": "2.5.2",
+    "date": "2026-04-13",
+    "title": "Simpler final CTA — button only",
+    "changes": [
+      "index.html — removed the 'جاهز؟' heading and the 'أنت الآن تعرف كلّ ما تحتاجه...' lead paragraph from the .final-cta block at the bottom of the landing page. The primary 'ابدأ التصفّح' button and the version pill stay exactly where they were.",
+      "Motivation: by the time a reader reaches the final CTA they have already seen the walkthrough — the heading + copy were restating what the whole page above already teaches, so dropping them makes the call-to-action more direct and reduces visual noise on the closing screen.",
+      "No CSS changes: .final-cta already centers its children, so the button sits naturally below the FAQ without touching layout styles."
+    ]
+  },
+  {
     "version": "2.5.1",
     "date": "2026-04-13",
     "title": "Hover tooltip on hours-distribution graphs",
