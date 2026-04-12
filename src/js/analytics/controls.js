@@ -91,31 +91,113 @@ export function initControls(onChange, dateRange) {
     }
   });
 
-  // Category toggles
-  var catBtns = document.querySelectorAll('.a-ctrl[data-cat]');
-  catBtns.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var cat = btn.getAttribute('data-cat');
+  // Category filter drawer
+  initDrawer();
+
+  // Grouping segmented control
+  initSegmentedGroup();
+}
+
+/**
+ * Wire the category filter drawer: checkbox toggles, open/close behavior,
+ * badge counter, partial-state highlight, outside-click and Escape to close.
+ */
+function initDrawer() {
+  var btn = document.getElementById('aDrawerBtn');
+  var panel = document.getElementById('aDrawerPanel');
+  var badge = document.getElementById('aDrawerBadge');
+  if (!btn || !panel || !badge) return;
+
+  var boxes = panel.querySelectorAll('input[type=checkbox][data-cat]');
+  var total = boxes.length;
+
+  function syncBadge() {
+    var on = 0;
+    boxes.forEach(function(b) { if (b.checked) on++; });
+    badge.textContent = on + '/' + total;
+    btn.classList.toggle('partial', on > 0 && on < total);
+  }
+
+  boxes.forEach(function(box) {
+    box.addEventListener('change', function() {
+      var cat = box.getAttribute('data-cat');
       var idx = _state.categories.indexOf(cat);
-      if (idx >= 0) {
-        _state.categories.splice(idx, 1);
-        btn.classList.remove('on');
-      } else {
-        _state.categories.push(cat);
-        btn.classList.add('on');
-      }
+      if (box.checked && idx < 0) _state.categories.push(cat);
+      if (!box.checked && idx >= 0) _state.categories.splice(idx, 1);
+      syncBadge();
       if (_onChange) _onChange(getState());
     });
   });
 
-  // Grouping toggles
-  var grpBtns = document.querySelectorAll('.a-ctrl[data-group]');
-  grpBtns.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      _state.grouping = btn.getAttribute('data-group');
-      grpBtns.forEach(function(b) { b.classList.remove('on'); });
-      btn.classList.add('on');
-      if (_onChange) _onChange(getState());
+  function openDrawer() {
+    btn.classList.add('open');
+    panel.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+  }
+  function closeDrawer() {
+    btn.classList.remove('open');
+    panel.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (btn.classList.contains('open')) closeDrawer();
+    else openDrawer();
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!panel.contains(e.target) && !btn.contains(e.target)) closeDrawer();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && btn.classList.contains('open')) closeDrawer();
+  });
+
+  syncBadge();
+}
+
+/**
+ * Wire the grouping segmented control: button clicks + RTL-aware sliding thumb.
+ */
+function initSegmentedGroup() {
+  var seg = document.getElementById('aGroupSeg');
+  if (!seg) return;
+  var thumb = seg.querySelector('.a-seg-thumb');
+  var buttons = seg.querySelectorAll('button[data-group]');
+
+  function placeThumb(active) {
+    if (!thumb || !active) return;
+    var segRect = seg.getBoundingClientRect();
+    var btnRect = active.getBoundingClientRect();
+    var rightOffset = segRect.right - btnRect.right;
+    thumb.style.right = rightOffset + 'px';
+    thumb.style.width = btnRect.width + 'px';
+  }
+
+  function activate(btn) {
+    buttons.forEach(function(b) {
+      b.classList.remove('on');
+      b.setAttribute('aria-selected', 'false');
     });
+    btn.classList.add('on');
+    btn.setAttribute('aria-selected', 'true');
+    placeThumb(btn);
+    _state.grouping = btn.getAttribute('data-group');
+    if (_onChange) _onChange(getState());
+  }
+
+  buttons.forEach(function(btn) {
+    btn.addEventListener('click', function() { activate(btn); });
+  });
+
+  // Initial placement — wait a frame so fonts/layout settle
+  requestAnimationFrame(function() {
+    var active = seg.querySelector('button.on') || buttons[0];
+    placeThumb(active);
+  });
+  window.addEventListener('resize', function() {
+    var active = seg.querySelector('button.on');
+    if (active) placeThumb(active);
   });
 }

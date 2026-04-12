@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.5.5",
+    "date": "2026-04-13",
+    "title": "Analytics controls v2 — collapsed filter drawer + segmented grouping",
+    "changes": [
+      "analytics.html — rebuilt the .a-controls row. The six category buttons (بيانات، صفارات، إعلام العدو، إيران، فيديو، حلفاء) are now collapsed behind a single 'فلاتر' drawer button with a live 6/6 badge, and the three grouping buttons (يومي، أسبوعي، شهري) became a true segmented control with a sliding golden thumb. The .a-controls class was kept as-is so mountExcelButton('.a-controls') still attaches the Excel action to the far end of the row without any change to excel-button.js.",
+      "src/js/analytics/controls.js — replaced the old per-button listeners with initDrawer() and initSegmentedGroup(). The state contract is identical: _state.categories is still a mutating array of the same six keys and _state.grouping is still 'daily'/'weekly'/'monthly', so buildWhere() and getGroupFormat() keep working unchanged. Drawer supports outside-click and Escape to close, tracks a 'partial' state when 1 ≤ checked < 6 (button flips to gold border), and the segmented thumb is positioned in RTL via getBoundingClientRect() right-offset math so it slides correctly under direction:rtl without CSS translate fiddling.",
+      "src/css/analytics.css — appended the .a-controls-v2, .a-drawer-*, and .a-seg-* component styles. All colors flow through existing CSS variables (--surface2, --accent, --border, --text-dim), so the light theme automatically inherits correct contrast; explicit body.analytics.light overrides added only for the drawer panel background and segmented-button active text color where the variable palette needs inversion. Old .a-ctrl / .a-ctrl-sep rules are left in place for backward compatibility but are no longer referenced by analytics.html.",
+      "mockups/controls-templates.html — added an interactive side-by-side preview of all five control-row design templates that drove the decision to adopt the drawer pattern. Kept in the repo as a design reference and as a test bed for future control-row iterations.",
+      "Bumped cache-bust and version pill strings to 2.5.5 across index, timeline, analytics, archive, report, and src/js/app.js."
+    ]
+  },
+  {
     "version": "2.5.4",
     "date": "2026-04-13",
     "title": "Remove site-wide PDF export, keep analytics Excel export",

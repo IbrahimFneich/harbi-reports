@@ -403,6 +403,157 @@ body.analytics.light .a-kpi .num {
 body.analytics.light .a-controls { border-bottom-color: rgba(212,207,196,0.5); }
 body.analytics.light .a-table tr:hover td { background: rgba(154,123,45,0.06); }
 
+/* ═══════════════════════════════════════════════════
+   Controls v2 — collapsed filter drawer + segmented group
+   ═══════════════════════════════════════════════════ */
+.a-controls.a-controls-v2 { gap: 12px; align-items: center; }
+.a-controls-spacer { flex: 1 1 auto; }
+
+/* Category filter drawer */
+.a-drawer-wrap { position: relative; }
+.a-drawer-btn {
+  font-family: inherit;
+  font-size: 0.64rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, color 0.18s;
+  white-space: nowrap;
+}
+.a-drawer-btn:hover { border-color: var(--accent); }
+.a-drawer-btn.open {
+  border-color: var(--accent);
+  background: var(--accent-dim, rgba(201,168,76,0.12));
+}
+.a-drawer-btn.partial {
+  border-color: var(--accent);
+  background: var(--accent-dim, rgba(201,168,76,0.12));
+  color: var(--accent);
+}
+.a-drawer-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #0a0f18;
+  font-size: 0.55rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.a-drawer-chev {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  transition: transform 0.2s ease;
+}
+.a-drawer-btn.open .a-drawer-chev { transform: rotate(180deg); }
+
+.a-drawer-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 220px;
+  padding: 8px;
+  background: var(--surface, #0f1520);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+  z-index: 40;
+  display: none;
+}
+.a-drawer-panel.open {
+  display: block;
+  animation: aDrawerFade 0.18s ease both;
+}
+@keyframes aDrawerFade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.a-drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s;
+  user-select: none;
+}
+.a-drawer-item:hover { background: var(--surface2); }
+.a-drawer-item input[type=checkbox] {
+  accent-color: var(--accent);
+  cursor: pointer;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* Grouping segmented control */
+.a-seg {
+  position: relative;
+  display: inline-flex;
+  padding: 3px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.a-seg button {
+  position: relative;
+  z-index: 2;
+  font-family: inherit;
+  font-size: 0.62rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-radius: 5px;
+  transition: color 0.22s ease;
+  white-space: nowrap;
+}
+.a-seg button:hover { color: var(--text); }
+.a-seg button.on { color: #0a0f18; }
+.a-seg-thumb {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  background: var(--accent);
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(201,168,76,0.3);
+  transition:
+    right 0.28s cubic-bezier(0.32, 0.72, 0, 1),
+    width 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Excel button lives on the far end of the row via the spacer */
+.a-controls.a-controls-v2 .download-btn {
+  font-size: 0.68rem;
+  padding: 7px 14px;
+}
+
+/* Light theme — drawer panel contrast */
+body.analytics.light .a-drawer-panel {
+  background: #ffffff;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+}
+body.analytics.light .a-drawer-badge { color: #ffffff; }
+body.analytics.light .a-seg button.on { color: #ffffff; }
+
 /* ── Mobile ── */
 @media (max-width: 768px) {
   .a-kpi-strip { grid-template-columns: repeat(3, 1fr); }
@@ -410,4 +561,6 @@ body.analytics.light .a-table tr:hover td { background: rgba(154,123,45,0.06); }
   .a-controls { padding: 10px 16px; }
   .a-panel { padding: 12px; }
   .a-bar-label { width: 60px; font-size: 0.56rem; }
+  .a-controls-spacer { display: none; }
+  .a-drawer-panel { right: auto; left: 0; }
 }

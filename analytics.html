@@ -7,11 +7,11 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="src/css/enhancements.css?v=2.5.4">
-<link rel="stylesheet" href="src/css/analytics.css?v=2.5.4">
-<link rel="stylesheet" href="src/css/navbar.css?v=2.5.4"/>
-<link rel="stylesheet" href="src/css/spotlight.css?v=2.5.4"/>
-<link rel="stylesheet" href="src/css/print.css?v=2.5.4" media="print"/>
+<link rel="stylesheet" href="src/css/enhancements.css?v=2.5.5">
+<link rel="stylesheet" href="src/css/analytics.css?v=2.5.5">
+<link rel="stylesheet" href="src/css/navbar.css?v=2.5.5"/>
+<link rel="stylesheet" href="src/css/spotlight.css?v=2.5.5"/>
+<link rel="stylesheet" href="src/css/print.css?v=2.5.5" media="print"/>
 <script>
 (function(){try{var s=localStorage.getItem('harbi-theme');var l=s!=='dark';document.documentElement.classList.toggle('light',l);var f=function(){document.body&&document.body.classList.toggle('light',l);};if(document.body)f();else document.addEventListener('DOMContentLoaded',f);}catch(e){}})();
 </script>
@@ -31,23 +31,39 @@
 </div>
 
 <!-- Controls -->
-<div class="a-controls">
+<div class="a-controls a-controls-v2">
   <div class="a-date-range-wrap">
     <button class="a-date-trigger" id="dateFrom">...</button>
     <span class="a-date-arrow">&rarr;</span>
     <button class="a-date-trigger" id="dateTo">...</button>
   </div>
-  <div class="a-ctrl-sep"></div>
-  <button class="a-ctrl on" data-cat="bayanat">بيانات</button>
-  <button class="a-ctrl on" data-cat="sirens">صفارات</button>
-  <button class="a-ctrl on" data-cat="enemy">إعلام العدو</button>
-  <button class="a-ctrl on" data-cat="iran">إيران</button>
-  <button class="a-ctrl on" data-cat="videos">فيديو</button>
-  <button class="a-ctrl on" data-cat="allies">حلفاء</button>
-  <div class="a-ctrl-sep"></div>
-  <button class="a-ctrl on" data-group="daily">يومي</button>
-  <button class="a-ctrl" data-group="monthly">شهري</button>
-  <button class="a-ctrl" data-group="weekly">أسبوعي</button>
+
+  <!-- Category filter drawer -->
+  <div class="a-drawer-wrap">
+    <button class="a-drawer-btn" id="aDrawerBtn" type="button" aria-haspopup="true" aria-expanded="false">
+      <span>فلاتر</span>
+      <span class="a-drawer-badge" id="aDrawerBadge">6/6</span>
+      <span class="a-drawer-chev" aria-hidden="true">▾</span>
+    </button>
+    <div class="a-drawer-panel" id="aDrawerPanel" role="menu">
+      <label class="a-drawer-item"><input type="checkbox" data-cat="bayanat" checked> <span>بيانات</span></label>
+      <label class="a-drawer-item"><input type="checkbox" data-cat="sirens" checked> <span>صفارات</span></label>
+      <label class="a-drawer-item"><input type="checkbox" data-cat="enemy" checked> <span>إعلام العدو</span></label>
+      <label class="a-drawer-item"><input type="checkbox" data-cat="iran" checked> <span>إيران</span></label>
+      <label class="a-drawer-item"><input type="checkbox" data-cat="videos" checked> <span>فيديو</span></label>
+      <label class="a-drawer-item"><input type="checkbox" data-cat="allies" checked> <span>حلفاء</span></label>
+    </div>
+  </div>
+
+  <!-- Grouping segmented control -->
+  <div class="a-seg" id="aGroupSeg" role="tablist" aria-label="التجميع">
+    <button class="on" data-group="daily" type="button" role="tab" aria-selected="true">يومي</button>
+    <button data-group="weekly" type="button" role="tab" aria-selected="false">أسبوعي</button>
+    <button data-group="monthly" type="button" role="tab" aria-selected="false">شهري</button>
+    <span class="a-seg-thumb" aria-hidden="true"></span>
+  </div>
+
+  <div class="a-controls-spacer"></div>
 </div>
 
 <!-- KPI Strip -->
@@ -87,19 +103,19 @@
     البيانات مأخوذة من تليغرام ومُعالَجة بواسطة ذكاء اصطناعي — قد تحتوي على أخطاء.
   </div>
   <div data-disclaimer-slot style="margin-top:10px;font-size:0.68rem;">
-    <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;">Harbi Reports v2.5.4</span>
+    <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;">Harbi Reports v2.5.5</span>
   </div>
 </div>
 
 <script src="https://sql.js.org/dist/sql-wasm.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
-<script type="module" src="src/js/analytics/dashboard.js?v=2.5.4"></script>
-<script type="module" src="src/js/search/spotlight.js?v=2.5.4"></script>
+<script type="module" src="src/js/analytics/dashboard.js?v=2.5.5"></script>
+<script type="module" src="src/js/search/spotlight.js?v=2.5.5"></script>
 <script type="module">
 import { initNavbar } from './src/js/ui/navbar.js';
 initNavbar();
 </script>
-<script src="src/js/ui/disclaimer.js?v=2.5.4"></script>
+<script src="src/js/ui/disclaimer.js?v=2.5.5"></script>
 <script type="module">
   import { mountExcelButton } from './src/js/export/excel-button.js';
   // Wait until dashboard.js has initialized the DB + controls before mounting,
