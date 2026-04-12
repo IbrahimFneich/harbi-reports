@@ -1,5 +1,16 @@
 [
   {
+    "version": "2.2.3",
+    "date": "2026-04-12",
+    "title": "Ultra-compact report header (template D)",
+    "changes": [
+      "Report header row redesigned as a single compact line: day • dateAr • hijri • picker • counter, with prev/next pinned to edges",
+      "Date picker trigger is now a dotted-underline accent link (monospace) instead of a boxy chip",
+      "Counter uses tabular-nums so digits don't jitter on nav",
+      "Hijri shrunk to 0.72rem muted; main date text is 0.82rem; day name is gold"
+    ]
+  },
+  {
     "version": "2.2.2",
     "date": "2026-04-12",
     "title": "Navbar brand, monthly default, merged report header row",

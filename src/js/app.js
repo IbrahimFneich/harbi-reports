@@ -43,19 +43,39 @@ function renderReport(data) {
   var dateCenter = document.createElement('div');
   dateCenter.className = 'date-center';
 
-  var dateDiv = document.createElement('div');
-  dateDiv.className = 'date';
-  var dateText = document.createTextNode(computedDay + ' ');
-  dateDiv.appendChild(dateText);
-  var dateSpan = document.createElement('span');
-  dateSpan.textContent = data.dateAr;
-  dateDiv.appendChild(dateSpan);
-  var dateSuffix = document.createTextNode(' \u2014 ' + data.hijri);
-  dateDiv.appendChild(dateSuffix);
-  dateCenter.appendChild(dateDiv);
+  // day name — gold, bold
+  var daySpan = document.createElement('span');
+  daySpan.className = 'd-day';
+  daySpan.textContent = computedDay;
+  dateCenter.appendChild(daySpan);
 
-  // dd/mm/yyyy date picker trigger
-  var dpTrigger = document.createElement('span');
+  // Arabic date (e.g. ٣ نيسان ٢٠٢٦)
+  var dateArSpan = document.createElement('span');
+  dateArSpan.className = 'd-datear';
+  dateArSpan.textContent = data.dateAr;
+  dateCenter.appendChild(dateArSpan);
+
+  // separator
+  var sep1 = document.createElement('span');
+  sep1.className = 'd-sep';
+  sep1.textContent = '\u2022';
+  dateCenter.appendChild(sep1);
+
+  // hijri — muted small
+  var hijriSpan = document.createElement('span');
+  hijriSpan.className = 'd-hijri';
+  hijriSpan.textContent = data.hijri;
+  dateCenter.appendChild(hijriSpan);
+
+  // separator
+  var sep2 = document.createElement('span');
+  sep2.className = 'd-sep';
+  sep2.textContent = '\u2022';
+  dateCenter.appendChild(sep2);
+
+  // dd/mm/yyyy picker — dotted-underline accent
+  var dpTrigger = document.createElement('button');
+  dpTrigger.type = 'button';
   dpTrigger.className = 'report-date-trigger';
   dpTrigger.id = 'reportDatePicker';
   var dp = data.date.split('-');
@@ -177,7 +197,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v2.2.2';
+  ver.textContent = 'Harbi Reports v2.2.3';
   ver.onclick = function() { showChangelog(); };
   slot.appendChild(ver);
   footer.appendChild(slot);

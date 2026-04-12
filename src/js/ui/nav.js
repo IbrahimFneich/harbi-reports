@@ -47,7 +47,11 @@ export function initNav() {
   if (nextDate) nextBtn.href = reportUrl(nextDate);
   dateRow.insertBefore(nextBtn, dateRow.firstChild);
 
-  // Current / total counter — lives inside date-center
+  // Current / total counter — lives inside date-center, preceded by a separator
+  var curSep = document.createElement('span');
+  curSep.className = 'd-sep';
+  curSep.textContent = '\u2022';
+  dateCenter.appendChild(curSep);
   var cur = document.createElement('span');
   cur.className = 'day-nav-current';
   cur.textContent = (idx + 1) + ' / ' + ALL_REPORTS.length;
