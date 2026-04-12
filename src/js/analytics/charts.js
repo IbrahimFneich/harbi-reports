@@ -82,7 +82,15 @@ export function renderLineChart(containerId, datasets, height, opts) {
     var chartW = el.offsetWidth || 600;
     var marginL = 40, marginB = 24, marginR = 6, marginT = 6;
     var w = chartW;
-    var h = (height || 200) + marginB;
+    // Respect container height if it's tall enough (e.g. fullscreen panel);
+    // otherwise fall back to the caller-provided fixed height.
+    var baseH = height || 200;
+    var containerH = el.clientHeight || 0;
+    var legendReserve = 40; // approximate legend row height appended below
+    var effectiveH = (containerH > baseH + legendReserve + 20)
+      ? (containerH - legendReserve)
+      : baseH;
+    var h = effectiveH + marginB;
     var plotW = w - marginL - marginR;
     var plotH = h - marginT - marginB;
 
@@ -92,7 +100,11 @@ export function renderLineChart(containerId, datasets, height, opts) {
     });
     if (allMax === 0) allMax = 1;
 
-    var svg = svgEl('svg', { viewBox: '0 0 ' + w + ' ' + h, style: 'width:100%;height:' + h + 'px;display:block' });
+    var svg = svgEl('svg', {
+      viewBox: '0 0 ' + w + ' ' + h,
+      preserveAspectRatio: 'none',
+      style: 'width:100%;height:' + h + 'px;max-height:100%;display:block'
+    });
 
     // Y-axis
     for (var yi = 0; yi <= 4; yi++) {

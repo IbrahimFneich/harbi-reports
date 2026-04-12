@@ -208,10 +208,25 @@ onReady(function() {
       var isTablePanel = panel.querySelector('#dataTable');
       addFullscreenBtn(panel,
         function() { // onEnter
-          if (isTablePanel) { _tableFullscreen = true; _tablePage = 1; refreshTable(); }
+          if (isTablePanel) {
+            _tableFullscreen = true;
+            _tablePage = 1;
+            refreshTable();
+          } else {
+            // Re-render charts so they remeasure the (now full-viewport) container.
+            // requestAnimationFrame ensures the browser has applied the
+            // .a-panel-fs layout before we measure clientHeight/Width.
+            requestAnimationFrame(function() { refresh(); });
+          }
         },
         function() { // onExit
-          if (isTablePanel) { _tableFullscreen = false; _tablePage = 1; refreshTable(); }
+          if (isTablePanel) {
+            _tableFullscreen = false;
+            _tablePage = 1;
+            refreshTable();
+          } else {
+            requestAnimationFrame(function() { refresh(); });
+          }
         }
       );
     });

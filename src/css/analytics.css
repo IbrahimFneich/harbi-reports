@@ -319,12 +319,26 @@ body.analytics.light .dp-today-btn:hover:not(:disabled) { color: #fff; }
   position: fixed !important; top: 0; left: 0; right: 0; bottom: 0;
   z-index: 9998; padding: 24px !important;
   background: var(--bg, #0a0f18) !important;
-  overflow-y: auto;
+  display: flex; flex-direction: column;
+  overflow: hidden;
 }
+.a-panel-fs .a-panel-title { flex: 0 0 auto; }
 .a-panel-fs .a-line-chart,
 .a-panel-fs #heatmapPanel,
 .a-panel-fs #barChart,
-.a-panel-fs #dataTable { max-height: calc(100vh - 100px); overflow-y: auto; }
+.a-panel-fs #dataTable {
+  flex: 1 1 auto; min-height: 0;
+  max-height: none;
+  overflow: auto;
+}
+.a-panel-fs .a-line-chart svg { width: 100%; }
+.a-panel-fs #barChart { display: flex; flex-direction: column; justify-content: space-around; gap: 10px; }
+.a-panel-fs #barChart .a-bar-row { font-size: 0.9rem; margin: 0; }
+.a-panel-fs #barChart .a-bar-label { width: 180px; font-size: 0.85rem; }
+.a-panel-fs #barChart .a-bar-track { height: 32px; }
+.a-panel-fs #barChart .a-bar-val { width: 60px; font-size: 0.9rem; }
+.a-panel-fs .a-heatmap { gap: 4px; }
+.a-panel-fs #heatmapPanel .a-hm-labels span { font-size: 0.62rem; }
 
 /* ── Pagination ── */
 .a-pager {

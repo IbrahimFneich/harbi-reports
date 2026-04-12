@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.3.3",
+    "date": "2026-04-12",
+    "title": "Analytics panel fullscreen actually fills the viewport",
+    "changes": [
+      "Fixed: entering fullscreen on an analytics panel left the chart at its normal ~220px height with the rest of the screen empty — the line chart's SVG was being rendered at a caller-fixed pixel height, so growing the container did nothing",
+      "src/css/analytics.css — .a-panel-fs is now a flex column; .a-line-chart/#heatmapPanel/#barChart/#dataTable get flex:1 1 auto + min-height:0 so they claim all remaining viewport height after the title",
+      "src/js/analytics/charts.js — renderLineChart now measures el.clientHeight and, when the container is taller than the caller's base height, re-derives the SVG dimensions to fill it (preserveAspectRatio=none keeps the axes crisp end-to-end)",
+      "src/js/analytics/dashboard.js — entering/exiting fullscreen on a chart panel now triggers refresh() inside a requestAnimationFrame so charts re-measure and re-render at the new container size",
+      "Bonus: fullscreen bar chart now shows taller bars, larger labels, and 10px gap between rows so it actually uses the space too; heatmap gets a wider gap + larger hour labels"
+    ]
+  },
+  {
     "version": "2.3.2",
     "date": "2026-04-12",
     "title": "Fix site-wide light theme consistency (index, spotlight, analytics)",
