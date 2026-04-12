@@ -1,5 +1,15 @@
 [
   {
+    "version": "2.2.2",
+    "date": "2026-04-12",
+    "title": "Navbar brand, monthly default, merged report header row",
+    "changes": [
+      "Navbar brand is now «★ أرشيف الإعلام الحربي» (was «★ الإعلام الحربي»)",
+      "Monthly chronicle default link points to 2023-10 (war chronicle starts from October 2023)",
+      "Report header: prev/next buttons and day counter merged into the same row as the date and date picker — one unified styled row with accent separator"
+    ]
+  },
+  {
     "version": "2.2.1",
     "date": "2026-04-12",
     "title": "Unified footer disclaimer notice across all pages",

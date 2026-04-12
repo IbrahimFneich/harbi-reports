@@ -40,6 +40,9 @@ function renderReport(data) {
   var dateRow = document.createElement('div');
   dateRow.className = 'date-row';
 
+  var dateCenter = document.createElement('div');
+  dateCenter.className = 'date-center';
+
   var dateDiv = document.createElement('div');
   dateDiv.className = 'date';
   var dateText = document.createTextNode(computedDay + ' ');
@@ -49,7 +52,7 @@ function renderReport(data) {
   dateDiv.appendChild(dateSpan);
   var dateSuffix = document.createTextNode(' \u2014 ' + data.hijri);
   dateDiv.appendChild(dateSuffix);
-  dateRow.appendChild(dateDiv);
+  dateCenter.appendChild(dateDiv);
 
   // dd/mm/yyyy date picker trigger
   var dpTrigger = document.createElement('span');
@@ -57,8 +60,9 @@ function renderReport(data) {
   dpTrigger.id = 'reportDatePicker';
   var dp = data.date.split('-');
   dpTrigger.textContent = dp[2] + '/' + dp[1] + '/' + dp[0];
-  dateRow.appendChild(dpTrigger);
+  dateCenter.appendChild(dpTrigger);
 
+  dateRow.appendChild(dateCenter);
   header.appendChild(dateRow);
 
   root.appendChild(header);
@@ -173,7 +177,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v2.2.1';
+  ver.textContent = 'Harbi Reports v2.2.2';
   ver.onclick = function() { showChangelog(); };
   slot.appendChild(ver);
   footer.appendChild(slot);

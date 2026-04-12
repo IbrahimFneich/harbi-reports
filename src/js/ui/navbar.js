@@ -19,7 +19,7 @@ export function initNavbar() {
   var logo = document.createElement('a');
   logo.className = 'nav-logo';
   logo.href = prefix + 'index.html';
-  logo.textContent = '\u2605 \u0627\u0644\u0625\u0639\u0644\u0627\u0645 \u0627\u0644\u062D\u0631\u0628\u064A';
+  logo.textContent = '\u2605 \u0623\u0631\u0634\u064A\u0641 \u0627\u0644\u0625\u0639\u0644\u0627\u0645 \u0627\u0644\u062D\u0631\u0628\u064A';
   nav.appendChild(logo);
 
   var links = document.createElement('div');
@@ -28,7 +28,7 @@ export function initNavbar() {
     { href: prefix + 'index.html', label: '\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629', id: 'index' },
     { href: prefix + 'timeline.html', label: '\u0627\u0644\u062A\u0633\u0644\u0633\u0644 \u0627\u0644\u0632\u0645\u0646\u064A', id: 'timeline' },
     { href: prefix + 'analytics.html', label: '\u0627\u0644\u062A\u062D\u0644\u064A\u0644\u0627\u062A', id: 'analytics' },
-    { href: (page === 'monthly') ? '#' : (prefix + 'monthly/2024-03.html'), label: '\u0627\u0644\u0648\u062B\u064A\u0642\u0629 \u0627\u0644\u0634\u0647\u0631\u064A\u0629', id: 'monthly' }
+    { href: (page === 'monthly') ? '#' : (prefix + 'monthly/2023-10.html'), label: '\u0627\u0644\u0648\u062B\u064A\u0642\u0629 \u0627\u0644\u0634\u0647\u0631\u064A\u0629', id: 'monthly' }
   ];
   items.forEach(function(item) {
     var a = document.createElement('a');

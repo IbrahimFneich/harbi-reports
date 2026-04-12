@@ -342,23 +342,7 @@ body.light .search-target .tl-body::before {
   font-size: 0.78rem; font-weight: 700; white-space: nowrap;
 }
 
-/* ═══════════════ Prev/Next Navigation ═══════════════ */
-.day-nav {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 16px; background: var(--surface2);
-  border-bottom: 1px solid var(--border);
-}
-.day-nav-btn {
-  text-decoration: none; padding: 6px 14px; border-radius: 8px;
-  font-size: 0.75rem; font-weight: 600; font-family: inherit;
-  border: 1px solid var(--border); background: var(--surface3);
-  color: var(--text-dim); transition: all 0.2s; cursor: pointer;
-}
-.day-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
-.day-nav-btn.disabled { opacity: 0.3; pointer-events: none; }
-.day-nav-current {
-  font-size: 0.72rem; color: var(--text-dim); direction: ltr; unicode-bidi: isolate;
-}
+/* ═══════════════ Prev/Next Navigation (merged into .header .date-row — see report.css) ═══════════════ */
 
 /* ═══════════════ Combined Heatmap ═══════════════ */
 .heatmap-strip {

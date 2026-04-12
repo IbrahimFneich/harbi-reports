@@ -50,11 +50,32 @@ body {
 }
 .header h1 { font-size:1.9rem; font-weight:900; color:var(--accent); position:relative; margin-bottom:4px; }
 .header .date-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; position: relative; flex-wrap: wrap;
+  max-width: 1040px; margin: 14px auto 0; padding: 10px 14px 0;
+  border-top: 1px solid rgba(201,168,76,0.18);
+}
+.header .date-center {
   display: flex; align-items: center; justify-content: center; gap: 12px;
-  position: relative; flex-wrap: wrap;
+  flex: 1 1 auto; flex-wrap: wrap;
 }
 .header .date { font-size:0.95rem; color:var(--text-dim); position:relative; }
 .header .date span { color:var(--accent); font-weight:700; }
+.header .day-nav-btn {
+  flex: 0 0 auto;
+  text-decoration: none; padding: 7px 14px; border-radius: 8px;
+  font-size: 0.78rem; font-weight: 700; font-family: inherit;
+  border: 1px solid var(--border); background: rgba(255,255,255,0.03);
+  color: var(--text-dim); transition: all 0.2s; cursor: pointer;
+  white-space: nowrap;
+}
+.header .day-nav-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(201,168,76,0.06); }
+.header .day-nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.header .day-nav-current {
+  font-size: 0.7rem; font-weight: 700; color: var(--text-dim); direction: ltr; unicode-bidi: isolate;
+  padding: 3px 10px; border-radius: 999px; background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.18);
+}
 
 /* ═══════════════ STATS BAR ═══════════════ */
 .stats {
