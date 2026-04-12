@@ -500,7 +500,7 @@ export function renderTable(containerId, columns, rows, colorMap, opts) {
 
     if (opts.sortKey === col.key) {
       var arrow = document.createElement('span');
-      arrow.style.cssText = 'font-size:0.5rem;color:var(--accent)';
+      arrow.style.cssText = 'font-size:0.8rem;color:var(--accent);margin-right:4px';
       arrow.textContent = opts.sortDir === 'asc' ? '\u25B2' : '\u25BC';
       th.appendChild(arrow);
     }
@@ -520,7 +520,7 @@ export function renderTable(containerId, columns, rows, colorMap, opts) {
       var td = document.createElement('td');
       td.textContent = row[col.key] != null ? row[col.key] : '';
       if (col.key === 'date') {
-        td.style.cssText = 'direction:ltr;font-family:monospace;font-size:0.6rem';
+        td.style.cssText = 'direction:ltr;font-family:monospace';
       } else if (colorMap && colorMap[col.key]) {
         td.className = 'num-cell';
         td.style.color = colorMap[col.key];

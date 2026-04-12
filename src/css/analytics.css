@@ -291,16 +291,19 @@ body.analytics.light .dp-today-btn:hover:not(:disabled) { color: #fff; }
 }
 
 /* ── Data Table ── */
-.a-table { width: 100%; border-collapse: collapse; font-size: 0.64rem; }
+.a-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
 .a-table th {
-  text-align: right; padding: 8px 10px; font-weight: 700;
+  text-align: right; padding: 12px 14px; font-weight: 700;
   color: var(--text-dim); border-bottom: 1px solid var(--border);
-  font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.06em;
+  font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;
 }
 .a-table td {
-  padding: 8px 10px; border-bottom: 1px solid rgba(30,45,61,0.3);
+  padding: 12px 14px; border-bottom: 1px solid rgba(30,45,61,0.3);
   font-variant-numeric: tabular-nums; direction: ltr; text-align: right;
 }
+.a-panel-fs .a-table { font-size: 1.1rem; }
+.a-panel-fs .a-table th { font-size: 0.92rem; padding: 16px 18px; }
+.a-panel-fs .a-table td { padding: 16px 18px; }
 .a-table tr:hover td { background: rgba(201,168,76,0.04); }
 .a-table .num-cell { font-weight: 700; font-family: monospace; }
 .a-table th:hover { color: var(--accent); }
@@ -347,15 +350,15 @@ body.analytics.light .dp-today-btn:hover:not(:disabled) { color: #fff; }
   border-top: 1px solid var(--border);
 }
 .a-pager-btn {
-  font-family: inherit; font-size: 0.6rem; font-weight: 600;
-  padding: 5px 14px; border-radius: 6px;
+  font-family: inherit; font-size: 0.85rem; font-weight: 600;
+  padding: 8px 18px; border-radius: 6px;
   border: 1px solid var(--border); background: var(--surface2);
   color: var(--text-dim); cursor: pointer; transition: all 0.15s;
 }
 .a-pager-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
 .a-pager-btn:disabled { opacity: 0.3; cursor: default; }
 .a-pager-info {
-  font-size: 0.58rem; color: var(--text-dim); font-weight: 600;
+  font-size: 0.85rem; color: var(--text-dim); font-weight: 600;
   direction: ltr;
 }
 

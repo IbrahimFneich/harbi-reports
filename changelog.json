@@ -1,5 +1,16 @@
 [
   {
+    "version": "2.3.5",
+    "date": "2026-04-12",
+    "title": "Bigger, more readable analytics data table",
+    "changes": [
+      "src/css/analytics.css — .a-table font-size bumped from 0.64rem → 0.92rem body / 0.78rem header, with wider 12px/14px cell padding; fullscreen mode goes further to 1.1rem body / 0.92rem header with 16px/18px padding",
+      "src/js/analytics/charts.js — removed the inline font-size:0.6rem override on date cells that was defeating the CSS rule; date cells now inherit the table font-size and keep their monospace styling",
+      "Bumped the inline sort-arrow indicator from 0.5rem → 0.8rem with a small margin so it reads correctly next to the new larger header labels",
+      "src/css/analytics.css — pager buttons and info text bumped from ~0.6rem → 0.85rem with roomier 8px/18px padding so pagination controls stay visually consistent with the bigger table"
+    ]
+  },
+  {
     "version": "2.3.4",
     "date": "2026-04-12",
     "title": "Bigger, more visible line-chart axis labels",
