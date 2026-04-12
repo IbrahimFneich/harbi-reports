@@ -212,7 +212,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v2.3.7';
+  ver.textContent = 'Harbi Reports v2.3.8';
   ver.onclick = function() { showChangelog(); };
   slot.appendChild(ver);
   footer.appendChild(slot);

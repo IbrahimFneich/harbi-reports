@@ -49,212 +49,218 @@ export function addFullscreenBtn(panelEl, onEnter, onExit) {
   return btn;
 }
 
-/* ═══════════ LINE CHART ═══════════ */
+/* ═══════════ LINE CHART (ECharts — finance-grade: zoom, pan, brush, select) ═══════════ */
 
 /**
- * Multi-series line chart with axes, legend toggle, tooltip, grouping badge.
- * datasets: [{data: number[], color: string, label: string}]
- * opts.xLabels, opts.grouping
+ * Stock-terminal UX: wheel=zoom, bottom slider=pan+window,
+ * toolbox rect-zoom / brush / restore / save-as-PNG, crosshair tooltip, legend toggle.
+ * Contract unchanged: datasets:[{data,color,label}], opts:{xLabels, grouping}.
  */
 export function renderLineChart(containerId, datasets, height, opts) {
   var el = document.getElementById(containerId);
   if (!el) return;
-  el.textContent = '';
+
+  if (typeof echarts === 'undefined') {
+    el.textContent = 'ECharts failed to load';
+    return;
+  }
 
   var xLabels = (opts && opts.xLabels) || [];
   var grouping = (opts && opts.grouping) || '';
-  var hiddenSeries = {}; // track toggled-off series by index
 
-  var wrapper = document.createElement('div');
-  wrapper.style.cssText = 'position:relative';
+  var prev = echarts.getInstanceByDom(el);
+  if (prev) prev.dispose();
+  el.textContent = '';
 
-  function draw() {
-    // Remove previous SVG/legend but keep wrapper
-    var prevSvg = wrapper.querySelector('svg');
-    if (prevSvg) prevSvg.remove();
-    var prevLeg = wrapper.querySelector('.lc-legend');
-    if (prevLeg) prevLeg.remove();
-    var prevTip = wrapper.querySelector('.lc-tooltip');
-    if (prevTip) prevTip.remove();
-
-    var visibleDS = datasets.filter(function(_, i) { return !hiddenSeries[i]; });
-
-    var chartW = el.offsetWidth || 600;
-    var marginL = 56, marginB = 38, marginR = 10, marginT = 10;
-    var w = chartW;
-    // In fullscreen, stretch the chart to fill the panel; otherwise use the
-    // caller-provided fixed height. Detect fullscreen by walking up to the
-    // .a-panel ancestor and checking for .a-panel-fs — deterministic and
-    // immune to re-draw feedback loops.
-    var baseH = height || 200;
-    var panelEl = el.closest ? el.closest('.a-panel') : null;
-    var isFs = !!(panelEl && panelEl.classList.contains('a-panel-fs'));
-    var legendReserve = 48;
-    var effectiveH = baseH;
-    if (isFs) {
-      var containerH = el.clientHeight || 0;
-      if (containerH > baseH) effectiveH = containerH - legendReserve;
-    }
-    var h = effectiveH + marginB;
-    var plotW = w - marginL - marginR;
-    var plotH = h - marginT - marginB;
-
-    var allMax = 0;
-    visibleDS.forEach(function(ds) {
-      ds.data.forEach(function(v) { if (v > allMax) allMax = v; });
-    });
-    if (allMax === 0) allMax = 1;
-
-    var svg = svgEl('svg', {
-      viewBox: '0 0 ' + w + ' ' + h,
-      style: 'width:100%;height:' + h + 'px;max-height:100%;display:block'
-    });
-
-    // Y-axis
-    for (var yi = 0; yi <= 4; yi++) {
-      var yVal = Math.round(allMax * yi / 4);
-      var yPos = marginT + plotH - (yi / 4) * plotH;
-      svg.appendChild(svgEl('line', {
-        x1: String(marginL), y1: String(yPos), x2: String(w - marginR), y2: String(yPos),
-        stroke: 'var(--border, #1e2d3d)', 'stroke-width': '0.5', 'stroke-dasharray': yi === 0 ? 'none' : '3,3'
-      }));
-      svg.appendChild(svgText(marginL - 8, yPos + 5, yVal, { 'text-anchor': 'end', 'font-size': '14' }));
-    }
-
-    // X-axis
-    if (xLabels.length > 0) {
-      var maxXL = Math.min(xLabels.length, 12);
-      var step = Math.max(1, Math.floor(xLabels.length / maxXL));
-      for (var xi = 0; xi < xLabels.length; xi += step) {
-        var xPos = marginL + (xi / Math.max(xLabels.length - 1, 1)) * plotW;
-        var lbl = xLabels[xi];
-        if (lbl.length === 7) lbl = lbl.substring(5) + '/' + lbl.substring(2, 4);
-        else if (lbl.length === 10) lbl = lbl.substring(5);
-        else if (lbl.indexOf('-W') > 0) lbl = 'W' + lbl.split('W')[1];
-        svg.appendChild(svgText(xPos, h - 10, lbl, { 'text-anchor': 'middle', 'font-size': '13' }));
-        svg.appendChild(svgEl('line', {
-          x1: String(xPos), y1: String(marginT + plotH), x2: String(xPos), y2: String(marginT + plotH + 4),
-          stroke: 'var(--border, #1e2d3d)', 'stroke-width': '0.5'
-        }));
-      }
-    }
-
-    // Points + lines
-    var pointPositions = [];
-    var nPoints = visibleDS.length > 0 ? visibleDS[0].data.length : 0;
-    for (var pi = 0; pi < nPoints; pi++) {
-      pointPositions.push({ x: marginL + (pi / Math.max(nPoints - 1, 1)) * plotW, period: xLabels[pi] || '', values: [] });
-    }
-
-    visibleDS.forEach(function(ds) {
-      var pts = [];
-      for (var i = 0; i < ds.data.length; i++) {
-        var x = marginL + (i / Math.max(ds.data.length - 1, 1)) * plotW;
-        var y = marginT + plotH - (ds.data[i] / allMax) * plotH;
-        pts.push(x.toFixed(1) + ',' + y.toFixed(1));
-        if (pointPositions[i]) pointPositions[i].values.push({ label: ds.label, value: ds.data[i], color: ds.color });
-      }
-      var areaD = 'M' + pts[0] + ' L' + pts.join(' L') + ' L' + (marginL + plotW) + ',' + (marginT + plotH) + ' L' + marginL + ',' + (marginT + plotH) + ' Z';
-      svg.appendChild(svgEl('path', { d: areaD, fill: ds.color, opacity: '0.08' }));
-      svg.appendChild(svgEl('polyline', {
-        points: pts.join(' '), fill: 'none', stroke: ds.color,
-        'stroke-width': '2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round'
-      }));
-    });
-
-    // Hover line
-    var hoverLine = svgEl('line', {
-      x1: '0', y1: String(marginT), x2: '0', y2: String(marginT + plotH),
-      stroke: 'var(--accent, #c9a84c)', 'stroke-width': '1', opacity: '0', 'stroke-dasharray': '3,3'
-    });
-    svg.appendChild(hoverLine);
-    wrapper.insertBefore(svg, wrapper.firstChild);
-
-    // Tooltip
-    var tooltip = document.createElement('div');
-    tooltip.className = 'lc-tooltip';
-    tooltip.style.cssText = 'display:none;position:absolute;z-index:10;background:var(--surface,#0f1520);border:1px solid var(--border,#1e2d3d);border-radius:8px;padding:8px 12px;font-size:0.58rem;pointer-events:none;direction:ltr;min-width:120px;box-shadow:0 4px 16px rgba(0,0,0,0.4)';
-    wrapper.appendChild(tooltip);
-
-    svg.style.cursor = 'crosshair';
-    svg.addEventListener('mousemove', function(e) {
-      var rect = svg.getBoundingClientRect();
-      var mouseX = (e.clientX - rect.left) / rect.width * w;
-      var nearest = null, nearestDist = Infinity;
-      for (var idx = 0; idx < pointPositions.length; idx++) {
-        var dist = Math.abs(pointPositions[idx].x - mouseX);
-        if (dist < nearestDist) { nearestDist = dist; nearest = pointPositions[idx]; }
-      }
-      if (nearest && nearestDist < plotW / Math.max(nPoints, 1)) {
-        hoverLine.setAttribute('x1', String(nearest.x));
-        hoverLine.setAttribute('x2', String(nearest.x));
-        hoverLine.setAttribute('opacity', '0.6');
-        tooltip.style.display = 'block';
-        tooltip.textContent = '';
-        var hdr = document.createElement('div');
-        hdr.style.cssText = 'font-weight:700;color:var(--accent,#c9a84c);margin-bottom:4px;font-size:0.6rem';
-        hdr.textContent = nearest.period;
-        tooltip.appendChild(hdr);
-        nearest.values.forEach(function(v) {
-          var row = document.createElement('div');
-          row.style.cssText = 'display:flex;align-items:center;gap:6px;padding:1px 0';
-          var dot = document.createElement('span');
-          dot.style.cssText = 'width:6px;height:6px;border-radius:50%;flex-shrink:0;background:' + v.color;
-          var nm = document.createElement('span');
-          nm.style.cssText = 'flex:1;color:var(--text-dim,#6b7d92)';
-          nm.textContent = v.label;
-          var vl = document.createElement('span');
-          vl.style.cssText = 'font-weight:700;color:var(--text,#dfe6ee)';
-          vl.textContent = v.value;
-          row.appendChild(dot); row.appendChild(nm); row.appendChild(vl);
-          tooltip.appendChild(row);
-        });
-        var tipX = e.clientX - rect.left + 14;
-        if (tipX + tooltip.offsetWidth > rect.width - 10) tipX = e.clientX - rect.left - tooltip.offsetWidth - 14;
-        tooltip.style.left = tipX + 'px';
-        tooltip.style.top = '10px';
-      }
-    });
-    svg.addEventListener('mouseleave', function() {
-      hoverLine.setAttribute('opacity', '0');
-      tooltip.style.display = 'none';
-    });
-
-    // Legend (clickable to toggle series)
-    var legend = document.createElement('div');
-    legend.className = 'lc-legend';
-    legend.style.cssText = 'display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px';
-
-    // Grouping badge
-    if (grouping) {
-      var badge = document.createElement('span');
-      badge.className = 'lc-group-badge';
-      var groupLabels = { daily: '\u064A\u0648\u0645\u064A', weekly: '\u0623\u0633\u0628\u0648\u0639\u064A', monthly: '\u0634\u0647\u0631\u064A' };
-      badge.textContent = groupLabels[grouping] || grouping;
-      legend.appendChild(badge);
-    }
-
-    datasets.forEach(function(ds, idx) {
-      var item = document.createElement('div');
-      item.style.cssText = 'display:flex;align-items:center;gap:5px;font-size:0.54rem;cursor:pointer;user-select:none;transition:opacity 0.15s;' +
-        (hiddenSeries[idx] ? 'opacity:0.3;text-decoration:line-through;' : 'color:var(--text-dim)');
-      var dot = document.createElement('div');
-      dot.style.cssText = 'width:8px;height:3px;border-radius:2px;background:' + ds.color + (hiddenSeries[idx] ? ';opacity:0.3' : '');
-      var txt = document.createElement('span');
-      txt.textContent = ds.label || '';
-      item.appendChild(dot);
-      item.appendChild(txt);
-      item.addEventListener('click', function() {
-        hiddenSeries[idx] = !hiddenSeries[idx];
-        draw();
-      });
-      legend.appendChild(item);
-    });
-    wrapper.appendChild(legend);
+  var panelEl = el.closest ? el.closest('.a-panel') : null;
+  var isFs = !!(panelEl && panelEl.classList.contains('a-panel-fs'));
+  if (isFs) {
+    el.style.removeProperty('height');
+  } else {
+    el.style.height = Math.max((height || 200) + 90, 310) + 'px';
   }
+  el.style.width = '100%';
 
-  draw();
-  el.appendChild(wrapper);
+  var css = getComputedStyle(document.body);
+  var cv = function(name, fallback) {
+    var v = css.getPropertyValue(name).trim();
+    return v || fallback;
+  };
+  var textColor = cv('--text', '#dfe6ee');
+  var textDim = cv('--text-dim', '#6b7d92');
+  var borderColor = cv('--border', '#1e2d3d');
+  var surfaceColor = cv('--surface', '#0f1520');
+  var accentColor = cv('--accent', '#c9a84c');
+
+  var formattedLabels = xLabels.map(function(lbl) {
+    if (!lbl) return '';
+    if (lbl.length === 7) return lbl.substring(5) + '/' + lbl.substring(2, 4);
+    if (lbl.length === 10) return lbl.substring(5);
+    if (lbl.indexOf('-W') > 0) return 'W' + lbl.split('-W')[1];
+    return lbl;
+  });
+
+  var series = datasets.map(function(ds) {
+    var hex = ds.color || accentColor;
+    return {
+      name: ds.label,
+      type: 'line',
+      smooth: false,
+      symbol: 'circle',
+      symbolSize: 6,
+      showSymbol: false,
+      sampling: 'lttb',
+      lineStyle: { width: 2, color: hex },
+      itemStyle: { color: hex },
+      areaStyle: {
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: hex + '55' },
+          { offset: 1, color: hex + '05' }
+        ])
+      },
+      emphasis: { focus: 'series', lineStyle: { width: 3 } },
+      data: ds.data
+    };
+  });
+
+  var groupLabels = { daily: '\u064A\u0648\u0645\u064A', weekly: '\u0623\u0633\u0628\u0648\u0639\u064A', monthly: '\u0634\u0647\u0631\u064A' };
+  var groupBadge = groupLabels[grouping] || grouping;
+
+  var chart = echarts.init(el, null, { renderer: 'canvas' });
+
+  var option = {
+    backgroundColor: 'transparent',
+    textStyle: { fontFamily: 'Noto Kufi Arabic, monospace', color: textColor },
+    color: datasets.map(function(d) { return d.color; }),
+    animationDuration: 400,
+    grid: { left: 12, right: 20, top: 54, bottom: 72, containLabel: true },
+    legend: {
+      data: datasets.map(function(d) { return d.label; }),
+      top: 10, right: 12,
+      textStyle: { color: textDim, fontSize: 11, fontFamily: 'Noto Kufi Arabic' },
+      icon: 'roundRect', itemWidth: 14, itemHeight: 6, itemGap: 14,
+      inactiveColor: cv('--text-muted', '#3d5068')
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        crossStyle: { color: accentColor, type: 'dashed', width: 1 },
+        lineStyle: { color: accentColor, type: 'dashed', width: 1 },
+        label: { backgroundColor: accentColor, color: '#0a0f18', fontWeight: 700 }
+      },
+      backgroundColor: surfaceColor,
+      borderColor: borderColor,
+      borderWidth: 1,
+      padding: [8, 12],
+      textStyle: { color: textColor, fontFamily: 'Noto Kufi Arabic', fontSize: 11 },
+      extraCssText: 'box-shadow:0 8px 24px rgba(0,0,0,0.5); border-radius:8px; direction:rtl;'
+    },
+    toolbox: {
+      right: 14, top: 8,
+      itemGap: 10, itemSize: 14,
+      iconStyle: { borderColor: textDim, borderWidth: 1.5 },
+      emphasis: { iconStyle: { borderColor: accentColor } },
+      feature: {
+        dataZoom: {
+          yAxisIndex: 'none',
+          title: { zoom: '\u062A\u0643\u0628\u064A\u0631', back: '\u0631\u062C\u0648\u0639' },
+          brushStyle: { color: 'rgba(201,168,76,0.15)', borderColor: accentColor }
+        },
+        brush: {
+          type: ['lineX', 'clear'],
+          title: { lineX: '\u062A\u062D\u062F\u064A\u062F', clear: '\u0645\u0633\u062D' }
+        },
+        restore: { title: '\u0627\u0633\u062A\u0639\u0627\u062F\u0629' },
+        saveAsImage: {
+          title: '\u062D\u0641\u0638',
+          name: 'harbi-analytics',
+          backgroundColor: surfaceColor,
+          pixelRatio: 2
+        }
+      }
+    },
+    brush: {
+      xAxisIndex: 0,
+      throttleType: 'debounce',
+      throttleDelay: 100,
+      outOfBrush: { colorAlpha: 0.15 },
+      brushStyle: {
+        borderColor: accentColor,
+        borderWidth: 1,
+        color: 'rgba(201,168,76,0.12)'
+      }
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: formattedLabels,
+      axisLine: { lineStyle: { color: borderColor } },
+      axisTick: { lineStyle: { color: borderColor } },
+      axisLabel: { color: textDim, fontSize: 11, fontFamily: 'monospace', hideOverlap: true },
+      axisPointer: { label: { show: true } }
+    },
+    yAxis: {
+      type: 'value',
+      splitLine: { lineStyle: { color: borderColor, type: 'dashed', opacity: 0.6 } },
+      axisLabel: { color: textDim, fontSize: 12, fontFamily: 'monospace' },
+      axisLine: { show: false },
+      axisTick: { show: false }
+    },
+    dataZoom: [
+      {
+        type: 'inside',
+        xAxisIndex: 0,
+        start: 0, end: 100,
+        zoomOnMouseWheel: true,
+        moveOnMouseMove: false,
+        moveOnMouseWheel: false
+      },
+      {
+        type: 'slider',
+        xAxisIndex: 0,
+        start: 0, end: 100,
+        height: 24, bottom: 16,
+        borderColor: borderColor,
+        backgroundColor: 'rgba(0,0,0,0.15)',
+        fillerColor: 'rgba(201,168,76,0.14)',
+        handleStyle: { color: accentColor, borderColor: accentColor },
+        moveHandleStyle: { color: accentColor, opacity: 0.8 },
+        dataBackground: {
+          lineStyle: { color: textDim, opacity: 0.5, width: 1 },
+          areaStyle: { color: textDim, opacity: 0.08 }
+        },
+        selectedDataBackground: {
+          lineStyle: { color: accentColor, width: 1 },
+          areaStyle: { color: accentColor, opacity: 0.18 }
+        },
+        textStyle: { color: textDim, fontSize: 10, fontFamily: 'monospace' },
+        labelFormatter: function(_idx, str) { return str || ''; }
+      }
+    ],
+    series: series,
+    graphic: groupBadge ? [{
+      type: 'text', left: 14, top: 12, z: 100,
+      style: {
+        text: groupBadge,
+        fontSize: 11,
+        fontWeight: 700,
+        fill: accentColor,
+        fontFamily: 'Noto Kufi Arabic'
+      }
+    }] : []
+  };
+
+  chart.setOption(option);
+
+  if (!el.__harbiResizeBound) {
+    el.__harbiResizeBound = true;
+    var ro = new ResizeObserver(function() {
+      var inst = echarts.getInstanceByDom(el);
+      if (inst) inst.resize();
+    });
+    ro.observe(el);
+  }
 }
 
 /* ═══════════ BAR CHART ═══════════ */
@@ -479,9 +485,10 @@ export function renderKPIs(containerId, kpis) {
 /**
  * columns: [{key, label}], rows, colorMap,
  * opts: {
- *   onSort(key, shiftKey),
- *   sort: [{key, dir}]  // multi-sort array; index 0 = primary
- *   sortKey, sortDir    // legacy single-sort (still honored)
+ *   onSort(key, shiftKey),       // click a column header
+ *   onSortRemove(key),           // remove a column from the sort chain
+ *   sort: [{key, dir}]           // multi-sort array; index 0 = primary
+ *   sortKey, sortDir             // legacy single-sort (still honored)
  *   isFullscreen, page, totalPages, onPage
  * }
  */
@@ -499,6 +506,75 @@ export function renderTable(containerId, columns, rows, colorMap, opts) {
   for (var si = 0; si < sortList.length; si++) sortIndex[sortList[si].key] = si;
   var showPriority = sortList.length > 1;
 
+  // Build a key → label lookup for the sort-chain chip bar.
+  var labelByKey = {};
+  columns.forEach(function(col) { labelByKey[col.key] = col.label; });
+
+  // ── Sort-chain status bar ──
+  // Always render it so users can see multi-sort state even when the secondary
+  // key has no visible effect (e.g. unique primary values). Clicking a chip's
+  // arrow toggles direction; clicking × removes it from the chain.
+  var chipBar = document.createElement('div');
+  chipBar.className = 'a-sort-bar';
+  var chipLabel = document.createElement('span');
+  chipLabel.className = 'a-sort-bar-label';
+  chipLabel.textContent = '\u0627\u0644\u0641\u0631\u0632:';
+  chipBar.appendChild(chipLabel);
+
+  if (sortList.length === 0) {
+    var emptyHint = document.createElement('span');
+    emptyHint.className = 'a-sort-bar-empty';
+    emptyHint.textContent = '\u0627\u0636\u063A\u0637 \u0639\u0644\u0649 \u0631\u0623\u0633 \u0639\u0645\u0648\u062F \u0644\u0644\u0641\u0631\u0632';
+    chipBar.appendChild(emptyHint);
+  } else {
+    sortList.forEach(function(entry, i) {
+      var chip = document.createElement('span');
+      chip.className = 'a-sort-chip';
+
+      var rank = document.createElement('span');
+      rank.className = 'a-sort-chip-rank';
+      rank.textContent = String(i + 1);
+      chip.appendChild(rank);
+
+      var name = document.createElement('span');
+      name.className = 'a-sort-chip-name';
+      name.textContent = labelByKey[entry.key] || entry.key;
+      chip.appendChild(name);
+
+      var dir = document.createElement('button');
+      dir.type = 'button';
+      dir.className = 'a-sort-chip-dir';
+      dir.textContent = entry.dir === 'asc' ? '\u25B2' : '\u25BC';
+      dir.title = '\u0639\u0643\u0633 \u0627\u0644\u0627\u062A\u062C\u0627\u0647';
+      dir.addEventListener('click', function(ev) {
+        ev.stopPropagation();
+        // Toggle direction via a shift+click on this column (keeps it in the chain).
+        if (opts.onSort) opts.onSort(entry.key, true);
+      });
+      chip.appendChild(dir);
+
+      var close = document.createElement('button');
+      close.type = 'button';
+      close.className = 'a-sort-chip-close';
+      close.textContent = '\u2716';
+      close.title = '\u0625\u0632\u0627\u0644\u0629 \u0645\u0646 \u0627\u0644\u0641\u0631\u0632';
+      close.addEventListener('click', function(ev) {
+        ev.stopPropagation();
+        if (opts.onSortRemove) opts.onSortRemove(entry.key);
+      });
+      chip.appendChild(close);
+
+      chipBar.appendChild(chip);
+    });
+  }
+
+  var hint = document.createElement('span');
+  hint.className = 'a-sort-bar-hint';
+  hint.textContent = 'Shift+\u0646\u0642\u0631\u0629 \u0644\u0641\u0631\u0632 \u0645\u062A\u0639\u062F\u062F';
+  chipBar.appendChild(hint);
+
+  el.appendChild(chipBar);
+
   var table = document.createElement('table');
   table.className = 'a-table';
   table.title = '\u0646\u0642\u0631\u0629: \u0641\u0631\u0632 \u0628\u0639\u0645\u0648\u062F \u0648\u0627\u062D\u062F \u00B7 Shift+\u0646\u0642\u0631\u0629: \u0641\u0631\u0632 \u0645\u062A\u0639\u062F\u062F \u0627\u0644\u0623\u0639\u0645\u062F\u0629';
@@ -515,20 +591,19 @@ export function renderTable(containerId, columns, rows, colorMap, opts) {
     th.appendChild(label);
 
     if (Object.prototype.hasOwnProperty.call(sortIndex, col.key)) {
-      var rank = sortIndex[col.key];
-      var entry = sortList[rank];
+      var rank2 = sortIndex[col.key];
+      var entry2 = sortList[rank2];
+      th.classList.add('sorted');
+      if (rank2 === 0) th.classList.add('sorted-primary');
+
       var arrow = document.createElement('span');
-      arrow.style.cssText = 'font-size:1rem;color:var(--accent);margin-right:6px';
-      arrow.textContent = entry.dir === 'asc' ? '\u25B2' : '\u25BC';
+      arrow.style.cssText = 'font-size:1.2rem;color:var(--accent);margin-right:6px;font-weight:900';
+      arrow.textContent = entry2.dir === 'asc' ? '\u25B2' : '\u25BC';
       th.appendChild(arrow);
       if (showPriority) {
         var badge = document.createElement('span');
-        badge.style.cssText =
-          'display:inline-block;min-width:18px;height:18px;padding:0 5px;' +
-          'margin-right:4px;border-radius:9px;background:var(--accent);' +
-          'color:var(--bg);font-size:0.7rem;font-weight:800;line-height:18px;' +
-          'text-align:center;vertical-align:middle;';
-        badge.textContent = String(rank + 1);
+        badge.className = 'a-sort-badge';
+        badge.textContent = String(rank2 + 1);
         th.appendChild(badge);
       }
     }

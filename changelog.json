@@ -1,5 +1,20 @@
 [
   {
+    "version": "2.3.8",
+    "date": "2026-04-12",
+    "title": "Visible sort-chain status bar for analytics table",
+    "changes": [
+      "Fixed perceived 'sort doesn't work' issue: the underlying SQL multi-sort was correct (verified in a headless browser — rows tying on the primary key were correctly ordered by the secondary key), but the UX was invisible when primary-key values were unique. The secondary sort had no visible effect, so users thought nothing happened.",
+      "Added a sort-chain status bar above the data table — renders one accent-colored chip per active sort column, each showing its priority rank, the column label, a direction toggle button (▲/▼), and a × remove button. This makes the multi-sort state always visible even when primary-unique values mask the tiebreaker.",
+      "Chip direction button reuses the existing onSort(key, shift=true) path to preserve the column's position in the chain while flipping its direction.",
+      "Chip × button routes through a new onSortRemove(key) callback in dashboard.js, which filters the key out of _tableSort and falls back to the default [{total, desc}] sort if the chain becomes empty.",
+      "Bigger, more prominent header priority badges (22px circle, 0.85rem bold) — previously 18px/0.7rem and barely visible; direction arrow on sorted headers bumped from 1rem to 1.2rem 900-weight.",
+      "Added a subtle highlight on sorted column headers: .sorted gets --accent-dim background; .sorted-primary also gets an inset 3px --accent underline so the primary sort is unambiguous at a glance.",
+      "Added an Arabic hint ('Shift+نقرة لفرز متعدد') at the left edge of the sort bar so first-time users discover the multi-sort interaction.",
+      "Fullscreen scales: sort bar, chips, and priority badges all bump up (1.1rem fonts, 26px chip widgets) so they stay legible when the panel fills the viewport."
+    ]
+  },
+  {
     "version": "2.3.7",
     "date": "2026-04-12",
     "title": "Multi-column sort on the analytics data table",

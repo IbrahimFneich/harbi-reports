@@ -112,6 +112,14 @@ function refreshTable() {
       _tablePage = 1;
       refreshTable();
     },
+    onSortRemove: function(key) {
+      _tableSort = _tableSort.filter(function(s) { return s.key !== key; });
+      if (_tableSort.length === 0) {
+        _tableSort = [{ key: 'total', dir: 'desc' }];
+      }
+      _tablePage = 1;
+      refreshTable();
+    },
     onPage: function(page) {
       _tablePage = page;
       refreshTable();
