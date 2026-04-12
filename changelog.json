@@ -1,5 +1,18 @@
 [
   {
+    "version": "2.5.1",
+    "date": "2026-04-13",
+    "title": "Hover tooltip on hours-distribution graphs",
+    "changes": [
+      "src/js/dashboards/helpers.js — buildTimeline now wires every .cat-tbar to a lazy-created shared .cat-tbar-tooltip element via mouseenter/mouseleave + focus/blur handlers. Replaces the slow native bar.title attribute that took ~1s to appear and had no styling.",
+      "Tooltip content: HH:00 → HH:00 in LTR monospace plus an Arabic count line that pluralizes (حدث / أحداث). Built with DOM nodes — no innerHTML — so it stays XSS-safe even if data ever gets less trusted.",
+      "Smart positioning: tooltip is anchored above the bar, but flips below when there is no room above, and clamps horizontally to the viewport so edge bars never push it offscreen.",
+      "Bars now have tabIndex=0 and a focus-visible ring, so keyboard users get the same hover treatment as mouse users — fixes a small accessibility gap on every dashboard.",
+      "src/css/enhancements.css — added .cat-tbar-tooltip styles with dark + light theme variants, fade-in animation, RTL count row + LTR monospace time row.",
+      "All four hour graphs (bayanat, sirens, enemy, iran dashboards) inherit the new tooltip from a single helper change — no per-dashboard edits needed."
+    ]
+  },
+  {
     "version": "2.5.0",
     "date": "2026-04-13",
     "title": "Finance-grade interactive line chart on the analytics dashboard",
