@@ -1,5 +1,18 @@
 [
   {
+    "version": "2.3.7",
+    "date": "2026-04-12",
+    "title": "Multi-column sort on the analytics data table",
+    "changes": [
+      "Analytics 'Most Active Days' table now supports multi-column sorting — click a header to replace the current sort, Shift+click to add it as a secondary/tertiary sort or toggle its direction if already in the list",
+      "Each active sort column shows its arrow and, when more than one column is sorted, a numeric priority badge (1/2/3...) so it's clear which column drives the primary order",
+      "ORDER BY is now built from the full sort chain with an implicit 'date DESC' tiebreaker so pagination stays stable even when every active sort key ties",
+      "src/js/analytics/dashboard.js — replaced single _tableSortKey/_tableSortDir state with a _tableSort array of {key,dir}. Added a _sortableKeys whitelist to guard the SQL ORDER BY string concat from any stray key names",
+      "src/js/analytics/charts.js — renderTable now accepts opts.sort (multi-sort array), still honors the legacy opts.sortKey/opts.sortDir for backward compatibility, and forwards ev.shiftKey to the onSort callback",
+      "Added an Arabic title tooltip on the table explaining the single-click vs Shift+click interaction model"
+    ]
+  },
+  {
     "version": "2.3.6",
     "date": "2026-04-12",
     "title": "Larger analytics data table — second pass",

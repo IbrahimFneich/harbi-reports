@@ -477,7 +477,13 @@ export function renderKPIs(containerId, kpis) {
 /* ═══════════ DATA TABLE (sortable, fullscreen-paginated) ═══════════ */
 
 /**
- * columns: [{key, label}], rows, colorMap, opts: {onSort, sortKey, sortDir, isFullscreen, page, totalPages, onPage}
+ * columns: [{key, label}], rows, colorMap,
+ * opts: {
+ *   onSort(key, shiftKey),
+ *   sort: [{key, dir}]  // multi-sort array; index 0 = primary
+ *   sortKey, sortDir    // legacy single-sort (still honored)
+ *   isFullscreen, page, totalPages, onPage
+ * }
  */
 export function renderTable(containerId, columns, rows, colorMap, opts) {
   var el = document.getElementById(containerId);
@@ -485,8 +491,17 @@ export function renderTable(containerId, columns, rows, colorMap, opts) {
   el.textContent = '';
   opts = opts || {};
 
+  // Normalize to a multi-sort array.
+  var sortList = opts.sort && opts.sort.length
+    ? opts.sort
+    : (opts.sortKey ? [{ key: opts.sortKey, dir: opts.sortDir || 'desc' }] : []);
+  var sortIndex = {};
+  for (var si = 0; si < sortList.length; si++) sortIndex[sortList[si].key] = si;
+  var showPriority = sortList.length > 1;
+
   var table = document.createElement('table');
   table.className = 'a-table';
+  table.title = '\u0646\u0642\u0631\u0629: \u0641\u0631\u0632 \u0628\u0639\u0645\u0648\u062F \u0648\u0627\u062D\u062F \u00B7 Shift+\u0646\u0642\u0631\u0629: \u0641\u0631\u0632 \u0645\u062A\u0639\u062F\u062F \u0627\u0644\u0623\u0639\u0645\u062F\u0629';
 
   var thead = document.createElement('thead');
   var headRow = document.createElement('tr');
@@ -494,19 +509,32 @@ export function renderTable(containerId, columns, rows, colorMap, opts) {
     var th = document.createElement('th');
     th.style.cursor = 'pointer';
     th.style.userSelect = 'none';
+    th.style.whiteSpace = 'nowrap';
 
     var label = document.createTextNode(col.label + ' ');
     th.appendChild(label);
 
-    if (opts.sortKey === col.key) {
+    if (Object.prototype.hasOwnProperty.call(sortIndex, col.key)) {
+      var rank = sortIndex[col.key];
+      var entry = sortList[rank];
       var arrow = document.createElement('span');
       arrow.style.cssText = 'font-size:1rem;color:var(--accent);margin-right:6px';
-      arrow.textContent = opts.sortDir === 'asc' ? '\u25B2' : '\u25BC';
+      arrow.textContent = entry.dir === 'asc' ? '\u25B2' : '\u25BC';
       th.appendChild(arrow);
+      if (showPriority) {
+        var badge = document.createElement('span');
+        badge.style.cssText =
+          'display:inline-block;min-width:18px;height:18px;padding:0 5px;' +
+          'margin-right:4px;border-radius:9px;background:var(--accent);' +
+          'color:var(--bg);font-size:0.7rem;font-weight:800;line-height:18px;' +
+          'text-align:center;vertical-align:middle;';
+        badge.textContent = String(rank + 1);
+        th.appendChild(badge);
+      }
     }
 
-    th.addEventListener('click', function() {
-      if (opts.onSort) opts.onSort(col.key);
+    th.addEventListener('click', function(ev) {
+      if (opts.onSort) opts.onSort(col.key, !!(ev && ev.shiftKey));
     });
     headRow.appendChild(th);
   });

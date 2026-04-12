@@ -16,12 +16,15 @@ var CATEGORY_META = {
 var CATEGORY_ORDER = ['bayanat', 'sirens', 'enemy', 'iran', 'videos', 'allies'];
 
 // ── Table state ──
-var _tableSortKey = 'total';
-var _tableSortDir = 'desc';
+// Multi-column sort: array of {key, dir}. Index 0 = primary, 1 = secondary, ...
+var _tableSort = [{ key: 'total', dir: 'desc' }];
 var _tablePage = 1;
 var _tablePageSize = 10;
 var _tableFullscreen = false;
 var _tableFullscreenPageSize = 30;
+
+// Whitelist of sortable columns to prevent SQL injection from the onSort callback.
+var _sortableKeys = { date: 1, bayanat: 1, sirens: 1, enemy: 1, iran: 1, videos: 1, total: 1 };
 
 var TABLE_COLUMNS = [
   { key: 'date', label: '\u0627\u0644\u062A\u0627\u0631\u064A\u062E' },
@@ -38,6 +41,20 @@ var TABLE_COLORS = {
   iran: 'var(--purple)', videos: 'var(--teal)', total: 'var(--accent)'
 };
 
+function buildOrderBy() {
+  var parts = [];
+  var seen = {};
+  _tableSort.forEach(function(s) {
+    if (!_sortableKeys[s.key] || seen[s.key]) return;
+    seen[s.key] = 1;
+    var dir = s.dir === 'asc' ? 'ASC' : 'DESC';
+    parts.push(s.key + ' ' + dir);
+  });
+  // Always append date DESC as a stable tiebreaker so pagination is deterministic
+  if (!seen.date) parts.push('date DESC');
+  return parts.join(', ');
+}
+
 function getTableSQL() {
   var w = buildWhere();
   var pageSize = _tableFullscreen ? _tableFullscreenPageSize : _tablePageSize;
@@ -51,7 +68,7 @@ function getTableSQL() {
     "SUM(CASE WHEN category='videos' THEN 1 ELSE 0 END) as videos, " +
     'COUNT(*) as total ' +
     'FROM events ' + w.where +
-    ' GROUP BY date ORDER BY ' + _tableSortKey + ' ' + _tableSortDir +
+    ' GROUP BY date ORDER BY ' + buildOrderBy() +
     ' LIMIT ' + pageSize + ' OFFSET ' + offset;
 
   var countSql = 'SELECT COUNT(DISTINCT date) FROM events ' + w.where;
@@ -67,17 +84,30 @@ function refreshTable() {
   var totalPages = Math.max(1, Math.ceil(totalRows / pageSize));
 
   renderTable('dataTable', TABLE_COLUMNS, tableRows, TABLE_COLORS, {
-    sortKey: _tableSortKey,
-    sortDir: _tableSortDir,
+    sort: _tableSort,
     isFullscreen: _tableFullscreen,
     page: _tablePage,
     totalPages: totalPages,
-    onSort: function(key) {
-      if (_tableSortKey === key) {
-        _tableSortDir = _tableSortDir === 'desc' ? 'asc' : 'desc';
+    onSort: function(key, shiftKey) {
+      if (!_sortableKeys[key]) return;
+      var idx = -1;
+      for (var i = 0; i < _tableSort.length; i++) {
+        if (_tableSort[i].key === key) { idx = i; break; }
+      }
+      if (shiftKey) {
+        // Shift+click: add as secondary/tertiary, or toggle direction if already present
+        if (idx >= 0) {
+          _tableSort[idx].dir = _tableSort[idx].dir === 'desc' ? 'asc' : 'desc';
+        } else {
+          _tableSort.push({ key: key, dir: key === 'date' ? 'asc' : 'desc' });
+        }
       } else {
-        _tableSortKey = key;
-        _tableSortDir = key === 'date' ? 'asc' : 'desc';
+        // Plain click: single-sort. Toggle if already the sole primary key.
+        if (idx === 0 && _tableSort.length === 1) {
+          _tableSort[0].dir = _tableSort[0].dir === 'desc' ? 'asc' : 'desc';
+        } else {
+          _tableSort = [{ key: key, dir: key === 'date' ? 'asc' : 'desc' }];
+        }
       }
       _tablePage = 1;
       refreshTable();
