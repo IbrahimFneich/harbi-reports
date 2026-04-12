@@ -26,23 +26,9 @@ initNavbar();
   </div>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script type="module" src="src/js/app.js?v=2.5.2"></script>
+<script type="module" src="src/js/app.js?v=2.5.4"></script>
 <script src="https://sql.js.org/dist/sql-wasm.js"></script>
 <script type="module" src="src/js/search/spotlight.js"></script>
-<script src="src/js/ui/disclaimer.js?v=2.5.2"></script>
-<script type="module">
-  import { mountPdfButton } from './src/js/export/pdf-button.js';
-  // report.html starts with a loading placeholder; src/js/app.js replaces the
-  // header once data loads. Wait for .header .date-row to appear before mounting.
-  const reportRoot = document.getElementById('report-root');
-  const observer = new MutationObserver((_, obs) => {
-    const target = document.querySelector('.header .date-row');
-    if (target && !document.querySelector('.download-btn-pdf')) {
-      mountPdfButton('.header .date-row');
-      obs.disconnect();
-    }
-  });
-  observer.observe(reportRoot, { childList: true, subtree: true });
-</script>
+<script src="src/js/ui/disclaimer.js?v=2.5.4"></script>
 </body>
 </html>

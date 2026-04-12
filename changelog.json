@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.5.4",
+    "date": "2026-04-13",
+    "title": "Remove site-wide PDF export, keep analytics Excel export",
+    "changes": [
+      "Deleted src/js/export/pdf-button.js and every call site that mounted it. The print-to-PDF button was cluttering report.html, timeline.html, and all 31 monthly chronicle pages with a duplicate of what the browser's native Ctrl+P already does.",
+      "Stripped the mountPdfButton() <script> block from report.html, timeline.html, and all monthly/*.html files. Also removed the same block from the build_monthly.py template so future chronicle rebuilds stay clean.",
+      "Kept the analytics Excel export (src/js/export/excel-button.js + build-workbook.js) untouched — that one produces a real 6-sheet .xlsx artifact with KPIs, events over time, hourly density, top targets, and raw data, which the browser cannot replicate.",
+      "Left src/css/print.css intact: it is still linked as media=\"print\" on every page, so manual browser printing still gets proper styling. It is not an export button, just a print stylesheet.",
+      "Bumped version-pill strings to 2.5.4 across index, timeline, analytics, archive, report, and app.js."
+    ]
+  },
+  {
     "version": "2.5.3",
     "date": "2026-04-13",
     "title": "Fix bidi-mangled day navigation bar",

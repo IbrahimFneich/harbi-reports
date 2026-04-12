@@ -442,12 +442,6 @@ def render_page(year, month, days, totals, turning_points, prev_month, next_mont
 </script>
 <script src="../src/js/ui/disclaimer.js?v=2.3.0"></script>
 <script src="../src/js/monthly.js"></script>
-<script type="module">
-  import {{ mountPdfButton }} from '../src/js/export/pdf-button.js';
-  document.addEventListener('DOMContentLoaded', () => {{
-    mountPdfButton('.mc-cover');
-  }});
-</script>
 </body>
 </html>
 '''
