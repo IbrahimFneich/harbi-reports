@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.2.14",
+    "date": "2026-04-12",
+    "title": "Tutorial-style landing page + calendar moved to Archive button",
+    "changes": [
+      "New index.html is a 5-step guided walkthrough: open calendar, pick a day, read a report, search, view map, export — each step illustrated with a fake browser window mockup",
+      "Calendar app (the previous index.html) moved to archive.html (git mv preserves history)",
+      "Added new 'الأرشيف' nav item in src/js/ui/navbar.js pointing to archive.html, with active-page detection for the archive route",
+      "Landing page includes 6-question FAQ with native <details>/<summary> expand/collapse, no JavaScript required",
+      "Added 6 landing-page mockup explorations in mockups/ (editorial, anatomy, dashboard, manifesto, walkthrough, quickstart) as design-direction reference"
+    ]
+  },
+  {
     "version": "2.2.13",
     "date": "2026-04-12",
     "title": "Maps now render real city borders with info drawer + POLY/DOT toggle",

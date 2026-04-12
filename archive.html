@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإعلام الحربي — أرشيف التقارير اليومية</title>
+<link rel="stylesheet" href="src/css/enhancements.css"/>
+<link rel="stylesheet" href="src/css/index.css"/>
+<link rel="stylesheet" href="src/css/navbar.css"/>
+<link rel="stylesheet" href="src/css/spotlight.css"/>
+<style>
+  /* All layout styles in src/css/index.css */
+</style>
+<script>
+  if (localStorage.getItem('harbi-theme') !== 'dark') document.body.classList.add('light');
+</script>
+</head>
+<body>
+
+<div class="view-toggle">
+  <button id="viewCalBtn" class="active" onclick="setView('cal')">📅 التقويم</button>
+  <button id="viewListBtn" onclick="setView('list')">📋 القائمة</button>
+</div>
+
+<div class="list-section" id="listSection">
+  <div class="list-summary" id="listSummary"></div>
+  <div class="list-sort-bar">
+    <label for="listSort">ترتيب حسب:</label>
+    <select id="listSort" onchange="renderList()">
+      <option value="date">التاريخ</option>
+      <option value="total">الإجمالي</option>
+      <option value="bayanat">البيانات العسكرية</option>
+      <option value="sirens">صفارات الإنذار</option>
+      <option value="enemy">إعلام العدو</option>
+      <option value="iran">إيران</option>
+      <option value="videos">الفيديوهات</option>
+    </select>
+    <button class="dir-btn" id="listDirBtn" onclick="toggleListDir()" title="تبديل الاتجاه">↓</button>
+  </div>
+  <div class="list-grid" id="listGrid"></div>
+</div>
+
+<div class="calendar-section" id="calSection">
+<div class="stats-strip" id="statsStrip"></div>
+
+<div class="month-nav">
+  <button class="btn" id="prevBtn" onclick="changeMonth(-1)">&larr; الشهر السابق</button>
+  <div style="text-align:center">
+    <div class="current-month" id="currentMonth"></div>
+    <div id="currentMonthNum" style="font-size:0.85rem;color:#9ca3af;letter-spacing:0.15em;margin-top:2px"></div>
+    <a id="monthlyLink" href="#" style="font-size:0.75rem;color:var(--accent);text-decoration:none;margin-top:4px;display:inline-block;opacity:0.7;transition:opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">الوثيقة الشهرية &larr;</a>
+  </div>
+  <button class="btn" id="nextBtn" onclick="changeMonth(1)">الشهر التالي &rarr;</button>
+</div>
+
+<div class="container">
+  <div class="cal-grid" id="calGrid"></div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> تقرير متاح</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--text-muted)"></div> لا تقرير</div>
+    <div class="legend-item"><span style="color:var(--accent);">&starf;</span> الأكثر نشاطاً</div>
+  </div>
+  <div class="heatmap-legend">
+    <span>أكثر</span>
+    <div class="heatmap-gradient"></div>
+    <span>أقل</span>
+  </div>
+</div>
+
+</div><!-- /calSection -->
+
+<div class="footer">
+  <div>مصدر: <a href="https://t.me/C_Military1" target="_blank" rel="noopener">قناة الإعلام الحربي — التغطية الإخبارية</a></div>
+  <div style="margin-top:8px;font-size:0.68rem;color:var(--text-muted);line-height:1.6;">
+    هذا الموقع <strong>غير رسمي</strong> ولا يتبع قناة «الإعلام الحربي» ولا أي جهة مرتبطة بها.
+    البيانات مأخوذة من تليغرام ومُعالَجة بواسطة ذكاء اصطناعي — قد تحتوي على أخطاء.
+  </div>
+  <div data-disclaimer-slot style="margin-top:10px;font-size:0.68rem;">
+    <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v2.2.13</span>
+  </div>
+</div>
+<script src="src/js/ui/disclaimer.js?v=2.2.11"></script>
+
+<script>
+function showChangelog() {
+  var existing = document.querySelector('.changelog-overlay');
+  if (existing) { existing.classList.add('show'); return; }
+  var x = new XMLHttpRequest();
+  x.open('GET', 'changelog.json?t=' + Date.now());
+  x.onload = function() {
+    var releases = JSON.parse(x.responseText);
+    var o = document.createElement('div');
+    o.className = 'changelog-overlay show';
+    o.style.cssText = 'display:flex;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:9999;justify-content:center;align-items:center;padding:20px;';
+    o.onclick = function(e) { if (e.target === o) o.classList.remove('show'); };
+    var m = document.createElement('div');
+    m.style.cssText = 'background:#0f1520;border:1px solid #1e2d3d;border-radius:14px;max-width:560px;width:100%;max-height:80vh;overflow-y:auto;direction:ltr;';
+    var hdr = document.createElement('div');
+    hdr.style.cssText = 'padding:20px 24px 16px;border-bottom:1px solid #1e2d3d;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#0f1520;border-radius:14px 14px 0 0;';
+    var h2 = document.createElement('h2');
+    h2.style.cssText = 'font-size:1rem;font-weight:800;color:#c9a84c;margin:0;';
+    h2.textContent = 'Changelog';
+    hdr.appendChild(h2);
+    var cb = document.createElement('button');
+    cb.style.cssText = 'background:none;border:1px solid #1e2d3d;border-radius:8px;color:#6b7d92;cursor:pointer;padding:4px 10px;font-size:0.8rem;';
+    cb.textContent = '\u2715';
+    cb.onclick = function() { o.style.display = 'none'; };
+    hdr.appendChild(cb);
+    m.appendChild(hdr);
+    var bd = document.createElement('div');
+    bd.style.cssText = 'padding:16px 24px 24px;';
+    for (var i = 0; i < releases.length; i++) {
+      var r = releases[i];
+      var rv = document.createElement('div');
+      rv.style.cssText = 'margin-bottom:20px;';
+      var vr = document.createElement('div');
+      vr.style.cssText = 'display:flex;align-items:center;gap:10px;margin-bottom:8px;';
+      var bg = document.createElement('span');
+      bg.style.cssText = 'font-size:0.72rem;font-weight:800;padding:3px 10px;border-radius:6px;background:rgba(201,168,76,0.1);color:#c9a84c;';
+      bg.textContent = 'v' + r.version;
+      vr.appendChild(bg);
+      var tt = document.createElement('span');
+      tt.style.cssText = 'font-size:0.82rem;font-weight:700;color:#dfe6ee;';
+      tt.textContent = r.title;
+      vr.appendChild(tt);
+      var dt = document.createElement('span');
+      dt.style.cssText = 'font-size:0.62rem;color:#6b7d92;margin-left:auto;';
+      dt.textContent = r.date;
+      vr.appendChild(dt);
+      rv.appendChild(vr);
+      var ul = document.createElement('ul');
+      ul.style.cssText = 'list-style:none;padding:0;margin:0;';
+      for (var j = 0; j < r.changes.length; j++) {
+        var li = document.createElement('li');
+        li.style.cssText = 'font-size:0.74rem;color:#6b7d92;padding:3px 0 3px 16px;position:relative;';
+        li.textContent = r.changes[j];
+        ul.appendChild(li);
+      }
+      rv.appendChild(ul);
+      bd.appendChild(rv);
+    }
+    m.appendChild(bd);
+    o.appendChild(m);
+    document.body.appendChild(o);
+  };
+  x.send();
+}
+</script>
+<script src="data/reports-meta.js"></script>
+<script>
+// reports, reportStats, searchIndex loaded from data/reports-meta.js
+
+// Find busiest day
+var busiestDate = '';
+var busiestTotal = 0;
+Object.keys(reportStats).forEach(function(d) {
+  if (reportStats[d].total > busiestTotal) {
+    busiestTotal = reportStats[d].total;
+    busiestDate = d;
+  }
+});
+var maxTotal = busiestTotal;
+
+var reportSet = {};
+reports.forEach(function(d) { reportSet[d] = true; });
+
+var arabicDays = {0:'الأحد',1:'الإثنين',2:'الثلاثاء',3:'الأربعاء',4:'الخميس',5:'الجمعة',6:'السبت'};
+var arabicDaysShort = {0:'أحد',1:'إثنين',2:'ثلاثاء',3:'أربعاء',4:'خميس',5:'جمعة',6:'سبت'};
+var arabicMonths = {0:'كانون الثاني',1:'شباط',2:'آذار',3:'نيسان',4:'أيار',5:'حزيران',6:'تموز',7:'آب',8:'أيلول',9:'تشرين الأول',10:'تشرين الثاني',11:'كانون الأول'};
+
+// Determine available months from reports
+var availableMonths = [];
+var monthSet = {};
+reports.forEach(function(d) {
+  var key = d.substring(0, 7); // YYYY-MM
+  if (!monthSet[key]) {
+    monthSet[key] = true;
+    var parts = key.split('-');
+    availableMonths.push({year: parseInt(parts[0]), month: parseInt(parts[1]) - 1});
+  }
+});
+availableMonths.sort(function(a, b) {
+  return (a.year * 12 + a.month) - (b.year * 12 + b.month);
+});
+
+var currentIdx = availableMonths.length - 1; // Start at most recent month
+
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+function renderStats() {
+  var strip = document.getElementById('statsStrip');
+  strip.textContent = '';
+
+  var totalReports = reports.length;
+
+  // Count per month for current view
+  var currentM = availableMonths[currentIdx];
+  var monthKey = currentM.year + '-' + pad(currentM.month + 1);
+  var monthCount = 0;
+  reports.forEach(function(d) { if (d.indexOf(monthKey) === 0) monthCount++; });
+
+  var s1 = document.createElement('div'); s1.className = 'stat';
+  var n1 = document.createElement('span'); n1.className = 'n'; n1.textContent = totalReports;
+  s1.appendChild(n1);
+  s1.appendChild(document.createTextNode('تقرير إجمالي'));
+  strip.appendChild(s1);
+
+  var s2 = document.createElement('div'); s2.className = 'stat';
+  var n2 = document.createElement('span'); n2.className = 'n'; n2.textContent = monthCount;
+  s2.appendChild(n2);
+  s2.appendChild(document.createTextNode('هذا الشهر'));
+  strip.appendChild(s2);
+
+  var s3 = document.createElement('div'); s3.className = 'stat';
+  var n3 = document.createElement('span'); n3.className = 'n'; n3.textContent = availableMonths.length;
+  s3.appendChild(n3);
+  s3.appendChild(document.createTextNode('شهر مغطى'));
+  strip.appendChild(s3);
+}
+
+function renderCalendar() {
+  var cm = availableMonths[currentIdx];
+  var year = cm.year;
+  var month = cm.month;
+
+  // Update month title
+  var mm = String(month + 1).length < 2 ? '0' + (month + 1) : String(month + 1);
+  document.getElementById('currentMonth').textContent = arabicMonths[month] + ' ' + year;
+  document.getElementById('currentMonthNum').textContent = mm + ' / ' + year;
+  document.getElementById('monthlyLink').href = 'monthly/' + year + '-' + mm + '.html';
+
+  // Update nav buttons
+  document.getElementById('prevBtn').disabled = (currentIdx <= 0);
+  document.getElementById('nextBtn').disabled = (currentIdx >= availableMonths.length - 1);
+
+  var grid = document.getElementById('calGrid');
+  grid.textContent = '';
+
+  // Day headers (Sat first, LTR grid direction)
+  var dayOrder = [6, 0, 1, 2, 3, 4, 5]; // Sat, Sun, Mon, Tue, Wed, Thu, Fri (LTR)
+  var weekendDays = [5, 6]; // Fri, Sat
+  dayOrder.forEach(function(di) {
+    var hdr = document.createElement('div');
+    hdr.className = 'cal-header';
+    if (di === 5 || di === 6) hdr.className += ' weekend';
+    hdr.textContent = arabicDaysShort[di];
+    grid.appendChild(hdr);
+  });
+
+  // First day of month
+  var firstDay = new Date(year, month, 1).getDay(); // 0=Sun
+  var daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  // Map JS getDay() to our grid position (Sat=0 in grid)
+  var dayToGrid = {6:0, 0:1, 1:2, 2:3, 3:4, 4:5, 5:6};
+  var startPos = dayToGrid[firstDay];
+
+  // Empty cells before first day
+  for (var i = 0; i < startPos; i++) {
+    var empty = document.createElement('div');
+    empty.className = 'cal-day empty';
+    grid.appendChild(empty);
+  }
+
+  // Today
+  var today = new Date();
+  var todayStr = today.getFullYear() + '-' + pad(today.getMonth() + 1) + '-' + pad(today.getDate());
+
+  // Day cells
+  for (var d = 1; d <= daysInMonth; d++) {
+    var dateStr = year + '-' + pad(month + 1) + '-' + pad(d);
+    var dt = new Date(year, month, d);
+    var hasReport = reportSet[dateStr];
+    var isToday = (dateStr === todayStr);
+
+    if (hasReport) {
+      var a = document.createElement('a');
+      a.className = 'cal-day has-report';
+      if (isToday) a.className += ' today';
+      a.href = 'report.html?date=' + dateStr;
+
+      // Heatmap background color
+      var stats = reportStats[dateStr];
+      if (stats && maxTotal > 0) {
+        var intensity = stats.total / maxTotal;
+        a.style.background = 'rgba(231,76,60,' + (0.08 + intensity * 0.25) + ')';
+        a.style.borderColor = 'rgba(231,76,60,' + (0.2 + intensity * 0.4) + ')';
+      }
+
+      var num = document.createElement('div');
+      num.className = 'day-num';
+      num.textContent = d;
+
+      var name = document.createElement('div');
+      name.className = 'day-name';
+      name.textContent = arabicDays[dt.getDay()];
+
+      var dot = document.createElement('div');
+      dot.className = 'dot';
+
+      a.appendChild(num);
+      a.appendChild(name);
+      a.appendChild(dot);
+
+      // Busiest badge
+      if (dateStr === busiestDate) {
+        var badge = document.createElement('span');
+        badge.className = 'busiest-badge';
+        badge.textContent = '\u2605';
+        badge.title = '\u0627\u0644\u064A\u0648\u0645 \u0627\u0644\u0623\u0643\u062B\u0631 \u0646\u0634\u0627\u0637\u0627\u064B';
+        a.appendChild(badge);
+      }
+
+      // Tooltip
+      if (stats) {
+        var tip = document.createElement('div');
+        tip.className = 'cal-tooltip';
+        var tipDate = document.createElement('div');
+        tipDate.className = 'tt-date';
+        tipDate.textContent = d + ' ' + arabicMonths[month] + ' — ' + arabicDays[dt.getDay()];
+        var tipStats = document.createElement('div');
+        tipStats.className = 'tt-stats';
+        tipStats.textContent = stats.bayanat + ' بيان \u2022 ' + stats.sirens + ' صفارة \u2022 ' + stats.enemy + ' إعلام \u2022 ' + stats.iran + ' إيران';
+        tip.appendChild(tipDate);
+        tip.appendChild(tipStats);
+        a.appendChild(tip);
+      }
+
+      grid.appendChild(a);
+    } else {
+      var cell = document.createElement('div');
+      cell.className = 'cal-day inactive';
+      if (isToday) cell.className += ' today';
+
+      var num2 = document.createElement('div');
+      num2.className = 'day-num';
+      num2.textContent = d;
+
+      cell.appendChild(num2);
+      grid.appendChild(cell);
+    }
+  }
+
+  renderStats();
+}
+
+function changeMonth(dir) {
+  var newIdx = currentIdx + dir;
+  if (newIdx < 0 || newIdx >= availableMonths.length) return;
+  currentIdx = newIdx;
+  renderCalendar();
+}
+
+renderCalendar();
+
+// ═══════════════ VIEW TOGGLE + LIST VIEW ═══════════════
+
+var listDir = 'desc';
+
+function _clearNode(el) {
+  while (el.firstChild) el.removeChild(el.firstChild);
+}
+
+function setView(view) {
+  var calSec = document.getElementById('calSection');
+  var listSec = document.getElementById('listSection');
+  var calBtn = document.getElementById('viewCalBtn');
+  var listBtn = document.getElementById('viewListBtn');
+  if (view === 'list') {
+    calSec.classList.add('hidden');
+    listSec.classList.add('active');
+    calBtn.classList.remove('active');
+    listBtn.classList.add('active');
+    renderList();
+  } else {
+    calSec.classList.remove('hidden');
+    listSec.classList.remove('active');
+    calBtn.classList.add('active');
+    listBtn.classList.remove('active');
+  }
+  try { localStorage.setItem('harbi-view', view); } catch (e) {}
+}
+
+function toggleListDir() {
+  listDir = (listDir === 'desc') ? 'asc' : 'desc';
+  document.getElementById('listDirBtn').textContent = (listDir === 'desc') ? '↓' : '↑';
+  renderList();
+}
+
+function renderList() {
+  var sortField = document.getElementById('listSort').value;
+  var dates = Object.keys(reportStats);
+
+  var rows = dates.map(function(d) {
+    var s = reportStats[d];
+    var si = (typeof searchIndex !== 'undefined' && searchIndex[d]) ? searchIndex[d] : {};
+    return {
+      date: d,
+      bayanat: s.bayanat || 0, sirens: s.sirens || 0, enemy: s.enemy || 0, iran: s.iran || 0, videos: s.videos || 0,
+      total: s.total || 0,
+      kw: si.kw || ''
+    };
+  });
+
+  rows.sort(function(a, b) {
+    var av, bv;
+    if (sortField === 'date') { av = a.date; bv = b.date; }
+    else { av = a[sortField] || 0; bv = b[sortField] || 0; }
+    if (av < bv) return listDir === 'asc' ? -1 : 1;
+    if (av > bv) return listDir === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  var totalEvents = 0;
+  for (var i = 0; i < rows.length; i++) totalEvents += rows[i].total;
+  var avg = rows.length ? Math.round(totalEvents / rows.length) : 0;
+  var summary = document.getElementById('listSummary');
+  _clearNode(summary);
+  var items = [
+    { n: rows.length, l: 'تقرير' },
+    { n: totalEvents.toLocaleString('en-US'), l: 'مجموع الأحداث' },
+    { n: avg, l: 'معدّل / يوم' }
+  ];
+  items.forEach(function(it) {
+    var div = document.createElement('div');
+    div.className = 'item';
+    var n = document.createElement('span'); n.className = 'n'; n.textContent = it.n;
+    var l = document.createElement('span'); l.className = 'l'; l.textContent = it.l;
+    div.appendChild(n); div.appendChild(l);
+    summary.appendChild(div);
+  });
+
+  var dayNames = {0:'الأحد',1:'الإثنين',2:'الثلاثاء',3:'الأربعاء',4:'الخميس',5:'الجمعة',6:'السبت'};
+  var monthNames = {1:'يناير',2:'فبراير',3:'مارس',4:'أبريل',5:'مايو',6:'يونيو',7:'يوليو',8:'أغسطس',9:'سبتمبر',10:'أكتوبر',11:'نوفمبر',12:'ديسمبر'};
+  var grid = document.getElementById('listGrid');
+  _clearNode(grid);
+
+  rows.forEach(function(r) {
+    var a = document.createElement('a');
+    a.className = 'list-row';
+    a.href = 'report.html?date=' + r.date;
+
+    var dp = r.date.split('-');
+    var dt = new Date(parseInt(dp[0]), parseInt(dp[1]) - 1, parseInt(dp[2]));
+
+    var dc = document.createElement('div');
+    dc.className = 'date-col';
+    var dLine = document.createElement('div');
+    dLine.className = 'd';
+    dLine.textContent = parseInt(dp[2]) + ' ' + monthNames[parseInt(dp[1])] + ' ' + dp[0];
+    var dnLine = document.createElement('div');
+    dnLine.className = 'dn';
+    dnLine.textContent = dayNames[dt.getDay()];
+    dc.appendChild(dLine);
+    dc.appendChild(dnLine);
+
+    var pc = document.createElement('div');
+    pc.className = 'pills-col';
+    var pillDefs = [
+      { k: 'bayanat', label: 'بيان',    v: r.bayanat },
+      { k: 'sirens',  label: 'صفارة',   v: r.sirens },
+      { k: 'enemy',   label: 'عدو',     v: r.enemy },
+      { k: 'iran',    label: 'إيران',   v: r.iran },
+      { k: 'videos',  label: 'فيديو',   v: r.videos }
+    ];
+    pillDefs.forEach(function(p) {
+      if (p.v > 0) {
+        var pill = document.createElement('span');
+        pill.className = 'pill ' + p.k;
+        pill.textContent = p.v + ' ' + p.label;
+        pc.appendChild(pill);
+      }
+    });
+    if (r.kw) {
+      var kw = document.createElement('div');
+      kw.className = 'keywords';
+      var words = r.kw.split(/\s+/).filter(Boolean).slice(0, 10).join(' · ');
+      kw.textContent = words;
+      pc.appendChild(kw);
+    }
+
+    var tc = document.createElement('div');
+    tc.className = 'total-col';
+    var tn = document.createElement('span'); tn.className = 'n'; tn.textContent = r.total;
+    var tl = document.createElement('span'); tl.className = 'l'; tl.textContent = 'إجمالي';
+    tc.appendChild(tn);
+    tc.appendChild(tl);
+
+    a.appendChild(dc);
+    a.appendChild(pc);
+    a.appendChild(tc);
+    grid.appendChild(a);
+  });
+}
+
+// ── Restore saved view preference (runs after searchIndex is defined) ──
+try {
+  var savedView = localStorage.getItem('harbi-view');
+  if (savedView === 'list') setView('list');
+} catch (e) {}
+</script>
+
+<script src="https://sql.js.org/dist/sql-wasm.js"></script>
+<script type="module" src="src/js/search/spotlight.js"></script>
+<script type="module">
+import { initNavbar } from './src/js/ui/navbar.js';
+initNavbar();
+</script>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أرشيف الإعلام الحربي — لوحة الأرقام</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c12; --surface: #0f1520; --surface2: #151d2b; --surface3: #1a2538;
+    --border: #1e2d3d; --text: #dfe6ee; --text-dim: #6b7d92; --text-muted: #3a4a5c;
+    --accent: #c9a84c; --accent-dim: rgba(201,168,76,0.12);
+    --green: #2ecc71; --red: #e74c3c; --orange: #e67e22;
+    --blue: #3498db; --purple: #9b59b6; --cyan: #1abc9c;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Noto Kufi Arabic', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  /* Grid background */
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--surface) 1px, transparent 1px),
+      linear-gradient(90deg, var(--surface) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
+    mask-image: radial-gradient(ellipse at center, black, transparent 80%);
+  }
+  .wrap { position: relative; z-index: 1; }
+
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+  }
+  .nav .brand { color: var(--accent); font-weight: 900; font-size: 0.95rem; letter-spacing: 0.05em; }
+  .nav .status { color: var(--text-dim); display: flex; align-items: center; gap: 8px; }
+  .nav .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 50% { opacity: 0.4; } }
+
+  /* Hero heading */
+  .hero-head {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 40px 30px;
+    text-align: center;
+  }
+  .hero-head .label {
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .hero-head h1 {
+    font-size: 2.4rem;
+    font-weight: 900;
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+  .hero-head .sub {
+    font-size: 1rem;
+    color: var(--text-dim);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  /* Range strip */
+  .range-strip {
+    max-width: 1100px;
+    margin: 30px auto 0;
+    padding: 14px 40px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+  }
+  .range-strip span { display: flex; gap: 10px; align-items: baseline; }
+  .range-strip strong { color: var(--accent); font-weight: 800; font-size: 0.9rem; }
+
+  /* Counters grid */
+  .counters {
+    max-width: 1100px;
+    margin: 50px auto 30px;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .counter {
+    background: var(--bg);
+    padding: 40px 30px 34px;
+    position: relative;
+    overflow: hidden;
+  }
+  .counter::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 4px; height: 100%;
+    background: var(--c, var(--accent));
+  }
+  .counter .cat {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .counter .num {
+    font-size: 3.6rem;
+    font-weight: 900;
+    color: var(--c, var(--accent));
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .counter .name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .counter .desc {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+    min-height: 60px;
+  }
+  .counter .spark {
+    margin-top: 14px;
+    display: flex;
+    gap: 2px;
+    align-items: flex-end;
+    height: 24px;
+  }
+  .counter .spark div {
+    flex: 1;
+    background: var(--c, var(--accent));
+    opacity: 0.35;
+    border-radius: 1px 1px 0 0;
+  }
+
+  /* What this is */
+  .what {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .what h3 {
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 8px;
+  }
+  .what p {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    line-height: 1.9;
+  }
+  .what p strong { color: var(--text); font-weight: 700; }
+
+  /* How to browse */
+  .how {
+    max-width: 1100px;
+    margin: 0 auto 60px;
+    padding: 0 40px;
+  }
+  .how h2 {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+  }
+  .step .n {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .step .t { font-weight: 700; margin-bottom: 6px; }
+  .step .d { font-size: 0.82rem; color: var(--text-dim); line-height: 1.7; }
+
+  /* Footer cta */
+  .cta-bar {
+    max-width: 1100px;
+    margin: 0 auto 60px;
+    padding: 30px 40px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+  .cta-bar a {
+    display: inline-block;
+    padding: 14px 40px;
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 900;
+    text-decoration: none;
+    border-radius: 8px;
+    letter-spacing: 0.1em;
+    font-size: 0.9rem;
+  }
+  .cta-bar a:hover { background: #e0bf60; }
+
+  @media (max-width: 900px) {
+    .counters { grid-template-columns: repeat(2, 1fr); padding: 0 16px; }
+    .hero-head h1 { font-size: 1.7rem; }
+    .what { grid-template-columns: 1fr; padding: 24px; }
+    .how-grid { grid-template-columns: 1fr; }
+    .how { padding: 0 16px; }
+    .range-strip { flex-wrap: wrap; gap: 16px; padding: 14px 20px; }
+    .nav { padding: 16px 20px; }
+  }
+  @media (max-width: 520px) {
+    .counters { grid-template-columns: 1fr; }
+    .counter .num { font-size: 2.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<div class="wrap">
+
+<div class="nav">
+  <div class="brand">الإعلام الحربي — الأرشيف</div>
+  <div class="status"><span class="dot"></span>يُحدَّث يوميًّا · آخر تحديث ١١ أبريل ٢٠٢٦</div>
+</div>
+
+<div class="hero-head">
+  <div class="label">مؤشّرات الأرشيف</div>
+  <h1>كلّ رسالةٍ مهمّة من قناةٍ واحدة،<br>محفوظةٌ ومُصنَّفةٌ ومُتاحة.</h1>
+  <p class="sub">
+    هذه هي الأرقام الخام للأرشيف — ما تمّ توثيقه من قناة "الإعلام الحربي" على تيليغرام، مُحتسبةً من اللحظة الأولى حتى اليوم.
+  </p>
+</div>
+
+<div class="range-strip">
+  <span>من <strong>٧ أكتوبر ٢٠٢٣</strong></span>
+  <span>إلى <strong>١١ أبريل ٢٠٢٦</strong></span>
+  <span>مجموع الأيّام <strong>٩١٨</strong></span>
+  <span>الرسائل المُصنَّفة <strong>٢٩٬٠١١</strong></span>
+</div>
+
+<div class="counters">
+
+  <div class="counter" style="--c: var(--accent)">
+    <div class="cat">القسم ٠١</div>
+    <div class="num">4,825</div>
+    <div class="name">بيانًا عسكريًّا</div>
+    <div class="desc">كلّ بيانٍ صادرٍ عن المقاومة الإسلاميّة، محفوظٌ كاملًا مع رقمه وتوقيته وهدفه وسلاحه.</div>
+    <div class="spark">
+      <div style="height:30%"></div><div style="height:55%"></div><div style="height:70%"></div>
+      <div style="height:90%"></div><div style="height:65%"></div><div style="height:80%"></div>
+      <div style="height:50%"></div><div style="height:40%"></div><div style="height:60%"></div>
+      <div style="height:75%"></div><div style="height:45%"></div><div style="height:30%"></div>
+    </div>
+  </div>
+
+  <div class="counter" style="--c: var(--red)">
+    <div class="cat">القسم ٠٢</div>
+    <div class="num">7,548</div>
+    <div class="name">صفّارة إنذار</div>
+    <div class="desc">مُوثّقة بالوقت والموقع الجغرافي، قابلة للعرض على خريطة شمال فلسطين المحتلّة.</div>
+    <div class="spark">
+      <div style="height:40%"></div><div style="height:65%"></div><div style="height:85%"></div>
+      <div style="height:95%"></div><div style="height:80%"></div><div style="height:70%"></div>
+      <div style="height:60%"></div><div style="height:50%"></div><div style="height:45%"></div>
+      <div style="height:55%"></div><div style="height:40%"></div><div style="height:25%"></div>
+    </div>
+  </div>
+
+  <div class="counter" style="--c: var(--orange)">
+    <div class="cat">القسم ٠٣</div>
+    <div class="num">13,571</div>
+    <div class="name">اقتباس من إعلام العدو</div>
+    <div class="desc">كما وردت في القناة، بلا تعليقٍ ولا تعديل — المصدر الأوّلي هو المرجع.</div>
+    <div class="spark">
+      <div style="height:50%"></div><div style="height:70%"></div><div style="height:80%"></div>
+      <div style="height:95%"></div><div style="height:90%"></div><div style="height:75%"></div>
+      <div style="height:85%"></div><div style="height:60%"></div><div style="height:70%"></div>
+      <div style="height:55%"></div><div style="height:65%"></div><div style="height:50%"></div>
+    </div>
+  </div>
+
+  <div class="counter" style="--c: var(--green)">
+    <div class="cat">القسم ٠٤</div>
+    <div class="num">875</div>
+    <div class="name">خبرًا من إيران</div>
+    <div class="desc">تصريحات وأخبارٌ من مصادر إيرانيّة رسميّة، منسوبةً إلى مصدرها الأصلي.</div>
+    <div class="spark">
+      <div style="height:20%"></div><div style="height:35%"></div><div style="height:50%"></div>
+      <div style="height:70%"></div><div style="height:40%"></div><div style="height:55%"></div>
+      <div style="height:30%"></div><div style="height:45%"></div><div style="height:25%"></div>
+      <div style="height:35%"></div><div style="height:50%"></div><div style="height:40%"></div>
+    </div>
+  </div>
+
+  <div class="counter" style="--c: var(--purple)">
+    <div class="cat">القسم ٠٥</div>
+    <div class="num">986</div>
+    <div class="name">فيديو ميدانيّ</div>
+    <div class="desc">قائمةٌ مُفهرسة بالأوصاف والتواريخ. لا نستضيف الملفّات؛ نحفظ السجلّ فقط.</div>
+    <div class="spark">
+      <div style="height:35%"></div><div style="height:50%"></div><div style="height:65%"></div>
+      <div style="height:80%"></div><div style="height:55%"></div><div style="height:45%"></div>
+      <div style="height:60%"></div><div style="height:40%"></div><div style="height:50%"></div>
+      <div style="height:30%"></div><div style="height:35%"></div><div style="height:25%"></div>
+    </div>
+  </div>
+
+  <div class="counter" style="--c: var(--cyan)">
+    <div class="cat">القسم ٠٦</div>
+    <div class="num">1,206</div>
+    <div class="name">موقفًا للحلفاء</div>
+    <div class="desc">بياناتٌ ومواقف من جبهات الإسناد المختلفة، مع علم الجهة وملخّصها.</div>
+    <div class="spark">
+      <div style="height:40%"></div><div style="height:55%"></div><div style="height:70%"></div>
+      <div style="height:60%"></div><div style="height:75%"></div><div style="height:50%"></div>
+      <div style="height:65%"></div><div style="height:45%"></div><div style="height:55%"></div>
+      <div style="height:40%"></div><div style="height:30%"></div><div style="height:35%"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="what">
+  <h3>ما هذا الموقع؟</h3>
+  <p>
+    أرشيفٌ مُستقلٌّ وغير ربحيّ يحفظ ما يُبَثّ على قناة "الإعلام الحربي - التغطية الإخبارية" في تيليغرام، ويُعيد تنظيمه في <strong>تقريرٍ يوميٍّ موحّد</strong>. لكلّ يومٍ صفحته الخاصّة، ولكلّ رسالةٍ مكانها في القسم المناسب. الهدف: جعل المحتوى قابلًا للبحث، للاستشهاد، وللمراجعة — دون أن تضيع رسالةٌ في تدفّق الأيام.
+  </p>
+</div>
+
+<div class="how">
+  <h2>كيف تتصفّح</h2>
+  <div class="how-grid">
+    <div class="step">
+      <div class="n">01</div>
+      <div class="t">اختر يومًا</div>
+      <div class="d">استخدم التقويم أو القائمة للانتقال إلى أيّ تاريخٍ منذ ٧ أكتوبر ٢٠٢٣.</div>
+    </div>
+    <div class="step">
+      <div class="n">02</div>
+      <div class="t">اقرأ التقرير</div>
+      <div class="d">كلّ يومٍ موثّقٌ في صفحةٍ واحدة مُقسَّمة إلى الأقسام الستّة أعلاه.</div>
+    </div>
+    <div class="step">
+      <div class="n">03</div>
+      <div class="t">ابحث أو صدِّر</div>
+      <div class="d">البحث يعمل عبر كامل الأرشيف. الأرقام والإحداثيّات متاحة كنصّ قابل للنسخ.</div>
+    </div>
+  </div>
+</div>
+
+<div class="cta-bar">
+  <a href="../index.html">ادخل الأرشيف ←</a>
+</div>
+
+</div>
+
+</body>
+</html>

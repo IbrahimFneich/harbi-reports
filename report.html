@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="src/css/enhancements.css"/>
 <link rel="stylesheet" href="src/css/navbar.css"/>
 <link rel="stylesheet" href="src/css/spotlight.css"/>
+<link rel="stylesheet" href="src/css/print.css" media="print"/>
 </head>
 <body>
 <script>
@@ -28,5 +29,19 @@ initNavbar();
 <script src="https://sql.js.org/dist/sql-wasm.js"></script>
 <script type="module" src="src/js/search/spotlight.js"></script>
 <script src="src/js/ui/disclaimer.js?v=2.2.11"></script>
+<script type="module">
+  import { mountPdfButton } from './src/js/export/pdf-button.js';
+  // report.html starts with a loading placeholder; src/js/app.js replaces the
+  // header once data loads. Wait for .header .date-row to appear before mounting.
+  const reportRoot = document.getElementById('report-root');
+  const observer = new MutationObserver((_, obs) => {
+    const target = document.querySelector('.header .date-row');
+    if (target && !document.querySelector('.download-btn-pdf')) {
+      mountPdfButton('.header .date-row');
+      obs.disconnect();
+    }
+  });
+  observer.observe(reportRoot, { childList: true, subtree: true });
+</script>
 </body>
 </html>

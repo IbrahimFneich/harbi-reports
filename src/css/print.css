@@ -1,0 +1,101 @@
+/* src/css/print.css
+   Shared @media print rules for all Harbi Reports pages.
+   Hides interactive chrome, expands content, preserves RTL Arabic.
+   Applied via <link media="print"> so it only activates during print preview. */
+
+@media print {
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 14mm 12mm 14mm 12mm;
+  }
+
+  /* Force light background, black text for ink economy */
+  html, body {
+    background: #ffffff !important;
+    color: #111111 !important;
+    font-size: 11pt;
+  }
+
+  /* Hide interactive chrome */
+  .navbar,
+  .nav,
+  .spotlight-fab,
+  .spotlight-overlay,
+  .day-nav-btn,
+  .disclaimer-banner,
+  .report-date-trigger,
+  .a-controls,
+  .a-status-bar,
+  .download-btn,
+  .analytics-loader,
+  #loader,
+  script,
+  .leaflet-control-container {
+    display: none !important;
+  }
+
+  /* Accent color stays gold on print so headers still read as "Harbi" */
+  .header h1,
+  .a-page-title,
+  .monthly-cover-title {
+    color: #8a6f1a !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Arabic RTL preservation */
+  body, .header, .section, .card {
+    direction: rtl !important;
+    text-align: right;
+  }
+
+  /* Cards / sections: avoid splitting across pages */
+  .bayan-card,
+  .siren-row,
+  .enemy-row,
+  .iran-row,
+  .video-row,
+  .allies-row,
+  .tp-card,
+  .report-day {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Monthly chronicle: one day per page for archival feel */
+  .report-day,
+  .monthly-day-section {
+    page-break-after: always;
+    break-after: page;
+  }
+  .report-day:last-child,
+  .monthly-day-section:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  /* Note: sirenMap/leaflet visibility is already handled by enhancements.css
+     @media print block (display:none). We intentionally do not override it —
+     the existing project decision is to omit the live map from printed output. */
+
+  /* Links: show URL on print for references */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555;
+  }
+
+  /* Tables (analytics) */
+  table {
+    page-break-inside: auto;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  thead { display: table-header-group; }
+  tr    { page-break-inside: avoid; }
+  th, td {
+    border: 1px solid #cccccc;
+    padding: 4px 6px;
+  }
+}
