@@ -1,5 +1,18 @@
 [
   {
+    "version": "2.3.0",
+    "date": "2026-04-12",
+    "title": "Export reports as PDF (editorial pages) + Excel (analytics)",
+    "changes": [
+      "Added download button on report.html, timeline.html, and all monthly chronicle pages — one click triggers a native PDF via window.print() with a dedicated @media print stylesheet",
+      "New src/css/print.css: hides navbar/spotlight/buttons, preserves RTL Arabic, forces cards to stay whole across pages, and makes monthly chronicles break one day per page for archival use",
+      "Added Excel export on analytics.html — lazy-loads SheetJS (~400KB) only on first click, then builds a 6-sheet workbook (KPIs, Events Over Time, Hourly Density, Most Active Days, Top Targets, Raw Data) by running the same queries the dashboard uses",
+      "New src/js/export/: pdf-button.js mounts the shared button, build-workbook.js is a pure testable function (14 browser assertions), excel-button.js wires the analytics click-to-download flow",
+      "Zero new runtime dependencies on the critical path — SheetJS loads only when someone actually clicks export",
+      "Added site favicon (favicon.svg at project root): dark navy rounded square with gold crosshair target ring and Arabic letter ح centered, matching the existing #080c12/#c9a84c dossier palette; wired into index.html, report.html, archive.html, analytics.html, timeline.html, test-db.html, and the monthly template in src/python/build_monthly.py"
+    ]
+  },
+  {
     "version": "2.2.14",
     "date": "2026-04-12",
     "title": "Tutorial-style landing page + calendar moved to Archive button",
