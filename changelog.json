@@ -1,5 +1,15 @@
 [
   {
+    "version": "2.5.7",
+    "date": "2026-04-13",
+    "title": "Tighten header — drop hairline and vertical whitespace above cockpit row",
+    "changes": [
+      "src/css/report.css — removed the gold border-top hairline from .header .date-row. It was a leftover from the old two-row layout where the hairline visually separated the title block from the date meta line; with the title block gone and the nav chips inline, the hairline was just dead chrome.",
+      "src/css/report.css — collapsed .header padding from 36px 20px 20px down to 14px 20px, and dropped the 14px top margin + 12px top padding on .date-row. The cockpit row now sits directly inside the header's radial-glow gradient with no extra vertical gutters, saving ~34px of vertical space above the date meta.",
+      "Bumped cache-bust and version-pill strings to 2.5.7 across index, timeline, analytics, archive, report HTML files and the app.js footer pill."
+    ]
+  },
+  {
     "version": "2.5.6",
     "date": "2026-04-13",
     "title": "Unified header row — cockpit layout merges date meta with day nav",
