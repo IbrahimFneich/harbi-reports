@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>وضعية العمليات — Interactive Map Prototype</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+  :root{
+    --bg:#0a0f1a; --panel:#121a2b; --line:#1f2a44; --ink:#e6edf7;
+    --muted:#8a97b4; --accent:#d4a017;
+    --rockets:#e5484d; --quality:#f59e0b; --guided:#d4a017;
+    --artillery:#b36b00; --clash:#3fb950; --drone:#58a6ff; --ied:#a371f7; --other:#6b7280;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;font-family:-apple-system,"SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
+    background:#070b14;color:var(--ink);overflow:hidden}
+  .app{display:grid;grid-template-columns:320px 1fr;height:100vh}
+  @media(max-width:900px){.app{grid-template-columns:1fr;grid-template-rows:auto 1fr}}
+
+  .side{background:var(--panel);border-left:1px solid var(--line);
+    padding:20px;overflow-y:auto}
+  .side h1{margin:0 0 2px;font-size:17px;letter-spacing:.2px}
+  .side .sub{color:var(--muted);font-size:11px;margin-bottom:16px;line-height:1.5}
+  .date-card{background:#0e1524;border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;margin-bottom:16px}
+  .date-card .day{color:var(--accent);font-weight:600;font-size:14px}
+  .date-card .dt{color:var(--muted);font-size:12px;margin-top:2px}
+  .depth{background:linear-gradient(90deg,#3a0a0c,#7a1215);border:1px solid #c42a2f;
+    border-radius:10px;padding:12px 14px;margin-bottom:16px;text-align:center}
+  .depth .kl{font-size:28px;font-weight:800;color:#fff;font-family:monospace;line-height:1}
+  .depth .lb{font-size:10px;color:#f0c674;margin-top:4px;letter-spacing:.5px}
+
+  .legend-title{font-size:11px;color:var(--muted);text-transform:uppercase;
+    letter-spacing:1px;margin:10px 0 8px}
+  .cat{display:flex;align-items:center;gap:10px;padding:8px 10px;
+    background:#0a1020;border:1px solid var(--line);border-radius:8px;
+    margin-bottom:6px;cursor:pointer;transition:all .2s}
+  .cat:hover{background:#0e1831;border-color:#2a3a5e}
+  .cat.off{opacity:.35}
+  .dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;
+    box-shadow:0 0 0 2px rgba(255,255,255,.15)}
+  .dot.rockets{background:var(--rockets)}
+  .dot.quality{background:var(--quality)}
+  .dot.guided{background:var(--guided)}
+  .dot.artillery{background:var(--artillery)}
+  .dot.clash{background:var(--clash)}
+  .dot.drone{background:var(--drone)}
+  .dot.ied{background:var(--ied)}
+  .dot.other{background:var(--other)}
+  .cat .nm{flex:1;font-size:12px;color:var(--ink)}
+  .cat .ct{font-family:monospace;font-weight:700;font-size:14px;color:var(--ink)}
+  .total{margin-top:12px;padding:12px 14px;background:#0e1524;border:1px dashed var(--line);
+    border-radius:8px;display:flex;justify-content:space-between;align-items:center}
+  .total .tl{font-size:12px;color:var(--muted)}
+  .total .tv{font-size:22px;font-weight:800;color:var(--accent);font-family:monospace}
+
+  #map{width:100%;height:100vh;background:#000}
+  .leaflet-popup-content-wrapper{background:#0e1524;color:var(--ink);
+    border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.6)}
+  .leaflet-popup-tip{background:#0e1524;border:1px solid var(--line)}
+  .leaflet-popup-content{margin:12px 14px;font-size:12px;line-height:1.6;direction:rtl}
+  .pop-num{display:inline-block;background:var(--accent);color:#1a1205;
+    font-weight:700;font-family:monospace;padding:2px 8px;border-radius:4px;margin-left:6px}
+  .pop-row{color:var(--muted);font-size:11px;margin-top:4px}
+  .pop-row b{color:var(--ink);font-weight:600}
+  .pop-wep{color:var(--accent);font-weight:600}
+
+  .disc{font-size:10px;color:var(--muted);background:#1a1205;
+    border:1px solid #3a2a10;border-radius:6px;padding:8px 10px;margin-top:14px;line-height:1.5}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="side">
+    <h1>وضعية العمليات</h1>
+    <div class="sub">Interactive map prototype — markers extracted from daily bayanat, categorized by weapon type</div>
+
+    <div class="date-card">
+      <div class="day" id="f-day"></div>
+      <div class="dt" id="f-dt"></div>
+    </div>
+
+    <div class="depth">
+      <div class="kl" id="f-depth"></div>
+      <div class="lb">عمق الاستهداف</div>
+    </div>
+
+    <div class="legend-title">فئات العمليات</div>
+    <div id="cats"></div>
+
+    <div class="total">
+      <span class="tl">إجمالي العمليات</span>
+      <span class="tv" id="f-total"></span>
+    </div>
+
+    <div class="disc">
+      <b>Data source:</b> <code>data/2026-04-10.json</code> (57/59 bayanat geocoded via a ~60-entry Arabic → lat/lng table).
+      Click category pills to filter. Click markers for bayan details. Depth = 150 km from source infographic (stamped on original image).
+    </div>
+  </aside>
+  <main><div id="map"></div></main>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const REPORT = {"date": "2026-04-10", "dayAr": "الجمعة", "dateAr": "١٠ نيسان ٢٠٢٦", "markers": [{"num": 1, "postTime": "00:05", "opTime": "23:00", "target": "معتقل الخيام", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.3283, "lng": 35.6311}, {"num": 2, "postTime": "00:10", "opTime": "20:45", "target": "موقع المرج", "weapon": "", "cat": "other", "lat": 33.2781, "lng": 35.5797}, {"num": 3, "postTime": "00:15", "opTime": "22:00", "target": "ثكنة برانيت", "weapon": "", "cat": "other", "lat": 33.0972, "lng": 35.3419}, {"num": 4, "postTime": "00:20", "opTime": "00:20", "target": "رشاف", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.1472, "lng": 35.3972}, {"num": 5, "postTime": "00:25", "opTime": "00:05", "target": "المطلّة", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.2797, "lng": 35.5786}, {"num": 6, "postTime": "00:30", "opTime": "00:30", "target": "شلومي", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0743, "lng": 35.1456}, {"num": 7, "postTime": "00:35", "opTime": "00:30", "target": "غورن", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0506, "lng": 35.2436}, {"num": 8, "postTime": "01:55", "opTime": "02:15", "target": "ثكنة يعرا", "weapon": "", "cat": "other", "lat": 33.0506, "lng": 35.1717}, {"num": 9, "postTime": "03:15", "opTime": "05:50", "target": "طى الخيام", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.3283, "lng": 35.6311}, {"num": 10, "postTime": "06:35", "opTime": "08:00", "target": "كريات شمونة", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.2081, "lng": 35.5731}, {"num": 11, "postTime": "07:15", "opTime": "07:30", "target": "المطلّة ومسكاف عام", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.2797, "lng": 35.5786}, {"num": 12, "postTime": "07:25", "opTime": "08:00", "target": "مسكاف عام للمرّة الثانية", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0339, "lng": 35.1339}, {"num": 13, "postTime": "07:35", "opTime": "09:00", "target": "دوفيف", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0556, "lng": 35.4131}, {"num": 14, "postTime": "07:45", "opTime": "10:00", "target": "معتقل الخيام", "weapon": "", "cat": "other", "lat": 33.3283, "lng": 35.6311}, {"num": 15, "postTime": "07:55", "opTime": "10:05", "target": "موقع الغجر", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.2675, "lng": 35.6283}, {"num": 16, "postTime": "08:05", "opTime": "10:30", "target": "كريات شمونة للمرّة الثانية", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.2081, "lng": 35.5731}, {"num": 17, "postTime": "09:00", "opTime": "10:50", "target": "الخيام", "weapon": "صاروخ نوعيّ", "cat": "quality", "lat": 33.3283, "lng": 35.6311}, {"num": 18, "postTime": "09:15", "opTime": "11:00", "target": "المطلّة للمرّة الثالثة", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.2797, "lng": 35.5786}, {"num": 19, "postTime": "09:30", "opTime": "10:30", "target": "المطلّة ومرغليوت ومسكاف عام", "weapon": "صليات صاروخية", "cat": "rockets", "lat": 33.2797, "lng": 35.5786}, {"num": 20, "postTime": "11:00", "opTime": "12:00", "target": "ثكنة كريات شمونة", "weapon": "مسيّرات انقضاضية", "cat": "drone", "lat": 33.2081, "lng": 35.5731}, {"num": 21, "postTime": "11:10", "opTime": "13:30", "target": "أفيفيم", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0583, "lng": 35.4336}, {"num": 22, "postTime": "11:25", "opTime": "01:00", "target": "البحريّة العسكريّة في ميناء أشدود", "weapon": "", "cat": "other", "lat": 31.8044, "lng": 34.6553}, {"num": 23, "postTime": "11:45", "opTime": "13:50", "target": "نؤوت مردخاي", "weapon": "مسيّرات انقضاضية", "cat": "drone", "lat": 33.2172, "lng": 35.6003}, {"num": 24, "postTime": "11:55", "opTime": "09:20", "target": "موقع خربة يارون", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.067, "lng": 35.41}, {"num": 25, "postTime": "12:10", "opTime": "09:40", "target": "مثلث التحرير على أطراف مدينة بنت جبيل", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0844, "lng": 35.4108}, {"num": 26, "postTime": "12:50", "opTime": "12:20", "target": "رشاف", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.1472, "lng": 35.3972}, {"num": 27, "postTime": "12:58", "opTime": "15:15", "target": "الطيبة", "weapon": "محلّقة انقضاضية", "cat": "drone", "lat": 33.3586, "lng": 35.4072}, {"num": 28, "postTime": "13:12", "opTime": "14:50", "target": "كرميئيل", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 32.9137, "lng": 35.2918}, {"num": 29, "postTime": "13:20", "opTime": "15:00", "target": "المطلة ومسكاف عام", "weapon": "صليات صاروخية", "cat": "rockets", "lat": 33.2797, "lng": 35.5786}, {"num": 30, "postTime": "13:25", "opTime": "07:00", "target": "الطيبة", "weapon": "مسيّرات انقضاضية", "cat": "drone", "lat": 33.3586, "lng": 35.4072}, {"num": 31, "postTime": "13:30", "opTime": "14:00", "target": "صفد", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 32.9646, "lng": 35.4967}, {"num": 32, "postTime": "13:35", "opTime": "14:00", "target": "قاعدة ميرون للمراقبة وإدارة العمليّات الجويّة شمال فلسطين", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 32.9833, "lng": 35.4392}, {"num": 33, "postTime": "14:40", "opTime": "16:30", "target": "عيناتا", "weapon": "صليات صاروخية", "cat": "rockets", "lat": 33.1236, "lng": 35.4322}, {"num": 34, "postTime": "14:45", "opTime": "16:35", "target": "دوفيف للمرّة الثانية", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0556, "lng": 35.4131}, {"num": 35, "postTime": "14:50", "opTime": "16:55", "target": "مثلث التحرير", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0844, "lng": 35.4108}, {"num": 36, "postTime": "14:55", "opTime": "17:00", "target": "نهاريّا", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0042, "lng": 35.0968}, {"num": 37, "postTime": "15:28", "opTime": "15:00", "target": "عيتا الشعب", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.1011, "lng": 35.3539}, {"num": 38, "postTime": "15:50", "opTime": "18:00", "target": "ليمان وشلومي", "weapon": "صليات صاروخية", "cat": "rockets", "lat": 33.0796, "lng": 35.1169}, {"num": 39, "postTime": "16:00", "opTime": "16:40", "target": "مدرسة الإشراق في مدينة بنت جبيل", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0583, "lng": 35.4336}, {"num": 40, "postTime": "16:10", "opTime": "18:15", "target": "مدرسة الإشراق في مدينة بنت جبيل للمرّة الثانية", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0583, "lng": 35.4336}, {"num": 41, "postTime": "16:20", "opTime": "18:15", "target": "ثكنة كريات شمونة وقاعدة بيت هلل بأسرابٍ من المُسيّرات الانقضاضيّة", "weapon": "", "cat": "other", "lat": 33.2081, "lng": 35.5731}, {"num": 42, "postTime": "16:25", "opTime": "18:45", "target": "كرميئيل للمرّة الثانية", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 32.9137, "lng": 35.2918}, {"num": 43, "postTime": "16:29", "opTime": "19:00", "target": "العديسة الحدوديّة", "weapon": "", "cat": "other", "lat": 33.1692, "lng": 35.5631}, {"num": 44, "postTime": "17:00", "opTime": "19:30", "target": "يرؤون", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0678, "lng": 35.4267}, {"num": 45, "postTime": "17:25", "opTime": "18:00", "target": "عكّا", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 32.9215, "lng": 35.0764}, {"num": 46, "postTime": "18:20", "opTime": "19:30", "target": "مدرسة الإشراق في مدينة بنت جبيل للمرّة الثالثة", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0583, "lng": 35.4336}, {"num": 47, "postTime": "18:30", "opTime": "20:10", "target": "نهاريّا للمرّة الثانية", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0042, "lng": 35.0968}, {"num": 48, "postTime": "18:40", "opTime": "20:15", "target": "كريات شمونة", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.2081, "lng": 35.5731}, {"num": 49, "postTime": "18:58", "opTime": "20:55", "target": "أفيفيم للمرّة الثانية", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0583, "lng": 35.4336}, {"num": 50, "postTime": "19:30", "opTime": "21:10", "target": "حيفا", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 32.794, "lng": 34.9896}, {"num": 51, "postTime": "19:35", "opTime": "", "target": "مدرسة الإشراق في مدينة بنت جبيل", "weapon": "صليات صاروخية", "cat": "rockets", "lat": 33.0583, "lng": 35.4336}, {"num": 52, "postTime": "19:40", "opTime": "21:00", "target": "مثلث التحرير", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.0844, "lng": 35.4108}, {"num": 53, "postTime": "19:50", "opTime": "17:00", "target": "عيناتا", "weapon": "قذائف مدفعية", "cat": "artillery", "lat": 33.1236, "lng": 35.4322}, {"num": 54, "postTime": "20:00", "opTime": "22:00", "target": "كريات شمونة للمرّة الثانية", "weapon": "صلية صاروخية", "cat": "rockets", "lat": 33.2081, "lng": 35.5731}, {"num": 56, "postTime": "21:08", "opTime": "19:00", "target": "أدميت", "weapon": "مسيّرات انقضاضية", "cat": "drone", "lat": 33.0569, "lng": 35.2014}, {"num": 57, "postTime": "21:12", "opTime": "15:30", "target": "شآر يشوف وهغوشريم ونؤوت مردخاي", "weapon": "صليات صاروخية", "cat": "rockets", "lat": 33.2172, "lng": 35.6003}, {"num": 58, "postTime": "21:32", "opTime": "23:10", "target": "دفنا وكريات شمونة", "weapon": "صليات صاروخية", "cat": "rockets", "lat": 33.2364, "lng": 35.6308}], "cats": {"rockets": 43, "other": 7, "quality": 1, "drone": 5, "artillery": 1}, "depthKm": 150, "sirenPoints": [{"lat": 33.2081, "lng": 35.5731, "loc": "كريات شمونه", "times": ["05:05", "07:29", "07:33", "09:22", "11:08", "15:14", "19:03", "19:04", "19:06", "20:10", "21:46"], "count": 11}, {"lat": 33.05, "lng": 35.15, "loc": "الجليل الغربي", "times": ["06:17", "10:25", "13:29", "13:38", "15:00", "15:02", "15:46", "16:06", "16:32", "17:58"], "count": 10}, {"lat": 33.2, "lng": 35.57, "loc": "إصبع الجليل", "times": ["04:34", "08:01", "12:01", "19:05", "21:50", "21:53"], "count": 6}, {"lat": 33.0042, "lng": 35.0968, "loc": "نهاريا", "times": ["13:56", "15:02", "15:05", "17:14"], "count": 4}, {"lat": 32.9646, "lng": 35.4967, "loc": "صفد", "times": ["13:05"], "count": 1}, {"lat": 32.83, "lng": 35.07, "loc": "الكريوت", "times": ["18:06"], "count": 1}]};
+
+var CAT_LABEL = {
+  rockets:'صليات صاروخية', quality:'صواريخ نوعية', guided:'صواريخ موجّهة',
+  artillery:'قذائف مدفعية', clash:'اشتباكات', drone:'مسيّرات',
+  ied:'عبوات', other:'أخرى'
+};
+var CAT_COLOR = {
+  rockets:'#e5484d', quality:'#f59e0b', guided:'#d4a017',
+  artillery:'#b36b00', clash:'#3fb950', drone:'#58a6ff',
+  ied:'#a371f7', other:'#6b7280'
+};
+
+// Header fields
+document.getElementById('f-day').textContent = REPORT.dayAr + ' — ' + REPORT.dateAr;
+document.getElementById('f-dt').textContent  = REPORT.date;
+document.getElementById('f-depth').textContent = REPORT.depthKm + ' كلم';
+document.getElementById('f-total').textContent = REPORT.markers.length;
+
+// Build category pills
+var catsBox = document.getElementById('cats');
+var active = {};
+var ORDER = ['rockets','quality','guided','artillery','drone','other'];
+ORDER.forEach(function(k){
+  var count = REPORT.cats[k] || 0;
+  if (count === 0) return;
+  active[k] = true;
+  var el = document.createElement('div');
+  el.className = 'cat';
+  el.setAttribute('data-k', k);
+  el.innerHTML = '<span class="dot '+k+'"></span>'+
+                 '<span class="nm">'+CAT_LABEL[k]+'</span>'+
+                 '<span class="ct">'+count+'</span>';
+  el.onclick = function(){
+    active[k] = !active[k];
+    el.classList.toggle('off', !active[k]);
+    refreshMarkers();
+  };
+  catsBox.appendChild(el);
+});
+
+// Initialize Leaflet map
+var map = L.map('map', {zoomControl:true, attributionControl:true})
+  .setView([33.15, 35.42], 10);
+
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Esri World Imagery',
+  maxZoom: 18
+}).addTo(map);
+
+// Lebanese-Palestinian border (coarse polyline, illustrative)
+var border = [
+  [33.089, 35.105],[33.092, 35.135],[33.098, 35.175],[33.092, 35.232],
+  [33.088, 35.282],[33.096, 35.335],[33.092, 35.385],[33.087, 35.432],
+  [33.095, 35.487],[33.108, 35.535],[33.135, 35.585],[33.185, 35.614],
+  [33.230, 35.628],[33.270, 35.640]
+];
+L.polyline(border, {color:'#f59e0b', weight:3, opacity:.9, dashArray:'6,4'}).addTo(map);
+
+// Depth arc — show approximate reach (visualized from border midpoint)
+L.circle([33.12, 35.35], {
+  radius: REPORT.depthKm * 1000,
+  color:'#e5484d', weight:2, opacity:.6, fill:false, dashArray:'4,6'
+}).addTo(map);
+
+// Markers
+var markerLayer = L.layerGroup().addTo(map);
+function refreshMarkers(){
+  markerLayer.clearLayers();
+  REPORT.markers.forEach(function(m){
+    if (!active[m.cat]) return;
+    var circle = L.circleMarker([m.lat, m.lng], {
+      radius: 7,
+      fillColor: CAT_COLOR[m.cat] || CAT_COLOR.other,
+      color: '#fff',
+      weight: 1.5,
+      opacity: 1,
+      fillOpacity: 0.85
+    });
+    var html = '<div><span class="pop-num">#'+m.num+'</span>'+
+               '<b>'+m.target+'</b></div>'+
+               '<div class="pop-row">السلاح: <span class="pop-wep">'+(m.weapon||'غير محدد')+'</span></div>'+
+               '<div class="pop-row">نُشر: <b>'+m.postTime+'</b> &nbsp;·&nbsp; نُفّذ: <b>'+m.opTime+'</b></div>';
+    circle.bindPopup(html);
+    circle.bindTooltip('#'+m.num+' — '+m.target, {direction:'top', offset:[0,-6]});
+    markerLayer.addLayer(circle);
+  });
+}
+refreshMarkers();
+</script>
+</body>
+</html>

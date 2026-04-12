@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.2.11",
+    "date": "2026-04-12",
+    "title": "Expanded sheet now covers search row and filters (true full-screen)",
+    "changes": [
+      "Moved sheet's positioning context from .sl-split to .sl-modal so it can extend above the top bars",
+      "Expanded state now fills 100% of the modal (was constrained to the split area below the filters)",
+      "Top bars (search row, info bar, filters) pinned with z-index 11 so they remain above the dim backdrop and usable in collapsed state",
+      "Sheet z-index raised to 20 so it always sits above the top bars when expanded",
+      "Drag-height cap now reads from the modal rather than the split (correct containing block)"
+    ]
+  },
+  {
     "version": "2.2.10",
     "date": "2026-04-12",
     "title": "Fix: tapping a result no longer instantly closes the mobile sheet",

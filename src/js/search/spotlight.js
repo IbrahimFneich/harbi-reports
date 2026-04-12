@@ -103,8 +103,10 @@ function attachSheetGestures(handleEl, sheetEl) {
     currentY = startY;
     dragging = true;
     startHeight = sheetEl.getBoundingClientRect().height;
-    var parent = sheetEl.parentElement;
-    splitHeight = parent ? parent.getBoundingClientRect().height : window.innerHeight;
+    // Sheet is positioned relative to the modal (not the split), so the
+    // maximum drag height is the modal's height.
+    var modal = sheetEl.closest ? sheetEl.closest('.sl-modal') : null;
+    splitHeight = modal ? modal.getBoundingClientRect().height : window.innerHeight;
     sheetEl.style.transition = 'none';
   }, { passive: true });
 
