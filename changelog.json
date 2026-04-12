@@ -1,5 +1,18 @@
 [
   {
+    "version": "2.2.13",
+    "date": "2026-04-12",
+    "title": "Maps now render real city borders with info drawer + POLY/DOT toggle",
+    "changes": [
+      "Replaced circle-marker dots on all three maps (sirenMap, autoSirenMap, autoBayanMap) with real OSM admin polygons where available, synthesized polygons otherwise",
+      "Pre-baked 134 place borders via new src/python/fetch_borders.py (47 real OSM polygons from Nominatim, 87 synthetic fallbacks) into data/borders.json",
+      "Added slide-in info drawer per map (4th map button ≡) with intensity legend + click-to-zoom location list, following Option B from the panel-layouts prototype",
+      "Added POLY/DOT mode toggle (5th map button) so viewers can flip between border and legacy dot rendering on demand",
+      "Extracted all polygon/dot/synthesis/drawer logic into shared src/js/maps/border-renderer.js so future maps inherit the same UX",
+      "Color ramp by intensity: green 1, yellow 2–3, orange 4–6, red 7+"
+    ]
+  },
+  {
     "version": "2.2.12",
     "date": "2026-04-12",
     "title": "Satellite view toggle on siren and bayanat maps",

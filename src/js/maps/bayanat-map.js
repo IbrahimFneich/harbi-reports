@@ -3,7 +3,7 @@
 import { addTrackedTileLayer } from './tiles.js';
 import { addFullscreenBtn } from './fullscreen.js';
 import { addSatelliteBtn } from './satellite-toggle.js';
-import { barColors } from '../dashboards/helpers.js';
+import { createBorderMap } from './border-renderer.js';
 import { onTabSwitch } from '../ui/tabs.js';
 
 export function initBayanatMap() {
@@ -75,9 +75,10 @@ export function initBayanatMap() {
   var locs = Object.keys(locData).sort(function(a,b){ return locData[b].count - locData[a].count; });
   if (locs.length < 1) return;
 
-  // Assign barColors by rank (same order as the dashboard chart)
-  var locColorMap = {};
-  locs.forEach(function(name, idx) { locColorMap[name] = barColors[idx % barColors.length]; });
+  // Adapt locData into the place-list shape the shared border-renderer expects.
+  var places = locs.map(function(name) {
+    return { name: name, lat: locData[name].lat, lng: locData[name].lng, count: locData[name].count };
+  });
 
   var titleDiv = document.createElement('div');
   titleDiv.className = 'siren-map-title';
@@ -110,41 +111,11 @@ export function initBayanatMap() {
     });
     addTrackedTileLayer(map);
 
-    locs.forEach(function(name) {
-      var pt = locData[name];
-      var color = locColorMap[name] || '#2ecc71';
-      var radius = 5 + Math.min(pt.count * 3, 16);
+    var div = document.getElementById('autoBayanMap');
+    createBorderMap(map, div, places, { unit: '\u0639\u0645\u0644\u064A\u0629' });
 
-      var marker = L.circleMarker([pt.lat, pt.lng], {
-        radius: radius, fillColor: color, fillOpacity: 0.6,
-        color: color, weight: 2
-      }).addTo(map);
-
-      var popup = document.createElement('div');
-      popup.style.cssText = 'text-align:right;direction:rtl;min-width:100px;';
-      var pTitle = document.createElement('div');
-      pTitle.style.cssText = 'font-weight:800;font-size:0.85rem;color:' + color + ';margin-bottom:3px;';
-      pTitle.textContent = name;
-      popup.appendChild(pTitle);
-      var pCount = document.createElement('div');
-      pCount.style.cssText = 'font-size:0.72rem;color:#6b7d92;';
-      pCount.textContent = pt.count + ' \u0639\u0645\u0644\u064A\u0629';
-      popup.appendChild(pCount);
-      marker.bindPopup(popup, {closeButton: false});
-      marker.on('mouseover', function() { this.openPopup(); this.setStyle({fillOpacity: 1, weight: 3}); });
-      marker.on('mouseout', function() { this.closePopup(); this.setStyle({fillOpacity: 0.6, weight: 2}); });
-
-      if (pt.count >= 3) {
-        var icon = L.divIcon({
-          className: '',
-          html: '<div style="background:' + color + ';color:#fff;font-size:0.55rem;font-weight:800;padding:1px 4px;border-radius:4px;font-family:sans-serif;">' + pt.count + '</div>',
-          iconSize: [18, 14], iconAnchor: [9, -6]
-        });
-        L.marker([pt.lat, pt.lng], {icon: icon, interactive: false}).addTo(map);
-      }
-    });
     setTimeout(function() { map.invalidateSize(); }, 200);
-    addFullscreenBtn(document.getElementById('autoBayanMap'), map);
-    addSatelliteBtn(document.getElementById('autoBayanMap'), map);
+    addFullscreenBtn(div, map);
+    addSatelliteBtn(div, map);
   }
 }

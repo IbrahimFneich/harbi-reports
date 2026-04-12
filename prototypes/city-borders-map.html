@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Prototype — City Border Heatmap</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root {
+    --bg: #0a0f18;
+    --surface: #0f1520;
+    --border: #1e2d3d;
+    --text: #dfe6ee;
+    --muted: #6b7d92;
+    --gold: #c9a84c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 20px;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+  h1 {
+    font-size: 1.1rem; font-weight: 800; text-align: center;
+    margin: 0 0 4px; color: var(--gold); letter-spacing: 0.3px;
+  }
+  .sub {
+    font-size: 0.75rem; color: var(--muted); text-align: center;
+    margin-bottom: 16px;
+  }
+  .grid {
+    display: grid; grid-template-columns: 1fr 260px; gap: 16px;
+  }
+  @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+  .map-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden; position: relative;
+  }
+  #borderMap { width: 100%; height: 560px; }
+  .side {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px; font-size: 0.78rem;
+  }
+  .side h3 {
+    margin: 0 0 10px; font-size: 0.82rem;
+    color: var(--gold); border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+  .legend-row {
+    display: flex; align-items: center; gap: 8px; margin: 4px 0;
+  }
+  .sw { width: 18px; height: 12px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.15); }
+  .progress {
+    margin-top: 12px; font-size: 0.7rem; color: var(--muted);
+  }
+  .progress .bar {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 4px; height: 8px; margin-top: 4px; overflow: hidden;
+  }
+  .progress .fill {
+    height: 100%; background: var(--gold); width: 0%;
+    transition: width 0.3s;
+  }
+  .loc-list {
+    margin-top: 12px; max-height: 260px; overflow-y: auto;
+    font-size: 0.7rem;
+  }
+  .loc-list div {
+    display: flex; justify-content: space-between;
+    padding: 3px 4px; border-radius: 3px;
+  }
+  .loc-list div:hover { background: rgba(201,168,76,0.08); cursor: pointer; }
+  .loc-list .n { color: var(--muted); font-family: monospace; }
+  .loc-list .ok { color: #2ecc71; }
+  .loc-list .fb { color: #f39c12; }
+  .loc-list .err { color: #e74c3c; }
+
+  /* Match the real app's SAT/FS button styling */
+  .map-fs-btn, .map-sat-btn, .map-mode-btn {
+    position: absolute; right: 10px; z-index: 1001;
+    background: rgba(15,21,32,0.9); border: 1px solid rgba(30,45,61,0.8);
+    color: var(--text); cursor: pointer; border-radius: 6px;
+    width: 32px; height: 32px; line-height: 1; padding: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; font-family: inherit;
+  }
+  .map-fs-btn { top: 10px; font-size: 1rem; }
+  .map-sat-btn { top: 50px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.5px; }
+  .map-mode-btn { top: 90px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.5px; }
+  .map-fs-btn:hover, .map-sat-btn:hover, .map-mode-btn:hover {
+    background: rgba(201,168,76,0.2); color: var(--gold); border-color: var(--gold);
+  }
+  .map-sat-btn.sat-active, .map-mode-btn.dot-mode {
+    background: rgba(201,168,76,0.25); color: var(--gold); border-color: var(--gold);
+  }
+  /* Polygon label */
+  .poly-label {
+    background: rgba(15,21,32,0.85);
+    color: #fff;
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  }
+  .poly-label .c { color: var(--gold); margin-inline-start: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>خريطة العمليات العسكرية — حدود المدن والقرى</h1>
+  <div class="sub">Prototype: replace circle-dot markers with real admin boundaries (OSM via Nominatim)</div>
+
+  <div class="grid">
+    <div class="map-card">
+      <div id="borderMap"></div>
+    </div>
+    <div class="side">
+      <h3>Intensity (عدد العمليات)</h3>
+      <div class="legend-row"><span class="sw" style="background:#2ecc71"></span><span>1 عملية</span></div>
+      <div class="legend-row"><span class="sw" style="background:#f1c40f"></span><span>2–3</span></div>
+      <div class="legend-row"><span class="sw" style="background:#e67e22"></span><span>4–6</span></div>
+      <div class="legend-row"><span class="sw" style="background:#e74c3c"></span><span>7+</span></div>
+
+      <div class="progress">
+        <div id="progLabel">Fetching borders from Nominatim…</div>
+        <div class="bar"><div class="fill" id="progFill"></div></div>
+      </div>
+
+      <h3 style="margin-top:14px;">Locations</h3>
+      <div class="loc-list" id="locList"></div>
+
+      <div class="progress" style="margin-top:10px;">
+        <div><span class="ok">●</span> OSM boundary &nbsp; <span class="fb">●</span> synthetic &nbsp; <span class="err">●</span> error</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Sample strike data (Arabic display → English Nominatim query + synthetic count) ──
+// Counts mirror a typical day from the real bayanat data.
+var PLACES = [
+  { ar: 'نهاريا',          en: 'Nahariya, Israel',              count: 6 },
+  { ar: 'حيفا',            en: 'Haifa, Israel',                 count: 3 },
+  { ar: 'عكا',             en: 'Acre, Israel',                  count: 2 },
+  { ar: 'صفد',             en: 'Safed, Israel',                 count: 4 },
+  { ar: 'كريات شمونة',     en: 'Kiryat Shmona, Israel',         count: 8 },
+  { ar: 'المطلة',          en: 'Metula, Israel',                count: 5 },
+  { ar: 'شتولا',           en: 'Shtula, Israel',                count: 3 },
+  { ar: 'ميرون',           en: 'Meron, Israel',                 count: 2 },
+  { ar: 'بنت جبيل',        en: 'Bint Jbeil, Lebanon',           count: 7 },
+  { ar: 'مارون الراس',     en: 'Maroun al-Ras, Lebanon',        count: 4 },
+  { ar: 'عيتا الشعب',      en: 'Aita al-Shaab, Lebanon',        count: 5 },
+  { ar: 'الخيام',          en: 'Khiam, Lebanon',                count: 3 },
+  { ar: 'شبعا',            en: 'Shebaa, Lebanon',               count: 2 },
+  { ar: 'دبل',             en: 'Debel, Lebanon',                count: 1 }
+];
+
+// ── Color ramp by count ──
+function colorFor(c) {
+  if (c >= 7) return '#e74c3c';
+  if (c >= 4) return '#e67e22';
+  if (c >= 2) return '#f1c40f';
+  return '#2ecc71';
+}
+function opacityFor(c) {
+  // 0.35 → 0.75 over 1..10
+  return 0.35 + Math.min(c, 10) * 0.04;
+}
+
+// ── Leaflet setup ──
+var DARK = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+var SAT  = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+
+var map = L.map('borderMap', {
+  center: [33.1, 35.4], zoom: 10, zoomControl: true, attributionControl: false
+});
+var baseLayer = L.tileLayer(DARK, { maxZoom: 15 }).addTo(map);
+var satMode = false;
+
+// Fullscreen + SAT button (clone of the real app's UX)
+var mapDiv = document.getElementById('borderMap');
+mapDiv.style.position = 'relative';
+
+var fsBtn = document.createElement('button');
+fsBtn.className = 'map-fs-btn'; fsBtn.textContent = '⛶';
+mapDiv.appendChild(fsBtn);
+var isFS = false;
+fsBtn.onclick = function() {
+  isFS = !isFS;
+  mapDiv.style.position = isFS ? 'fixed' : 'relative';
+  mapDiv.style.top = isFS ? '0' : '';
+  mapDiv.style.left = isFS ? '0' : '';
+  mapDiv.style.width = isFS ? '100vw' : '';
+  mapDiv.style.height = isFS ? '100vh' : '';
+  mapDiv.style.zIndex = isFS ? '9999' : '';
+  fsBtn.textContent = isFS ? '✖' : '⛶';
+  document.body.style.overflow = isFS ? 'hidden' : '';
+  setTimeout(function(){ map.invalidateSize(); }, 150);
+};
+
+var satBtn = document.createElement('button');
+satBtn.className = 'map-sat-btn'; satBtn.textContent = 'SAT';
+mapDiv.appendChild(satBtn);
+satBtn.onclick = function() {
+  satMode = !satMode;
+  map.removeLayer(baseLayer);
+  baseLayer = L.tileLayer(satMode ? SAT : DARK, { maxZoom: satMode ? 18 : 15 }).addTo(map);
+  satBtn.classList.toggle('sat-active', satMode);
+  satBtn.textContent = satMode ? 'MAP' : 'SAT';
+};
+
+var modeBtn = document.createElement('button');
+modeBtn.className = 'map-mode-btn';
+modeBtn.textContent = 'DOT';
+modeBtn.title = 'Toggle borders / dots';
+mapDiv.appendChild(modeBtn);
+modeBtn.onclick = function() {
+  currentMode = (currentMode === 'borders') ? 'dots' : 'borders';
+  modeBtn.textContent = (currentMode === 'borders') ? 'DOT' : 'POLY';
+  modeBtn.classList.toggle('dot-mode', currentMode === 'dots');
+  redrawAll();
+};
+
+// ── Nominatim queue ──
+var drawnLayers = [];
+var fetchResults = []; // cached {kind, geojson?, lat, lon, place} per PLACES index
+var currentMode = 'borders'; // 'borders' | 'dots'
+var progFill = document.getElementById('progFill');
+var progLabel = document.getElementById('progLabel');
+var locList = document.getElementById('locList');
+
+function listRow(place, state) {
+  var row = document.createElement('div');
+  row.id = 'row-' + place.en.replace(/\W/g, '');
+  var left = document.createElement('span');
+  var dot = document.createElement('span');
+  dot.textContent = '● ';
+  dot.className = state;
+  left.appendChild(dot);
+  left.appendChild(document.createTextNode(place.ar));
+  var right = document.createElement('span');
+  right.className = 'n';
+  right.textContent = place.count;
+  row.appendChild(left); row.appendChild(right);
+  row.onclick = function() {
+    var layer = drawnLayers[PLACES.indexOf(place)];
+    if (layer && layer.getBounds) map.fitBounds(layer.getBounds(), {maxZoom: 13});
+    else if (layer && layer.getLatLng) map.setView(layer.getLatLng(), 12);
+  };
+  return row;
+}
+
+PLACES.forEach(function(p){ locList.appendChild(listRow(p, 'n')); });
+
+function updateProgress(done) {
+  var pct = Math.round(done / PLACES.length * 100);
+  progFill.style.width = pct + '%';
+  progLabel.textContent = 'Fetching borders ' + done + '/' + PLACES.length + ' (' + pct + '%)';
+  if (done === PLACES.length) progLabel.textContent = 'Done — ' + PLACES.length + ' locations rendered';
+}
+
+function setRowState(place, state) {
+  var row = document.getElementById('row-' + place.en.replace(/\W/g, ''));
+  if (!row) return;
+  var dot = row.querySelector('span > span');
+  if (dot) dot.className = state;
+}
+
+function renderPolygon(place, geojson) {
+  var color = colorFor(place.count);
+  var layer = L.geoJSON(geojson, {
+    style: {
+      color: color,
+      weight: 2,
+      fillColor: color,
+      fillOpacity: opacityFor(place.count),
+      opacity: 0.9
+    }
+  }).addTo(map);
+  attachLabel(layer, place, color);
+  return layer;
+}
+
+// Dot mode — replicates the production bayanat-map.js styling so the toggle
+// compares apples-to-apples.
+function renderDot(place, lat, lon) {
+  var color = colorFor(place.count);
+  var radius = 5 + Math.min(place.count * 3, 16);
+  var marker = L.circleMarker([lat, lon], {
+    radius: radius,
+    fillColor: color, fillOpacity: 0.65,
+    color: color, weight: 2
+  }).addTo(map);
+  attachLabel(marker, place, color);
+  return marker;
+}
+
+function centerOfResult(res) {
+  if (res.kind === 'point') return [res.lat, res.lon];
+  // Derive centroid from polygon bounds via a throwaway layer.
+  var tmp = L.geoJSON(res.geojson);
+  var b = tmp.getBounds();
+  return [b.getCenter().lat, b.getCenter().lng];
+}
+
+// Build a synthetic "town-sized" polygon around a point — used when OSM has
+// no admin boundary for a small village. Produces a smoothed 20-vertex shape
+// with slight per-vertex jitter so it reads as an organic boundary, not a circle.
+function synthesizePolygon(lat, lon, count) {
+  var baseR = 0.0095 + Math.min(count, 8) * 0.0008; // ~1.0–1.7km
+  var verts = 20;
+  var ring = [];
+  // Deterministic pseudo-random jitter seeded by lat/lon
+  var seed = Math.abs(Math.sin(lat * 1000 + lon * 1000)) * 1000;
+  function rand() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  for (var a = 0; a < verts; a++) {
+    var theta = (a / verts) * Math.PI * 2;
+    var jitter = 0.82 + rand() * 0.36;             // 0.82–1.18
+    var rLat = baseR * 0.88 * jitter;              // slight N-S squash
+    var rLon = baseR * jitter;
+    ring.push([lon + rLon * Math.cos(theta), lat + rLat * Math.sin(theta)]);
+  }
+  ring.push(ring[0]); // close
+  return { type: 'Polygon', coordinates: [ring] };
+}
+
+function renderSynthetic(place, lat, lon) {
+  var geojson = synthesizePolygon(lat, lon, place.count);
+  return renderPolygon(place, geojson);
+}
+
+function attachLabel(layer, place, color) {
+  var html =
+    '<div class="poly-label" style="border-color:' + color + '66;">' +
+      place.ar + '<span class="c">' + place.count + '</span>' +
+    '</div>';
+  layer.bindTooltip(html, {
+    permanent: true, direction: 'center', className: 'poly-wrap', opacity: 1
+  });
+  layer.on('mouseover', function() {
+    this.setStyle && this.setStyle({ weight: 3, fillOpacity: Math.min(1, opacityFor(place.count) + 0.2) });
+  });
+  layer.on('mouseout', function() {
+    this.setStyle && this.setStyle({ weight: 2, fillOpacity: opacityFor(place.count) });
+  });
+}
+
+// Ask Nominatim for up to 5 candidates and pick the first that carries a real
+// Polygon/MultiPolygon. Many village queries return a node as hit #1 even when
+// a boundary relation exists further down the list.
+function queryNominatim(q) {
+  var url = 'https://nominatim.openstreetmap.org/search'
+    + '?format=json&polygon_geojson=1&limit=5&q=' + encodeURIComponent(q);
+  return fetch(url, { headers: { 'Accept': 'application/json' } })
+    .then(function(r){ return r.json(); })
+    .then(function(arr){
+      if (!arr || !arr.length) return null;
+      for (var k = 0; k < arr.length; k++) {
+        var gj = arr[k].geojson;
+        if (gj && (gj.type === 'Polygon' || gj.type === 'MultiPolygon')) {
+          return { kind: 'poly', geojson: gj };
+        }
+      }
+      var first = arr[0];
+      return { kind: 'point', lat: parseFloat(first.lat), lon: parseFloat(first.lon) };
+    });
+}
+
+function fetchOne(place) {
+  // Try 1: the full "Name, Country" query.
+  return queryNominatim(place.en).then(function(res){
+    if (res && res.kind === 'poly') return res;
+    // Try 2: bare name (strip country) — sometimes yields a boundary relation.
+    var bare = place.en.split(',')[0].trim();
+    return new Promise(function(resolve){
+      setTimeout(function(){
+        queryNominatim(bare).then(function(res2){
+          if (res2 && res2.kind === 'poly') resolve(res2);
+          else resolve(res || res2 || null);
+        }).catch(function(){ resolve(res || null); });
+      }, 1100); // rate-limit spacing
+    });
+  });
+}
+
+// Sequential fetch to respect Nominatim 1 req/sec
+var i = 0;
+function nextFetch() {
+  if (i >= PLACES.length) {
+    updateProgress(PLACES.length);
+    // Fit bounds to all drawn layers
+    var group = L.featureGroup(drawnLayers.filter(Boolean));
+    if (group.getLayers().length) map.fitBounds(group.getBounds().pad(0.1));
+    return;
+  }
+  var place = PLACES[i];
+  var idx = i;
+  fetchOne(place).then(function(res){
+    if (!res) { setRowState(place, 'err'); return; }
+    // Pre-compute a centroid so both modes can use it without recomputation.
+    res.center = centerOfResult(res);
+    fetchResults[idx] = res;
+    setRowState(place, res.kind === 'poly' ? 'ok' : 'fb');
+    drawnLayers[idx] = renderPlace(place, res);
+  }).catch(function(){
+    setRowState(place, 'err');
+  }).then(function(){
+    i++;
+    updateProgress(i);
+    setTimeout(nextFetch, 1100);
+  });
+}
+
+// Single entry-point for drawing a place in whichever mode is active.
+function renderPlace(place, res) {
+  if (currentMode === 'borders') {
+    return res.kind === 'poly'
+      ? renderPolygon(place, res.geojson)
+      : renderSynthetic(place, res.lat, res.lon);
+  }
+  // dots mode
+  return renderDot(place, res.center[0], res.center[1]);
+}
+
+// Tear down every drawn layer and rebuild from cache in the current mode.
+// Called on mode-button click — no network traffic, instant flip.
+function redrawAll() {
+  drawnLayers.forEach(function(l){ if (l) map.removeLayer(l); });
+  drawnLayers = [];
+  PLACES.forEach(function(place, idx) {
+    var res = fetchResults[idx];
+    if (!res) return;
+    drawnLayers[idx] = renderPlace(place, res);
+  });
+}
+
+updateProgress(0);
+nextFetch();
+</script>
+</body>
+</html>
