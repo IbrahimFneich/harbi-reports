@@ -4,7 +4,9 @@ import { swapAllMapTiles } from '../maps/tiles.js';
 
 export function initTheme() {
   var saved = localStorage.getItem('harbi-theme');
-  if (saved !== 'dark') document.body.classList.add('light');
+  var wantsLight = saved !== 'dark';
+  document.documentElement.classList.toggle('light', wantsLight);
+  if (document.body) document.body.classList.toggle('light', wantsLight);
 
   var header = document.querySelector('.header');
   if (!header) return;

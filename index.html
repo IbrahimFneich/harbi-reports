@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="src/css/navbar.css"/>
 <script>
-  if (localStorage.getItem('harbi-theme') !== 'dark') document.body.classList.add('light');
+  (function(){try{var s=localStorage.getItem('harbi-theme');var l=s!=='dark';document.documentElement.classList.toggle('light',l);var f=function(){document.body&&document.body.classList.toggle('light',l);};if(document.body)f();else document.addEventListener('DOMContentLoaded',f);}catch(e){}})();
 </script>
 <style>
   :root {
@@ -16,6 +16,13 @@
     --accent: #c9a84c; --accent-dim: rgba(201,168,76,0.12);
     --green: #2ecc71; --red: #e74c3c; --orange: #e67e22;
     --blue: #3498db; --purple: #9b59b6; --cyan: #1abc9c;
+  }
+  body.light {
+    --bg: #f5f5f0; --surface: #ffffff; --surface2: #f0ede6; --surface3: #e8e4db;
+    --border: #d4cfc4; --text: #1a1a1a; --text-dim: #6b6b6b; --text-muted: #b0b0b0;
+    --accent: #9a7b2d; --accent-dim: rgba(154,123,45,0.10);
+    --green: #1a8a46; --red: #c0392b; --orange: #d35400;
+    --blue: #2471a3; --purple: #7d3c98; --cyan: #148f77;
   }
   .site-footer {
     text-align: center; padding: 24px;
@@ -769,7 +776,7 @@
   <p>أنت الآن تعرف كلّ ما تحتاجه. باقي الأرشيف سيُعلّمك نفسه عن طريق الاستخدام.</p>
   <a href="archive.html">ابدأ التصفّح</a>
   <div style="margin-top:20px;font-size:0.6rem;opacity:0.55;direction:ltr;">
-    <span style="cursor:pointer" onclick="window.location='archive.html'">Harbi Reports v2.2.14</span>
+    <span style="cursor:pointer" onclick="window.location='archive.html'">Harbi Reports v2.3.2</span>
   </div>
 </div>
 
@@ -785,10 +792,10 @@
     البيانات مأخوذة من تليغرام ومُعالَجة بواسطة ذكاء اصطناعي — قد تحتوي على أخطاء.
   </div>
   <div data-disclaimer-slot style="margin-top:10px;font-size:0.68rem;">
-    <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v2.2.14</span>
+    <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v2.3.2</span>
   </div>
 </div>
-<script src="src/js/ui/disclaimer.js?v=2.3.1"></script>
+<script src="src/js/ui/disclaimer.js?v=2.3.2"></script>
 <script>
 function showChangelog() {
   var existing = document.querySelector('.changelog-overlay');

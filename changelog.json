@@ -1,5 +1,21 @@
 [
   {
+    "version": "2.3.2",
+    "date": "2026-04-12",
+    "title": "Fix site-wide light theme consistency (index, spotlight, analytics)",
+    "changes": [
+      "Fixed the broken inline <head> theme-init script on every page: it called document.body.classList.add('light') while document.body was still null, throwing a silent TypeError so the saved 'light' class never applied on first paint",
+      "Replaced the one-liner with a robust IIFE that sets the class on <html> synchronously (pre-FOUC) then on <body> via a DOMContentLoaded fallback — patched across 35 HTML files (index, archive, report, timeline, and all 32 monthly/*.html pages)",
+      "Added the missing inline theme script to analytics.html, which previously had none and always rendered dark regardless of user preference",
+      "Made initNavbar() in src/js/ui/navbar.js authoritative: it now re-applies the saved theme to <html> and <body> on every page load, guaranteeing a single source of truth even if an inline script ever regresses",
+      "index.html inline <style> now defines a body.light { ... } palette block matching the site-wide light tokens — the landing page previously had no light overrides at all, so it was stuck dark",
+      "src/css/index.css now ships a body.light override block, which also fixes every monthly/*.html chronicle page (they share this stylesheet)",
+      "src/css/spotlight.css now has a body.light fork for all --sl-* variables plus softer overlay dim and modal shadow — the Spotlight search overlay was hard-coded dark and ignored the active theme",
+      "Also hardened src/js/ui/theme.js initTheme() the same null-body-safe way to stay consistent with initNavbar",
+      "Bumped footer version pills site-wide to v2.3.2, including two stale v2.2.14 pills in index.html that were missed by the 2.3.1 sync"
+    ]
+  },
+  {
     "version": "2.3.1",
     "date": "2026-04-12",
     "title": "Site-wide footer trailer + version pill sync",

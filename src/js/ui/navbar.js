@@ -3,6 +3,14 @@
 export function initNavbar() {
   if (document.querySelector('.navbar')) return;
 
+  // Apply saved theme (default = light) before any UI renders.
+  try {
+    var savedTheme = localStorage.getItem('harbi-theme');
+    var wantsLight = savedTheme !== 'dark';
+    document.documentElement.classList.toggle('light', wantsLight);
+    if (document.body) document.body.classList.toggle('light', wantsLight);
+  } catch (e) {}
+
   var path = window.location.pathname;
   var page = 'index';
   if (path.indexOf('archive') !== -1) page = 'archive';

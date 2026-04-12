@@ -28,6 +28,28 @@
   --sl-transition:      0.15s ease;
 }
 
+/* Light theme overrides — mirrors site light palette */
+body.light {
+  --sl-bg-deep:         #f5f5f0;
+  --sl-bg-surface:      #ffffff;
+  --sl-bg-elevated:     #f7f5ef;
+  --sl-bg-hover:        #efece3;
+  --sl-border:          #d4cfc4;
+  --sl-border-focus:    #9a7b2d;
+  --sl-text:            #1a1a1a;
+  --sl-text-secondary:  #6b6b6b;
+  --sl-text-muted:      #a0a0a0;
+  --sl-accent:          #9a7b2d;
+  --sl-highlight-bg:    rgba(154, 123, 45, 0.18);
+  --sl-highlight-text:  #7a5f1f;
+}
+body.light #spotlightOverlay {
+  background: rgba(20, 18, 10, 0.35);
+}
+body.light .sl-modal {
+  box-shadow: 0 24px 64px rgba(40, 30, 10, 0.18), 0 4px 16px rgba(40, 30, 10, 0.10);
+}
+
 /* ── Animations ─────────────────────────────────────────────────────── */
 @keyframes slFadeIn {
   from { opacity: 0; }

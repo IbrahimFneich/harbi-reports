@@ -27,6 +27,33 @@
     --pink-dim: rgba(232,67,147,0.06);
   }
 
+  body.light {
+    --bg: #f5f5f0;
+    --surface: #ffffff;
+    --surface2: #f0ede6;
+    --surface3: #e8e4db;
+    --border: #d4cfc4;
+    --text: #1a1a1a;
+    --text-dim: #6b6b6b;
+    --text-muted: #b0b0b0;
+    --accent: #9a7b2d;
+    --accent-dim: rgba(154,123,45,0.10);
+    --green: #1a8a46;
+    --green-dim: rgba(26,138,70,0.08);
+    --red: #c0392b;
+    --red-dim: rgba(192,57,43,0.10);
+    --orange: #d35400;
+    --orange-dim: rgba(211,84,0,0.08);
+    --blue: #2471a3;
+    --blue-dim: rgba(36,113,163,0.08);
+    --purple: #7d3c98;
+    --purple-dim: rgba(125,60,152,0.08);
+    --cyan: #148f77;
+    --cyan-dim: rgba(20,143,119,0.06);
+    --pink: #c2185b;
+    --pink-dim: rgba(194,24,91,0.06);
+  }
+
   * { margin:0; padding:0; box-sizing:border-box; }
 
   body {
