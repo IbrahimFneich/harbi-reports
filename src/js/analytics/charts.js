@@ -14,8 +14,8 @@ function svgEl(tag, attrs) {
 function svgText(x, y, text, attrs) {
   var el = svgEl('text', Object.assign({
     x: String(x), y: String(y),
-    'font-size': '9', fill: 'var(--text-dim, #6b7d92)',
-    'font-family': 'monospace'
+    'font-size': '13', fill: 'var(--text, #dfe6ee)',
+    'font-family': 'monospace', 'font-weight': '600'
   }, attrs || {}));
   el.textContent = text;
   return el;
@@ -80,16 +80,21 @@ export function renderLineChart(containerId, datasets, height, opts) {
     var visibleDS = datasets.filter(function(_, i) { return !hiddenSeries[i]; });
 
     var chartW = el.offsetWidth || 600;
-    var marginL = 40, marginB = 24, marginR = 6, marginT = 6;
+    var marginL = 56, marginB = 38, marginR = 10, marginT = 10;
     var w = chartW;
-    // Respect container height if it's tall enough (e.g. fullscreen panel);
-    // otherwise fall back to the caller-provided fixed height.
+    // In fullscreen, stretch the chart to fill the panel; otherwise use the
+    // caller-provided fixed height. Detect fullscreen by walking up to the
+    // .a-panel ancestor and checking for .a-panel-fs — deterministic and
+    // immune to re-draw feedback loops.
     var baseH = height || 200;
-    var containerH = el.clientHeight || 0;
-    var legendReserve = 40; // approximate legend row height appended below
-    var effectiveH = (containerH > baseH + legendReserve + 20)
-      ? (containerH - legendReserve)
-      : baseH;
+    var panelEl = el.closest ? el.closest('.a-panel') : null;
+    var isFs = !!(panelEl && panelEl.classList.contains('a-panel-fs'));
+    var legendReserve = 48;
+    var effectiveH = baseH;
+    if (isFs) {
+      var containerH = el.clientHeight || 0;
+      if (containerH > baseH) effectiveH = containerH - legendReserve;
+    }
     var h = effectiveH + marginB;
     var plotW = w - marginL - marginR;
     var plotH = h - marginT - marginB;
@@ -102,7 +107,6 @@ export function renderLineChart(containerId, datasets, height, opts) {
 
     var svg = svgEl('svg', {
       viewBox: '0 0 ' + w + ' ' + h,
-      preserveAspectRatio: 'none',
       style: 'width:100%;height:' + h + 'px;max-height:100%;display:block'
     });
 
@@ -114,7 +118,7 @@ export function renderLineChart(containerId, datasets, height, opts) {
         x1: String(marginL), y1: String(yPos), x2: String(w - marginR), y2: String(yPos),
         stroke: 'var(--border, #1e2d3d)', 'stroke-width': '0.5', 'stroke-dasharray': yi === 0 ? 'none' : '3,3'
       }));
-      svg.appendChild(svgText(marginL - 4, yPos + 3, yVal, { 'text-anchor': 'end', 'font-size': '8' }));
+      svg.appendChild(svgText(marginL - 8, yPos + 5, yVal, { 'text-anchor': 'end', 'font-size': '14' }));
     }
 
     // X-axis
@@ -127,7 +131,7 @@ export function renderLineChart(containerId, datasets, height, opts) {
         if (lbl.length === 7) lbl = lbl.substring(5) + '/' + lbl.substring(2, 4);
         else if (lbl.length === 10) lbl = lbl.substring(5);
         else if (lbl.indexOf('-W') > 0) lbl = 'W' + lbl.split('W')[1];
-        svg.appendChild(svgText(xPos, h - 4, lbl, { 'text-anchor': 'middle', 'font-size': '7.5' }));
+        svg.appendChild(svgText(xPos, h - 10, lbl, { 'text-anchor': 'middle', 'font-size': '13' }));
         svg.appendChild(svgEl('line', {
           x1: String(xPos), y1: String(marginT + plotH), x2: String(xPos), y2: String(marginT + plotH + 4),
           stroke: 'var(--border, #1e2d3d)', 'stroke-width': '0.5'

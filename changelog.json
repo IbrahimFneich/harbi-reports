@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.3.4",
+    "date": "2026-04-12",
+    "title": "Bigger, more visible line-chart axis labels",
+    "changes": [
+      "src/js/analytics/charts.js — line-chart Y-axis labels bumped from 8px → 14px and X-axis labels from 7.5px → 13px, with color moved from --text-dim to --text and font-weight 600 so they actually read clearly in both normal and fullscreen mode",
+      "Widened axis margins: marginL 40→56 and marginB 24→38 so the bigger labels have breathing room and don't collide with the plot area or get clipped",
+      "Tightened label offsets (Y: marginL-4→marginL-8 and +3→+5 vertical nudge; X: h-4→h-10) so the larger glyphs sit where the eye expects them",
+      "Removed preserveAspectRatio='none' from the SVG — it was causing the new larger glyphs to stretch horizontally in fullscreen since the container aspect ratio differs from the viewBox. The viewBox is already sized to match the container so uniform scaling is the correct default",
+      "Replaced the pixel-threshold fullscreen heuristic in renderLineChart with a deterministic closest('.a-panel-fs') check — prevents a re-draw feedback loop where legend toggles could otherwise keep nudging the measured height above a static threshold"
+    ]
+  },
+  {
     "version": "2.3.3",
     "date": "2026-04-12",
     "title": "Analytics panel fullscreen actually fills the viewport",
