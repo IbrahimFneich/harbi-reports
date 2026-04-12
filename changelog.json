@@ -1,5 +1,14 @@
 [
   {
+    "version": "2.2.1",
+    "date": "2026-04-12",
+    "title": "Unified footer disclaimer notice across all pages",
+    "changes": [
+      "All pages (index, report, timeline, analytics, monthly) now show the same full disclaimer notice: non-affiliation covers affiliated entities, AI processing explicitly noted as error-prone",
+      "analytics.html and timeline.html footers aligned with index layout"
+    ]
+  },
+  {
     "version": "2.2.0",
     "date": "2026-04-12",
     "title": "Legal disclaimer modal across all pages",
