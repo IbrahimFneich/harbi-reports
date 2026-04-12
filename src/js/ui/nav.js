@@ -35,33 +35,34 @@ export function initNav() {
   var idx = ALL_REPORTS.indexOf(current);
   if (idx === -1) return;
 
-  var dateRow = document.querySelector('.header .date-row');
-  if (!dateRow) return;
-  var dateCenter = dateRow.querySelector('.date-center') || dateRow;
+  var header = document.querySelector('.header');
+  if (!header) return;
 
-  // Next (newer) — appended first so it takes the inline-start edge in RTL
+  var nav = document.createElement('div');
+  nav.className = 'day-nav';
+
+  // Next (newer) — appears on the right in RTL
   var nextDate = idx < ALL_REPORTS.length - 1 ? ALL_REPORTS[idx + 1] : null;
   var nextBtn = document.createElement('a');
   nextBtn.className = 'day-nav-btn' + (nextDate ? '' : ' disabled');
   nextBtn.textContent = '\u2192 ' + (nextDate ? formatDateAr(nextDate) : '');
   if (nextDate) nextBtn.href = reportUrl(nextDate);
-  dateRow.insertBefore(nextBtn, dateRow.firstChild);
+  nav.appendChild(nextBtn);
 
-  // Current / total counter — lives inside date-center, preceded by a separator
-  var curSep = document.createElement('span');
-  curSep.className = 'd-sep';
-  curSep.textContent = '\u2022';
-  dateCenter.appendChild(curSep);
+  // Current date label
   var cur = document.createElement('span');
   cur.className = 'day-nav-current';
   cur.textContent = (idx + 1) + ' / ' + ALL_REPORTS.length;
-  dateCenter.appendChild(cur);
+  nav.appendChild(cur);
 
-  // Previous (older) — appended last so it takes the inline-end edge in RTL
+  // Previous (older) — appears on the left in RTL
   var prevDate = idx > 0 ? ALL_REPORTS[idx - 1] : null;
   var prevBtn = document.createElement('a');
   prevBtn.className = 'day-nav-btn' + (prevDate ? '' : ' disabled');
   prevBtn.textContent = (prevDate ? formatDateAr(prevDate) : '') + ' \u2190';
   if (prevDate) prevBtn.href = reportUrl(prevDate);
-  dateRow.appendChild(prevBtn);
+  nav.appendChild(prevBtn);
+
+  // Insert after header
+  header.parentNode.insertBefore(nav, header.nextSibling);
 }

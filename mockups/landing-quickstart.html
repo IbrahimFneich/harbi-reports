@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أرشيف الإعلام الحربي — دليل البدء السريع</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c12; --surface: #0f1520; --surface2: #151d2b; --surface3: #1a2538;
+    --border: #1e2d3d; --text: #dfe6ee; --text-dim: #6b7d92; --text-muted: #3a4a5c;
+    --accent: #c9a84c; --accent-dim: rgba(201,168,76,0.12);
+    --green: #2ecc71; --red: #e74c3c; --orange: #e67e22;
+    --blue: #3498db; --purple: #9b59b6; --cyan: #1abc9c;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Noto Kufi Arabic', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* Two-column layout: sticky sidebar + content */
+  .layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 40px;
+    padding: 40px 32px;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    position: sticky;
+    top: 40px;
+    align-self: start;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 20px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+  }
+  .sidebar .brand {
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 18px;
+  }
+  .sidebar .brand .name {
+    color: var(--accent);
+    font-weight: 900;
+    font-size: 1rem;
+  }
+  .sidebar .brand .sub {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+  }
+  .sidebar h4 {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    margin-bottom: 10px;
+    margin-top: 16px;
+  }
+  .sidebar ol {
+    list-style: none;
+    padding: 0;
+    counter-reset: s;
+  }
+  .sidebar ol li {
+    counter-increment: s;
+    padding: 8px 0 8px 12px;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-right: 2px solid transparent;
+    position: relative;
+    padding-right: 30px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .sidebar ol li::before {
+    content: counter(s, arabic-indic);
+    position: absolute;
+    right: 0;
+    top: 8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--surface3);
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+  }
+  .sidebar ol li.active {
+    color: var(--accent);
+    border-right-color: var(--accent);
+  }
+  .sidebar ol li.active::before {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .sidebar ol li:hover { color: var(--text); }
+  .sidebar .cta-mini {
+    display: block;
+    margin-top: 20px;
+    padding: 10px;
+    background: var(--accent);
+    color: var(--bg);
+    text-align: center;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 0.78rem;
+  }
+
+  /* Content */
+  .content { min-width: 0; }
+
+  .intro {
+    padding: 20px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 50px;
+  }
+  .intro .label {
+    display: inline-block;
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.3em;
+    padding: 5px 12px;
+    border: 1px solid var(--accent);
+    border-radius: 100px;
+    margin-bottom: 18px;
+  }
+  .intro h1 {
+    font-size: 2.4rem;
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+  .intro p {
+    color: var(--text-dim);
+    font-size: 1rem;
+    max-width: 680px;
+  }
+
+  /* Instruction card */
+  .inst {
+    margin-bottom: 50px;
+    scroll-margin-top: 40px;
+  }
+  .inst-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .inst-head .ring {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    display: grid;
+    place-items: center;
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--accent);
+    flex-shrink: 0;
+    background: var(--accent-dim);
+  }
+  .inst-head h2 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    line-height: 1.4;
+  }
+  .inst-head h2 .tail {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-weight: 400;
+    margin-top: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  .inst-body {
+    padding-right: 68px;
+  }
+  .inst-body .intro-line {
+    color: var(--text);
+    font-size: 1rem;
+    margin-bottom: 18px;
+    line-height: 1.9;
+  }
+  .inst-body .actions {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+  }
+  .inst-body .actions h5 {
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .inst-body .actions ol {
+    list-style: none;
+    counter-reset: act;
+  }
+  .inst-body .actions ol li {
+    counter-increment: act;
+    padding: 6px 0 6px 30px;
+    font-size: 0.9rem;
+    color: var(--text);
+    position: relative;
+    padding-right: 30px;
+  }
+  .inst-body .actions ol li::before {
+    content: counter(act);
+    position: absolute;
+    right: 0;
+    top: 8px;
+    width: 20px;
+    height: 20px;
+    background: var(--surface3);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: grid;
+    place-items: center;
+  }
+  .inst-body .actions ol li kbd {
+    font-family: 'Noto Kufi Arabic', monospace;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: 1px 8px;
+    font-size: 0.8rem;
+    color: var(--accent);
+    margin: 0 2px;
+  }
+
+  /* Mini illustration */
+  .mini {
+    background: var(--bg);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .mini .caption {
+    position: absolute;
+    top: -10px;
+    right: 16px;
+    background: var(--bg);
+    padding: 0 10px;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* Mini calendar illustration */
+  .mc {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+    max-width: 320px;
+  }
+  .mc .d {
+    aspect-ratio: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 0.6rem;
+    display: grid;
+    place-items: center;
+    color: var(--text-muted);
+  }
+  .mc .d.sel {
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 900;
+    box-shadow: 0 0 12px rgba(201,168,76,0.5);
+  }
+  .mc .d.has { color: var(--text); border-color: var(--text-dim); }
+
+  /* Mini card illustration */
+  .mini-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-right: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    font-size: 0.75rem;
+  }
+  .mini-card .hd { display: flex; justify-content: space-between; margin-bottom: 3px; }
+  .mini-card .hd .n { color: var(--accent); font-weight: 800; font-size: 0.7rem; }
+  .mini-card .hd .t { color: var(--text-muted); font-size: 0.65rem; }
+  .mini-card .tg { font-weight: 700; font-size: 0.78rem; }
+
+  /* Mini search */
+  .mini-search {
+    background: var(--bg);
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    padding: 10px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .mini-search .i { color: var(--accent); }
+  .mini-search .q { color: var(--text); font-weight: 600; font-size: 0.82rem; }
+
+  /* Legend strip */
+  .legend {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .legend .chip {
+    font-size: 0.68rem;
+    padding: 3px 10px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+  }
+  .legend .chip.b { color: var(--accent); border-color: var(--accent); }
+  .legend .chip.s { color: var(--red); border-color: var(--red); }
+  .legend .chip.e { color: var(--orange); border-color: var(--orange); }
+  .legend .chip.i { color: var(--green); border-color: var(--green); }
+  .legend .chip.v { color: var(--purple); border-color: var(--purple); }
+  .legend .chip.a { color: var(--cyan); border-color: var(--cyan); }
+
+  /* Callout tip */
+  .tip {
+    padding: 14px 16px;
+    background: var(--accent-dim);
+    border-right: 3px solid var(--accent);
+    border-radius: 6px;
+    font-size: 0.88rem;
+    color: var(--text);
+    line-height: 1.8;
+    margin-top: 10px;
+  }
+  .tip strong { color: var(--accent); }
+
+  /* FAQ strip */
+  .faq {
+    margin-top: 30px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .faq h3 {
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .faq details {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .faq details[open] { border-color: var(--accent); }
+  .faq summary {
+    font-weight: 700;
+    color: var(--text);
+    font-size: 0.92rem;
+    outline: none;
+  }
+  .faq details[open] summary { color: var(--accent); }
+  .faq details p {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-top: 10px;
+    line-height: 1.8;
+  }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; padding: 20px; }
+    .sidebar { position: static; max-height: none; }
+    .inst-body { padding-right: 0; }
+    .intro h1 { font-size: 1.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="name">الإعلام الحربي · الأرشيف</div>
+      <div class="sub">دليل البدء السريع</div>
+    </div>
+    <h4>خطوات الدليل</h4>
+    <ol>
+      <li class="active">فتح التقويم</li>
+      <li>اختيار يوم</li>
+      <li>قراءة تقرير</li>
+      <li>فهم الألوان</li>
+      <li>استخدام البحث</li>
+      <li>عرض الخريطة</li>
+      <li>الاستشهاد والتصدير</li>
+    </ol>
+    <a href="../index.html" class="cta-mini">تخطَّ الدليل → الأرشيف</a>
+  </aside>
+
+  <main class="content">
+
+    <div class="intro">
+      <span class="label">دليلٌ في سبع خطوات</span>
+      <h1>تعلَّم تصفّح الأرشيف في أقلّ من ثلاث دقائق.</h1>
+      <p>
+        كلّ خطوةٍ مكتوبةٌ بوضوح، مع إرشادٍ عمليّ وصورةٍ مصغّرة لما ستراه على شاشتك. لا حاجة لحسابٍ ولا لتثبيت تطبيق — الأرشيف مفتوحٌ في المتصفّح مباشرةً.
+      </p>
+    </div>
+
+    <!-- 1 -->
+    <section class="inst">
+      <div class="inst-head">
+        <div class="ring">١</div>
+        <h2>افتح التقويم
+          <span class="tail">الصفحة الرئيسيّة هي نقطة البداية</span>
+        </h2>
+      </div>
+      <div class="inst-body">
+        <p class="intro-line">
+          عند زيارة الموقع، سترى تقويمًا شهريًّا يُغطّي كلّ يومٍ موثّق منذ ٧ أكتوبر ٢٠٢٣. كلّ خليّةٍ في التقويم تمثّل يومًا، والأيّام الفعّالة مميّزةٌ بلونٍ واضح.
+        </p>
+        <div class="actions">
+          <h5>افعل هذا</h5>
+          <ol>
+            <li>اضغط <kbd>← الشهر السابق</kbd> أو <kbd>الشهر التالي →</kbd> للتنقّل</li>
+            <li>جرّب زرّ <kbd>📋 القائمة</kbd> لعرضٍ مختلفٍ مرتّبٍ بالإجماليّات</li>
+            <li>النقاط الصغيرة الحمراء = يومٌ فيه صفّارات إنذار</li>
+          </ol>
+        </div>
+        <div class="tip"><strong>ملاحظة:</strong> الأيّام الباهتة قبل ٧ أكتوبر ٢٠٢٣ غير قابلةٍ للنقر — لا يوجد أرشيفٌ قبل هذا التاريخ.</div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="inst">
+      <div class="inst-head">
+        <div class="ring">٢</div>
+        <h2>اختر يومًا واضغط عليه
+          <span class="tail">كلّ يومٍ له صفحته الخاصّة</span>
+        </h2>
+      </div>
+      <div class="inst-body">
+        <p class="intro-line">
+          اضغط على أيّ يومٍ في التقويم لتفتح تقريره الكامل. ستنتقل إلى صفحةٍ جديدة تحوي كلّ ما نُشِر في ذلك اليوم، مُرتّبًا.
+        </p>
+        <div class="mini">
+          <span class="caption">مثال · التقويم</span>
+          <div class="mc">
+            <div class="d">1</div><div class="d has">2</div><div class="d">3</div><div class="d has">4</div><div class="d">5</div><div class="d">6</div><div class="d has">7</div>
+            <div class="d has">8</div><div class="d">9</div><div class="d">10</div><div class="d sel">11</div><div class="d">12</div><div class="d has">13</div><div class="d">14</div>
+            <div class="d">15</div><div class="d has">16</div><div class="d">17</div><div class="d">18</div><div class="d has">19</div><div class="d">20</div><div class="d">21</div>
+          </div>
+        </div>
+        <div class="actions">
+          <h5>افعل هذا</h5>
+          <ol>
+            <li>مرّر مؤشّر الفأرة فوق اليوم لرؤية إجماليّاته</li>
+            <li>اضغط لفتح التقرير الكامل في صفحةٍ جديدة</li>
+            <li>استخدم زرّ الرجوع في المتصفّح للعودة إلى التقويم</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section class="inst">
+      <div class="inst-head">
+        <div class="ring">٣</div>
+        <h2>اقرأ التقرير اليوميّ
+          <span class="tail">ستّة أقسام، مُرتّبة، قابلة للقفز</span>
+        </h2>
+      </div>
+      <div class="inst-body">
+        <p class="intro-line">
+          كلّ تقريرٍ يوميٍّ يبدأ بشريط الأقسام في أعلى الصفحة: <em>بيانات، صفّارات، إعلام العدو، إيران، فيديوهات، حلفاء</em>. اضغط أيّ قسمٍ للقفز إليه مباشرةً. داخل كلّ قسم، كلّ عنصرٍ في بطاقةٍ خاصّةٍ به.
+        </p>
+        <div class="mini">
+          <span class="caption">مثال · بطاقة بيان</span>
+          <div class="mini-card">
+            <div class="hd"><span class="n">البيان ٠١</span><span class="t">٠٩:٢٠</span></div>
+            <div class="tg">ثكنة ميتات — ضربة عمق</div>
+          </div>
+          <div class="mini-card">
+            <div class="hd"><span class="n">البيان ٠٢</span><span class="t">١١:٤٥</span></div>
+            <div class="tg">موقع راداريّ — بصلية صواريخ</div>
+          </div>
+        </div>
+        <div class="actions">
+          <h5>افعل هذا</h5>
+          <ol>
+            <li>اضغط شريط الأقسام في الأعلى للقفز السريع</li>
+            <li>اضغط أيّ بطاقةٍ لعرض نصّها الكامل كما ورد</li>
+            <li>استخدم مفتاح <kbd>F</kbd> لفتح شاشة كاملةٍ لنصّ البيان</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="inst">
+      <div class="inst-head">
+        <div class="ring">٤</div>
+        <h2>افهم نظام الألوان
+          <span class="tail">كلّ قسمٍ له لونه الخاصّ</span>
+        </h2>
+      </div>
+      <div class="inst-body">
+        <p class="intro-line">
+          الألوان ليست زينة — هي مفتاح القراءة السريعة. كلّ قسمٍ من الأقسام الستّة له لونٌ موحّد عبر الموقع بأكمله، من التقويم إلى البحث إلى الخريطة.
+        </p>
+        <div class="legend">
+          <span class="chip b">ذهبيّ · بيانات</span>
+          <span class="chip s">أحمر · صفّارات</span>
+          <span class="chip e">برتقاليّ · إعلام العدو</span>
+          <span class="chip i">أخضر · إيران</span>
+          <span class="chip v">بنفسجيّ · فيديوهات</span>
+          <span class="chip a">فيروزيّ · حلفاء</span>
+        </div>
+        <div class="tip"><strong>احفظها مرّةً واحدة:</strong> بعد ثلاث زياراتٍ فقط، ستتعرّف على القسم من لونه دون قراءة عنوانه.</div>
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section class="inst">
+      <div class="inst-head">
+        <div class="ring">٥</div>
+        <h2>استخدم البحث
+          <span class="tail">٢٩ ألف رسالة في حقلٍ واحد</span>
+        </h2>
+      </div>
+      <div class="inst-body">
+        <p class="intro-line">
+          البحث يشمل كامل الأرشيف — نصوصًا كاملة، لا عناوين فقط. اكتب ما تريد كما هو (موقعًا، سلاحًا، اسم شخصيّة)، وستظهر كلّ الأيّام التي وردت فيها الكلمة.
+        </p>
+        <div class="mini">
+          <span class="caption">مثال · البحث</span>
+          <div class="mini-search">
+            <span class="i">⚲</span>
+            <span class="q">صاروخ موجّه</span>
+          </div>
+          <div style="font-size:0.72rem; color: var(--text-muted); padding-right:4px;">↓ ٨٤ نتيجةً في ٦١ يومًا</div>
+        </div>
+        <div class="actions">
+          <h5>افعل هذا</h5>
+          <ol>
+            <li>اضغط أيقونة البحث <kbd>⚲</kbd> في الأعلى أو <kbd>/</kbd> على لوحة المفاتيح</li>
+            <li>اكتب الكلمة — النتائج تظهر فور الكتابة</li>
+            <li>اضغط نتيجةً للقفز إلى يومها، أو <kbd>Esc</kbd> للإغلاق</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="inst">
+      <div class="inst-head">
+        <div class="ring">٦</div>
+        <h2>افتح خريطة الصفّارات
+          <span class="tail">كلّ صفّارةٍ بإحداثيّاتها الحقيقيّة</span>
+        </h2>
+      </div>
+      <div class="inst-body">
+        <p class="intro-line">
+          في أيّ تقريرٍ يوميٍّ يحوي صفّارات، ستجد خريطةً تفاعليّة لشمال فلسطين المحتلّة. كلّ دبّوسٍ يمثّل مستوطنةً واحدة، وحجمه يتناسب مع عدد الصفّارات في ذلك اليوم في ذلك الموقع.
+        </p>
+        <div class="actions">
+          <h5>افعل هذا</h5>
+          <ol>
+            <li>مرّر عجلة الفأرة للتكبير والتصغير</li>
+            <li>اسحب الخريطة لاستكشاف المناطق المختلفة</li>
+            <li>اضغط أيّ دبّوس لرؤية اسم الموقع وتوقيتات الصفّارات</li>
+          </ol>
+        </div>
+        <div class="tip"><strong>انتبه:</strong> الخريطة تظهر فقط في الأيّام التي تحوي صفّارات. الأيّام الهادئة لن تُظهر قسم الخريطة.</div>
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section class="inst">
+      <div class="inst-head">
+        <div class="ring">٧</div>
+        <h2>استشهِد وصدِّر
+          <span class="tail">كلّ شيءٍ قابلٌ للنسخ والاستشهاد</span>
+        </h2>
+      </div>
+      <div class="inst-body">
+        <p class="intro-line">
+          النصوص في الأرشيف كلّها قابلةٌ للنسخ، والروابط دائمةٌ. لكلّ يومٍ رابطٌ خاصّ، ولكلّ بيانٍ مُعرِّفٌ مباشر — كلّ ذلك يجعل الاستشهاد الأكاديميّ سهلًا.
+        </p>
+        <div class="actions">
+          <h5>افعل هذا</h5>
+          <ol>
+            <li>انسخ رابط اليوم من شريط عنوان المتصفّح</li>
+            <li>لتصدير شهرٍ كامل، افتح <kbd>صفحة الحوليّة</kbd> من قائمة التنقّل</li>
+            <li>البيانات الخام بصيغة JSON متاحةٌ في مستودع المشروع على GitHub</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <div class="faq">
+      <h3>أسئلة شائعة</h3>
+      <details>
+        <summary>هل يحتاج الأرشيف إلى تسجيل دخول؟</summary>
+        <p>لا. كلّ شيءٍ مفتوحٌ ومجّانيّ. لا حسابات، ولا اشتراكات، ولا إعلانات.</p>
+      </details>
+      <details>
+        <summary>هل يعمل على الهاتف؟</summary>
+        <p>نعم. التصميم متجاوبٌ كاملًا، والتقويم والخريطة يعملان على الشاشات الصغيرة.</p>
+      </details>
+      <details>
+        <summary>هل الأرشيف يُحدَّث تلقائيًّا؟</summary>
+        <p>نعم. يُحدَّث يوميًّا، وغالبًا ما تكون رسائل اليوم الحاليّ متاحةً في المساء.</p>
+      </details>
+      <details>
+        <summary>هل يمكنني تحميل البيانات الخام؟</summary>
+        <p>نعم. كلّ يومٍ متاحٌ كملفّ JSON في مستودع المشروع، ومناسبٌ للبحث الأكاديميّ.</p>
+      </details>
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+</html>

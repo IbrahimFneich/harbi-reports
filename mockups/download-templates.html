@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Download UI Templates — Harbi Reports</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080c12; --surface:#0f1520; --surface2:#151d2b; --surface3:#1a2538;
+  --border:#1e2d3d; --text:#dfe6ee; --text-dim:#6b7d92;
+  --accent:#c9a84c; --accent-dim:rgba(201,168,76,0.12);
+  --green:#2ecc71; --red:#e74c3c; --blue:#3498db; --orange:#e67e22;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:'Noto Kufi Arabic',sans-serif; font-size:14px; line-height:1.6;
+  padding:40px 20px;
+}
+.page{max-width:1100px; margin:0 auto}
+.page-title{
+  text-align:center; font-size:2rem; color:var(--accent); font-weight:900;
+  margin:0 0 8px; letter-spacing:0.5px;
+}
+.page-sub{
+  text-align:center; color:var(--text-dim); font-size:0.9rem; margin-bottom:48px;
+  direction:ltr; font-family:system-ui,sans-serif;
+}
+.option{
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  padding:28px; margin-bottom:32px; position:relative;
+}
+.option-label{
+  position:absolute; top:-12px; right:24px;
+  background:var(--accent); color:#000; font-weight:800; font-size:0.75rem;
+  padding:4px 12px; border-radius:20px; letter-spacing:0.5px;
+  direction:ltr; font-family:system-ui,sans-serif;
+}
+.option-name{
+  font-size:1.2rem; color:var(--accent); font-weight:800; margin:0 0 4px;
+}
+.option-desc{
+  color:var(--text-dim); font-size:0.85rem; margin:0 0 20px;
+}
+.demo-frame{
+  background:var(--bg); border:1px dashed var(--border); border-radius:10px;
+  padding:32px 24px; margin-top:16px; min-height:120px;
+  display:flex; align-items:center; justify-content:center; position:relative;
+}
+
+/* ============ OPTION 1: Single PDF button ============ */
+.btn-single{
+  display:inline-flex; align-items:center; gap:10px;
+  background:var(--accent); color:#000; font-family:inherit; font-weight:800;
+  padding:12px 22px; border:none; border-radius:10px; cursor:pointer;
+  font-size:0.95rem; box-shadow:0 4px 14px rgba(201,168,76,0.25);
+  transition:transform .15s;
+}
+.btn-single:hover{transform:translateY(-2px)}
+.btn-single svg{width:18px; height:18px}
+
+/* ============ OPTION 2: Split button dropdown ============ */
+.split-wrap{position:relative; display:inline-flex}
+.split-main{
+  background:var(--surface2); color:var(--text); border:1px solid var(--border);
+  border-left:none; padding:11px 20px; font-family:inherit; font-weight:700;
+  border-radius:10px 0 0 10px; cursor:pointer; font-size:0.9rem;
+  display:flex; align-items:center; gap:8px;
+}
+.split-chevron{
+  background:var(--surface2); color:var(--accent); border:1px solid var(--border);
+  padding:11px 14px; border-radius:0 10px 10px 0; cursor:pointer;
+  font-size:0.8rem;
+}
+.split-menu{
+  position:absolute; top:calc(100% + 6px); right:0;
+  background:var(--surface2); border:1px solid var(--border); border-radius:10px;
+  padding:6px; min-width:220px; box-shadow:0 10px 30px rgba(0,0,0,0.5);
+  z-index:10;
+}
+.split-item{
+  display:flex; align-items:center; gap:12px; padding:10px 14px;
+  border-radius:6px; cursor:pointer; color:var(--text);
+}
+.split-item:hover{background:var(--accent-dim)}
+.split-item .icon{
+  width:32px; height:32px; border-radius:7px; display:flex;
+  align-items:center; justify-content:center; font-weight:900;
+  font-size:0.7rem; font-family:system-ui,sans-serif;
+}
+.icon-pdf{background:rgba(231,76,60,0.15); color:#e74c3c}
+.icon-xls{background:rgba(46,204,113,0.15); color:#2ecc71}
+.icon-json{background:rgba(52,152,219,0.15); color:#3498db}
+.icon-png{background:rgba(230,126,34,0.15); color:#e67e22}
+.split-item .label{flex:1; font-size:0.88rem; font-weight:700}
+.split-item .sub{font-size:0.7rem; color:var(--text-dim); display:block; margin-top:1px}
+
+/* ============ OPTION 3: Chip bar ============ */
+.chip-bar{
+  display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+  padding:14px 18px; background:var(--surface2); border:1px solid var(--border);
+  border-radius:12px;
+}
+.chip-bar-label{
+  color:var(--text-dim); font-size:0.8rem; font-weight:700; margin-left:4px;
+}
+.chip{
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--surface3); border:1px solid var(--border); color:var(--text);
+  padding:8px 14px; border-radius:20px; cursor:pointer; font-family:inherit;
+  font-size:0.82rem; font-weight:700; transition:all .15s;
+}
+.chip:hover{border-color:var(--accent); color:var(--accent)}
+.chip .dot{width:8px; height:8px; border-radius:50%}
+.dot-red{background:var(--red)}
+.dot-green{background:var(--green)}
+.dot-blue{background:var(--blue)}
+.dot-orange{background:var(--orange)}
+
+/* ============ OPTION 4: Export panel / modal card ============ */
+.export-card{
+  width:100%; max-width:520px; background:var(--surface2);
+  border:1px solid var(--border); border-radius:14px; padding:24px;
+}
+.export-card-head{
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom:1px solid var(--border); padding-bottom:14px; margin-bottom:16px;
+}
+.export-card-title{font-size:1.05rem; font-weight:800; color:var(--accent)}
+.export-card-close{color:var(--text-dim); cursor:pointer; font-size:1.3rem}
+.format-row{
+  display:flex; align-items:center; gap:14px; padding:14px;
+  border:1px solid var(--border); border-radius:10px; margin-bottom:10px;
+  cursor:pointer; transition:all .15s;
+}
+.format-row:hover{border-color:var(--accent); background:var(--accent-dim)}
+.format-row.selected{border-color:var(--accent); background:var(--accent-dim)}
+.format-row .icon{width:42px; height:42px; border-radius:9px; flex-shrink:0}
+.format-row .icon{display:flex; align-items:center; justify-content:center; font-weight:900; font-size:0.75rem; font-family:system-ui,sans-serif}
+.format-row .meta{flex:1}
+.format-row .meta .name{font-size:0.95rem; font-weight:800; margin-bottom:2px}
+.format-row .meta .desc{font-size:0.75rem; color:var(--text-dim)}
+.format-row .size{font-size:0.72rem; color:var(--text-dim); direction:ltr; font-family:system-ui,sans-serif}
+.export-card-footer{
+  display:flex; gap:10px; justify-content:flex-end; margin-top:18px;
+  padding-top:16px; border-top:1px solid var(--border);
+}
+.btn-ghost{
+  background:transparent; color:var(--text-dim); border:1px solid var(--border);
+  padding:10px 18px; border-radius:8px; cursor:pointer; font-family:inherit; font-weight:700;
+}
+.btn-primary{
+  background:var(--accent); color:#000; border:none;
+  padding:10px 22px; border-radius:8px; cursor:pointer; font-family:inherit; font-weight:800;
+}
+
+/* ============ OPTION 5: Floating action button ============ */
+.fab-demo{height:160px; width:100%; background:var(--surface2); border-radius:10px; position:relative; overflow:hidden}
+.fab-demo::before{
+  content:"محتوى التقرير..."; position:absolute; top:20px; right:24px;
+  color:var(--text-dim); font-size:0.85rem;
+}
+.fab{
+  position:absolute; bottom:20px; left:20px;
+  width:56px; height:56px; border-radius:50%;
+  background:var(--accent); color:#000; border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 8px 20px rgba(201,168,76,0.35);
+}
+.fab svg{width:24px; height:24px}
+.fab-label{
+  position:absolute; bottom:32px; left:84px;
+  background:var(--surface3); border:1px solid var(--border);
+  padding:6px 12px; border-radius:6px; font-size:0.75rem; font-weight:700;
+  direction:ltr; font-family:system-ui,sans-serif;
+}
+
+/* ============ Pros/Cons ============ */
+.tradeoffs{
+  display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:20px;
+}
+.tradeoff{
+  padding:12px 14px; border-radius:8px; font-size:0.8rem;
+}
+.pros{background:rgba(46,204,113,0.08); border:1px solid rgba(46,204,113,0.25)}
+.cons{background:rgba(231,76,60,0.08); border:1px solid rgba(231,76,60,0.25)}
+.tradeoff-title{font-weight:800; margin-bottom:6px; font-size:0.78rem}
+.pros .tradeoff-title{color:var(--green)}
+.cons .tradeoff-title{color:var(--red)}
+.tradeoff ul{margin:0; padding-right:16px; color:var(--text-dim)}
+.tradeoff li{margin-bottom:3px}
+
+.recommendation{
+  background:linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.03));
+  border:1px solid var(--accent); border-radius:14px; padding:24px;
+  margin-top:24px;
+}
+.rec-title{
+  color:var(--accent); font-weight:900; font-size:1.1rem; margin:0 0 10px;
+  display:flex; align-items:center; gap:10px;
+}
+.rec-body{color:var(--text); font-size:0.9rem; line-height:1.8}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1 class="page-title">قوالب زر التحميل</h1>
+  <div class="page-sub">Download UI Templates — pick your favorite</div>
+
+  <!-- ============ OPTION 1 ============ -->
+  <div class="option">
+    <span class="option-label">OPTION 1</span>
+    <h2 class="option-name">Single PDF button</h2>
+    <p class="option-desc">One button, one format. Simplest possible. PDF only.</p>
+    <div class="demo-frame">
+      <button class="btn-single">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        تحميل التقرير (PDF)
+      </button>
+    </div>
+    <div class="tradeoffs">
+      <div class="tradeoff pros">
+        <div class="tradeoff-title">PROS</div>
+        <ul><li>Zero friction</li><li>No decision fatigue</li><li>Fits anywhere in header</li></ul>
+      </div>
+      <div class="tradeoff cons">
+        <div class="tradeoff-title">CONS</div>
+        <ul><li>Analysts can't grab CSV</li><li>No flexibility</li><li>Future-proof? No</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ OPTION 2 ============ -->
+  <div class="option">
+    <span class="option-label">OPTION 2</span>
+    <h2 class="option-name">Split button with dropdown</h2>
+    <p class="option-desc">Primary action (PDF) + chevron reveals other formats. Familiar pattern.</p>
+    <div class="demo-frame">
+      <div class="split-wrap">
+        <button class="split-main">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          تحميل PDF
+        </button>
+        <button class="split-chevron">▾</button>
+        <div class="split-menu">
+          <div class="split-item">
+            <div class="icon icon-pdf">PDF</div>
+            <div class="label">تقرير كامل<span class="sub">Full layout, maps, Arabic</span></div>
+          </div>
+          <div class="split-item">
+            <div class="icon icon-xls">XLS</div>
+            <div class="label">جدول البيانات<span class="sub">Bayanat + sirens, sortable</span></div>
+          </div>
+          <div class="split-item">
+            <div class="icon icon-json">{ }</div>
+            <div class="label">JSON خام<span class="sub">Raw structured data</span></div>
+          </div>
+          <div class="split-item">
+            <div class="icon icon-png">PNG</div>
+            <div class="label">صورة<span class="sub">Share on social</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tradeoffs">
+      <div class="tradeoff pros">
+        <div class="tradeoff-title">PROS</div>
+        <ul><li>Default = PDF (most users)</li><li>Power options hidden</li><li>One click for common case</li></ul>
+      </div>
+      <div class="tradeoff cons">
+        <div class="tradeoff-title">CONS</div>
+        <ul><li>Slightly more UI complexity</li><li>Dropdown state on mobile</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ OPTION 3 ============ -->
+  <div class="option">
+    <span class="option-label">OPTION 3</span>
+    <h2 class="option-name">Chip bar (all formats visible)</h2>
+    <p class="option-desc">All formats exposed as chips. Best when you want to signal "many formats available".</p>
+    <div class="demo-frame">
+      <div class="chip-bar">
+        <span class="chip-bar-label">تنزيل:</span>
+        <button class="chip"><span class="dot dot-red"></span>PDF</button>
+        <button class="chip"><span class="dot dot-green"></span>Excel</button>
+        <button class="chip"><span class="dot dot-blue"></span>JSON</button>
+        <button class="chip"><span class="dot dot-orange"></span>صورة</button>
+      </div>
+    </div>
+    <div class="tradeoffs">
+      <div class="tradeoff pros">
+        <div class="tradeoff-title">PROS</div>
+        <ul><li>Everything discoverable</li><li>One click per format</li><li>No hidden state</li></ul>
+      </div>
+      <div class="tradeoff cons">
+        <div class="tradeoff-title">CONS</div>
+        <ul><li>Wider footprint</li><li>Decision friction every visit</li><li>Looks "busy" in the header</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ OPTION 4 ============ -->
+  <div class="option">
+    <span class="option-label">OPTION 4 — RECOMMENDED</span>
+    <h2 class="option-name">Export modal / panel</h2>
+    <p class="option-desc">Small button opens a panel with previews, sizes, and descriptions. Best for a polished, editorial feel.</p>
+    <div class="demo-frame">
+      <div class="export-card">
+        <div class="export-card-head">
+          <div class="export-card-title">تصدير تقرير 11-04-2026</div>
+          <div class="export-card-close">×</div>
+        </div>
+        <div class="format-row selected">
+          <div class="icon icon-pdf">PDF</div>
+          <div class="meta">
+            <div class="name">تقرير كامل منسّق</div>
+            <div class="desc">شامل البيانات والخرائط والصور</div>
+          </div>
+          <div class="size">~420 KB</div>
+        </div>
+        <div class="format-row">
+          <div class="icon icon-xls">XLS</div>
+          <div class="meta">
+            <div class="name">جدول إكسل</div>
+            <div class="desc">بيانات، إنذارات، إحصاءات</div>
+          </div>
+          <div class="size">~38 KB</div>
+        </div>
+        <div class="format-row">
+          <div class="icon icon-json">{ }</div>
+          <div class="meta">
+            <div class="name">بيانات JSON</div>
+            <div class="desc">للمطوّرين والمحلّلين</div>
+          </div>
+          <div class="size">~22 KB</div>
+        </div>
+        <div class="export-card-footer">
+          <button class="btn-ghost">إلغاء</button>
+          <button class="btn-primary">تحميل</button>
+        </div>
+      </div>
+    </div>
+    <div class="tradeoffs">
+      <div class="tradeoff pros">
+        <div class="tradeoff-title">PROS</div>
+        <ul><li>Feels editorial / premium</li><li>Shows sizes, descriptions</li><li>Room to grow (monthly, ranges)</li><li>Works great on mobile as sheet</li></ul>
+      </div>
+      <div class="tradeoff cons">
+        <div class="tradeoff-title">CONS</div>
+        <ul><li>Two clicks to download</li><li>More code to maintain</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ OPTION 5 ============ -->
+  <div class="option">
+    <span class="option-label">OPTION 5</span>
+    <h2 class="option-name">Floating action button (FAB)</h2>
+    <p class="option-desc">Persistent circular button, bottom corner. Always visible while scrolling.</p>
+    <div class="demo-frame">
+      <div class="fab-demo">
+        <button class="fab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </button>
+        <div class="fab-label">Download ↖</div>
+      </div>
+    </div>
+    <div class="tradeoffs">
+      <div class="tradeoff pros">
+        <div class="tradeoff-title">PROS</div>
+        <ul><li>Always reachable</li><li>Mobile-friendly</li><li>Doesn't steal header space</li></ul>
+      </div>
+      <div class="tradeoff cons">
+        <div class="tradeoff-title">CONS</div>
+        <ul><li>Can overlap content</li><li>Conflicts with spotlight FAB if exists</li><li>Not discoverable as "export"</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ RECOMMENDATION ============ -->
+  <div class="recommendation">
+    <h3 class="rec-title">◆ التوصية</h3>
+    <div class="rec-body">
+      <strong>Option 4 (Export modal)</strong> for the daily and monthly pages — it matches the editorial "military report" tone of the site and leaves room to add date-range and bulk exports later.<br><br>
+      <strong>Option 1 (Single PDF)</strong> is the right call if you want to ship it this week with zero design overhead — you can always upgrade to Option 4 later.<br><br>
+      Avoid Option 3 (chip bar) — it looks busy in the header alongside the stats row, and Option 5 (FAB) — it would collide with your existing spotlight floating button.
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>build-workbook test</title>
+  <style>
+    body { font-family: monospace; padding: 20px; background: #111; color: #eee; }
+    .pass { color: #2ecc71; }
+    .fail { color: #e74c3c; font-weight: bold; }
+    h1 { color: #c9a84c; }
+  </style>
+</head>
+<body>
+  <h1>build-workbook.js — browser unit tests</h1>
+  <p>Open in a local HTTP server (module imports require http://, not file://).</p>
+  <pre id="out"></pre>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script type="module">
+    import { buildWorkbook } from '../build-workbook.js';
+
+    const out = document.getElementById('out');
+    let passCount = 0;
+    let failCount = 0;
+
+    function assert(cond, msg) {
+      const line = document.createElement('div');
+      if (cond) {
+        line.className = 'pass';
+        line.textContent = 'PASS  ' + msg;
+        passCount++;
+      } else {
+        line.className = 'fail';
+        line.textContent = 'FAIL  ' + msg;
+        failCount++;
+      }
+      out.appendChild(line);
+    }
+
+    const fakeResults = {
+      kpis: [
+        { category: 'bayanat', n: 120 },
+        { category: 'sirens', n: 45 },
+      ],
+      eventsOverTime: [
+        { period: '2026-04-01', bayanat: 3, sirens: 1, enemy: 0, iran: 0, videos: 0, allies: 0 },
+        { period: '2026-04-02', bayanat: 2, sirens: 0, enemy: 1, iran: 0, videos: 0, allies: 0 },
+      ],
+      hourlyDensity: [
+        { hour: 0, count: 5 },
+        { hour: 1, count: 3 },
+      ],
+      mostActiveDays: [
+        { date: '2026-04-01', total: 4 },
+        { date: '2026-04-02', total: 3 },
+      ],
+      topTargets: [
+        { target: 'shama', count: 12 },
+        { target: 'kiryat-shmona', count: 8 },
+      ],
+      rawData: [
+        { id: 1, category: 'bayanat', date: '2026-04-01', time: '01:40', summary: 'test' },
+      ],
+    };
+
+    const dateRange = { from: '2026-04-01', to: '2026-04-11' };
+
+    try {
+      const wb = buildWorkbook(fakeResults, dateRange);
+
+      assert(wb.SheetNames.length === 6, 'workbook has 6 sheets');
+      assert(wb.SheetNames[0] === 'KPIs', 'first sheet is KPIs');
+      assert(wb.SheetNames.includes('Events Over Time'), 'has events sheet');
+      assert(wb.SheetNames.includes('Hourly Density'),   'has hourly sheet');
+      assert(wb.SheetNames.includes('Most Active Days'), 'has active days sheet');
+      assert(wb.SheetNames.includes('Top Targets'),      'has targets sheet');
+      assert(wb.SheetNames.includes('Raw Data'),         'has raw sheet');
+
+      const kpiSheet = wb.Sheets['KPIs'];
+      assert(kpiSheet['A1'].v === 'Category', 'KPI A1 header');
+      assert(kpiSheet['B1'].v === 'Count',    'KPI B1 header');
+      assert(kpiSheet['A2'].v === 'bayanat',  'KPI A2 value');
+      assert(kpiSheet['B2'].v === 120,        'KPI B2 value');
+
+      const eventsSheet = wb.Sheets['Events Over Time'];
+      assert(eventsSheet['A1'].v === 'Period', 'Events A1 header');
+      assert(eventsSheet['B2'].v === 3,        'Events bayanat value');
+
+      const emptyResults = { kpis: [], eventsOverTime: [], hourlyDensity: [],
+                             mostActiveDays: [], topTargets: [], rawData: [] };
+      const emptyWb = buildWorkbook(emptyResults, dateRange);
+      assert(emptyWb.SheetNames.length === 6, 'empty results still produces 6 sheets');
+      assert(emptyWb.Sheets['Raw Data']['A1'].v === '(empty)', 'raw data placeholder header on empty');
+    } catch (err) {
+      assert(false, 'threw: ' + err.message);
+    }
+
+    const summary = document.createElement('div');
+    summary.style.marginTop = '16px';
+    summary.style.fontWeight = 'bold';
+    summary.style.fontSize = '16px';
+    summary.className = failCount === 0 ? 'pass' : 'fail';
+    summary.textContent = `Summary: ${passCount} pass, ${failCount} fail`;
+    out.appendChild(summary);
+  </script>
+</body>
+</html>

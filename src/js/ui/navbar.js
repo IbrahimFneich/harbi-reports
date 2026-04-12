@@ -5,6 +5,7 @@ export function initNavbar() {
 
   var path = window.location.pathname;
   var page = 'index';
+  if (path.indexOf('archive') !== -1) page = 'archive';
   if (path.indexOf('report') !== -1) page = 'report';
   if (path.indexOf('analytics') !== -1) page = 'analytics';
   if (path.indexOf('timeline') !== -1) page = 'timeline';
@@ -26,6 +27,7 @@ export function initNavbar() {
   links.className = 'nav-links';
   var items = [
     { href: prefix + 'index.html', label: '\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629', id: 'index' },
+    { href: prefix + 'archive.html', label: '\u0627\u0644\u0623\u0631\u0634\u064A\u0641', id: 'archive' },
     { href: prefix + 'timeline.html', label: '\u0627\u0644\u062A\u0633\u0644\u0633\u0644 \u0627\u0644\u0632\u0645\u0646\u064A', id: 'timeline' },
     { href: prefix + 'analytics.html', label: '\u0627\u0644\u062A\u062D\u0644\u064A\u0644\u0627\u062A', id: 'analytics' },
     { href: (page === 'monthly') ? '#' : (prefix + 'monthly/2023-10.html'), label: '\u0627\u0644\u0648\u062B\u064A\u0642\u0629 \u0627\u0644\u0634\u0647\u0631\u064A\u0629', id: 'monthly' }

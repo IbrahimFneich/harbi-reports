@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أرشيف الإعلام الحربي — تشريح التقرير</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c12; --surface: #0f1520; --surface2: #151d2b; --surface3: #1a2538;
+    --border: #1e2d3d; --text: #dfe6ee; --text-dim: #6b7d92; --text-muted: #3a4a5c;
+    --accent: #c9a84c; --accent-dim: rgba(201,168,76,0.12);
+    --green: #2ecc71; --red: #e74c3c; --orange: #e67e22;
+    --blue: #3498db; --purple: #9b59b6; --cyan: #1abc9c;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Noto Kufi Arabic', sans-serif;
+    background:
+      radial-gradient(ellipse at top, rgba(201,168,76,0.05), transparent 60%),
+      var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+  .top-strip {
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+  .top-strip .logo { color: var(--accent); font-weight: 800; font-size: 0.9rem; }
+
+  .hero {
+    text-align: center;
+    padding: 80px 24px 40px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .hero .kicker {
+    display: inline-block;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.35em;
+    padding: 6px 16px;
+    border: 1px solid var(--accent);
+    border-radius: 100px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+  .hero h1 .gold { color: var(--accent); }
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--text-dim);
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  /* Anatomy specimen */
+  .anatomy-stage {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 24px 40px;
+    position: relative;
+  }
+  .anatomy-title {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    letter-spacing: 0.3em;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+  }
+  .anatomy-title::before, .anatomy-title::after {
+    content: '';
+    display: inline-block;
+    width: 80px;
+    height: 1px;
+    background: var(--border);
+    vertical-align: middle;
+    margin: 0 16px;
+  }
+  .diagram {
+    position: relative;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 60px 0;
+  }
+  .report-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.4), 0 0 0 1px var(--accent-dim);
+    position: relative;
+    z-index: 2;
+  }
+  .report-card .date-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed var(--border);
+    margin-bottom: 18px;
+  }
+  .report-card .date-head .day { font-size: 1.3rem; font-weight: 900; color: var(--accent); }
+  .report-card .date-head .hijri { font-size: 0.75rem; color: var(--text-dim); }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px dotted rgba(255,255,255,0.05);
+    position: relative;
+  }
+  .row:last-child { border-bottom: none; }
+  .row .ic {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: grid; place-items: center;
+    font-size: 0.9rem; font-weight: 900;
+    flex-shrink: 0;
+  }
+  .row .label { font-size: 0.85rem; color: var(--text); flex: 1; }
+  .row .label strong { color: var(--text); font-weight: 700; }
+  .row .n { font-size: 0.82rem; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+
+  .row.b .ic { background: var(--accent-dim); color: var(--accent); }
+  .row.s .ic { background: rgba(231,76,60,0.12); color: var(--red); }
+  .row.e .ic { background: rgba(230,126,34,0.12); color: var(--orange); }
+  .row.i .ic { background: rgba(46,204,113,0.12); color: var(--green); }
+  .row.v .ic { background: rgba(155,89,182,0.12); color: var(--purple); }
+  .row.a .ic { background: rgba(26,188,156,0.12); color: var(--cyan); }
+
+  /* Callout labels */
+  .callouts {
+    display: none;
+  }
+  @media (min-width: 1100px) {
+    .callouts { display: block; }
+    .callout {
+      position: absolute;
+      width: 240px;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    .callout .tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 3px;
+    }
+    .callout .text strong { color: var(--text); font-weight: 700; }
+    .callout::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(to left, var(--accent), transparent);
+    }
+    .callout.left { right: calc(50% + 310px); text-align: left; }
+    .callout.left::before { left: -90px; transform: scaleX(-1); }
+    .callout.right { left: calc(50% + 310px); text-align: right; }
+    .callout.right::before { right: -90px; }
+
+    .c-date  { top: 90px; }
+    .c-bayan { top: 170px; }
+    .c-siren { top: 220px; }
+    .c-enemy { top: 270px; }
+    .c-iran  { top: 320px; }
+    .c-video { top: 370px; }
+    .c-allies { top: 420px; }
+  }
+
+  /* Mobile explanation list — shown when callouts are hidden */
+  .mobile-legend {
+    max-width: 560px;
+    margin: 30px auto 0;
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+  .mobile-legend p { margin-bottom: 10px; }
+  .mobile-legend strong { color: var(--accent); }
+  @media (min-width: 1100px) { .mobile-legend { display: none; } }
+
+  /* Closing note */
+  .closing {
+    max-width: 700px;
+    margin: 60px auto;
+    padding: 40px 24px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+  .closing p {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+  .closing .cta {
+    display: inline-block;
+    padding: 12px 28px;
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 800;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    transition: transform 0.2s;
+  }
+  .closing .cta:hover { transform: translateY(-2px); }
+
+  @media (max-width: 800px) {
+    .hero { padding: 40px 20px 20px; }
+    .hero h1 { font-size: 2rem; }
+    .hero p { font-size: 0.95rem; }
+    .anatomy-stage { padding: 20px; }
+    .report-card { padding: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-strip">
+  <div class="logo">الإعلام الحربي — الأرشيف</div>
+  <div>٩١٨ يومًا موثّقًا</div>
+</div>
+
+<div class="hero">
+  <span class="kicker">ما هو هذا الموقع؟</span>
+  <h1>تقريرٌ واحد لكلّ يوم.<br><span class="gold">ستّة أقسام</span> في كلّ تقرير.</h1>
+  <p>
+    نحفظ ما يُنشَر على قناة "الإعلام الحربي" في تيليغرام، ونُعيد ترتيبه في صفحةٍ يوميّة واحدة. هذا ما يبدو عليه التقرير، وما تعنيه كلّ سطر فيه:
+  </p>
+</div>
+
+<div class="anatomy-stage">
+  <div class="anatomy-title">تشريح التقرير اليوميّ</div>
+
+  <div class="diagram">
+    <div class="report-card">
+      <div class="date-head">
+        <div class="day">الاثنين ١١ أبريل ٢٠٢٦</div>
+        <div class="hijri">٢٣ شوّال ١٤٤٧</div>
+      </div>
+      <div class="row b">
+        <div class="ic">ب</div>
+        <div class="label">البيانات العسكريّة</div>
+        <div class="n">٧ بيانات</div>
+      </div>
+      <div class="row s">
+        <div class="ic">ص</div>
+        <div class="label">صفّارات الإنذار</div>
+        <div class="n">١٢ صفّارة</div>
+      </div>
+      <div class="row e">
+        <div class="ic">ع</div>
+        <div class="label">إعلام العدو</div>
+        <div class="n">٢٤ اقتباسًا</div>
+      </div>
+      <div class="row i">
+        <div class="ic">إ</div>
+        <div class="label">إيران</div>
+        <div class="n">٣ أخبار</div>
+      </div>
+      <div class="row v">
+        <div class="ic">ف</div>
+        <div class="label">الفيديوهات</div>
+        <div class="n">٢ فيديو</div>
+      </div>
+      <div class="row a">
+        <div class="ic">ح</div>
+        <div class="label">الحلفاء</div>
+        <div class="n">٤ مواقف</div>
+      </div>
+    </div>
+
+    <div class="callouts">
+      <div class="callout left c-date">
+        <div class="tag">التاريخ</div>
+        <div class="text">كلّ تقريرٍ مُعرَّفٌ بتاريخه <strong>الميلادي والهجري</strong>، ويُربط باليوم الذي نُشرت فيه الرسائل.</div>
+      </div>
+      <div class="callout right c-bayan">
+        <div class="tag">القسم الأوّل</div>
+        <div class="text"><strong>البيانات العسكريّة</strong> الصادرة عن المقاومة، بأرقامها وأوقاتها وأهدافها.</div>
+      </div>
+      <div class="callout left c-siren">
+        <div class="tag">القسم الثاني</div>
+        <div class="text"><strong>صفّارات الإنذار</strong> في شمال فلسطين المحتلّة، موثّقة بالوقت والموقع.</div>
+      </div>
+      <div class="callout right c-enemy">
+        <div class="tag">القسم الثالث</div>
+        <div class="text">اقتباسات <strong>إعلام العدو</strong> كما وردت، بلا تعديل ولا تعليق.</div>
+      </div>
+      <div class="callout left c-iran">
+        <div class="tag">القسم الرابع</div>
+        <div class="text">أخبار <strong>إيران</strong> من مصادرها الرسميّة، مع نسبة كلّ خبرٍ إلى مصدره.</div>
+      </div>
+      <div class="callout right c-video">
+        <div class="tag">القسم الخامس</div>
+        <div class="text">قائمة <strong>الفيديوهات</strong> الميدانيّة: أوصاف وتواريخ، دون استضافة الملفّات.</div>
+      </div>
+      <div class="callout left c-allies">
+        <div class="tag">القسم السادس</div>
+        <div class="text">مواقف <strong>الحلفاء</strong> من جبهات الإسناد المختلفة.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mobile-legend">
+    <p><strong>ب · البيانات العسكريّة</strong> — الصادرة عن المقاومة، بأرقامها وأوقاتها.</p>
+    <p><strong>ص · صفّارات الإنذار</strong> — بالوقت والموقع الجغرافي، مُعرضة على خريطة.</p>
+    <p><strong>ع · إعلام العدو</strong> — اقتباسات كما وردت، بلا تعليق.</p>
+    <p><strong>إ · إيران</strong> — أخبار من المصادر الرسميّة مع النسبة إلى المصدر.</p>
+    <p><strong>ف · الفيديوهات</strong> — أوصاف وتواريخ دون استضافة.</p>
+    <p><strong>ح · الحلفاء</strong> — مواقف من جبهات إسناد متعدّدة.</p>
+  </div>
+</div>
+
+<div class="closing">
+  <p>
+    ٩١٨ يومًا · ٤٬٨٢٥ بيانًا · ٧٬٥٤٨ صفّارة · ١٣٬٥٧١ اقتباسًا · كلّها في مكانٍ واحد، قابلة للبحث والتصفّح يومًا بيوم.
+  </p>
+  <a href="../index.html" class="cta">ادخل الأرشيف</a>
+</div>
+
+</body>
+</html>

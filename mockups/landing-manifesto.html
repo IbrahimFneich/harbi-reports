@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أرشيف الإعلام الحربي — البيان</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c12; --surface: #0f1520; --border: #1e2d3d;
+    --text: #dfe6ee; --text-dim: #8a9aae; --text-muted: #3a4a5c;
+    --accent: #c9a84c;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Noto Kufi Arabic', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.9;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* Subtle vertical rule on the side */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    right: 80px;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, var(--border) 15%, var(--border) 85%, transparent);
+    opacity: 0.6;
+  }
+
+  .top {
+    padding: 40px 80px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+  .top .mark { color: var(--accent); font-weight: 800; letter-spacing: 0.2em; }
+
+  main {
+    flex: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 120px 40px 60px;
+    width: 100%;
+  }
+
+  .sigil {
+    font-family: 'Amiri', serif;
+    font-size: 0.8rem;
+    color: var(--accent);
+    letter-spacing: 0.4em;
+    margin-bottom: 60px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .sigil::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.4;
+  }
+
+  h1 {
+    font-family: 'Amiri', serif;
+    font-size: 4rem;
+    line-height: 1.3;
+    font-weight: 700;
+    margin-bottom: 80px;
+    color: var(--text);
+  }
+  h1 .accent { color: var(--accent); }
+  h1 .small {
+    display: block;
+    font-size: 1.1rem;
+    color: var(--text-dim);
+    font-family: 'Noto Kufi Arabic', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    margin-top: 24px;
+  }
+
+  .para-block { }
+  .para {
+    margin-bottom: 50px;
+    position: relative;
+    padding-right: 40px;
+  }
+  .para .idx {
+    position: absolute;
+    right: 0;
+    top: 8px;
+    font-family: 'Amiri', serif;
+    font-size: 1rem;
+    color: var(--accent);
+    font-weight: 700;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-style: italic;
+  }
+  .para p {
+    font-size: 1.15rem;
+    color: var(--text);
+    line-height: 2;
+  }
+  .para p strong {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .para .tag {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .rule {
+    width: 100px;
+    height: 1px;
+    background: var(--border);
+    margin: 80px 0 50px;
+  }
+
+  .footer-note {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.9;
+    margin-bottom: 40px;
+  }
+  .footer-note strong { color: var(--text); font-weight: 700; }
+
+  .cta {
+    display: inline-block;
+    font-size: 0.82rem;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 14px 0;
+    border-top: 1px solid var(--accent);
+    border-bottom: 1px solid var(--accent);
+    transition: color 0.2s, letter-spacing 0.3s;
+    font-weight: 700;
+  }
+  .cta:hover {
+    letter-spacing: 0.35em;
+  }
+  .cta::after {
+    content: ' ←';
+  }
+
+  .bottom {
+    padding: 40px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 800px) {
+    body::before { right: 20px; }
+    .top, .bottom { padding-left: 20px; padding-right: 40px; }
+    main { padding: 60px 20px 40px 40px; }
+    h1 { font-size: 2.4rem; }
+    .para p { font-size: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="mark">الإعلام الحربي · الأرشيف</div>
+  <div>بيان المشروع</div>
+</div>
+
+<main>
+
+  <div class="sigil">بسم الله</div>
+
+  <h1>
+    ما يُنشَر <span class="accent">يضيع</span>.<br>
+    ما يُؤرشَف <span class="accent">يبقى</span>.
+    <span class="small">— مشروعُ حفظٍ لما يُبَثّ يومًا بيوم.</span>
+  </h1>
+
+  <div class="para-block">
+
+    <div class="para">
+      <div class="idx">١</div>
+      <span class="tag">ما هذا</span>
+      <p>
+        هذا الموقعُ أرشيفٌ يوميٌّ لقناة <strong>"الإعلام الحربي - التغطية الإخبارية"</strong> على تيليغرام. نحفظ ما يُنشَر فيها كلّ يوم، ونُعيد ترتيبه في تقريرٍ واحدٍ لكلّ يوم، مُقسَّمٍ إلى أقسامه الطبيعيّة: بياناتٌ عسكريّة، صفّارات إنذار، إعلام العدو، أخبار إيران، فيديوهات، ومواقف الحلفاء.
+      </p>
+    </div>
+
+    <div class="para">
+      <div class="idx">٢</div>
+      <span class="tag">لماذا</span>
+      <p>
+        قناةٌ واحدةٌ تنشر عشرات الرسائل يوميًّا. تمرّ الرسالةُ وتختفي في تدفّق اليوم التالي، ويصعب على من أراد الرجوعَ إلى ما حدث في يومٍ بعينه أن يجده. أردنا <strong>سجلًّا مُنظَّمًا</strong> يُسهّل البحث والاستشهاد والمراجعة، ولا يُعيد كتابةَ ما نُشِر، بل يحفظه كما هو.
+      </p>
+    </div>
+
+    <div class="para">
+      <div class="idx">٣</div>
+      <span class="tag">كيف</span>
+      <p>
+        لسنا موقعًا إخباريًّا ولا منصّةً تحليليّة. ليس هنا رأيٌ ولا تعليق. نُصنِّف آليًّا، ونعرض النصّ الأصليّ، ونربط الصفّارات بإحداثيّاتها، والبيانات بأرقامها وأوقاتها. القارئُ يقرأ، والباحثُ يُحلِّل، ونحن نحفظ. <strong>٩١٨ يومًا</strong> حتى الآن، وما زال العدّ مستمرًّا.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="rule"></div>
+
+  <div class="footer-note">
+    الأرشيف مستقلٌّ وغير ربحيّ. يُحدَّث يوميًّا. المصدر الوحيد: قناة <strong>@harbi_reports</strong> على تيليغرام.
+    المدى الزمنيّ: <strong>٧ أكتوبر ٢٠٢٣ — ١١ أبريل ٢٠٢٦</strong>.
+  </div>
+
+  <a href="../index.html" class="cta">ادخل الأرشيف</a>
+
+</main>
+
+<div class="bottom">
+  <div>٩١٨ يومًا · ٢٩٬٠١١ رسالة</div>
+  <div>إصدار ٢٫٢٫١٢</div>
+</div>
+
+</body>
+</html>

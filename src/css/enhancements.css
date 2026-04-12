@@ -564,4 +564,36 @@ body.light .search-target .tl-body::before {
   .bayan, .siren-row, .enemy-row, .iran-card, .vid-card, .ally-card {
     background: #f9f9f9; border-color: #ddd;
   }
+  .download-btn { display: none !important; }
+}
+
+/* ═══════════════ Download Button ═══════════════ */
+/* Shared button used by pdf-button.js and excel-button.js across report,
+   timeline, monthly, and analytics pages. */
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: #000;
+  font-family: 'Noto Kufi Arabic', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 9px 16px;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(201, 168, 76, 0.22);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.download-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(201, 168, 76, 0.32);
+}
+.download-btn:active { transform: translateY(0); }
+.download-btn:disabled { opacity: 0.6; cursor: wait; }
+.download-btn svg { flex-shrink: 0; }
+
+body.light .download-btn {
+  box-shadow: 0 3px 10px rgba(201, 168, 76, 0.18);
 }
