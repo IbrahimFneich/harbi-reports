@@ -1,5 +1,16 @@
 [
   {
+    "version": "2.2.4",
+    "date": "2026-04-12",
+    "title": "Fix: hijri date missing on 61% of report pages",
+    "changes": [
+      "565 of 919 data files had empty hijri — header showed an orphan separator and gap",
+      "Now computes hijri on the fly via Intl.DateTimeFormat(islamic-umalqura) when data.hijri is empty",
+      "Stored hijri values take priority, so dates you already have keep their original text",
+      "Hijri span + its leading separator are hidden entirely if both stored and computed fail (very old browsers)"
+    ]
+  },
+  {
     "version": "2.2.3",
     "date": "2026-04-12",
     "title": "Ultra-compact report header (template D)",

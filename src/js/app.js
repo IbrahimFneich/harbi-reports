@@ -21,6 +21,19 @@ window.showChangelog = showChangelog;
 window.clearSearch = clearSearch;
 window.swapAllMapTiles = swapAllMapTiles;
 
+// Compute Hijri date (Arabic Umm al-Qura) from a Gregorian Date.
+// Returns '' if the runtime doesn't support islamic-umalqura calendar.
+var _hijriFmt = null;
+try {
+  _hijriFmt = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', {
+    day: '2-digit', month: 'long', year: 'numeric'
+  });
+} catch (_e) { _hijriFmt = null; }
+function computeHijri(date) {
+  if (!_hijriFmt || !(date instanceof Date) || isNaN(date.getTime())) return '';
+  try { return _hijriFmt.format(date); } catch (_e) { return ''; }
+}
+
 // ── renderReport — master orchestrator ───────────────────
 
 function renderReport(data) {
@@ -55,19 +68,21 @@ function renderReport(data) {
   dateArSpan.textContent = data.dateAr;
   dateCenter.appendChild(dateArSpan);
 
-  // separator
-  var sep1 = document.createElement('span');
-  sep1.className = 'd-sep';
-  sep1.textContent = '\u2022';
-  dateCenter.appendChild(sep1);
+  // hijri — use stored value if present, else compute via Intl islamic-umalqura
+  var hijriText = (data.hijri && String(data.hijri).trim()) || computeHijri(_dt);
+  if (hijriText) {
+    var sep1 = document.createElement('span');
+    sep1.className = 'd-sep';
+    sep1.textContent = '\u2022';
+    dateCenter.appendChild(sep1);
 
-  // hijri — muted small
-  var hijriSpan = document.createElement('span');
-  hijriSpan.className = 'd-hijri';
-  hijriSpan.textContent = data.hijri;
-  dateCenter.appendChild(hijriSpan);
+    var hijriSpan = document.createElement('span');
+    hijriSpan.className = 'd-hijri';
+    hijriSpan.textContent = hijriText;
+    dateCenter.appendChild(hijriSpan);
+  }
 
-  // separator
+  // separator before the picker
   var sep2 = document.createElement('span');
   sep2.className = 'd-sep';
   sep2.textContent = '\u2022';
@@ -197,7 +212,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v2.2.3';
+  ver.textContent = 'Harbi Reports v2.2.4';
   ver.onclick = function() { showChangelog(); };
   slot.appendChild(ver);
   footer.appendChild(slot);
