@@ -1,5 +1,15 @@
 [
   {
+    "version": "2.2.5",
+    "date": "2026-04-12",
+    "title": "Fact-fix: Naim Qassem elected 29 Oct 2024, not 2025",
+    "changes": [
+      "Timeline Chapter 4 (Sep-Nov 2024): added Qassem's election on 29 Oct 2024 to narrative, step-by-step, event strip, and tags",
+      "Timeline Chapter 5 (Dec 2024-Mar 2025): removed 3 wrong mentions placing Qassem's election in Jan/Feb 2025",
+      "Qassem was elected the day before Halloween 2024, one month after Nasrallah's assassination — belongs in the war chapter, not post-ceasefire"
+    ]
+  },
+  {
     "version": "2.2.4",
     "date": "2026-04-12",
     "title": "Fix: hijri date missing on 61% of report pages",
