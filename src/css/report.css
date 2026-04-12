@@ -50,31 +50,35 @@ body {
 }
 .header h1 { font-size:1.9rem; font-weight:900; color:var(--accent); position:relative; margin-bottom:4px; }
 
-/* Template D — ultra-compact single-line header row */
+/* Template 05 — Cockpit Row: nav chips flank a two-line meta stack */
 .header .date-row {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 12px; position: relative; flex-wrap: wrap;
-  max-width: 1040px; margin: 14px auto 0; padding: 10px 14px 0;
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center;
+  gap: 20px; position: relative;
+  max-width: 1040px; margin: 14px auto 0; padding: 12px 14px 4px;
   border-top: 1px solid rgba(201,168,76,0.18);
 }
 .header .date-center {
-  display: flex; align-items: center; justify-content: center;
-  gap: 10px; flex: 1 1 auto; flex-wrap: wrap;
-  font-size: 0.82rem; color: var(--text-dim);
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
 }
-.header .date-center .d-day {
-  color: var(--accent); font-weight: 700;
+.header .date-center .meta-line1 {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.88rem;
 }
-.header .date-center .d-datear {
+.header .date-center .meta-line1 .d-day {
+  color: var(--accent); font-weight: 800; font-size: 1rem;
+}
+.header .date-center .meta-line1 .d-datear {
   color: var(--text); font-weight: 600;
 }
-.header .date-center .d-sep { opacity: 0.35; }
-.header .date-center .d-hijri {
-  font-size: 0.72rem; color: var(--text-muted);
+.header .date-center .meta-line2 {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.72rem; color: var(--text-dim);
 }
+.header .date-center .meta-line2 .d-hijri { color: var(--text-muted); }
+.header .date-center .d-sep { opacity: 0.35; }
 .header .date-center .report-date-trigger {
   font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-  font-size: 0.72rem; color: var(--accent);
+  font-size: 0.7rem; color: var(--accent);
   background: transparent; border: none; border-radius: 0;
   border-bottom: 1px dotted rgba(201,168,76,0.4);
   padding: 0 2px 1px; direction: ltr;
@@ -84,33 +88,27 @@ body {
 .header .date-center .report-date-trigger:hover {
   color: #e0c572; border-bottom-color: var(--accent);
 }
-.header .date-center .day-nav-current,
-.day-nav .day-nav-current {
-  font-size: 0.68rem; color: var(--text-muted); direction: ltr;
+.header .date-center .day-nav-current {
+  font-size: 0.66rem; color: var(--text-muted); direction: ltr;
   unicode-bidi: isolate; font-variant-numeric: tabular-nums;
   font-weight: 600;
 }
 
-.day-nav {
-  display: flex; align-items: center; justify-content: center;
-  gap: 12px; padding: 10px 16px; flex-wrap: wrap;
-  border-bottom: 1px solid var(--border);
-}
-
-.header .day-nav-btn,
-.day-nav .day-nav-btn {
-  flex: 0 0 auto;
-  text-decoration: none; padding: 6px 12px; border-radius: 6px;
+.header .date-row .day-nav-btn {
+  text-decoration: none; padding: 8px 14px; border-radius: 6px;
   font-size: 0.72rem; font-weight: 600; font-family: inherit;
   border: 1px solid var(--border); background: transparent;
-  color: var(--text-muted); transition: all 0.2s; cursor: pointer;
-  white-space: nowrap;
-  unicode-bidi: isolate;
+  color: var(--text-dim); transition: all 0.2s; cursor: pointer;
+  white-space: nowrap; unicode-bidi: isolate;
 }
-.header .day-nav-btn:hover,
-.day-nav .day-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
-.header .day-nav-btn.disabled,
-.day-nav .day-nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.header .date-row .day-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+.header .date-row .day-nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+
+@media (max-width: 600px) {
+  .header .date-row { grid-template-columns: auto auto; gap: 10px 12px; }
+  .header .date-row .date-center { grid-column: 1 / -1; order: -1; }
+  .header .date-center .meta-line2 { flex-wrap: wrap; justify-content: center; }
+}
 
 /* ═══════════════ STATS BAR ═══════════════ */
 .stats {

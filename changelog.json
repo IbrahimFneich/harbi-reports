@@ -1,5 +1,19 @@
 [
   {
+    "version": "2.5.6",
+    "date": "2026-04-13",
+    "title": "Unified header row — cockpit layout merges date meta with day nav",
+    "changes": [
+      "src/css/report.css — rewrote .header .date-row as a 3-column CSS grid (auto 1fr auto). The previous two-row layout (.date-row above, .day-nav below) is now one row: next-day chip on the right, centered .date-center meta stack, previous-day chip on the left. Removed the standalone .day-nav ruleset (no longer rendered) and replaced with .header .date-row .day-nav-btn scoped selectors that keep unicode-bidi: isolate for bidi-safe Arabic + arrow glyphs. Added @media(max-width:600px) override that collapses the grid to a two-row fallback on narrow screens, pushing .date-center to order:-1 so the meta line stays on top and the nav chips wrap under it.",
+      "src/css/report.css — restructured the meta stack into .meta-line1 (day name + Arabic date, larger) and .meta-line2 (hijri · dd/mm/yyyy picker · report counter, smaller/dimmer). The day-nav-current counter is now part of meta-line2 instead of a standalone span, which eliminates the old two-row visual gap between the header and the nav bar.",
+      "src/js/app.js — renderReport() no longer builds a flat date-center; it constructs .meta-line1 + .meta-line2 and leaves an empty <span class='day-nav-current'> placeholder for initNav() to fill. This keeps nav.js fully decoupled from the specific DOM of line2.",
+      "src/js/ui/nav.js — initNav() now targets .header .date-row instead of creating a sibling .day-nav container. The next-day chip is inserted as the first grid child (right flank in RTL), the previous-day chip is appended as the last grid child (left flank in RTL), and the counter span is populated in place. No new DOM container is created, which means the layout shift between 'header rendered' and 'nav injected' is now limited to the two chips appearing on the outer columns of the existing grid.",
+      "src/python/build_index.py — synchronized the embedded initNav() template that regenerates src/js/ui/nav.js on every index rebuild, so future build_index runs don't regenerate the old two-row behavior.",
+      "mockups/header-nav-unified.html — kept as a design reference alongside controls-templates.html. Template 05 (Cockpit Arrows) is the one adopted in production; templates 01–04 and 06–07 remain for future header redesigns.",
+      "Bumped cache-bust and version-pill strings to 2.5.6 across index, timeline, analytics, archive, and report HTML files."
+    ]
+  },
+  {
     "version": "2.5.5",
     "date": "2026-04-13",
     "title": "Analytics controls v2 — collapsed filter drawer + segmented grouping",

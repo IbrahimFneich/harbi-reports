@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Header + Day Nav — Unified Row Templates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080c12;
+  --surface: #0f1520;
+  --surface2: #151d2b;
+  --surface3: #1a2538;
+  --border: #1e2d3d;
+  --border-hi: #2a3b52;
+  --text: #dfe6ee;
+  --text-dim: #8a9bb0;
+  --text-muted: #556a82;
+  --accent: #c9a84c;
+  --accent-bright: #e0bf5e;
+  --accent-dim: rgba(201,168,76,0.12);
+  --accent-mid: rgba(201,168,76,0.28);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Kufi Arabic', sans-serif;
+  background:
+    radial-gradient(1400px 700px at 80% -200px, rgba(201,168,76,0.05), transparent 60%),
+    var(--bg);
+  color: var(--text); padding: 40px 24px 80px; min-height:100vh;
+}
+.page-title {
+  max-width: 1100px; margin: 0 auto 28px; text-align:center;
+}
+.page-title h1 { font-size:1.4rem; color:var(--accent); font-weight:800; margin-bottom:6px;}
+.page-title p { font-size:0.85rem; color:var(--text-dim); }
+
+.tpl {
+  max-width: 1100px; margin: 0 auto 42px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+}
+.tpl-label {
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 12px 18px; background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+.tpl-label .num {
+  font-family: 'JetBrains Mono', monospace; font-size:0.72rem;
+  color: var(--accent); letter-spacing: 0.05em;
+}
+.tpl-label .name {
+  font-size:0.95rem; color: var(--text); font-weight: 700;
+}
+.tpl-label .hint {
+  font-size:0.72rem; color: var(--text-muted);
+}
+.tpl-canvas {
+  background: linear-gradient(135deg, #080c12 0%, #121a2a 50%, #0d1520 100%);
+  border-bottom: 2px solid var(--accent);
+  padding: 22px 18px 22px;
+  position: relative;
+}
+.tpl-canvas::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(ellipse at center, rgba(201,168,76,0.06) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+/* shared bits */
+.btn {
+  flex:0 0 auto; text-decoration:none; padding:6px 12px; border-radius:6px;
+  font-size:0.72rem; font-weight:600; font-family: inherit;
+  border:1px solid var(--border); background: transparent;
+  color: var(--text-dim); transition: all 0.2s; cursor: pointer;
+  white-space: nowrap; unicode-bidi: isolate;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.d-day { color: var(--accent); font-weight: 800; }
+.d-datear { color: var(--text); font-weight: 600; }
+.d-hijri { color: var(--text-muted); font-size: 0.7rem; }
+.d-sep { opacity: 0.35; color: var(--text-dim); }
+.d-greg {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem; color: var(--accent);
+  background: transparent; border:none;
+  border-bottom: 1px dotted rgba(201,168,76,0.4);
+  padding: 0 2px 1px; direction: ltr; cursor: pointer; line-height:1.4;
+}
+.d-greg:hover { color: var(--accent-bright); border-bottom-color: var(--accent); }
+.counter {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+  color: var(--text-muted); direction: ltr; font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════
+   TEMPLATE 1 — Justified Flank
+   Prev at far edge, date block centered, next at far edge.
+   Counter floats above the centered date block.
+   ═══════════════════════════════════════════════ */
+.tpl1 .row {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; max-width: 1040px; margin: 0 auto;
+  padding: 12px 16px 4px;
+  border-top: 1px solid rgba(201,168,76,0.18); position:relative;
+}
+.tpl1 .date-center {
+  display:flex; align-items:center; gap:10px; flex-wrap: wrap; justify-content:center;
+  font-size: 0.82rem; color: var(--text-dim);
+}
+.tpl1 .counter-float {
+  position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+  background: var(--bg); padding: 2px 10px; border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+/* ═══════════════════════════════════════════════
+   TEMPLATE 2 — Segmented Pill
+   Single pill bar: [prev] | date | hijri | greg | [next], counter underneath as micro-caption.
+   ═══════════════════════════════════════════════ */
+.tpl2 .pill {
+  display:inline-flex; align-items:center; gap:0;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px;
+  margin: 0 auto; max-width: 100%;
+}
+.tpl2 .wrap { display:flex; flex-direction:column; align-items:center; gap:8px; padding: 6px 0 0; }
+.tpl2 .pill .btn {
+  border: none; background: transparent; padding: 6px 12px; border-radius: 999px;
+}
+.tpl2 .pill .btn:hover { background: var(--accent-dim); color: var(--accent); }
+.tpl2 .pill .seg-divider { width:1px; height: 20px; background: var(--border); }
+.tpl2 .pill .date-block {
+  display:flex; align-items:center; gap:10px; padding: 0 16px;
+  font-size: 0.8rem; color: var(--text-dim);
+}
+.tpl2 .counter-cap { font-family: 'JetBrains Mono', monospace; font-size:0.62rem; color: var(--text-muted); letter-spacing:0.08em; }
+
+/* ═══════════════════════════════════════════════
+   TEMPLATE 3 — Bracket Rail
+   Hairline rail crossing the row; left/right nav as terminal brackets,
+   center date floats on top of rail. Counter sits on the rail itself as a chip.
+   ═══════════════════════════════════════════════ */
+.tpl3 .rail-row {
+  position:relative; max-width: 1040px; margin: 6px auto 0;
+  padding: 22px 6px 10px;
+}
+.tpl3 .rail-row::before {
+  content:''; position:absolute; top: 50%; left: 60px; right: 60px;
+  height: 1px; background: linear-gradient(90deg, transparent, var(--accent-mid) 20%, var(--accent-mid) 80%, transparent);
+}
+.tpl3 .flank {
+  position:absolute; top:50%; transform: translateY(-50%);
+}
+.tpl3 .flank.start { right: 6px; }
+.tpl3 .flank.end   { left: 6px; }
+.tpl3 .flank .btn {
+  border-radius: 999px; border-color: var(--accent-mid);
+  background: var(--surface2);
+}
+.tpl3 .center-stack {
+  position:relative; display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.tpl3 .date-chip {
+  display:inline-flex; align-items:center; gap:10px;
+  padding: 6px 16px; background: var(--surface);
+  border: 1px solid var(--accent-mid); border-radius: 999px;
+  font-size: 0.82rem; color: var(--text-dim);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+}
+.tpl3 .counter-chip {
+  padding: 2px 10px; border-radius: 999px;
+  background: var(--bg); border:1px solid var(--border);
+  font-family:'JetBrains Mono', monospace; font-size:0.62rem; color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════════
+   TEMPLATE 4 — Minimal Monoline
+   Everything on a single thin line separated by dot separators. No borders.
+   ═══════════════════════════════════════════════ */
+.tpl4 .mono {
+  display:flex; align-items:center; justify-content:center; gap: 14px;
+  flex-wrap: wrap; padding: 14px 16px 6px;
+  font-size: 0.78rem; color: var(--text-dim);
+  border-top: 1px solid rgba(201,168,76,0.15);
+  max-width: 1040px; margin: 12px auto 0;
+}
+.tpl4 .mono .link {
+  color: var(--text-dim); text-decoration:none; font-weight: 600;
+  transition: color 0.2s;
+}
+.tpl4 .mono .link:hover { color: var(--accent); }
+.tpl4 .mono .link.disabled { opacity: 0.3; pointer-events:none; }
+
+/* ═══════════════════════════════════════════════
+   TEMPLATE 5 — Cockpit Arrows
+   Prev/Next as large icon-only arrows at edges, dense date meta cluster
+   in the middle with counter inline as subscript.
+   ═══════════════════════════════════════════════ */
+.tpl5 .cockpit {
+  display:grid; grid-template-columns: auto 1fr auto; align-items:center;
+  gap: 20px; max-width: 1040px; margin: 10px auto 0;
+  padding: 14px 10px 6px;
+  border-top: 1px solid rgba(201,168,76,0.18);
+}
+.tpl5 .arrow {
+  width: 44px; height: 44px; border-radius: 12px;
+  border: 1px solid var(--border); background: var(--surface2);
+  display:flex; align-items:center; justify-content:center;
+  color: var(--text-dim); font-size: 1.2rem; text-decoration: none;
+  transition: all 0.2s; position: relative;
+}
+.tpl5 .arrow:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+.tpl5 .arrow .mini {
+  position:absolute; bottom: -16px; left:50%; transform: translateX(-50%);
+  font-size:0.58rem; color: var(--text-muted); white-space:nowrap;
+}
+.tpl5 .meta {
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.tpl5 .meta .line1 { display:flex; align-items:center; gap:10px; font-size: 0.88rem; }
+.tpl5 .meta .line1 .d-day { font-size: 1rem; }
+.tpl5 .meta .line2 { display:flex; align-items:center; gap:8px; font-size: 0.7rem; color: var(--text-muted); }
+.tpl5 .cockpit .btn { padding: 8px 14px; }
+
+/* ═══════════════════════════════════════════════
+   TEMPLATE 6 — Ticker Strip
+   Day name + arrow group on right, hijri + greg + counter on left.
+   Inspired by a news ticker / broadcast lower-third.
+   ═══════════════════════════════════════════════ */
+.tpl6 .ticker {
+  display:flex; align-items:stretch; justify-content:space-between;
+  max-width: 1040px; margin: 14px auto 0;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border);
+  border-radius: 10px; overflow:hidden;
+}
+.tpl6 .ticker > div {
+  display:flex; align-items:center; gap: 10px; padding: 10px 16px;
+}
+.tpl6 .ticker .primary {
+  background: var(--accent-dim);
+  border-left: 1px solid var(--accent-mid);
+}
+.tpl6 .ticker .primary .d-day { font-size: 1rem; }
+.tpl6 .ticker .primary .d-datear { font-size: 0.85rem; }
+.tpl6 .ticker .mid {
+  flex: 1; justify-content: center; gap: 14px;
+  font-size: 0.75rem; color: var(--text-dim);
+}
+.tpl6 .ticker .secondary {
+  gap: 6px;
+}
+
+/* ═══════════════════════════════════════════════
+   TEMPLATE 7 — Cockpit Ticker  (blend of 5 + 6)
+   Accented day block on one flank, mid meta cluster,
+   square cockpit arrows at the opposite flank.
+   All inside one row, inside a unified strip.
+   ═══════════════════════════════════════════════ */
+.tpl7 .strip {
+  display:flex; align-items:stretch; justify-content:space-between;
+  max-width: 1040px; margin: 4px auto 0;
+  background: rgba(0,0,0,0.22);
+  border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
+.tpl7 .strip .primary {
+  display:flex; align-items:center; gap: 10px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, var(--accent-dim), transparent);
+  border-left: 1px solid var(--accent-mid);
+}
+.tpl7 .strip .primary .d-day { font-size: 1.05rem; }
+.tpl7 .strip .primary .d-datear { font-size: 0.9rem; }
+.tpl7 .strip .mid {
+  flex: 1; display:flex; align-items:center; justify-content:center;
+  gap: 14px; padding: 10px 18px;
+  font-size: 0.76rem; color: var(--text-dim);
+}
+.tpl7 .strip .mid .counter {
+  padding: 3px 10px; border-radius: 999px;
+  background: var(--bg); border: 1px solid var(--border);
+  font-size: 0.62rem;
+}
+.tpl7 .strip .nav-cell {
+  display:flex; align-items:center; gap: 8px;
+  padding: 8px 10px; border-right: 1px solid var(--border);
+  background: rgba(255,255,255,0.015);
+}
+.tpl7 .strip .arrow {
+  width: 38px; height: 38px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--surface2);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  color: var(--text-dim); text-decoration: none;
+  transition: all 0.2s; line-height: 1;
+}
+.tpl7 .strip .arrow .glyph { font-size: 1.05rem; }
+.tpl7 .strip .arrow .mini { font-size: 0.52rem; color: var(--text-muted); margin-top: 2px; }
+.tpl7 .strip .arrow:hover {
+  border-color: var(--accent); color: var(--accent); background: var(--accent-dim);
+}
+.tpl7 .strip .arrow:hover .mini { color: var(--accent); }
+
+@media (max-width: 720px) {
+  .tpl7 .strip { flex-direction: column; }
+  .tpl7 .strip .primary { border-left:none; border-bottom:1px solid var(--accent-mid); justify-content:center; }
+  .tpl7 .strip .nav-cell { border-right:none; border-top:1px solid var(--border); justify-content:center; }
+}
+
+@media (max-width: 720px) {
+  .tpl5 .cockpit { grid-template-columns: 1fr; gap: 14px; }
+  .tpl5 .arrow { width: 100%; height: 36px; }
+  .tpl5 .arrow .mini { position:static; transform:none; margin-right:8px; }
+  .tpl3 .flank.start, .tpl3 .flank.end { position:static; transform:none; }
+  .tpl3 .rail-row { display:flex; flex-direction:column; gap:10px; align-items:center; padding: 12px 6px; }
+  .tpl3 .rail-row::before { display:none; }
+  .tpl6 .ticker { flex-direction:column; }
+  .tpl6 .ticker .primary { border-left:none; border-bottom:1px solid var(--accent-mid); }
+}
+</style>
+</head>
+<body>
+
+<div class="page-title">
+  <h1>Header + Day Navigation — Unified Row</h1>
+  <p>Six templates that merge date meta with prev/next nav into a single row.</p>
+</div>
+
+<!-- ═══════ TEMPLATE 1 ═══════ -->
+<div class="tpl tpl1">
+  <div class="tpl-label">
+    <span class="num">01</span>
+    <span class="name">Justified Flank</span>
+    <span class="hint">prev ⇢ center meta ⇠ next · counter floats above</span>
+  </div>
+  <div class="tpl-canvas">
+    <div class="row">
+      <div class="counter-float"><span class="counter">910 / 918</span></div>
+      <a class="btn" href="#">4 نيسان <span>→</span></a>
+      <div class="date-center">
+        <span class="d-day">الجمعة</span>
+        <span>٣ نيسان ٢٠٢٦</span>
+        <span class="d-sep">·</span>
+        <span class="d-hijri">15 شوال 1447 هـ</span>
+        <span class="d-sep">·</span>
+        <button class="d-greg">03/04/2026</button>
+      </div>
+      <a class="btn" href="#"><span>←</span> 2 نيسان</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ TEMPLATE 2 ═══════ -->
+<div class="tpl tpl2">
+  <div class="tpl-label">
+    <span class="num">02</span>
+    <span class="name">Segmented Pill</span>
+    <span class="hint">one borderless pill wraps nav + meta · counter as caption</span>
+  </div>
+  <div class="tpl-canvas">
+    <div class="wrap">
+      <div class="pill">
+        <a class="btn" href="#">4 نيسان <span>→</span></a>
+        <span class="seg-divider"></span>
+        <div class="date-block">
+          <span class="d-day">الجمعة</span>
+          <span>٣ نيسان ٢٠٢٦</span>
+          <span class="d-sep">·</span>
+          <span class="d-hijri">15 شوال 1447 هـ</span>
+          <span class="d-sep">·</span>
+          <button class="d-greg">03/04/2026</button>
+        </div>
+        <span class="seg-divider"></span>
+        <a class="btn" href="#"><span>←</span> 2 نيسان</a>
+      </div>
+      <span class="counter-cap">REPORT 910 / 918</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ TEMPLATE 3 ═══════ -->
+<div class="tpl tpl3">
+  <div class="tpl-label">
+    <span class="num">03</span>
+    <span class="name">Bracket Rail</span>
+    <span class="hint">hairline rail with date chip floating on top · counter as subchip</span>
+  </div>
+  <div class="tpl-canvas">
+    <div class="rail-row">
+      <div class="flank start"><a class="btn" href="#">4 نيسان <span>→</span></a></div>
+      <div class="center-stack">
+        <div class="date-chip">
+          <span class="d-day">الجمعة</span>
+          <span class="d-datear">٣ نيسان ٢٠٢٦</span>
+          <span class="d-sep">·</span>
+          <span class="d-hijri">15 شوال 1447 هـ</span>
+          <span class="d-sep">·</span>
+          <button class="d-greg">03/04/2026</button>
+        </div>
+        <span class="counter-chip">910 / 918</span>
+      </div>
+      <div class="flank end"><a class="btn" href="#"><span>←</span> 2 نيسان</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ TEMPLATE 4 ═══════ -->
+<div class="tpl tpl4">
+  <div class="tpl-label">
+    <span class="num">04</span>
+    <span class="name">Minimal Monoline</span>
+    <span class="hint">everything on a thin line, separated by dots · no borders</span>
+  </div>
+  <div class="tpl-canvas">
+    <div class="mono">
+      <a class="link" href="#">→ 4 نيسان</a>
+      <span class="d-sep">·</span>
+      <span class="d-day">الجمعة</span>
+      <span>٣ نيسان ٢٠٢٦</span>
+      <span class="d-sep">·</span>
+      <span class="d-hijri">15 شوال 1447 هـ</span>
+      <span class="d-sep">·</span>
+      <button class="d-greg">03/04/2026</button>
+      <span class="d-sep">·</span>
+      <span class="counter">910 / 918</span>
+      <span class="d-sep">·</span>
+      <a class="link" href="#">2 نيسان ←</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ TEMPLATE 5 ═══════ -->
+<div class="tpl tpl5">
+  <div class="tpl-label">
+    <span class="num">05</span>
+    <span class="name">Cockpit Arrows</span>
+    <span class="hint">square icon arrows flanking a two-line meta stack</span>
+  </div>
+  <div class="tpl-canvas">
+    <div class="cockpit">
+      <a class="btn" href="#">4 نيسان <span>→</span></a>
+      <div class="meta">
+        <div class="line1">
+          <span class="d-day">الجمعة</span>
+          <span class="d-datear">٣ نيسان ٢٠٢٦</span>
+        </div>
+        <div class="line2">
+          <span class="d-hijri">15 شوال 1447 هـ</span>
+          <span class="d-sep">·</span>
+          <button class="d-greg">03/04/2026</button>
+          <span class="d-sep">·</span>
+          <span class="counter">910 / 918</span>
+        </div>
+      </div>
+      <a class="btn" href="#"><span>←</span> 2 نيسان</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ TEMPLATE 6 ═══════ -->
+<div class="tpl tpl6">
+  <div class="tpl-label">
+    <span class="num">06</span>
+    <span class="name">Ticker Strip</span>
+    <span class="hint">broadcast lower-third · primary day block + mid meta + nav cluster</span>
+  </div>
+  <div class="tpl-canvas">
+    <div class="ticker">
+      <div class="primary">
+        <span class="d-day">الجمعة</span>
+        <span class="d-datear">٣ نيسان ٢٠٢٦</span>
+      </div>
+      <div class="mid">
+        <span class="d-hijri">15 شوال 1447 هـ</span>
+        <span class="d-sep">·</span>
+        <button class="d-greg">03/04/2026</button>
+        <span class="d-sep">·</span>
+        <span class="counter">910 / 918</span>
+      </div>
+      <div class="secondary">
+        <a class="btn" href="#">4 نيسان <span>→</span></a>
+        <a class="btn" href="#"><span>←</span> 2 نيسان</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ TEMPLATE 7 — Cockpit Ticker (5 × 6 blend) ═══════ -->
+<div class="tpl tpl7">
+  <div class="tpl-label">
+    <span class="num">07</span>
+    <span class="name">Cockpit Ticker · 5 × 6</span>
+    <span class="hint">accented day block + mid meta + square cockpit arrows, all in one strip</span>
+  </div>
+  <div class="tpl-canvas">
+    <div class="strip">
+      <div class="primary">
+        <span class="d-day">الجمعة</span>
+        <span class="d-datear">٣ نيسان ٢٠٢٦</span>
+      </div>
+      <div class="mid">
+        <span class="d-hijri">15 شوال 1447 هـ</span>
+        <span class="d-sep">·</span>
+        <button class="d-greg">03/04/2026</button>
+        <span class="d-sep">·</span>
+        <span class="counter">910 / 918</span>
+      </div>
+      <div class="nav-cell">
+        <a class="arrow" href="#" title="اليوم التالي">
+          <span class="glyph">→</span>
+          <span class="mini">4 نيسان</span>
+        </a>
+        <a class="arrow" href="#" title="اليوم السابق">
+          <span class="glyph">←</span>
+          <span class="mini">2 نيسان</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

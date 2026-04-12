@@ -304,36 +304,28 @@ export function initNav() {{
   var idx = ALL_REPORTS.indexOf(current);
   if (idx === -1) return;
 
-  var header = document.querySelector('.header');
-  if (!header) return;
+  var dateRow = document.querySelector('.header .date-row');
+  if (!dateRow) return;
 
-  var nav = document.createElement('div');
-  nav.className = 'day-nav';
-
-  // Next (newer) — appears on the right in RTL
+  // Next (newer) — first grid child, appears on the right in RTL
   var nextDate = idx < ALL_REPORTS.length - 1 ? ALL_REPORTS[idx + 1] : null;
   var nextBtn = document.createElement('a');
   nextBtn.className = 'day-nav-btn' + (nextDate ? '' : ' disabled');
   nextBtn.textContent = '\\u2192 ' + (nextDate ? formatDateAr(nextDate) : '');
   if (nextDate) nextBtn.href = reportUrl(nextDate);
-  nav.appendChild(nextBtn);
+  dateRow.insertBefore(nextBtn, dateRow.firstChild);
 
-  // Current date label
-  var cur = document.createElement('span');
-  cur.className = 'day-nav-current';
-  cur.textContent = (idx + 1) + ' / ' + ALL_REPORTS.length;
-  nav.appendChild(cur);
-
-  // Previous (older) — appears on the left in RTL
+  // Previous (older) — last grid child, appears on the left in RTL
   var prevDate = idx > 0 ? ALL_REPORTS[idx - 1] : null;
   var prevBtn = document.createElement('a');
   prevBtn.className = 'day-nav-btn' + (prevDate ? '' : ' disabled');
   prevBtn.textContent = (prevDate ? formatDateAr(prevDate) : '') + ' \\u2190';
   if (prevDate) prevBtn.href = reportUrl(prevDate);
-  nav.appendChild(prevBtn);
+  dateRow.appendChild(prevBtn);
 
-  // Insert after header
-  header.parentNode.insertBefore(nav, header.nextSibling);
+  // Counter slot (created empty by app.js renderReport)
+  var counter = dateRow.querySelector('.day-nav-current');
+  if (counter) counter.textContent = (idx + 1) + ' / ' + ALL_REPORTS.length;
 }}
 """.format(all_reports=all_reports_str)
 

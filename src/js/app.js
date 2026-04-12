@@ -53,49 +53,64 @@ function renderReport(data) {
   var dateRow = document.createElement('div');
   dateRow.className = 'date-row';
 
+  // Cockpit layout:
+  //   [ next-btn (right in RTL) ] [ .date-center (meta stack) ] [ prev-btn (left in RTL) ]
+  // Nav chips are injected later by initNav(); app.js only builds the meta stack.
   var dateCenter = document.createElement('div');
   dateCenter.className = 'date-center';
 
-  // day name — gold, bold
+  // Line 1 — day name + Arabic date
+  var line1 = document.createElement('div');
+  line1.className = 'meta-line1';
+
   var daySpan = document.createElement('span');
   daySpan.className = 'd-day';
   daySpan.textContent = computedDay;
-  dateCenter.appendChild(daySpan);
+  line1.appendChild(daySpan);
 
-  // Arabic date (e.g. ٣ نيسان ٢٠٢٦)
   var dateArSpan = document.createElement('span');
   dateArSpan.className = 'd-datear';
   dateArSpan.textContent = data.dateAr;
-  dateCenter.appendChild(dateArSpan);
+  line1.appendChild(dateArSpan);
 
-  // hijri — use stored value if present, else compute via Intl islamic-umalqura
+  dateCenter.appendChild(line1);
+
+  // Line 2 — hijri · dd/mm/yyyy picker · report counter
+  var line2 = document.createElement('div');
+  line2.className = 'meta-line2';
+
   var hijriText = (data.hijri && String(data.hijri).trim()) || computeHijri(_dt);
   if (hijriText) {
-    var sep1 = document.createElement('span');
-    sep1.className = 'd-sep';
-    sep1.textContent = '\u2022';
-    dateCenter.appendChild(sep1);
-
     var hijriSpan = document.createElement('span');
     hijriSpan.className = 'd-hijri';
     hijriSpan.textContent = hijriText;
-    dateCenter.appendChild(hijriSpan);
+    line2.appendChild(hijriSpan);
+
+    var sep1 = document.createElement('span');
+    sep1.className = 'd-sep';
+    sep1.textContent = '\u2022';
+    line2.appendChild(sep1);
   }
 
-  // separator before the picker
-  var sep2 = document.createElement('span');
-  sep2.className = 'd-sep';
-  sep2.textContent = '\u2022';
-  dateCenter.appendChild(sep2);
-
-  // dd/mm/yyyy picker — dotted-underline accent
   var dpTrigger = document.createElement('button');
   dpTrigger.type = 'button';
   dpTrigger.className = 'report-date-trigger';
   dpTrigger.id = 'reportDatePicker';
   var dp = data.date.split('-');
   dpTrigger.textContent = dp[2] + '/' + dp[1] + '/' + dp[0];
-  dateCenter.appendChild(dpTrigger);
+  line2.appendChild(dpTrigger);
+
+  var sep2 = document.createElement('span');
+  sep2.className = 'd-sep';
+  sep2.textContent = '\u2022';
+  line2.appendChild(sep2);
+
+  // Counter placeholder — filled by initNav()
+  var counterSpan = document.createElement('span');
+  counterSpan.className = 'day-nav-current';
+  line2.appendChild(counterSpan);
+
+  dateCenter.appendChild(line2);
 
   dateRow.appendChild(dateCenter);
   header.appendChild(dateRow);
@@ -212,7 +227,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v2.5.4';
+  ver.textContent = 'Harbi Reports v2.5.5';
   ver.onclick = function() { showChangelog(); };
   slot.appendChild(ver);
   footer.appendChild(slot);
