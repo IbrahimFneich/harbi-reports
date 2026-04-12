@@ -2,6 +2,7 @@
 
 import { addTrackedTileLayer } from './tiles.js';
 import { addFullscreenBtn } from './fullscreen.js';
+import { addSatelliteBtn } from './satellite-toggle.js';
 import { barColors } from '../dashboards/helpers.js';
 import { onTabSwitch } from '../ui/tabs.js';
 
@@ -144,5 +145,6 @@ export function initBayanatMap() {
     });
     setTimeout(function() { map.invalidateSize(); }, 200);
     addFullscreenBtn(document.getElementById('autoBayanMap'), map);
+    addSatelliteBtn(document.getElementById('autoBayanMap'), map);
   }
 }

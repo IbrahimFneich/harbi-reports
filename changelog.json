@@ -1,5 +1,16 @@
 [
   {
+    "version": "2.2.12",
+    "date": "2026-04-12",
+    "title": "Satellite view toggle on siren and bayanat maps",
+    "changes": [
+      "Added SAT/MAP toggle button below the fullscreen control on all Leaflet maps",
+      "Uses ESRI World Imagery satellite tiles (zoom up to 18) vs Carto dark/light street tiles",
+      "Theme swap (light/dark) now respects satellite mode and keeps imagery when toggled",
+      "Wired into siren-map, siren-auto-map and bayanat-map via shared satellite-toggle module"
+    ]
+  },
+  {
     "version": "2.2.11",
     "date": "2026-04-12",
     "title": "Expanded sheet now covers search row and filters (true full-screen)",

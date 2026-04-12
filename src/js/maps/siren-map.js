@@ -2,6 +2,7 @@
 
 import { addTrackedTileLayer } from './tiles.js';
 import { addFullscreenBtn } from './fullscreen.js';
+import { addSatelliteBtn } from './satellite-toggle.js';
 
 // ── Siren map (Leaflet) ────────────────────────────────
 
@@ -85,4 +86,5 @@ export function initSirenMap() {
 
   setTimeout(function() { sirenMap.invalidateSize(); }, 200);
   if (typeof addFullscreenBtn === 'function') addFullscreenBtn(document.getElementById('sirenMap'), sirenMap);
+  if (typeof addSatelliteBtn === 'function') addSatelliteBtn(document.getElementById('sirenMap'), sirenMap);
 }

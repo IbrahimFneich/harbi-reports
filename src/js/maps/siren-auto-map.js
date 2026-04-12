@@ -1,6 +1,7 @@
 /* === src/js/maps/siren-auto-map.js === */
 
 import { addFullscreenBtn } from './fullscreen.js';
+import { addSatelliteBtn } from './satellite-toggle.js';
 import { onTabSwitch } from '../ui/tabs.js';
 
 export function initAutoSirenMap() {
@@ -169,5 +170,6 @@ export function initAutoSirenMap() {
 
     setTimeout(function() { map.invalidateSize(); }, 200);
     addFullscreenBtn(document.getElementById('autoSirenMap'), map);
+    addSatelliteBtn(document.getElementById('autoSirenMap'), map);
   }
 }
