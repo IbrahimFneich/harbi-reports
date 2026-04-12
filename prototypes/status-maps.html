@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>وضعية العمليات — Prototype</title>
+<style>
+  :root{
+    --bg:#0a0f1a; --panel:#121a2b; --line:#1f2a44; --ink:#e6edf7;
+    --muted:#8a97b4; --accent:#d4a017; --red:#e5484d; --green:#3fb950;
+    --blue:#58a6ff; --orange:#f59e0b; --purple:#a371f7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"SF Pro Text","Segoe UI",Tahoma,Arial,sans-serif;
+    background:linear-gradient(180deg,#070b14 0%,#0a0f1a 100%);color:var(--ink);padding:24px;min-height:100vh}
+  h1{margin:0 0 4px;font-size:22px;letter-spacing:.3px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:24px}
+  .disclaimer{background:#2a1f0a;border:1px solid #5a4410;color:#f0c674;
+    padding:10px 14px;border-radius:8px;font-size:12px;margin-bottom:20px;line-height:1.6}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:32px}
+  @media(max-width:1100px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    overflow:hidden;display:flex;flex-direction:column}
+  .card-head{display:flex;justify-content:space-between;align-items:center;
+    padding:12px 16px;border-bottom:1px solid var(--line);background:#0e1524}
+  .date-badge{background:var(--accent);color:#1a1205;font-weight:700;
+    padding:4px 10px;border-radius:6px;font-size:13px;font-family:monospace}
+  .reach{color:var(--red);font-weight:600;font-size:13px}
+  .reach span{color:var(--muted);font-weight:400;font-size:11px;margin-right:4px}
+  .img-wrap{position:relative;background:#000}
+  .img-wrap img{width:100%;display:block}
+  .legend{padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;font-size:12px}
+  .row{display:flex;justify-content:space-between;align-items:center;
+    padding:6px 8px;background:#0a1020;border-radius:6px;border-right:3px solid var(--line)}
+  .row.rockets{border-color:var(--red)}
+  .row.quality{border-color:var(--orange)}
+  .row.guided{border-color:var(--accent)}
+  .row.artillery{border-color:#b36b00}
+  .row.clash{border-color:var(--green)}
+  .row.drone{border-color:var(--blue)}
+  .row.ied{border-color:var(--purple)}
+  .label{color:var(--muted)}
+  .count{font-weight:700;font-size:15px;color:var(--ink);font-family:monospace}
+  .total{grid-column:1/-1;margin-top:6px;padding-top:10px;border-top:1px dashed var(--line);
+    display:flex;justify-content:space-between;font-size:13px}
+  .total b{color:var(--accent);font-size:16px;font-family:monospace}
+
+  .trend{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:24px}
+  .trend h2{margin:0 0 16px;font-size:16px;color:var(--muted);font-weight:500}
+  .chart{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:end;height:180px}
+  .bar-group{display:flex;flex-direction:column;align-items:center;gap:8px;height:100%}
+  .bars{display:flex;gap:4px;align-items:flex-end;height:140px;width:100%;justify-content:center}
+  .bar{width:22px;border-radius:4px 4px 0 0;position:relative;transition:all .3s}
+  .bar:hover{filter:brightness(1.3)}
+  .bar::after{content:attr(data-v);position:absolute;top:-18px;left:50%;
+    transform:translateX(-50%);font-size:10px;color:var(--muted);font-family:monospace}
+  .bar.rockets{background:var(--red)}
+  .bar.quality{background:var(--orange)}
+  .bar.guided{background:var(--accent)}
+  .bar.artillery{background:#b36b00}
+  .bar.clash{background:var(--green)}
+  .bar.drone{background:var(--blue)}
+  .bar.ied{background:var(--purple)}
+  .bar-group .day{font-size:12px;color:var(--muted);font-family:monospace}
+
+  .reach-trend{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .reach-trend h2{margin:0 0 16px;font-size:16px;color:var(--muted);font-weight:500}
+  .reach-chart{display:flex;gap:20px;align-items:end;height:160px;padding:0 20px}
+  .reach-bar{flex:1;background:linear-gradient(180deg,var(--red),#7a1215);
+    border-radius:6px 6px 0 0;position:relative;min-height:20px}
+  .reach-bar::before{content:attr(data-km);position:absolute;top:-22px;left:50%;
+    transform:translateX(-50%);color:var(--red);font-weight:700;font-family:monospace;font-size:14px}
+  .reach-bar::after{content:attr(data-date);position:absolute;bottom:-22px;left:50%;
+    transform:translateX(-50%);color:var(--muted);font-size:11px;font-family:monospace}
+</style>
+</head>
+<body>
+
+<h1>وضعية عمليات المقاومة الإسلامية — Data Extraction Prototype</h1>
+<div class="sub">3 sample daily maps → structured data → comparable dashboards</div>
+
+<div class="disclaimer">
+  <b>⚠ Prototype note:</b> The counts below are <i>illustrative placeholders</i> I read visually from the legend boxes.
+  Production would run Tesseract Arabic OCR on the cropped legend rectangle (bottom-right ~180×280px) to get real numbers.
+  The <b>date</b> and <b>reach km</b> are trivially extractable. Marker positions on the map itself would require CV (icon detection + pixel→lat/lng via GCPs of labeled cities).
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="card-head">
+      <div class="date-badge">04 / 06 / 2026</div>
+      <div class="reach"><span>عمق الاستهداف</span>75 كلم</div>
+    </div>
+    <div class="img-wrap"><img src="../raw/status-maps/2026-04-06.jpg" alt="2026-04-06 status map"></div>
+    <div class="legend">
+      <div class="row rockets"><span class="label">صليات صاروخية</span><span class="count">3</span></div>
+      <div class="row quality"><span class="label">صواريخ نوعية</span><span class="count">1</span></div>
+      <div class="row guided"><span class="label">صواريخ موجّهة</span><span class="count">9</span></div>
+      <div class="row artillery"><span class="label">قذائف مدفعية</span><span class="count">7</span></div>
+      <div class="row clash"><span class="label">اشتباكات</span><span class="count">2</span></div>
+      <div class="row drone"><span class="label">مسيّرات</span><span class="count">4</span></div>
+      <div class="row ied"><span class="label">عبوات</span><span class="count">1</span></div>
+      <div class="total"><span>إجمالي العمليات</span><b>27</b></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="date-badge">04 / 10 / 2026</div>
+      <div class="reach"><span>عمق الاستهداف</span>150 كلم</div>
+    </div>
+    <div class="img-wrap"><img src="../raw/status-maps/2026-04-10.jpg" alt="2026-04-10 status map"></div>
+    <div class="legend">
+      <div class="row rockets"><span class="label">صليات صاروخية</span><span class="count">5</span></div>
+      <div class="row quality"><span class="label">صواريخ نوعية</span><span class="count">3</span></div>
+      <div class="row guided"><span class="label">صواريخ موجّهة</span><span class="count">18</span></div>
+      <div class="row artillery"><span class="label">قذائف مدفعية</span><span class="count">11</span></div>
+      <div class="row clash"><span class="label">اشتباكات</span><span class="count">4</span></div>
+      <div class="row drone"><span class="label">مسيّرات</span><span class="count">6</span></div>
+      <div class="row ied"><span class="label">عبوات</span><span class="count">2</span></div>
+      <div class="total"><span>إجمالي العمليات</span><b>49</b></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="date-badge">04 / 11 / 2026</div>
+      <div class="reach"><span>عمق الاستهداف</span>20 كلم</div>
+    </div>
+    <div class="img-wrap"><img src="../raw/status-maps/2026-04-11.jpg" alt="2026-04-11 status map"></div>
+    <div class="legend">
+      <div class="row rockets"><span class="label">صليات صاروخية</span><span class="count">2</span></div>
+      <div class="row quality"><span class="label">صواريخ نوعية</span><span class="count">2</span></div>
+      <div class="row guided"><span class="label">صواريخ موجّهة</span><span class="count">13</span></div>
+      <div class="row artillery"><span class="label">قذائف مدفعية</span><span class="count">6</span></div>
+      <div class="row clash"><span class="label">اشتباكات</span><span class="count">3</span></div>
+      <div class="row drone"><span class="label">مسيّرات</span><span class="count">3</span></div>
+      <div class="row ied"><span class="label">عبوات</span><span class="count">1</span></div>
+      <div class="total"><span>إجمالي العمليات</span><b>30</b></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="trend">
+  <h2>Operations breakdown — 3-day comparison</h2>
+  <div class="chart">
+    <div class="bar-group">
+      <div class="bars">
+        <div class="bar rockets"    style="height:17%" data-v="3"></div>
+        <div class="bar quality"    style="height:6%"  data-v="1"></div>
+        <div class="bar guided"     style="height:50%" data-v="9"></div>
+        <div class="bar artillery"  style="height:39%" data-v="7"></div>
+        <div class="bar clash"      style="height:11%" data-v="2"></div>
+        <div class="bar drone"      style="height:22%" data-v="4"></div>
+        <div class="bar ied"        style="height:6%"  data-v="1"></div>
+      </div>
+      <div class="day">04/06</div>
+    </div>
+    <div class="bar-group">
+      <div class="bars">
+        <div class="bar rockets"    style="height:28%"  data-v="5"></div>
+        <div class="bar quality"    style="height:17%"  data-v="3"></div>
+        <div class="bar guided"     style="height:100%" data-v="18"></div>
+        <div class="bar artillery"  style="height:61%"  data-v="11"></div>
+        <div class="bar clash"      style="height:22%"  data-v="4"></div>
+        <div class="bar drone"      style="height:33%"  data-v="6"></div>
+        <div class="bar ied"        style="height:11%"  data-v="2"></div>
+      </div>
+      <div class="day">04/10</div>
+    </div>
+    <div class="bar-group">
+      <div class="bars">
+        <div class="bar rockets"    style="height:11%" data-v="2"></div>
+        <div class="bar quality"    style="height:11%" data-v="2"></div>
+        <div class="bar guided"     style="height:72%" data-v="13"></div>
+        <div class="bar artillery"  style="height:33%" data-v="6"></div>
+        <div class="bar clash"      style="height:17%" data-v="3"></div>
+        <div class="bar drone"      style="height:17%" data-v="3"></div>
+        <div class="bar ied"        style="height:6%"  data-v="1"></div>
+      </div>
+      <div class="day">04/11</div>
+    </div>
+  </div>
+</div>
+
+<div class="reach-trend">
+  <h2>Strike depth (km) — the headline signal</h2>
+  <div class="reach-chart">
+    <div class="reach-bar" style="height:50%"  data-km="75 كلم"  data-date="04/06"></div>
+    <div class="reach-bar" style="height:100%" data-km="150 كلم" data-date="04/10"></div>
+    <div class="reach-bar" style="height:13%"  data-km="20 كلم"  data-date="04/11"></div>
+  </div>
+  <div style="margin-top:40px;color:var(--muted);font-size:12px;text-align:center">
+    A single value per day — but dramatic. Apr 10 hit 150 km (deep strike); Apr 11 fell back to 20 km.
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,5 +1,14 @@
 [
   {
+    "version": "2.2.10",
+    "date": "2026-04-12",
+    "title": "Fix: tapping a result no longer instantly closes the mobile sheet",
+    "changes": [
+      "Result tap was opening the sheet and then the same bubbling click was triggering the split's tap-outside-to-close handler — both happening in a single event cycle, so the sheet never stayed open",
+      "Split click handler now bails when e.target is inside .sl-results (not just .sl-detail), letting result clicks pass through without being treated as outside-taps"
+    ]
+  },
+  {
     "version": "2.2.9",
     "date": "2026-04-12",
     "title": "Spotlight bottom sheet: swipe-up expand + tap-outside close",

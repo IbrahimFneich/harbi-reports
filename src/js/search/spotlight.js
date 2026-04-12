@@ -428,10 +428,14 @@ function buildDOM() {
 
   // Tap-outside-to-close for mobile bottom sheet.
   // The dimmed backdrop is a ::after pseudo on .sl-split with pointer-events:auto
-  // when .sheet-open is set, so clicks on the dim fire on the split itself.
+  // when .sheet-open is set, so clicks on the dim fire on the split itself
+  // with e.target === split. Clicks inside the sheet (.sl-detail) or on result
+  // items (.sl-results) must NOT close — guard against event bubbling.
   split.addEventListener('click', function(e) {
     if (!split.classList.contains('sheet-open')) return;
-    if (e.target.closest && e.target.closest('.sl-detail')) return;
+    if (!e.target.closest) return;
+    if (e.target.closest('.sl-detail')) return;
+    if (e.target.closest('.sl-results')) return;
     closeMobileDetail();
   });
 
