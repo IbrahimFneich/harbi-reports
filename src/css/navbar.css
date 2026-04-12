@@ -46,6 +46,10 @@
   background: var(--surface3); border: 1px solid var(--border);
   font-family: monospace; direction: ltr;
 }
+.navbar .nav-search-btn .nav-search-icon {
+  font-size: 0.85rem; line-height: 1; display: none;
+}
+.navbar .nav-search-btn .nav-search-label { display: inline; }
 
 /* -- Hamburger -- */
 .navbar .nav-hamburger {
@@ -99,7 +103,12 @@
   .navbar { height: 48px; padding: 0 12px; }
   .navbar .nav-logo { font-size: 0.9rem; }
   .navbar .nav-links { display: none; }
-  .navbar .nav-search-btn { display: none; }
+  .navbar .nav-search-btn {
+    padding: 6px 8px; gap: 0; min-width: 34px; justify-content: center;
+  }
+  .navbar .nav-search-btn .nav-search-icon { display: inline; font-size: 0.95rem; }
+  .navbar .nav-search-btn .nav-search-label { display: none; }
+  .navbar .nav-search-btn kbd { display: none; }
   .navbar .nav-hamburger { display: flex; }
   .nav-mobile-overlay { top: 48px; }
 }

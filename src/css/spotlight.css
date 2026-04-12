@@ -620,6 +620,39 @@
   font-size:  13px;
 }
 
+/* ── Mobile Back Button (detail pane) ───────────────────────────────── */
+.sl-detail-back {
+  display:       none;
+  align-items:   center;
+  gap:           6px;
+  align-self:    flex-start;
+  padding:       6px 12px;
+  margin-bottom: 2px;
+  border:        1px solid var(--sl-border);
+  background:    var(--sl-bg-surface);
+  color:         var(--sl-text-secondary);
+  font:          inherit;
+  font-size:     12px;
+  font-weight:   500;
+  border-radius: 8px;
+  cursor:        pointer;
+  direction:     rtl;
+  transition:    background var(--sl-transition), color var(--sl-transition), border-color var(--sl-transition);
+}
+
+.sl-detail-back:hover,
+.sl-detail-back:active {
+  background:   var(--sl-bg-hover);
+  color:        var(--sl-text);
+  border-color: var(--sl-border-focus);
+}
+
+.sl-detail-back-arrow {
+  font-size:   14px;
+  line-height: 1;
+  color:       var(--sl-accent);
+}
+
 /* ── Mobile ─────────────────────────────────────────────────────────── */
 @media (max-width: 680px) {
   #spotlightOverlay {
@@ -631,7 +664,32 @@
     width:         100vw;
     max-width:     100vw;
     max-height:    100vh;
+    height:        100vh;
     border-radius: 0;
+  }
+
+  .sl-search-row {
+    padding: 12px 14px;
+    gap:     8px;
+  }
+
+  .sl-input {
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+
+  .sl-info-bar {
+    padding: 5px 14px;
+    font-size: 10px;
+  }
+
+  .sl-filters {
+    padding: 8px 14px;
+    gap:     5px;
+  }
+
+  .sl-filter-pill {
+    padding:   5px 11px;
+    font-size: 11.5px;
   }
 
   .sl-split {
@@ -640,21 +698,72 @@
   }
 
   .sl-detail {
-    display: none;
+    display:      none;
+    padding:      14px 16px 18px;
+    gap:          12px;
   }
 
   .sl-detail.mobile-open {
-    display:  flex;
-    position: absolute;
-    inset:    0;
-    z-index:  10;
+    display:    flex;
+    position:   absolute;
+    inset:      0;
+    z-index:    10;
+    background: var(--sl-bg-surface);
+    animation:  slSlideUp 0.22s ease;
+  }
+
+  .sl-detail-back { display: inline-flex; }
+
+  .sl-detail-badge-row {
+    flex-wrap: wrap;
+    gap:       6px;
+  }
+
+  .sl-detail-title {
+    font-size:   14px;
+    line-height: 1.65;
+  }
+
+  .sl-detail-full-text {
+    font-size:   12.5px;
+    line-height: 1.75;
+  }
+
+  .sl-detail-meta-grid {
+    font-size: 11.5px;
+    gap:       4px 10px;
+  }
+
+  .sl-detail-open-btn {
+    position:   sticky;
+    bottom:     0;
+    margin-top: 6px;
+    padding:    12px;
+    font-size:  13px;
+    font-weight: 600;
+    background: var(--sl-accent);
+    color:      var(--sl-bg-deep);
+    border-color: var(--sl-accent);
   }
 
   .sl-results {
     border-left: none;
   }
 
+  .sl-result-item {
+    padding: 12px 14px;
+  }
+
   .sl-result-item.selected {
     box-shadow: none;
+    background: transparent;
+  }
+
+  .sl-result-item:active {
+    background: var(--sl-bg-hover);
+  }
+
+  .sl-footer {
+    display: none;
   }
 }

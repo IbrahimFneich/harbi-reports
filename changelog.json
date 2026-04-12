@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.2.7",
+    "date": "2026-04-12",
+    "title": "Mobile spotlight: header search icon always visible + mobile preview drawer",
+    "changes": [
+      "Header: search icon now always visible on mobile as an icon-only button (was hidden behind hamburger)",
+      "Spotlight: tapping a result on mobile now opens a full-screen preview drawer with a back button",
+      "Spotlight mobile: reduced padding, readable font sizes, sticky accent 'open report' button, slide-up animation",
+      "Spotlight mobile: search input font-size raised to 16px to prevent iOS zoom-on-focus",
+      "Spotlight mobile: footer keyboard hints hidden (desktop-only), full-height 100vh modal"
+    ]
+  },
+  {
     "version": "2.2.6",
     "date": "2026-04-12",
     "title": "Deep timeline fact-check: 10 corrections across all 6 chapters",

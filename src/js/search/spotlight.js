@@ -65,6 +65,16 @@ var _lastQuery = '';
 var _built = false;
 var _lastSearchTerms = [];
 
+// ── Mobile detection ──────────────────────────────────────
+function isMobileView() {
+  return typeof window !== 'undefined' &&
+    window.matchMedia && window.matchMedia('(max-width: 680px)').matches;
+}
+
+function closeMobileDetail() {
+  if (_detailPane) _detailPane.classList.remove('mobile-open');
+}
+
 // ── Arabic normalization ──────────────────────────────────
 export function normalizeAr(s) {
   if (!s) return '';
@@ -545,7 +555,10 @@ function buildResultItem(item, idx) {
   row.appendChild(body);
 
   (function(i) {
-    row.addEventListener('click', function() { selectResult(i); });
+    row.addEventListener('click', function() {
+      selectResult(i);
+      if (isMobileView() && _detailPane) _detailPane.classList.add('mobile-open');
+    });
   })(idx);
 
   return row;
@@ -556,6 +569,20 @@ function renderDetail(item) {
   if (!item) { renderDetailEmpty(); return; }
 
   var catInfo = CATEGORIES[item.cat] || { label: '', color: '#6b7d92' };
+
+  // Mobile back button (only rendered on small screens)
+  if (isMobileView()) {
+    var backBtn = document.createElement('button');
+    backBtn.className = 'sl-detail-back';
+    backBtn.type = 'button';
+    var backArrow = document.createElement('span');
+    backArrow.className = 'sl-detail-back-arrow';
+    backArrow.textContent = '\u2192';
+    backBtn.appendChild(backArrow);
+    backBtn.appendChild(document.createTextNode(' \u0627\u0644\u0646\u062A\u0627\u0626\u062C'));
+    backBtn.addEventListener('click', closeMobileDetail);
+    _detailPane.appendChild(backBtn);
+  }
 
   // Badge row
   var badgeRow = document.createElement('div');
@@ -1174,6 +1201,7 @@ export function openSpotlight() {
 
 export function closeSL() {
   if (_overlay) _overlay.classList.remove('open');
+  closeMobileDetail();
   document.body.style.overflow = '';
 }
 

@@ -44,8 +44,16 @@ export function initNavbar() {
 
   var searchBtn = document.createElement('button');
   searchBtn.className = 'nav-search-btn';
-  searchBtn.textContent = '\u0628\u062D\u062B ';
   searchBtn.title = '\u0628\u062D\u062B (/)';
+  searchBtn.setAttribute('aria-label', '\u0628\u062D\u062B');
+  var searchIconEl = document.createElement('span');
+  searchIconEl.className = 'nav-search-icon';
+  searchIconEl.textContent = '\uD83D\uDD0D';
+  searchBtn.appendChild(searchIconEl);
+  var searchLabel = document.createElement('span');
+  searchLabel.className = 'nav-search-label';
+  searchLabel.textContent = '\u0628\u062D\u062B';
+  searchBtn.appendChild(searchLabel);
   var kbd = document.createElement('kbd');
   kbd.textContent = '/';
   searchBtn.appendChild(kbd);
