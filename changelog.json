@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.3.1",
+    "date": "2026-04-12",
+    "title": "Site-wide footer trailer + version pill sync",
+    "changes": [
+      "Added the source-attribution / non-official disclaimer / version-pill footer to the tutorial landing page (index.html), which previously shipped without it — now every user-facing page carries the same trailer",
+      "Scoped the new landing-page footer as .site-footer (inlined CSS) since index.html does not link src/css/index.css — avoids any collision with the shared .footer rule used elsewhere",
+      "Ported the full showChangelog() overlay + data-disclaimer-slot markup into index.html so the version pill opens the changelog modal consistently across the site",
+      "Synced stale version pills: archive.html (v2.2.13), index.html final-cta CTA pill (v2.2.14), and the runtime-rendered footer in src/js/app.js used by report.html (v2.2.14) now all read v2.3.1",
+      "Unified the disclaimer.js?v= cache-bust query param on archive.html (v2.2.11 → v2.3.1) so it no longer lags behind every other page"
+    ]
+  },
+  {
     "version": "2.3.0",
     "date": "2026-04-12",
     "title": "Export reports as PDF (editorial pages) + Excel (analytics)",
