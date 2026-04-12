@@ -49,19 +49,89 @@ export function makeCatCard(iconHtml, iconBg, iconColor, titleText) {
   return card;
 }
 
+function ensureHourTooltip() {
+  var tip = document.getElementById('cat-tbar-tooltip');
+  if (tip) return tip;
+  tip = document.createElement('div');
+  tip.id = 'cat-tbar-tooltip';
+  tip.className = 'cat-tbar-tooltip';
+  tip.setAttribute('role', 'tooltip');
+  tip.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(tip);
+  return tip;
+}
+
+function positionHourTooltip(tip, rect) {
+  var tipRect = tip.getBoundingClientRect();
+  var left = rect.left + (rect.width / 2) - (tipRect.width / 2) + window.scrollX;
+  var top  = rect.top - tipRect.height - 8 + window.scrollY;
+  var maxLeft = window.scrollX + document.documentElement.clientWidth - tipRect.width - 6;
+  if (left < window.scrollX + 6) left = window.scrollX + 6;
+  if (left > maxLeft) left = maxLeft;
+  if (top < window.scrollY + 6) top = rect.bottom + 8 + window.scrollY;
+  tip.style.left = left + 'px';
+  tip.style.top  = top + 'px';
+}
+
+function showHourTooltip(e) {
+  var bar = e.currentTarget;
+  var hour = parseInt(bar.dataset.hour, 10);
+  var count = parseInt(bar.dataset.count, 10);
+  var nextH = (hour + 1) % 24;
+  var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+  var tip = ensureHourTooltip();
+  while (tip.firstChild) tip.removeChild(tip.firstChild);
+
+  var timeRow = document.createElement('div');
+  timeRow.className = 'cat-tbar-tooltip-time';
+  timeRow.textContent = pad(hour) + ':00 \u2192 ' + pad(nextH) + ':00';
+
+  var countRow = document.createElement('div');
+  countRow.className = 'cat-tbar-tooltip-count';
+  var num = document.createElement('span');
+  num.className = 'cat-tbar-tooltip-num';
+  num.textContent = String(count);
+  countRow.appendChild(num);
+  countRow.appendChild(document.createTextNode(
+    ' ' + (count === 1 ? '\u062D\u062F\u062B' : '\u0623\u062D\u062F\u0627\u062B')
+  ));
+
+  tip.appendChild(timeRow);
+  tip.appendChild(countRow);
+
+  tip.classList.add('is-visible');
+  tip.setAttribute('aria-hidden', 'false');
+  positionHourTooltip(tip, bar.getBoundingClientRect());
+}
+
+function hideHourTooltip() {
+  var tip = document.getElementById('cat-tbar-tooltip');
+  if (!tip) return;
+  tip.classList.remove('is-visible');
+  tip.setAttribute('aria-hidden', 'true');
+}
+
 export function buildTimeline(containerId, hours, color) {
   var maxH = 0;
   hours.forEach(function(v) { if (v > maxH) maxH = v; });
   var container = document.getElementById(containerId);
   if (!container) return;
   for (var j = 0; j < 24; j++) {
+    var count = hours[j] || 0;
     var bar = document.createElement('div');
     bar.className = 'cat-tbar';
     if (color) bar.style.background = color;
-    var pct = maxH > 0 ? (hours[j] / maxH) * 100 : 0;
+    var pct = maxH > 0 ? (count / maxH) * 100 : 0;
     bar.style.height = Math.max(pct, 2) + '%';
-    if (hours[j] === 0) { bar.style.background = 'var(--surface3)'; bar.style.height = '4%'; }
-    bar.title = j + ':00 \u2014 ' + hours[j];
+    if (count === 0) { bar.style.background = 'var(--surface3)'; bar.style.height = '4%'; }
+    bar.dataset.hour = String(j);
+    bar.dataset.count = String(count);
+    bar.setAttribute('aria-label', j + ':00 \u2014 ' + count);
+    bar.tabIndex = 0;
+    bar.addEventListener('mouseenter', showHourTooltip);
+    bar.addEventListener('mouseleave', hideHourTooltip);
+    bar.addEventListener('focus', showHourTooltip);
+    bar.addEventListener('blur', hideHourTooltip);
     container.appendChild(bar);
   }
 }
