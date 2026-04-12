@@ -1,5 +1,16 @@
 [
   {
+    "version": "2.2.0",
+    "date": "2026-04-12",
+    "title": "Legal disclaimer modal across all pages",
+    "changes": [
+      "New 7-point disclaimer modal: non-affiliation, data source, AI processing, neutrality, content liability, copyright/fair use, no warranties",
+      "Disclaimer link added to footers on index, report, timeline, analytics, and monthly chronicle pages",
+      "analytics.html now has a footer (was missing)",
+      "Shared src/js/ui/disclaimer.js auto-injects link into any [data-disclaimer-slot] element"
+    ]
+  },
+  {
     "version": "2.1.0",
     "date": "2026-04-12",
     "title": "Monthly chronicle pages",

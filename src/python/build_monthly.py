@@ -424,14 +424,20 @@ def render_page(year, month, days, totals, turning_points, prev_month, next_mont
 
 <div class="mc-footer">
   \u0645\u0635\u062f\u0631: <a href="https://t.me/C_Military1" target="_blank" rel="noopener">\u0642\u0646\u0627\u0629 \u0627\u0644\u0625\u0639\u0644\u0627\u0645 \u0627\u0644\u062d\u0631\u0628\u064a</a>
-  <br><span style="display:inline-block;margin-top:6px;direction:ltr;cursor:pointer;"
-    onclick="window.location='../index.html'">Harbi Reports</span>
+  <div style="margin-top:8px;font-size:0.68rem;opacity:0.8;line-height:1.6;">
+    \u0647\u0630\u0627 \u0627\u0644\u0645\u0648\u0642\u0639 <strong>\u063a\u064a\u0631 \u0631\u0633\u0645\u064a</strong> \u0648\u0644\u0627 \u064a\u062a\u0628\u0639 \u0642\u0646\u0627\u0629 \u00ab\u0627\u0644\u0625\u0639\u0644\u0627\u0645 \u0627\u0644\u062d\u0631\u0628\u064a\u00bb. \u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0645\u0646 \u062a\u0644\u064a\u063a\u0631\u0627\u0645 \u0648\u0645\u064f\u0639\u0627\u0644\u064e\u062c\u0629 \u0628\u0630\u0643\u0627\u0621 \u0627\u0635\u0637\u0646\u0627\u0639\u064a.
+  </div>
+  <div data-disclaimer-slot style="margin-top:8px;">
+    <span style="display:inline-block;direction:ltr;cursor:pointer;"
+      onclick="window.location='../index.html'">Harbi Reports v2.2.0</span>
+  </div>
 </div>
 
 <script type="module">
   import {{ initNavbar }} from '../src/js/ui/navbar.js';
   initNavbar();
 </script>
+<script src="../src/js/ui/disclaimer.js?v=2.2.0"></script>
 <script src="../src/js/monthly.js"></script>
 </body>
 </html>

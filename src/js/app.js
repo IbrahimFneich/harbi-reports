@@ -156,14 +156,31 @@ function renderReport(data) {
   // Footer
   var footer = document.createElement('div');
   footer.className = 'footer';
-  footer.textContent = '\u0645\u0635\u062F\u0631: \u0642\u0646\u0627\u0629 \u0627\u0644\u0625\u0639\u0644\u0627\u0645 \u0627\u0644\u062D\u0631\u0628\u064A \u2014 \u0627\u0644\u062A\u063A\u0637\u064A\u0629 \u0627\u0644\u0625\u062E\u0628\u0627\u0631\u064A\u0629 (Telegram) \u2022 ' + computedDay + ' ' + data.dateAr;
+  var srcLine = document.createElement('div');
+  srcLine.textContent = 'مصدر: قناة الإعلام الحربي — التغطية الإخبارية (Telegram) • ' + computedDay + ' ' + data.dateAr;
+  footer.appendChild(srcLine);
+  var notice = document.createElement('div');
+  notice.style.cssText = 'margin-top:8px;font-size:0.68rem;opacity:0.8;line-height:1.6;';
+  var noticeBefore = document.createTextNode('هذا الموقع ');
+  var noticeBold = document.createElement('strong');
+  noticeBold.textContent = 'غير رسمي';
+  var noticeAfter = document.createTextNode(' ولا يتبع قناة «الإعلام الحربي». البيانات من تليغرام ومُعالَجة بذكاء اصطناعي.');
+  notice.appendChild(noticeBefore);
+  notice.appendChild(noticeBold);
+  notice.appendChild(noticeAfter);
+  footer.appendChild(notice);
+  var slot = document.createElement('div');
+  slot.setAttribute('data-disclaimer-slot', '');
+  slot.style.cssText = 'margin-top:8px;';
   var ver = document.createElement('span');
   ver.className = 'ver-link';
-  ver.style.cssText = 'display:inline-block;margin-top:6px;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v2.1.0';
+  ver.style.cssText = 'display:inline-block;font-size:0.6rem;opacity:0.5;direction:ltr;cursor:pointer;';
+  ver.textContent = 'Harbi Reports v2.2.0';
   ver.onclick = function() { showChangelog(); };
-  footer.appendChild(ver);
+  slot.appendChild(ver);
+  footer.appendChild(slot);
   root.appendChild(footer);
+  if (window.injectDisclaimerLink) window.injectDisclaimerLink(slot);
 
   // Init search and siren map lazy loading
   initSearch();
