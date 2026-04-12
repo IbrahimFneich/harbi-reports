@@ -81,51 +81,76 @@ function openMobileDetail() {
 function closeMobileDetail() {
   if (!_detailPane) return;
   _detailPane.classList.remove('mobile-open');
-  _detailPane.style.transform = '';
+  _detailPane.classList.remove('expanded');
+  _detailPane.style.height = '';
   _detailPane.style.transition = '';
   var split = _detailPane.parentElement;
   if (split) split.classList.remove('sheet-open');
 }
 
-// Attach drag-to-dismiss gestures to the sheet handle
+// Drag-to-expand / drag-to-collapse / drag-to-close gestures.
+// State machine: collapsed (68vh) ↔ expanded (95vh) → closed.
 function attachSheetGestures(handleEl, sheetEl) {
   var startY = 0;
-  var deltaY = 0;
+  var currentY = 0;
   var dragging = false;
+  var startHeight = 0;
+  var splitHeight = 0;
 
   handleEl.addEventListener('touchstart', function(e) {
     if (!e.touches || e.touches.length === 0) return;
     startY = e.touches[0].clientY;
-    deltaY = 0;
+    currentY = startY;
     dragging = true;
+    startHeight = sheetEl.getBoundingClientRect().height;
+    var parent = sheetEl.parentElement;
+    splitHeight = parent ? parent.getBoundingClientRect().height : window.innerHeight;
     sheetEl.style.transition = 'none';
   }, { passive: true });
 
   handleEl.addEventListener('touchmove', function(e) {
     if (!dragging || !e.touches || e.touches.length === 0) return;
-    deltaY = e.touches[0].clientY - startY;
-    if (deltaY < 0) deltaY = 0;
-    sheetEl.style.transform = 'translateY(' + deltaY + 'px)';
+    currentY = e.touches[0].clientY;
+    var delta = currentY - startY;
+    // Dragging down (delta>0) shrinks the sheet, up (delta<0) grows it
+    var newH = startHeight - delta;
+    if (newH < 60) newH = 60;
+    if (newH > splitHeight) newH = splitHeight;
+    sheetEl.style.height = newH + 'px';
   }, { passive: true });
 
   handleEl.addEventListener('touchend', function() {
     if (!dragging) return;
     dragging = false;
-    sheetEl.style.transition = 'transform 0.22s ease';
-    if (deltaY > 80) {
-      closeMobileDetail();
+    sheetEl.style.transition = '';
+
+    var delta = currentY - startY;
+    var wasExpanded = sheetEl.classList.contains('expanded');
+
+    // Snap decision
+    if (delta < -60) {
+      // Dragged up → expand (no-op if already expanded)
+      sheetEl.classList.add('expanded');
+      sheetEl.style.height = '';
+    } else if (delta > 80) {
+      if (wasExpanded) {
+        // Expanded → collapse to 68vh
+        sheetEl.classList.remove('expanded');
+        sheetEl.style.height = '';
+      } else {
+        // Collapsed → close entirely
+        closeMobileDetail();
+      }
     } else {
-      sheetEl.style.transform = 'translateY(0)';
+      // Not enough drag → snap back to current state
+      sheetEl.style.height = '';
     }
-    setTimeout(function() {
-      sheetEl.style.transition = '';
-      sheetEl.style.transform = '';
-    }, 240);
   });
 
-  // Tap handle (no drag) also closes
+  // Plain tap on the handle (no drag) closes the sheet
   handleEl.addEventListener('click', function() {
-    if (Math.abs(deltaY) < 5) closeMobileDetail();
+    var delta = currentY - startY;
+    if (Math.abs(delta) < 5) closeMobileDetail();
   });
 }
 
@@ -400,6 +425,15 @@ function buildDOM() {
   var detailPane = document.createElement('div');
   detailPane.className = 'sl-detail';
   split.appendChild(detailPane);
+
+  // Tap-outside-to-close for mobile bottom sheet.
+  // The dimmed backdrop is a ::after pseudo on .sl-split with pointer-events:auto
+  // when .sheet-open is set, so clicks on the dim fire on the split itself.
+  split.addEventListener('click', function(e) {
+    if (!split.classList.contains('sheet-open')) return;
+    if (e.target.closest && e.target.closest('.sl-detail')) return;
+    closeMobileDetail();
+  });
 
   modal.appendChild(split);
 

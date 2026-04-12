@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.2.9",
+    "date": "2026-04-12",
+    "title": "Spotlight bottom sheet: swipe-up expand + tap-outside close",
+    "changes": [
+      "Swipe up on the drag handle now expands the sheet from 68vh to 95vh full-height state",
+      "Swipe down from expanded collapses back to 68vh; another swipe down closes it",
+      "Tapping the dimmed backdrop (outside the sheet) now closes the preview",
+      "Drag handler rewritten as a state machine (collapsed ↔ expanded → closed)",
+      "Sheet height animates smoothly with a cubic-bezier transition; corners un-round slightly when expanded for a more immersive feel"
+    ]
+  },
+  {
     "version": "2.2.8",
     "date": "2026-04-12",
     "title": "Spotlight mobile: bottom-sheet preview with drag-to-dismiss",
