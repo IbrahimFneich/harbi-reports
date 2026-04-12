@@ -430,7 +430,7 @@ def render_page(year, month, days, totals, turning_points, prev_month, next_mont
   </div>
   <div data-disclaimer-slot style="margin-top:10px;font-size:0.68rem;">
     <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;"
-      onclick="window.location='../index.html'">Harbi Reports v2.2.5</span>
+      onclick="window.location='../index.html'">Harbi Reports v2.2.6</span>
   </div>
 </div>
 
@@ -438,7 +438,7 @@ def render_page(year, month, days, totals, turning_points, prev_month, next_mont
   import {{ initNavbar }} from '../src/js/ui/navbar.js';
   initNavbar();
 </script>
-<script src="../src/js/ui/disclaimer.js?v=2.2.5"></script>
+<script src="../src/js/ui/disclaimer.js?v=2.2.6"></script>
 <script src="../src/js/monthly.js"></script>
 </body>
 </html>

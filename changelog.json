@@ -1,5 +1,22 @@
 [
   {
+    "version": "2.2.6",
+    "date": "2026-04-12",
+    "title": "Deep timeline fact-check: 10 corrections across all 6 chapters",
+    "changes": [
+      "Ch1 Oct 7 rocket count: 3,000+ 'in the first hour' → 2,200+/آلاف in opening wave (closer to IDF/Hamas reconciled figures)",
+      "Ch2 Al-Shifa hospital raid date: 17 Nov → 15 Nov 2023 (the actual first IDF ground entry)",
+      "Ch2 Gaza 40k toll: 'by September' → 'by August' (crossed Aug 15, 2024)",
+      "Ch2 Nuseirat operation toll: 200+ → 274 per Gaza Health Ministry (narrative + step + event card)",
+      "Ch3 Major assassinations stat: 4 → 5 (Arouri + Zahedi + Shukr + Haniyeh + Deif)",
+      "Ch4 Lebanon martyrs stat: 3,700+ → ~4,000 (closer to final MoH ceasefire count of ~3,961)",
+      "Ch5 Assad regime duration: 53 years → 54 years (Nov 1970 → Dec 2024) — 4 locations",
+      "Ch5 ceasefire violations: 100+ → 1,500+ (more accurate for the period through early 2025)",
+      "Ch6 Gaza total: 50,000+ → 60,000+ (was stale, reflecting early 2025 figure)",
+      "Ch6 war days total: 550+ → 920+ (was stale by ~370 days)"
+    ]
+  },
+  {
     "version": "2.2.5",
     "date": "2026-04-12",
     "title": "Fact-fix: Naim Qassem elected 29 Oct 2024, not 2025",
