@@ -1,5 +1,18 @@
 [
   {
+    "version": "2.4.0",
+    "date": "2026-04-13",
+    "title": "Remove multi-column sort from analytics data table",
+    "changes": [
+      "Reverted the analytics 'Most Active Days' table to single-column sorting per user request — multi-sort, the sort-chain chip bar, and the priority badges added in v2.3.7/v2.3.8 are all gone",
+      "src/js/analytics/dashboard.js — restored single _tableSortKey + _tableSortDir state, removed buildOrderBy() and the multi-sort onSort handler, removed onSortRemove. ORDER BY is now built inline as 'key dir, date DESC' (date stays as a stable tiebreaker for pagination determinism)",
+      "src/js/analytics/charts.js — renderTable now takes opts.sortKey/opts.sortDir only, no opts.sort array, no chip bar DOM, no sortIndex/showPriority logic. Header click no longer forwards shiftKey",
+      "src/css/analytics.css — already had the .a-sort-bar/.a-sort-chip*/.a-sort-badge/th.sorted blocks removed in an earlier edit; verified no remnants",
+      "Kept the column-key whitelist in dashboard.js (_sortableKeys) — it's still useful as a defense-in-depth guard around the SQL ORDER BY string concat, even with single-sort",
+      "Kept the cache-bust ?v= query strings on every analytics asset import from v2.3.9 — those are still useful for forcing browsers to refetch on every release"
+    ]
+  },
+  {
     "version": "2.3.9",
     "date": "2026-04-12",
     "title": "Cache-bust analytics module imports so multi-sort actually loads",

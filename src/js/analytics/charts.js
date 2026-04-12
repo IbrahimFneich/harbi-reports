@@ -484,13 +484,7 @@ export function renderKPIs(containerId, kpis) {
 
 /**
  * columns: [{key, label}], rows, colorMap,
- * opts: {
- *   onSort(key, shiftKey),       // click a column header
- *   onSortRemove(key),           // remove a column from the sort chain
- *   sort: [{key, dir}]           // multi-sort array; index 0 = primary
- *   sortKey, sortDir             // legacy single-sort (still honored)
- *   isFullscreen, page, totalPages, onPage
- * }
+ * opts: { onSort(key), sortKey, sortDir, isFullscreen, page, totalPages, onPage }
  */
 export function renderTable(containerId, columns, rows, colorMap, opts) {
   var el = document.getElementById(containerId);
@@ -498,86 +492,8 @@ export function renderTable(containerId, columns, rows, colorMap, opts) {
   el.textContent = '';
   opts = opts || {};
 
-  // Normalize to a multi-sort array.
-  var sortList = opts.sort && opts.sort.length
-    ? opts.sort
-    : (opts.sortKey ? [{ key: opts.sortKey, dir: opts.sortDir || 'desc' }] : []);
-  var sortIndex = {};
-  for (var si = 0; si < sortList.length; si++) sortIndex[sortList[si].key] = si;
-  var showPriority = sortList.length > 1;
-
-  // Build a key → label lookup for the sort-chain chip bar.
-  var labelByKey = {};
-  columns.forEach(function(col) { labelByKey[col.key] = col.label; });
-
-  // ── Sort-chain status bar ──
-  // Always render it so users can see multi-sort state even when the secondary
-  // key has no visible effect (e.g. unique primary values). Clicking a chip's
-  // arrow toggles direction; clicking × removes it from the chain.
-  var chipBar = document.createElement('div');
-  chipBar.className = 'a-sort-bar';
-  var chipLabel = document.createElement('span');
-  chipLabel.className = 'a-sort-bar-label';
-  chipLabel.textContent = '\u0627\u0644\u0641\u0631\u0632:';
-  chipBar.appendChild(chipLabel);
-
-  if (sortList.length === 0) {
-    var emptyHint = document.createElement('span');
-    emptyHint.className = 'a-sort-bar-empty';
-    emptyHint.textContent = '\u0627\u0636\u063A\u0637 \u0639\u0644\u0649 \u0631\u0623\u0633 \u0639\u0645\u0648\u062F \u0644\u0644\u0641\u0631\u0632';
-    chipBar.appendChild(emptyHint);
-  } else {
-    sortList.forEach(function(entry, i) {
-      var chip = document.createElement('span');
-      chip.className = 'a-sort-chip';
-
-      var rank = document.createElement('span');
-      rank.className = 'a-sort-chip-rank';
-      rank.textContent = String(i + 1);
-      chip.appendChild(rank);
-
-      var name = document.createElement('span');
-      name.className = 'a-sort-chip-name';
-      name.textContent = labelByKey[entry.key] || entry.key;
-      chip.appendChild(name);
-
-      var dir = document.createElement('button');
-      dir.type = 'button';
-      dir.className = 'a-sort-chip-dir';
-      dir.textContent = entry.dir === 'asc' ? '\u25B2' : '\u25BC';
-      dir.title = '\u0639\u0643\u0633 \u0627\u0644\u0627\u062A\u062C\u0627\u0647';
-      dir.addEventListener('click', function(ev) {
-        ev.stopPropagation();
-        // Toggle direction via a shift+click on this column (keeps it in the chain).
-        if (opts.onSort) opts.onSort(entry.key, true);
-      });
-      chip.appendChild(dir);
-
-      var close = document.createElement('button');
-      close.type = 'button';
-      close.className = 'a-sort-chip-close';
-      close.textContent = '\u2716';
-      close.title = '\u0625\u0632\u0627\u0644\u0629 \u0645\u0646 \u0627\u0644\u0641\u0631\u0632';
-      close.addEventListener('click', function(ev) {
-        ev.stopPropagation();
-        if (opts.onSortRemove) opts.onSortRemove(entry.key);
-      });
-      chip.appendChild(close);
-
-      chipBar.appendChild(chip);
-    });
-  }
-
-  var hint = document.createElement('span');
-  hint.className = 'a-sort-bar-hint';
-  hint.textContent = 'Shift+\u0646\u0642\u0631\u0629 \u0644\u0641\u0631\u0632 \u0645\u062A\u0639\u062F\u062F';
-  chipBar.appendChild(hint);
-
-  el.appendChild(chipBar);
-
   var table = document.createElement('table');
   table.className = 'a-table';
-  table.title = '\u0646\u0642\u0631\u0629: \u0641\u0631\u0632 \u0628\u0639\u0645\u0648\u062F \u0648\u0627\u062D\u062F \u00B7 Shift+\u0646\u0642\u0631\u0629: \u0641\u0631\u0632 \u0645\u062A\u0639\u062F\u062F \u0627\u0644\u0623\u0639\u0645\u062F\u0629';
 
   var thead = document.createElement('thead');
   var headRow = document.createElement('tr');
@@ -590,26 +506,15 @@ export function renderTable(containerId, columns, rows, colorMap, opts) {
     var label = document.createTextNode(col.label + ' ');
     th.appendChild(label);
 
-    if (Object.prototype.hasOwnProperty.call(sortIndex, col.key)) {
-      var rank2 = sortIndex[col.key];
-      var entry2 = sortList[rank2];
-      th.classList.add('sorted');
-      if (rank2 === 0) th.classList.add('sorted-primary');
-
+    if (opts.sortKey === col.key) {
       var arrow = document.createElement('span');
       arrow.style.cssText = 'font-size:1.2rem;color:var(--accent);margin-right:6px;font-weight:900';
-      arrow.textContent = entry2.dir === 'asc' ? '\u25B2' : '\u25BC';
+      arrow.textContent = opts.sortDir === 'asc' ? '\u25B2' : '\u25BC';
       th.appendChild(arrow);
-      if (showPriority) {
-        var badge = document.createElement('span');
-        badge.className = 'a-sort-badge';
-        badge.textContent = String(rank2 + 1);
-        th.appendChild(badge);
-      }
     }
 
-    th.addEventListener('click', function(ev) {
-      if (opts.onSort) opts.onSort(col.key, !!(ev && ev.shiftKey));
+    th.addEventListener('click', function() {
+      if (opts.onSort) opts.onSort(col.key);
     });
     headRow.appendChild(th);
   });
