@@ -1,5 +1,16 @@
 [
   {
+    "version": "2.3.6",
+    "date": "2026-04-12",
+    "title": "Larger analytics data table — second pass",
+    "changes": [
+      "Further bumped .a-table font-size from 0.92rem → 1.2rem normal and 1.1rem → 1.5rem in fullscreen; header 0.78rem → 1rem normal and 0.92rem → 1.2rem in fullscreen",
+      "Widened cell padding to match the larger type: 16px/18px normal, 20px/24px in fullscreen so rows don't feel cramped at the new scale",
+      "Sort-arrow indicator bumped 0.8rem → 1rem with 6px margin for visual balance against the bigger header labels",
+      "Pager buttons bumped to 1.05rem with 10px/22px padding and 8px radius; pager info also 1.05rem to stay consistent with the new table scale"
+    ]
+  },
+  {
     "version": "2.3.5",
     "date": "2026-04-12",
     "title": "Bigger, more readable analytics data table",

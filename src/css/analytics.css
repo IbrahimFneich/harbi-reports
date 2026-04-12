@@ -291,19 +291,19 @@ body.analytics.light .dp-today-btn:hover:not(:disabled) { color: #fff; }
 }
 
 /* ── Data Table ── */
-.a-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.a-table { width: 100%; border-collapse: collapse; font-size: 1.2rem; }
 .a-table th {
-  text-align: right; padding: 12px 14px; font-weight: 700;
+  text-align: right; padding: 16px 18px; font-weight: 700;
   color: var(--text-dim); border-bottom: 1px solid var(--border);
-  font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;
+  font-size: 1rem; text-transform: uppercase; letter-spacing: 0.06em;
 }
 .a-table td {
-  padding: 12px 14px; border-bottom: 1px solid rgba(30,45,61,0.3);
+  padding: 16px 18px; border-bottom: 1px solid rgba(30,45,61,0.3);
   font-variant-numeric: tabular-nums; direction: ltr; text-align: right;
 }
-.a-panel-fs .a-table { font-size: 1.1rem; }
-.a-panel-fs .a-table th { font-size: 0.92rem; padding: 16px 18px; }
-.a-panel-fs .a-table td { padding: 16px 18px; }
+.a-panel-fs .a-table { font-size: 1.5rem; }
+.a-panel-fs .a-table th { font-size: 1.2rem; padding: 20px 24px; }
+.a-panel-fs .a-table td { padding: 20px 24px; }
 .a-table tr:hover td { background: rgba(201,168,76,0.04); }
 .a-table .num-cell { font-weight: 700; font-family: monospace; }
 .a-table th:hover { color: var(--accent); }
@@ -350,15 +350,15 @@ body.analytics.light .dp-today-btn:hover:not(:disabled) { color: #fff; }
   border-top: 1px solid var(--border);
 }
 .a-pager-btn {
-  font-family: inherit; font-size: 0.85rem; font-weight: 600;
-  padding: 8px 18px; border-radius: 6px;
+  font-family: inherit; font-size: 1.05rem; font-weight: 600;
+  padding: 10px 22px; border-radius: 8px;
   border: 1px solid var(--border); background: var(--surface2);
   color: var(--text-dim); cursor: pointer; transition: all 0.15s;
 }
 .a-pager-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
 .a-pager-btn:disabled { opacity: 0.3; cursor: default; }
 .a-pager-info {
-  font-size: 0.85rem; color: var(--text-dim); font-weight: 600;
+  font-size: 1.05rem; color: var(--text-dim); font-weight: 600;
   direction: ltr;
 }
 

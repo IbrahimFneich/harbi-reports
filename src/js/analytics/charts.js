@@ -500,7 +500,7 @@ export function renderTable(containerId, columns, rows, colorMap, opts) {
 
     if (opts.sortKey === col.key) {
       var arrow = document.createElement('span');
-      arrow.style.cssText = 'font-size:0.8rem;color:var(--accent);margin-right:4px';
+      arrow.style.cssText = 'font-size:1rem;color:var(--accent);margin-right:6px';
       arrow.textContent = opts.sortDir === 'asc' ? '\u25B2' : '\u25BC';
       th.appendChild(arrow);
     }
