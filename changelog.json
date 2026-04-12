@@ -1,5 +1,16 @@
 [
   {
+    "version": "2.3.9",
+    "date": "2026-04-12",
+    "title": "Cache-bust analytics module imports so multi-sort actually loads",
+    "changes": [
+      "Root cause diagnosis: analytics multi-sort was reported as 'still not working' even after v2.3.7 and v2.3.8. A fresh headless-browser test on the same commit confirmed the SQL sort WAS working (4 successive click tests produced 4 distinct row orders) — the user's browser was running a stale cached copy of dashboard.js / charts.js from before the multi-sort refactor.",
+      "analytics.html — added ?v=2.3.8 cache-bust query params to every local JS and CSS import (dashboard.js, spotlight.js, enhancements.css, analytics.css, navbar.css, spotlight.css, print.css). ES modules in Chrome are aggressively cached and stay stale until the URL changes.",
+      "Since my Python bumper already auto-replaces '?v=<old>' → '?v=<new>' on every version bump, wiring the query params with the current version now means all future analytics asset changes will cache-bust automatically on each release, no more manual intervention needed.",
+      "Bumped all version-pill strings to 2.3.9 across the 6 user-facing HTML pages and app.js."
+    ]
+  },
+  {
     "version": "2.3.8",
     "date": "2026-04-12",
     "title": "Visible sort-chain status bar for analytics table",

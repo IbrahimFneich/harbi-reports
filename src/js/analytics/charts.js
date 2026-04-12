@@ -77,7 +77,7 @@ export function renderLineChart(containerId, datasets, height, opts) {
   if (isFs) {
     el.style.removeProperty('height');
   } else {
-    el.style.height = Math.max((height || 200) + 90, 310) + 'px';
+    el.style.height = Math.max((height || 200) + 120, 340) + 'px';
   }
   el.style.width = '100%';
 
@@ -133,10 +133,10 @@ export function renderLineChart(containerId, datasets, height, opts) {
     textStyle: { fontFamily: 'Noto Kufi Arabic, monospace', color: textColor },
     color: datasets.map(function(d) { return d.color; }),
     animationDuration: 400,
-    grid: { left: 12, right: 20, top: 54, bottom: 72, containLabel: true },
+    grid: { left: 12, right: 20, top: 78, bottom: 72, containLabel: true },
     legend: {
       data: datasets.map(function(d) { return d.label; }),
-      top: 10, right: 12,
+      top: 38, left: 'center',
       textStyle: { color: textDim, fontSize: 11, fontFamily: 'Noto Kufi Arabic' },
       icon: 'roundRect', itemWidth: 14, itemHeight: 6, itemGap: 14,
       inactiveColor: cv('--text-muted', '#3d5068')
