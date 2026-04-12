@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.5.0",
+    "date": "2026-04-13",
+    "title": "Finance-grade interactive line chart on the analytics dashboard",
+    "changes": [
+      "Replaced the hand-rolled SVG line-chart renderer (~200 LOC) with Apache ECharts 5.5.1, served from jsDelivr and only loaded on analytics.html. The renderer keeps its old signature renderLineChart(id, datasets, height, {xLabels, grouping}), so dashboard.js and every refresh path (date range, category toggle, daily/weekly/monthly) work unchanged.",
+      "Stock-terminal interactions now available on the 'الأحداث بمرور الوقت' panel: mouse wheel zooms in/out on the time axis, the bottom range-slider pans and sets the visible window, the toolbox magnifier rect-zooms by drag, the brush tool highlights an X-range, the restore button resets, and saveAsImage exports a 2x-DPI PNG named harbi-analytics.png.",
+      "Crosshair tooltip with all series values at the cursor position, RTL formatting, theme-aware colors read from CSS vars (--accent, --border, --text-dim, --surface) so future light-theme work just inherits.",
+      "Layout: group badge (يومي/أسبوعي/شهري) anchored top-left, toolbox icons top-right, legend on its own centered row below the toolbox so the two never collide. Container height bumped to fit the slider and two header rows; ResizeObserver keeps the canvas in sync with fullscreen toggling.",
+      "Bumped all version-pill strings to 2.5.0 across the 6 user-facing HTML pages and app.js. Cache-bust query params auto-update via the existing string replace."
+    ]
+  },
+  {
     "version": "2.4.0",
     "date": "2026-04-13",
     "title": "Remove multi-column sort from analytics data table",
