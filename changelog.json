@@ -1,5 +1,18 @@
 [
   {
+    "version": "2.2.8",
+    "date": "2026-04-12",
+    "title": "Spotlight mobile: bottom-sheet preview with drag-to-dismiss",
+    "changes": [
+      "Mobile result preview is now a 68vh bottom sheet — list peek remains visible behind the drawer",
+      "Added drag handle at top of sheet with swipe-down to dismiss (threshold: 80px)",
+      "Tapping the drag handle also closes the sheet; dimmed backdrop over the list peek",
+      "Replaced the full-screen mobile detail view (v2.2.7) with the bottom-sheet pattern",
+      "New search query automatically closes the sheet so results regain focus",
+      "Back button removed on mobile — drag handle is the new close affordance"
+    ]
+  },
+  {
     "version": "2.2.7",
     "date": "2026-04-12",
     "title": "Mobile spotlight: header search icon always visible + mobile preview drawer",

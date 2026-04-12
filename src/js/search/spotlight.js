@@ -71,8 +71,62 @@ function isMobileView() {
     window.matchMedia && window.matchMedia('(max-width: 680px)').matches;
 }
 
+function openMobileDetail() {
+  if (!_detailPane) return;
+  _detailPane.classList.add('mobile-open');
+  var split = _detailPane.parentElement;
+  if (split) split.classList.add('sheet-open');
+}
+
 function closeMobileDetail() {
-  if (_detailPane) _detailPane.classList.remove('mobile-open');
+  if (!_detailPane) return;
+  _detailPane.classList.remove('mobile-open');
+  _detailPane.style.transform = '';
+  _detailPane.style.transition = '';
+  var split = _detailPane.parentElement;
+  if (split) split.classList.remove('sheet-open');
+}
+
+// Attach drag-to-dismiss gestures to the sheet handle
+function attachSheetGestures(handleEl, sheetEl) {
+  var startY = 0;
+  var deltaY = 0;
+  var dragging = false;
+
+  handleEl.addEventListener('touchstart', function(e) {
+    if (!e.touches || e.touches.length === 0) return;
+    startY = e.touches[0].clientY;
+    deltaY = 0;
+    dragging = true;
+    sheetEl.style.transition = 'none';
+  }, { passive: true });
+
+  handleEl.addEventListener('touchmove', function(e) {
+    if (!dragging || !e.touches || e.touches.length === 0) return;
+    deltaY = e.touches[0].clientY - startY;
+    if (deltaY < 0) deltaY = 0;
+    sheetEl.style.transform = 'translateY(' + deltaY + 'px)';
+  }, { passive: true });
+
+  handleEl.addEventListener('touchend', function() {
+    if (!dragging) return;
+    dragging = false;
+    sheetEl.style.transition = 'transform 0.22s ease';
+    if (deltaY > 80) {
+      closeMobileDetail();
+    } else {
+      sheetEl.style.transform = 'translateY(0)';
+    }
+    setTimeout(function() {
+      sheetEl.style.transition = '';
+      sheetEl.style.transform = '';
+    }, 240);
+  });
+
+  // Tap handle (no drag) also closes
+  handleEl.addEventListener('click', function() {
+    if (Math.abs(deltaY) < 5) closeMobileDetail();
+  });
 }
 
 // ── Arabic normalization ──────────────────────────────────
@@ -557,7 +611,7 @@ function buildResultItem(item, idx) {
   (function(i) {
     row.addEventListener('click', function() {
       selectResult(i);
-      if (isMobileView() && _detailPane) _detailPane.classList.add('mobile-open');
+      if (isMobileView()) openMobileDetail();
     });
   })(idx);
 
@@ -570,18 +624,14 @@ function renderDetail(item) {
 
   var catInfo = CATEGORIES[item.cat] || { label: '', color: '#6b7d92' };
 
-  // Mobile back button (only rendered on small screens)
+  // Mobile bottom-sheet drag handle
   if (isMobileView()) {
-    var backBtn = document.createElement('button');
-    backBtn.className = 'sl-detail-back';
-    backBtn.type = 'button';
-    var backArrow = document.createElement('span');
-    backArrow.className = 'sl-detail-back-arrow';
-    backArrow.textContent = '\u2192';
-    backBtn.appendChild(backArrow);
-    backBtn.appendChild(document.createTextNode(' \u0627\u0644\u0646\u062A\u0627\u0626\u062C'));
-    backBtn.addEventListener('click', closeMobileDetail);
-    _detailPane.appendChild(backBtn);
+    var handle = document.createElement('button');
+    handle.className = 'sl-sheet-handle';
+    handle.type = 'button';
+    handle.setAttribute('aria-label', '\u0625\u063A\u0644\u0627\u0642 \u0627\u0644\u0645\u0639\u0627\u064A\u0646\u0629');
+    attachSheetGestures(handle, _detailPane);
+    _detailPane.appendChild(handle);
   }
 
   // Badge row
@@ -1096,6 +1146,8 @@ function bindEvents() {
 
   // Input with debounce — waits for DB before searching
   _input.addEventListener('input', function() {
+    // A new query should dismiss the mobile sheet so results are visible
+    closeMobileDetail();
     clearTimeout(_debounceTimer);
     _debounceTimer = setTimeout(function() {
       var q = _input.value.trim();
