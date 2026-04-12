@@ -84,22 +84,33 @@ body {
 .header .date-center .report-date-trigger:hover {
   color: #e0c572; border-bottom-color: var(--accent);
 }
-.header .date-center .day-nav-current {
+.header .date-center .day-nav-current,
+.day-nav .day-nav-current {
   font-size: 0.68rem; color: var(--text-muted); direction: ltr;
   unicode-bidi: isolate; font-variant-numeric: tabular-nums;
   font-weight: 600;
 }
 
-.header .day-nav-btn {
+.day-nav {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; padding: 10px 16px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+}
+
+.header .day-nav-btn,
+.day-nav .day-nav-btn {
   flex: 0 0 auto;
   text-decoration: none; padding: 6px 12px; border-radius: 6px;
   font-size: 0.72rem; font-weight: 600; font-family: inherit;
   border: 1px solid var(--border); background: transparent;
   color: var(--text-muted); transition: all 0.2s; cursor: pointer;
   white-space: nowrap;
+  unicode-bidi: isolate;
 }
-.header .day-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
-.header .day-nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.header .day-nav-btn:hover,
+.day-nav .day-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+.header .day-nav-btn.disabled,
+.day-nav .day-nav-btn.disabled { opacity: 0.3; pointer-events: none; }
 
 /* ═══════════════ STATS BAR ═══════════════ */
 .stats {

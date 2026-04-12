@@ -1,5 +1,15 @@
 [
   {
+    "version": "2.5.3",
+    "date": "2026-04-13",
+    "title": "Fix bidi-mangled day navigation bar",
+    "changes": [
+      "src/css/report.css — added a real .day-nav flex container with gap, border, and proper styling. Before: the day-nav div had NO CSS rule at all, and the .header .day-nav-btn rules never matched because day-nav is injected as a sibling of .header (not a child), so the three nav elements collapsed into a single unstyled inline run.",
+      "Bidi fix: in RTL context, the unstyled inline flow let the LTR counter ('917 / 918') visually fuse with the Arabic date text in the adjacent button, producing garbage like '→ 11 نيسان917 / 9189 نيسان ←'. Added unicode-bidi: isolate on every .day-nav-btn and reached the .day-nav-current span (previously only scoped under .date-center) so numbers render as their own isolated run.",
+      "Hover and .disabled selectors extended to match buttons inside .day-nav, not just under .header — disabled end-of-range buttons now correctly fade to 0.3 opacity, and hover state actually triggers."
+    ]
+  },
+  {
     "version": "2.5.2",
     "date": "2026-04-13",
     "title": "Simpler final CTA — button only",
