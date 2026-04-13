@@ -4,10 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>الإعلام الحربي — بحث متقدم</title>
-<link rel="stylesheet" href="src/css/enhancements.css?v=2.5.22"/>
-<link rel="stylesheet" href="src/css/index.css?v=2.5.22"/>
-<link rel="stylesheet" href="src/css/navbar.css?v=2.5.22"/>
-<link rel="stylesheet" href="src/css/spotlight.css?v=2.5.22"/>
+<link rel="stylesheet" href="src/css/enhancements.css?v=2.5.23"/>
+<link rel="stylesheet" href="src/css/index.css?v=2.5.23"/>
+<link rel="stylesheet" href="src/css/navbar.css?v=2.5.23"/>
+<link rel="stylesheet" href="src/css/spotlight.css?v=2.5.23"/>
+<!-- Leaflet for map view (loaded eagerly so map-view tab is instant) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
   (function(){try{var s=localStorage.getItem('harbi-theme');var l=s!=='dark';document.documentElement.classList.toggle('light',l);var f=function(){document.body&&document.body.classList.toggle('light',l);};if(document.body)f();else document.addEventListener('DOMContentLoaded',f);}catch(e){}})();
 </script>
@@ -369,8 +372,418 @@
   .sp-btn.ghost{color:var(--text-dim)}
   .sp-actions .sp-spacer{flex:1}
 
-  .sp-results{
+  /* ═══════════════════════════════════════════════════════════════
+     VIEW SWITCHER (tab bar above results)
+     ═══════════════════════════════════════════════════════════════ */
+  .sp-view-switcher{
     margin-top:32px;
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:14px;
+    padding:12px 16px;
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  }
+  .sp-vs-label{
+    font-size:.68rem;font-weight:700;color:var(--text-dim);letter-spacing:.04em;
+  }
+  .sp-vs-tabs{display:flex;flex-wrap:wrap;gap:4px}
+  .sp-vs-tab{
+    font-family:inherit;cursor:pointer;
+    background:var(--surface2);border:1px solid var(--border);
+    color:var(--text-dim);font-size:.72rem;font-weight:600;
+    padding:7px 12px;border-radius:7px;
+    display:inline-flex;align-items:center;gap:6px;
+    transition:all .15s;
+  }
+  .sp-vs-tab:hover{border-color:var(--accent);color:var(--text)}
+  .sp-vs-tab.active{
+    background:var(--accent);color:#fff;border-color:var(--accent);
+  }
+  .sp-vs-tab .ic{font-size:.92rem;line-height:1}
+  .sp-vs-meta{
+    margin-right:auto;font-size:.68rem;color:var(--text-dim);
+  }
+  .sp-vs-meta b{color:var(--accent);font-weight:800;direction:ltr;display:inline-block}
+
+  @media(max-width:780px){
+    .sp-view-switcher{padding:10px 12px;border-radius:11px;gap:8px}
+    .sp-vs-tab{font-size:.66rem;padding:6px 10px}
+    .sp-vs-tab .ic{font-size:.85rem}
+    .sp-vs-tabs{gap:3px}
+    .sp-vs-meta{width:100%;text-align:center;font-size:.66rem}
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     VIEW: TABLE
+     ═══════════════════════════════════════════════════════════════ */
+  .sp-tbl-wrap{overflow-x:auto;margin:0 -10px;padding:0 10px}
+  .sp-tbl-toolbar{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    padding:6px 0 12px;border-bottom:1px dashed var(--border);
+    margin-bottom:8px;
+    font-size:.7rem;color:var(--text-dim);
+  }
+  .sp-tbl-toolbar .right{margin-right:auto;display:flex;gap:6px}
+  .sp-mini-btn{
+    font-family:inherit;background:var(--surface2);border:1px solid var(--border);
+    color:var(--text-dim);font-size:.66rem;font-weight:600;
+    padding:5px 10px;border-radius:6px;cursor:pointer;transition:all .15s;
+  }
+  .sp-mini-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .sp-tbl{
+    width:100%;border-collapse:separate;border-spacing:0;
+    font-size:.72rem;
+  }
+  .sp-tbl thead th{
+    background:var(--surface2);
+    color:var(--text-dim);font-size:.62rem;font-weight:700;letter-spacing:.04em;
+    text-align:right;padding:9px 12px;
+    border-bottom:2px solid var(--border-hi, var(--border));
+    cursor:pointer;transition:color .15s;white-space:nowrap;
+    user-select:none;
+  }
+  .sp-tbl thead th:hover{color:var(--accent)}
+  .sp-tbl thead th.sorted{color:var(--accent)}
+  .sp-tbl thead th .arrow{
+    display:inline-block;margin-right:4px;font-size:.6rem;opacity:.4;
+  }
+  .sp-tbl thead th.sorted .arrow{opacity:1}
+  .sp-tbl tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+    color:var(--text);vertical-align:top;
+  }
+  .sp-tbl tbody tr{transition:background .1s;cursor:pointer}
+  .sp-tbl tbody tr:hover td{background:var(--accent-dim)}
+  .sp-tbl tbody tr:nth-child(2n) td{background:var(--surface2)}
+  .sp-tbl tbody tr:nth-child(2n):hover td{background:var(--accent-dim)}
+  .sp-tbl .col-date{color:var(--accent);font-weight:600;direction:ltr;white-space:nowrap}
+  .sp-tbl .col-time{direction:ltr;color:var(--text-dim);white-space:nowrap;font-size:.68rem}
+  .sp-tbl .col-snippet{
+    max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .sp-tbl .pill{
+    display:inline-block;padding:2px 9px;border-radius:999px;
+    font-size:.6rem;font-weight:700;letter-spacing:.02em;direction:rtl;
+  }
+  .sp-tbl .pill.bayanat{background:var(--accent-dim);color:var(--accent)}
+  .sp-tbl .pill.sirens{background:var(--red-dim);color:var(--red)}
+  .sp-tbl .pill.enemy{background:var(--orange-dim);color:var(--orange)}
+  .sp-tbl .pill.iran{background:var(--green-dim);color:var(--green)}
+  .sp-tbl .pill.videos{background:var(--purple-dim);color:var(--purple)}
+  .sp-tbl .pill.allies{background:var(--blue-dim);color:var(--blue)}
+
+  /* ═══════════════════════════════════════════════════════════════
+     VIEW: TIMELINE
+     ═══════════════════════════════════════════════════════════════ */
+  .sp-tl{position:relative;padding:6px 60px 6px 14px}
+  .sp-tl-axis{
+    position:absolute;top:0;bottom:0;right:30px;
+    width:2px;
+    background:linear-gradient(180deg,var(--accent) 0%,var(--accent-dim) 100%);
+    border-radius:1px;
+  }
+  .sp-tl-day{position:relative;margin-bottom:24px}
+  .sp-tl-day:last-child{margin-bottom:0}
+  .sp-tl-day-marker{
+    position:absolute;right:-37px;top:6px;
+    width:16px;height:16px;border-radius:50%;
+    background:var(--accent);
+    border:3px solid var(--surface);
+    box-shadow:0 0 0 1px var(--accent);
+  }
+  .sp-tl-day-label{
+    display:inline-block;
+    background:var(--accent);color:#fff;
+    padding:5px 14px;border-radius:7px;
+    font-size:.7rem;font-weight:700;
+    margin-bottom:10px;
+  }
+  .sp-tl-day-label .day-en{
+    direction:ltr;display:inline-block;margin-right:8px;font-size:.65rem;opacity:.85;
+  }
+  .sp-tl-events{display:flex;flex-direction:column;gap:8px}
+  .sp-tl-event{
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-right:3px solid var(--accent);
+    border-radius:8px;padding:10px 14px;
+    display:flex;gap:12px;align-items:flex-start;
+    text-decoration:none;color:inherit;
+    transition:all .15s;
+  }
+  .sp-tl-event:hover{
+    border-color:var(--accent);
+    transform:translateX(-3px);
+  }
+  .sp-tl-event.sirens{border-right-color:var(--red)}
+  .sp-tl-event.enemy{border-right-color:var(--orange)}
+  .sp-tl-event.iran{border-right-color:var(--green)}
+  .sp-tl-event.videos{border-right-color:var(--purple)}
+  .sp-tl-event.allies{border-right-color:var(--blue)}
+  .sp-tl-event-time{
+    flex-shrink:0;font-size:.7rem;color:var(--accent);
+    font-weight:700;min-width:42px;direction:ltr;
+  }
+  .sp-tl-event-body{flex:1;min-width:0}
+  .sp-tl-event-title{
+    font-size:.78rem;color:var(--text);font-weight:600;line-height:1.5;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .sp-tl-event-cat{
+    flex-shrink:0;font-size:.58rem;font-weight:700;
+    padding:2px 8px;border-radius:999px;align-self:flex-start;
+    background:var(--accent-dim);color:var(--accent);
+  }
+  .sp-tl-event.sirens .sp-tl-event-cat{background:var(--red-dim);color:var(--red)}
+  .sp-tl-event.enemy .sp-tl-event-cat{background:var(--orange-dim);color:var(--orange)}
+  .sp-tl-event.iran .sp-tl-event-cat{background:var(--green-dim);color:var(--green)}
+  .sp-tl-event.videos .sp-tl-event-cat{background:var(--purple-dim);color:var(--purple)}
+  .sp-tl-event.allies .sp-tl-event-cat{background:var(--blue-dim);color:var(--blue)}
+
+  /* ═══════════════════════════════════════════════════════════════
+     VIEW: GROUPED BY DAY
+     ═══════════════════════════════════════════════════════════════ */
+  .sp-gd-day{
+    border:1px solid var(--border);border-radius:11px;
+    margin-bottom:10px;overflow:hidden;
+    background:var(--surface2);
+  }
+  .sp-gd-head{
+    padding:12px 16px;
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    background:var(--surface2);
+    border-bottom:1px solid var(--border);
+    cursor:pointer;transition:background .15s;
+  }
+  .sp-gd-head:hover{background:var(--accent-dim)}
+  .sp-gd-day.collapsed .sp-gd-head{border-bottom-color:transparent}
+  .sp-gd-day.collapsed .sp-gd-body{display:none}
+  .sp-gd-chevron{
+    font-size:.72rem;color:var(--accent);transition:transform .15s;
+  }
+  .sp-gd-day.collapsed .sp-gd-chevron{transform:rotate(-90deg)}
+  .sp-gd-date{
+    font-size:.85rem;font-weight:800;color:var(--accent);direction:ltr;
+  }
+  .sp-gd-name{font-size:.7rem;color:var(--text-dim);font-weight:600}
+  .sp-gd-stats{margin-right:auto;display:flex;gap:6px;flex-wrap:wrap}
+  .sp-gd-stat{
+    font-size:.6rem;font-weight:700;
+    padding:3px 10px;border-radius:999px;
+    background:var(--surface);color:var(--text-dim);
+    border:1px solid var(--border);
+  }
+  .sp-gd-stat b{
+    color:var(--accent);direction:ltr;display:inline-block;
+    font-feature-settings:"tnum","lnum";font-variant-numeric:tabular-nums lining-nums;
+  }
+  .sp-gd-stat.sirens b{color:var(--red)}
+  .sp-gd-stat.enemy b{color:var(--orange)}
+  .sp-gd-stat.iran b{color:var(--green)}
+  .sp-gd-stat.videos b{color:var(--purple)}
+  .sp-gd-stat.allies b{color:var(--blue)}
+  .sp-gd-body{padding:10px 14px}
+  .sp-gd-body .sp-card{margin-bottom:6px}
+  .sp-gd-body .sp-card:last-child{margin-bottom:0}
+
+  /* ═══════════════════════════════════════════════════════════════
+     VIEW: HEATMAP CALENDAR
+     ═══════════════════════════════════════════════════════════════ */
+  .sp-hm{display:grid;grid-template-columns:1fr 280px;gap:22px}
+  @media(max-width:900px){.sp-hm{grid-template-columns:1fr}}
+  .sp-hm-cal{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:11px;padding:18px 18px 14px;
+  }
+  .sp-hm-head{
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    margin-bottom:14px;padding-bottom:10px;border-bottom:1px dashed var(--border);
+  }
+  .sp-hm-head .nav{
+    background:var(--surface);border:1px solid var(--border);
+    color:var(--text-dim);font-family:inherit;font-size:.78rem;font-weight:700;
+    padding:5px 11px;border-radius:6px;cursor:pointer;transition:all .15s;
+  }
+  .sp-hm-head .nav:hover{border-color:var(--accent);color:var(--accent)}
+  .sp-hm-head .nav:disabled{opacity:.35;cursor:not-allowed}
+  .sp-hm-head .month{
+    font-size:.92rem;font-weight:800;color:var(--accent);direction:ltr;
+  }
+  .sp-hm-head .total{margin-right:auto;font-size:.68rem;color:var(--text-dim)}
+  .sp-hm-head .total b{color:var(--accent);direction:ltr;display:inline-block}
+  .sp-hm-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+  .sp-hm-dn{
+    text-align:center;font-size:.6rem;color:var(--text-muted);
+    font-weight:700;padding:4px 0;
+  }
+  .sp-hm-cell{
+    aspect-ratio:1;border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:.7rem;font-weight:700;direction:ltr;
+    cursor:pointer;transition:all .12s;
+    border:1px solid transparent;
+    color:var(--text-dim);background:var(--surface);
+    font-feature-settings:"tnum","lnum";font-variant-numeric:tabular-nums lining-nums;
+  }
+  .sp-hm-cell:hover{border-color:var(--accent);transform:scale(1.05)}
+  .sp-hm-cell.empty{background:transparent;cursor:default;border:0}
+  .sp-hm-cell.empty:hover{transform:none}
+  .sp-hm-cell.picked{
+    border-color:var(--accent);
+    box-shadow:0 0 0 2px var(--accent-dim);
+  }
+  .sp-hm-cell[data-int="0"]{background:var(--surface);color:var(--text-muted)}
+  .sp-hm-cell[data-int="1"]{background:var(--accent-dim);color:var(--text-dim)}
+  .sp-hm-cell[data-int="2"]{background:var(--accent-dim2);color:var(--text)}
+  .sp-hm-cell[data-int="3"]{background:rgba(168,133,50,.42);color:var(--text)}
+  .sp-hm-cell[data-int="4"]{background:rgba(168,133,50,.65);color:#fff}
+  .sp-hm-cell[data-int="5"]{background:var(--accent);color:#fff}
+  .sp-hm-legend{
+    margin-top:14px;padding-top:12px;border-top:1px dashed var(--border);
+    display:flex;align-items:center;gap:10px;
+    font-size:.6rem;color:var(--text-muted);
+  }
+  .sp-hm-legend .scale{display:flex;gap:3px}
+  .sp-hm-legend .scale span{width:14px;height:14px;border-radius:3px}
+  .sp-hm-side{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:11px;padding:14px 16px;
+  }
+  .sp-hm-side h3{
+    font-size:.72rem;font-weight:700;color:var(--accent);
+    margin-bottom:10px;letter-spacing:.04em;
+  }
+  .sp-hm-picked{
+    background:var(--accent-dim);
+    border-radius:8px;padding:10px 12px;margin-bottom:12px;
+  }
+  .sp-hm-picked .pdate{font-size:.85rem;font-weight:800;color:var(--accent);direction:ltr}
+  .sp-hm-picked .pcount{font-size:.66rem;color:var(--text-dim);margin-top:2px}
+  .sp-hm-breakdown{display:flex;flex-direction:column;gap:6px}
+  .sp-hm-brow{
+    display:flex;align-items:center;gap:8px;font-size:.7rem;color:var(--text);
+  }
+  .sp-hm-brow .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .sp-hm-brow b{
+    margin-right:auto;color:var(--accent);direction:ltr;font-weight:800;
+    font-feature-settings:"tnum","lnum";font-variant-numeric:tabular-nums lining-nums;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     VIEW: MAP
+     ═══════════════════════════════════════════════════════════════ */
+  .sp-mp{display:grid;grid-template-columns:1fr 260px;gap:22px}
+  @media(max-width:900px){.sp-mp{grid-template-columns:1fr}}
+  .sp-mp-canvas{
+    height:480px;border-radius:11px;
+    border:1px solid var(--border);
+    background:var(--surface2);
+    overflow:hidden;
+  }
+  .sp-mp-side{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:11px;padding:14px;
+    max-height:480px;overflow-y:auto;
+  }
+  .sp-mp-side h3{
+    font-size:.72rem;font-weight:700;color:var(--accent);
+    margin-bottom:10px;letter-spacing:.04em;
+  }
+  .sp-mp-side .mp-list{display:flex;flex-direction:column;gap:5px}
+  .sp-mp-row{
+    display:flex;align-items:center;gap:8px;
+    padding:7px 9px;border-radius:6px;
+    background:var(--surface);
+    font-size:.68rem;color:var(--text);cursor:pointer;
+    border:1px solid transparent;
+  }
+  .sp-mp-row:hover{background:var(--accent-dim);border-color:var(--accent)}
+  .sp-mp-row .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .sp-mp-row b{
+    margin-right:auto;font-weight:700;color:var(--accent);
+    direction:ltr;display:inline-block;
+    font-feature-settings:"tnum","lnum";font-variant-numeric:tabular-nums lining-nums;
+  }
+  /* override leaflet defaults to match theme */
+  .leaflet-popup-content-wrapper{
+    background:var(--surface);color:var(--text);
+    border:1px solid var(--accent);border-radius:8px;
+  }
+  .leaflet-popup-tip{background:var(--surface);border:1px solid var(--accent)}
+  .leaflet-popup-content{font-family:inherit;font-size:.74rem;direction:rtl;text-align:right}
+
+  /* ═══════════════════════════════════════════════════════════════
+     VIEW: STATS DASHBOARD
+     ═══════════════════════════════════════════════════════════════ */
+  .sp-st-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  @media(max-width:780px){.sp-st-grid{grid-template-columns:1fr}}
+  .sp-st-panel{
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:11px;padding:16px 18px;
+  }
+  .sp-st-panel h3{
+    font-size:.72rem;font-weight:700;color:var(--accent);
+    margin-bottom:14px;letter-spacing:.04em;
+    display:flex;align-items:center;gap:8px;
+  }
+  .sp-st-panel h3::before{
+    content:"";width:4px;height:14px;background:var(--accent);border-radius:2px;
+  }
+  .sp-st-bars{display:flex;flex-direction:column;gap:8px}
+  .sp-st-bar{display:flex;align-items:center;gap:10px;font-size:.7rem}
+  .sp-st-bar-name{
+    flex-shrink:0;width:120px;color:var(--text);font-weight:600;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .sp-st-bar-track{
+    flex:1;background:var(--surface);border-radius:5px;
+    height:18px;overflow:hidden;
+  }
+  .sp-st-bar-fill{
+    height:100%;background:linear-gradient(90deg,var(--accent-hi,var(--accent)),var(--accent));
+    border-radius:5px;transition:width .4s;
+  }
+  .sp-st-bar-cnt{
+    flex-shrink:0;width:54px;text-align:left;
+    font-size:.66rem;font-weight:700;color:var(--accent);direction:ltr;
+    font-feature-settings:"tnum","lnum";font-variant-numeric:tabular-nums lining-nums;
+  }
+  .sp-st-empty{
+    text-align:center;padding:30px 10px;
+    color:var(--text-muted);font-size:.7rem;font-style:italic;
+  }
+  .sp-st-hours{
+    display:grid;grid-template-columns:repeat(24,1fr);
+    gap:3px;height:110px;align-items:end;
+  }
+  .sp-st-hcol{
+    background:var(--accent-dim2);border-radius:3px 3px 0 0;
+    transition:background .15s;cursor:pointer;min-height:2px;
+  }
+  .sp-st-hcol:hover{background:var(--accent)}
+  .sp-st-haxis{
+    margin-top:6px;display:grid;grid-template-columns:repeat(8,1fr);
+    font-size:.55rem;color:var(--text-muted);direction:ltr;text-align:center;
+  }
+  .sp-st-donut{display:flex;align-items:center;gap:18px}
+  .sp-st-donut-svg{width:130px;height:130px;flex-shrink:0}
+  .sp-st-donut-legend{flex:1;display:flex;flex-direction:column;gap:6px}
+  .sp-st-drow{display:flex;align-items:center;gap:8px;font-size:.66rem}
+  .sp-st-drow .dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+  .sp-st-drow .name{flex:1;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sp-st-drow .pct{
+    color:var(--accent);font-weight:700;direction:ltr;
+    font-feature-settings:"tnum","lnum";font-variant-numeric:tabular-nums lining-nums;
+  }
+  .sp-st-spark{
+    height:90px;background:var(--surface);border-radius:7px;
+    padding:8px 10px;
+  }
+  .sp-st-spark svg{width:100%;height:100%;display:block}
+  .sp-st-full{grid-column:1/-1}
+
+  .sp-results{
+    margin-top:16px;
     background:var(--surface);border:1px solid var(--border);
     border-radius:18px;padding:24px 26px;
   }
@@ -672,6 +1085,20 @@
     </div>
   </form>
 
+  <div class="sp-view-switcher">
+    <span class="sp-vs-label">عرض:</span>
+    <div class="sp-vs-tabs" id="spVsTabs">
+      <button type="button" class="sp-vs-tab active" data-view="list"><span class="ic">☰</span> قائمة</button>
+      <button type="button" class="sp-vs-tab" data-view="table"><span class="ic">▦</span> جدول</button>
+      <button type="button" class="sp-vs-tab" data-view="timeline"><span class="ic">⏱</span> خط زمني</button>
+      <button type="button" class="sp-vs-tab" data-view="grouped"><span class="ic">📅</span> تجميع</button>
+      <button type="button" class="sp-vs-tab" data-view="heatmap"><span class="ic">🔥</span> خريطة حرارية</button>
+      <button type="button" class="sp-vs-tab" data-view="map"><span class="ic">🗺</span> خريطة</button>
+      <button type="button" class="sp-vs-tab" data-view="stats"><span class="ic">📊</span> إحصاءات</button>
+    </div>
+    <div class="sp-vs-meta"><b id="spVsCount">0</b> نتيجة</div>
+  </div>
+
   <div class="sp-results">
     <div class="sp-results-head">
       <span class="sp-num" id="spResultCount">0</span>
@@ -707,6 +1134,10 @@ let INDEX = [];
 let FACETS = null;   // loaded from data/search-facets.json — vocab + per-item enrichment
 let FILTERED = [];
 let LIMIT = 50;
+let VIEW = 'list';   // current view mode: list/table/timeline/grouped/heatmap/map/stats
+let HM_MONTH = null; // heatmap currently shown month (YYYY-MM)
+let HM_PICKED = null;// heatmap currently selected day (YYYY-MM-DD)
+let MAP_INST = null; // Leaflet map instance (lazy)
 const MS = {};       // multi-select widget instances keyed by host id
 
 /* ─── createMultiSelect(host, options, opts) ──────────────────────────
@@ -1058,24 +1489,44 @@ function runSearch(){
   updateUrl(f);
 }
 
-/* Render results using DOM API (safe — no innerHTML interpolation) */
-function renderResults(){
+/* Get FILTERED, sorted by current sort selector */
+function getSortedFiltered(){
   const sort = document.getElementById('spSortLive').value;
   const arr = FILTERED.slice();
   if (sort === 'date-desc')      arr.sort((a,b) => (b.d+b.t).localeCompare(a.d+a.t));
   else if (sort === 'date-asc')  arr.sort((a,b) => (a.d+a.t).localeCompare(b.d+b.t));
   else if (sort === 'relevance') arr.sort((a,b) => (b._score||0) - (a._score||0));
+  return arr;
+}
 
+/* Top-level render dispatch — picks the right view function based on VIEW state */
+function renderResults(){
+  const arr = getSortedFiltered();
   const host = document.getElementById('spResults');
+
   document.getElementById('spResultCount').textContent = arr.length.toLocaleString('en-US');
   document.getElementById('spResultLabel').textContent =
     arr.length === 1 ? 'نتيجة واحدة' : (arr.length === 0 ? 'لا نتائج' : 'نتيجة');
+  document.getElementById('spVsCount').textContent = arr.length.toLocaleString('en-US');
 
   host.replaceChildren();
   if (arr.length === 0){
     host.appendChild(makeEmpty());
     return;
   }
+
+  switch (VIEW){
+    case 'table':    renderViewTable(arr, host); break;
+    case 'timeline': renderViewTimeline(arr, host); break;
+    case 'grouped':  renderViewGrouped(arr, host); break;
+    case 'heatmap':  renderViewHeatmap(arr, host); break;
+    case 'map':      renderViewMap(arr, host); break;
+    case 'stats':    renderViewStats(arr, host); break;
+    default:         renderViewList(arr, host);
+  }
+}
+
+function renderViewList(arr, host){
   const parsed = readFilters().q;
   const shown = arr.slice(0, LIMIT);
   for (const item of shown) host.appendChild(makeCard(item, parsed));
@@ -1089,6 +1540,738 @@ function renderResults(){
 }
 
 function loadMore(){ LIMIT += 50; renderResults(); }
+
+/* ─── Shared lookups across view modes ────────────────────── */
+const CAT_LABEL_AR = {
+  bayanat: 'بيانات حربية', sirens: 'صفارات إنذار', enemy: 'أخبار العدو',
+  iran: 'أخبار إيران', videos: 'فيديوهات', allies: 'حلفاء'
+};
+const CAT_COLOR = {
+  bayanat: 'var(--accent)', sirens: 'var(--red)', enemy: 'var(--orange)',
+  iran: 'var(--green)', videos: 'var(--purple)', allies: 'var(--blue)'
+};
+const WEEKDAYS_AR = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+function weekdayAr(dateStr){
+  const d = new Date(dateStr + 'T00:00:00');
+  return WEEKDAYS_AR[d.getDay()] || '';
+}
+function deepLink(item){
+  return `report.html?date=${encodeURIComponent(item.d)}&tab=${encodeURIComponent(item.c)}&idx=${encodeURIComponent(item.i)}`;
+}
+
+/* ─── VIEW: table ─── sortable dense grid + CSV export ─── */
+function renderViewTable(arr, host){
+  const wrap = document.createElement('div');
+  wrap.className = 'sp-tbl-wrap';
+
+  const toolbar = document.createElement('div');
+  toolbar.className = 'sp-tbl-toolbar';
+  const counter = document.createElement('span');
+  counter.innerHTML = `عرض <b style="color:var(--accent)">${Math.min(arr.length, LIMIT).toLocaleString('en-US')}</b> من <b style="color:var(--accent)">${arr.length.toLocaleString('en-US')}</b>`;
+  toolbar.appendChild(counter);
+  const right = document.createElement('div');
+  right.className = 'right';
+  const csvBtn = document.createElement('button');
+  csvBtn.type = 'button';
+  csvBtn.className = 'sp-mini-btn';
+  csvBtn.textContent = '⤓ تصدير CSV';
+  csvBtn.addEventListener('click', () => exportCSV(arr));
+  right.appendChild(csvBtn);
+  toolbar.appendChild(right);
+  wrap.appendChild(toolbar);
+
+  const tbl = document.createElement('table');
+  tbl.className = 'sp-tbl';
+  const thead = document.createElement('thead');
+  const trh = document.createElement('tr');
+  const cols = [
+    { label:'التاريخ', sorted:true },
+    { label:'الوقت' },
+    { label:'النوع' },
+    { label:'السلاح' },
+    { label:'الهدف / الموقع' },
+    { label:'المصدر' },
+    { label:'النص' },
+  ];
+  for (const c of cols){
+    const th = document.createElement('th');
+    if (c.sorted) th.className = 'sorted';
+    const arrow = document.createElement('span');
+    arrow.className = 'arrow';
+    arrow.textContent = '▾';
+    th.appendChild(document.createTextNode(c.label + ' '));
+    th.appendChild(arrow);
+    trh.appendChild(th);
+  }
+  thead.appendChild(trh);
+  tbl.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  const shown = arr.slice(0, LIMIT);
+  for (const item of shown){
+    const tr = document.createElement('tr');
+    tr.addEventListener('click', () => { window.location.href = deepLink(item); });
+    const td = (cls, text) => { const e = document.createElement('td'); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+    tr.appendChild(td('col-date', item.d));
+    tr.appendChild(td('col-time', item.t || ''));
+    const tdCat = td();
+    const pill = document.createElement('span');
+    pill.className = 'pill ' + item.c;
+    pill.textContent = CAT_LABEL_AR[item.c] || item.c;
+    tdCat.appendChild(pill);
+    tr.appendChild(tdCat);
+    const meta = metaFor(item) || {};
+    tr.appendChild(td('', meta.w || (item.c === 'bayanat' ? '—' : '')));
+    tr.appendChild(td('', meta.t || meta.l || (item.c === 'sirens' || item.c === 'bayanat' ? '' : '—')));
+    tr.appendChild(td('', meta.f || (item.c === 'allies' ? '' : '—')));
+    tr.appendChild(td('col-snippet', item.tt || item.st || ''));
+    tbody.appendChild(tr);
+  }
+  tbl.appendChild(tbody);
+  wrap.appendChild(tbl);
+  host.appendChild(wrap);
+
+  if (arr.length > LIMIT){
+    const more = document.createElement('button');
+    more.className = 'sp-more';
+    more.textContent = `عرض المزيد (${(arr.length - LIMIT).toLocaleString('en-US')} متبقية)`;
+    more.addEventListener('click', loadMore);
+    host.appendChild(more);
+  }
+}
+
+/* CSV export — UTF-8 BOM so Excel reads Arabic correctly */
+function exportCSV(arr){
+  const cols = ['date','time','category','weapon','target','source','title'];
+  const rows = [cols.join(',')];
+  for (const item of arr){
+    const meta = metaFor(item) || {};
+    const vals = [
+      item.d, item.t || '', item.c,
+      meta.w || '', meta.t || meta.l || '', meta.f || '',
+      item.tt || item.st || ''
+    ];
+    rows.push(vals.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(','));
+  }
+  const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'harbi-search-results.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+/* ─── VIEW: timeline ─── vertical axis with day markers ─── */
+function renderViewTimeline(arr, host){
+  const tl = document.createElement('div');
+  tl.className = 'sp-tl';
+  const axis = document.createElement('div');
+  axis.className = 'sp-tl-axis';
+  tl.appendChild(axis);
+
+  const byDay = new Map();
+  const shown = arr.slice(0, Math.max(LIMIT, 100));
+  for (const item of shown){
+    if (!byDay.has(item.d)) byDay.set(item.d, []);
+    byDay.get(item.d).push(item);
+  }
+
+  for (const [date, items] of byDay){
+    const day = document.createElement('div');
+    day.className = 'sp-tl-day';
+    const marker = document.createElement('div');
+    marker.className = 'sp-tl-day-marker';
+    day.appendChild(marker);
+    const label = document.createElement('div');
+    label.className = 'sp-tl-day-label';
+    const en = document.createElement('span');
+    en.className = 'day-en';
+    en.textContent = date;
+    label.appendChild(en);
+    label.appendChild(document.createTextNode(weekdayAr(date)));
+    day.appendChild(label);
+
+    const events = document.createElement('div');
+    events.className = 'sp-tl-events';
+    for (const item of items){
+      const a = document.createElement('a');
+      a.className = 'sp-tl-event ' + item.c;
+      a.href = deepLink(item);
+      const time = document.createElement('div');
+      time.className = 'sp-tl-event-time';
+      time.textContent = item.t || '';
+      a.appendChild(time);
+      const body = document.createElement('div');
+      body.className = 'sp-tl-event-body';
+      const title = document.createElement('div');
+      title.className = 'sp-tl-event-title';
+      title.textContent = item.tt || item.st || '';
+      body.appendChild(title);
+      a.appendChild(body);
+      const cat = document.createElement('span');
+      cat.className = 'sp-tl-event-cat';
+      cat.textContent = CAT_LABEL_AR[item.c] || item.c;
+      a.appendChild(cat);
+      events.appendChild(a);
+    }
+    day.appendChild(events);
+    tl.appendChild(day);
+  }
+  host.appendChild(tl);
+
+  if (arr.length > shown.length){
+    const more = document.createElement('button');
+    more.className = 'sp-more';
+    more.textContent = `عرض المزيد (${(arr.length - shown.length).toLocaleString('en-US')} متبقية)`;
+    more.addEventListener('click', loadMore);
+    host.appendChild(more);
+  }
+}
+
+/* ─── VIEW: grouped by day ─── collapsible day cards ────── */
+function renderViewGrouped(arr, host){
+  const byDay = new Map();
+  for (const item of arr){
+    if (!byDay.has(item.d)) byDay.set(item.d, []);
+    byDay.get(item.d).push(item);
+  }
+
+  const parsed = readFilters().q;
+  let dayCount = 0;
+  for (const [date, items] of byDay){
+    const day = document.createElement('div');
+    day.className = 'sp-gd-day' + (dayCount >= 3 ? ' collapsed' : '');
+    const head = document.createElement('div');
+    head.className = 'sp-gd-head';
+    const chev = document.createElement('span');
+    chev.className = 'sp-gd-chevron';
+    chev.textContent = '▾';
+    head.appendChild(chev);
+    const dateEl = document.createElement('span');
+    dateEl.className = 'sp-gd-date';
+    dateEl.textContent = date;
+    head.appendChild(dateEl);
+    const nameEl = document.createElement('span');
+    nameEl.className = 'sp-gd-name';
+    nameEl.textContent = weekdayAr(date);
+    head.appendChild(nameEl);
+
+    const stats = document.createElement('div');
+    stats.className = 'sp-gd-stats';
+    const total = document.createElement('span');
+    total.className = 'sp-gd-stat';
+    const totalB = document.createElement('b');
+    totalB.textContent = items.length.toLocaleString('en-US');
+    total.appendChild(totalB);
+    total.appendChild(document.createTextNode(' ' + (items.length === 1 ? 'نتيجة' : 'نتائج')));
+    stats.appendChild(total);
+    const byCat = items.reduce((m, it) => { m[it.c] = (m[it.c] || 0) + 1; return m; }, {});
+    for (const [c, n] of Object.entries(byCat)){
+      const pill = document.createElement('span');
+      pill.className = 'sp-gd-stat ' + c;
+      const b = document.createElement('b');
+      b.textContent = n.toLocaleString('en-US');
+      pill.appendChild(b);
+      pill.appendChild(document.createTextNode(' ' + (CAT_LABEL_AR[c] || c)));
+      stats.appendChild(pill);
+    }
+    head.appendChild(stats);
+    head.addEventListener('click', () => day.classList.toggle('collapsed'));
+    day.appendChild(head);
+
+    const body = document.createElement('div');
+    body.className = 'sp-gd-body';
+    for (const item of items) body.appendChild(makeCard(item, parsed));
+    day.appendChild(body);
+
+    host.appendChild(day);
+    dayCount++;
+  }
+}
+
+/* ─── VIEW: heatmap calendar ────────────────────────────── */
+function renderViewHeatmap(arr, host){
+  const counts = new Map();
+  const breakdowns = new Map();
+  for (const item of arr){
+    counts.set(item.d, (counts.get(item.d) || 0) + 1);
+    if (!breakdowns.has(item.d)) breakdowns.set(item.d, {});
+    const b = breakdowns.get(item.d);
+    b[item.c] = (b[item.c] || 0) + 1;
+  }
+
+  if (counts.size === 0){
+    host.appendChild(makeEmpty());
+    return;
+  }
+
+  const months = [...new Set([...counts.keys()].map(d => d.slice(0,7)))].sort();
+  if (!HM_MONTH || !months.includes(HM_MONTH)) HM_MONTH = months[months.length - 1];
+
+  const maxC = Math.max(...counts.values());
+  const intensity = (n) => {
+    if (n === 0) return 0;
+    const r = n / maxC;
+    if (r <= 0.10) return 1;
+    if (r <= 0.30) return 2;
+    if (r <= 0.55) return 3;
+    if (r <= 0.80) return 4;
+    return 5;
+  };
+
+  const wrap = document.createElement('div');
+  wrap.className = 'sp-hm';
+
+  const cal = document.createElement('div');
+  cal.className = 'sp-hm-cal';
+  const header = document.createElement('div');
+  header.className = 'sp-hm-head';
+  const prev = document.createElement('button');
+  prev.type = 'button';
+  prev.className = 'nav';
+  prev.textContent = '→';
+  prev.title = 'الشهر السابق';
+  prev.disabled = months.indexOf(HM_MONTH) <= 0;
+  prev.addEventListener('click', () => {
+    const i = months.indexOf(HM_MONTH);
+    if (i > 0){ HM_MONTH = months[i - 1]; HM_PICKED = null; renderResults(); }
+  });
+  header.appendChild(prev);
+  const monthLbl = document.createElement('span');
+  monthLbl.className = 'month';
+  monthLbl.textContent = HM_MONTH;
+  header.appendChild(monthLbl);
+  const next = document.createElement('button');
+  next.type = 'button';
+  next.className = 'nav';
+  next.textContent = '←';
+  next.title = 'الشهر التالي';
+  next.disabled = months.indexOf(HM_MONTH) >= months.length - 1;
+  next.addEventListener('click', () => {
+    const i = months.indexOf(HM_MONTH);
+    if (i < months.length - 1){ HM_MONTH = months[i + 1]; HM_PICKED = null; renderResults(); }
+  });
+  header.appendChild(next);
+  const monthTotal = [...counts.entries()]
+    .filter(([d]) => d.startsWith(HM_MONTH))
+    .reduce((s, [, n]) => s + n, 0);
+  const totalLbl = document.createElement('div');
+  totalLbl.className = 'total';
+  const totalB = document.createElement('b');
+  totalB.textContent = monthTotal.toLocaleString('en-US');
+  totalLbl.appendChild(document.createTextNode('المجموع: '));
+  totalLbl.appendChild(totalB);
+  header.appendChild(totalLbl);
+  cal.appendChild(header);
+
+  const grid = document.createElement('div');
+  grid.className = 'sp-hm-grid';
+  const dayNames = ['ح','ن','ث','ر','خ','ج','س'];
+  for (const d of dayNames){
+    const dn = document.createElement('div');
+    dn.className = 'sp-hm-dn';
+    dn.textContent = d;
+    grid.appendChild(dn);
+  }
+  const [yr, mo] = HM_MONTH.split('-').map(Number);
+  const first = new Date(yr, mo - 1, 1);
+  const dim = new Date(yr, mo, 0).getDate();
+  for (let i = 0; i < first.getDay(); i++){
+    const e = document.createElement('div');
+    e.className = 'sp-hm-cell empty';
+    grid.appendChild(e);
+  }
+  for (let day = 1; day <= dim; day++){
+    const dateKey = `${HM_MONTH}-${String(day).padStart(2,'0')}`;
+    const n = counts.get(dateKey) || 0;
+    const cell = document.createElement('div');
+    cell.className = 'sp-hm-cell';
+    cell.dataset.int = String(intensity(n));
+    cell.textContent = String(day);
+    cell.title = n > 0 ? `${n} نتيجة` : 'لا نتائج';
+    if (n > 0){
+      cell.addEventListener('click', () => { HM_PICKED = dateKey; renderResults(); });
+    }
+    if (HM_PICKED === dateKey) cell.classList.add('picked');
+    grid.appendChild(cell);
+  }
+  cal.appendChild(grid);
+
+  const legend = document.createElement('div');
+  legend.className = 'sp-hm-legend';
+  const less = document.createElement('span');
+  less.textContent = 'أقل';
+  legend.appendChild(less);
+  const scale = document.createElement('div');
+  scale.className = 'scale';
+  const scaleColors = ['var(--surface)','var(--accent-dim)','var(--accent-dim2)','rgba(168,133,50,.42)','rgba(168,133,50,.65)','var(--accent)'];
+  for (const col of scaleColors){
+    const s = document.createElement('span');
+    s.style.background = col;
+    scale.appendChild(s);
+  }
+  legend.appendChild(scale);
+  const more = document.createElement('span');
+  more.textContent = 'أكثر';
+  legend.appendChild(more);
+  cal.appendChild(legend);
+  wrap.appendChild(cal);
+
+  const side = document.createElement('div');
+  side.className = 'sp-hm-side';
+  const h3 = document.createElement('h3');
+  h3.textContent = 'تفاصيل اليوم المختار';
+  side.appendChild(h3);
+  if (HM_PICKED && counts.has(HM_PICKED)){
+    const picked = document.createElement('div');
+    picked.className = 'sp-hm-picked';
+    const pdate = document.createElement('div');
+    pdate.className = 'pdate';
+    pdate.textContent = HM_PICKED;
+    picked.appendChild(pdate);
+    const pcount = document.createElement('div');
+    pcount.className = 'pcount';
+    pcount.textContent = `${weekdayAr(HM_PICKED)} · ${counts.get(HM_PICKED)} نتيجة`;
+    picked.appendChild(pcount);
+    side.appendChild(picked);
+    const breakdown = document.createElement('div');
+    breakdown.className = 'sp-hm-breakdown';
+    for (const [c, n] of Object.entries(breakdowns.get(HM_PICKED))){
+      const row = document.createElement('div');
+      row.className = 'sp-hm-brow';
+      const dot = document.createElement('span');
+      dot.className = 'dot';
+      dot.style.background = CAT_COLOR[c];
+      row.appendChild(dot);
+      row.appendChild(document.createTextNode(CAT_LABEL_AR[c] || c));
+      const b = document.createElement('b');
+      b.textContent = n.toLocaleString('en-US');
+      row.appendChild(b);
+      breakdown.appendChild(row);
+    }
+    side.appendChild(breakdown);
+  } else {
+    const hint = document.createElement('div');
+    hint.style.cssText = 'font-size:.7rem;color:var(--text-muted);font-style:italic;text-align:center;padding:20px 8px';
+    hint.textContent = 'انقر على أي يوم في التقويم لرؤية تفاصيله';
+    side.appendChild(hint);
+  }
+  wrap.appendChild(side);
+  host.appendChild(wrap);
+}
+
+/* ─── VIEW: stats dashboard ─────────────────────────────── */
+function renderViewStats(arr, host){
+  const grid = document.createElement('div');
+  grid.className = 'sp-st-grid';
+
+  const weapons = new Map();
+  const targets = new Map();
+  const cats    = new Map();
+  const hours   = new Array(24).fill(0);
+  const byDay   = new Map();
+
+  for (const item of arr){
+    cats.set(item.c, (cats.get(item.c) || 0) + 1);
+    if (item.t){
+      const h = parseInt(item.t.slice(0,2), 10);
+      if (!isNaN(h) && h >= 0 && h < 24) hours[h]++;
+    }
+    byDay.set(item.d, (byDay.get(item.d) || 0) + 1);
+    const meta = metaFor(item);
+    if (!meta) continue;
+    if (meta.w) weapons.set(meta.w, (weapons.get(meta.w) || 0) + 1);
+    if (meta.t) targets.set(meta.t, (targets.get(meta.t) || 0) + 1);
+  }
+
+  const topN = (m, n) => [...m.entries()].sort((a,b) => b[1] - a[1]).slice(0, n);
+  const maxV = (m) => Math.max(0, ...m.values());
+
+  grid.appendChild(makeBarPanel('أكثر الأسلحة استخداماً', topN(weapons, 6), maxV(weapons)));
+  grid.appendChild(makeBarPanel('أكثر الأهداف استهدافاً', topN(targets, 6), maxV(targets)));
+  grid.appendChild(makeHourPanel(hours));
+  grid.appendChild(makeDonutPanel(cats, arr.length));
+  grid.appendChild(makeSparkPanel(byDay));
+
+  host.appendChild(grid);
+}
+
+function makeBarPanel(title, rows, max){
+  const p = document.createElement('div');
+  p.className = 'sp-st-panel';
+  const h = document.createElement('h3');
+  h.textContent = title;
+  p.appendChild(h);
+  if (rows.length === 0){
+    const e = document.createElement('div');
+    e.className = 'sp-st-empty';
+    e.textContent = 'لا توجد بيانات لهذه الفئة في النتائج الحالية';
+    p.appendChild(e);
+    return p;
+  }
+  const bars = document.createElement('div');
+  bars.className = 'sp-st-bars';
+  for (const [name, n] of rows){
+    const row = document.createElement('div');
+    row.className = 'sp-st-bar';
+    const nm = document.createElement('span');
+    nm.className = 'sp-st-bar-name';
+    nm.textContent = name;
+    nm.title = name;
+    row.appendChild(nm);
+    const tr = document.createElement('span');
+    tr.className = 'sp-st-bar-track';
+    const fl = document.createElement('span');
+    fl.className = 'sp-st-bar-fill';
+    fl.style.width = ((n / max) * 100).toFixed(1) + '%';
+    tr.appendChild(fl);
+    row.appendChild(tr);
+    const cn = document.createElement('span');
+    cn.className = 'sp-st-bar-cnt';
+    cn.textContent = n.toLocaleString('en-US');
+    row.appendChild(cn);
+    bars.appendChild(row);
+  }
+  p.appendChild(bars);
+  return p;
+}
+
+function makeHourPanel(hours){
+  const p = document.createElement('div');
+  p.className = 'sp-st-panel';
+  const h = document.createElement('h3');
+  h.textContent = 'توزيع ساعات النشر';
+  p.appendChild(h);
+  const max = Math.max(1, ...hours);
+  const grid = document.createElement('div');
+  grid.className = 'sp-st-hours';
+  for (let i = 0; i < 24; i++){
+    const col = document.createElement('div');
+    col.className = 'sp-st-hcol';
+    col.style.height = ((hours[i] / max) * 100).toFixed(1) + '%';
+    col.title = `${String(i).padStart(2,'0')}:00 — ${hours[i]} نتيجة`;
+    grid.appendChild(col);
+  }
+  p.appendChild(grid);
+  const axis = document.createElement('div');
+  axis.className = 'sp-st-haxis';
+  for (const lbl of ['00','03','06','09','12','15','18','21']){
+    const s = document.createElement('span');
+    s.textContent = lbl;
+    axis.appendChild(s);
+  }
+  p.appendChild(axis);
+  return p;
+}
+
+function makeDonutPanel(cats, total){
+  const p = document.createElement('div');
+  p.className = 'sp-st-panel';
+  const h = document.createElement('h3');
+  h.textContent = 'توزيع الفئات';
+  p.appendChild(h);
+  const wrap = document.createElement('div');
+  wrap.className = 'sp-st-donut';
+
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('class', 'sp-st-donut-svg');
+  svg.setAttribute('viewBox', '0 0 42 42');
+  const bg = document.createElementNS(svgNS, 'circle');
+  bg.setAttribute('cx', '21'); bg.setAttribute('cy', '21'); bg.setAttribute('r', '15.9');
+  bg.setAttribute('fill', 'transparent');
+  bg.setAttribute('stroke', 'rgba(168,133,50,.12)');
+  bg.setAttribute('stroke-width', '6');
+  svg.appendChild(bg);
+  let offset = 0;
+  const ordered = [...cats.entries()].sort((a,b) => b[1] - a[1]);
+  const colorMap = { bayanat:'#a88532', sirens:'#a8322f', enemy:'#c4671c', iran:'#2e5a28', videos:'#6c3a7a', allies:'#2d5b7a' };
+  for (const [c, n] of ordered){
+    const pct = total > 0 ? (n / total) * 100 : 0;
+    const seg = document.createElementNS(svgNS, 'circle');
+    seg.setAttribute('cx', '21'); seg.setAttribute('cy', '21'); seg.setAttribute('r', '15.9');
+    seg.setAttribute('fill', 'transparent');
+    seg.setAttribute('stroke', colorMap[c] || '#a88532');
+    seg.setAttribute('stroke-width', '6');
+    seg.setAttribute('stroke-dasharray', `${pct.toFixed(2)} 100`);
+    seg.setAttribute('stroke-dashoffset', String(-offset));
+    seg.setAttribute('transform', 'rotate(-90 21 21)');
+    svg.appendChild(seg);
+    offset += pct;
+  }
+  wrap.appendChild(svg);
+
+  const legend = document.createElement('div');
+  legend.className = 'sp-st-donut-legend';
+  for (const [c, n] of ordered){
+    const row = document.createElement('div');
+    row.className = 'sp-st-drow';
+    const dot = document.createElement('span');
+    dot.className = 'dot';
+    dot.style.background = colorMap[c] || '#a88532';
+    row.appendChild(dot);
+    const name = document.createElement('span');
+    name.className = 'name';
+    name.textContent = CAT_LABEL_AR[c] || c;
+    row.appendChild(name);
+    const pct = document.createElement('span');
+    pct.className = 'pct';
+    pct.textContent = ((n / total) * 100).toFixed(0) + '%';
+    row.appendChild(pct);
+    legend.appendChild(row);
+  }
+  wrap.appendChild(legend);
+  p.appendChild(wrap);
+  return p;
+}
+
+function makeSparkPanel(byDay){
+  const p = document.createElement('div');
+  p.className = 'sp-st-panel sp-st-full';
+  const h = document.createElement('h3');
+  h.textContent = 'النشاط اليومي عبر الفترة المحددة';
+  p.appendChild(h);
+  const wrap = document.createElement('div');
+  wrap.className = 'sp-st-spark';
+  if (byDay.size === 0){ p.appendChild(wrap); return p; }
+
+  const dates = [...byDay.keys()].sort();
+  const max = Math.max(...byDay.values());
+  const W = 600, H = 80;
+  const stepX = dates.length > 1 ? W / (dates.length - 1) : 0;
+  const points = dates.map((d, i) => {
+    const v = byDay.get(d);
+    const y = H - 8 - (v / max) * (H - 16);
+    return [i * stepX, y];
+  });
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('preserveAspectRatio', 'none');
+
+  const defs = document.createElementNS(svgNS, 'defs');
+  const grad = document.createElementNS(svgNS, 'linearGradient');
+  grad.setAttribute('id', 'sparkfill');
+  grad.setAttribute('x1', '0'); grad.setAttribute('y1', '0');
+  grad.setAttribute('x2', '0'); grad.setAttribute('y2', '1');
+  const s1 = document.createElementNS(svgNS, 'stop');
+  s1.setAttribute('offset', '0%'); s1.setAttribute('stop-color', '#a88532'); s1.setAttribute('stop-opacity', '.35');
+  const s2 = document.createElementNS(svgNS, 'stop');
+  s2.setAttribute('offset', '100%'); s2.setAttribute('stop-color', '#a88532'); s2.setAttribute('stop-opacity', '0');
+  grad.appendChild(s1); grad.appendChild(s2);
+  defs.appendChild(grad);
+  svg.appendChild(defs);
+
+  const pathD = 'M' + points.map(p => p.join(',')).join(' L');
+  const fill = document.createElementNS(svgNS, 'path');
+  fill.setAttribute('d', pathD + ` L${W},${H} L0,${H} Z`);
+  fill.setAttribute('fill', 'url(#sparkfill)');
+  svg.appendChild(fill);
+  const line = document.createElementNS(svgNS, 'path');
+  line.setAttribute('d', pathD);
+  line.setAttribute('fill', 'none');
+  line.setAttribute('stroke', '#a88532');
+  line.setAttribute('stroke-width', '2');
+  svg.appendChild(line);
+
+  wrap.appendChild(svg);
+  p.appendChild(wrap);
+  return p;
+}
+
+/* ─── VIEW: map ─── Leaflet markers from FACETS.coords ──── */
+function renderViewMap(arr, host){
+  const wrap = document.createElement('div');
+  wrap.className = 'sp-mp';
+
+  const canvas = document.createElement('div');
+  canvas.className = 'sp-mp-canvas';
+  canvas.id = 'spMpCanvas';
+  wrap.appendChild(canvas);
+
+  const side = document.createElement('div');
+  side.className = 'sp-mp-side';
+  const h = document.createElement('h3');
+  h.textContent = 'المواقع في النتائج';
+  side.appendChild(h);
+  const list = document.createElement('div');
+  list.className = 'mp-list';
+  side.appendChild(list);
+  wrap.appendChild(side);
+  host.appendChild(wrap);
+
+  const coords = (FACETS && FACETS.coords) || {};
+  const locCounts = new Map();
+  const unmapped  = new Map();
+
+  for (const item of arr){
+    const meta = metaFor(item);
+    let loc = null;
+    if (item.c === 'sirens' && meta && meta.l)        loc = meta.l;
+    else if (item.c === 'bayanat' && meta && meta.t)  loc = meta.t;
+    if (!loc) continue;
+    const c = coords[loc];
+    if (c){
+      if (!locCounts.has(loc)) locCounts.set(loc, { count: 0, lat: c[0], lng: c[1], cat: item.c });
+      const e = locCounts.get(loc);
+      e.count++;
+    } else {
+      unmapped.set(loc, (unmapped.get(loc) || 0) + 1);
+    }
+  }
+
+  function init(){
+    if (typeof L === 'undefined'){ setTimeout(init, 100); return; }
+    if (MAP_INST){ MAP_INST.remove(); MAP_INST = null; }
+    const map = L.map(canvas, { zoomControl: true, scrollWheelZoom: true });
+    MAP_INST = map;
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18, attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    const bounds = [];
+    for (const [loc, e] of locCounts){
+      const radius = Math.max(6, Math.min(22, 4 + Math.log2(e.count + 1) * 3));
+      const color = e.cat === 'sirens' ? '#a8322f' : '#a88532';
+      const m = L.circleMarker([e.lat, e.lng], {
+        radius, color: '#fff', weight: 2,
+        fillColor: color, fillOpacity: 0.85
+      }).addTo(map);
+      m.bindPopup(`<b>${loc}</b><br/>${e.count.toLocaleString('en-US')} نتيجة`);
+      bounds.push([e.lat, e.lng]);
+    }
+    if (bounds.length) map.fitBounds(bounds, { padding: [30, 30] });
+    else               map.setView([33.0, 35.5], 8);
+  }
+  init();
+
+  const mappedSorted = [...locCounts.entries()].sort((a,b) => b[1].count - a[1].count);
+  for (const [loc, e] of mappedSorted){
+    const row = document.createElement('div');
+    row.className = 'sp-mp-row';
+    const dot = document.createElement('span');
+    dot.className = 'dot';
+    dot.style.background = e.cat === 'sirens' ? 'var(--red)' : 'var(--accent)';
+    row.appendChild(dot);
+    row.appendChild(document.createTextNode(loc));
+    const b = document.createElement('b');
+    b.textContent = e.count.toLocaleString('en-US');
+    row.appendChild(b);
+    row.addEventListener('click', () => {
+      if (MAP_INST) MAP_INST.setView([e.lat, e.lng], 11);
+    });
+    list.appendChild(row);
+  }
+  if (unmapped.size > 0){
+    const div = document.createElement('div');
+    div.style.cssText = 'margin-top:14px;padding-top:10px;border-top:1px dashed var(--border);font-size:.62rem;color:var(--text-muted)';
+    const total = [...unmapped.values()].reduce((a,b) => a + b, 0);
+    div.textContent = `+ ${unmapped.size.toLocaleString('en-US')} موقعاً بدون إحداثيات (${total.toLocaleString('en-US')} نتيجة)`;
+    side.appendChild(div);
+  }
+}
 
 function makeEmpty(){
   const div = document.createElement('div');
@@ -1204,6 +2387,20 @@ document.querySelectorAll('.sp-scope').forEach(btn => {
   });
 });
 
+/* View-switcher: click a tab to change view mode */
+document.querySelectorAll('#spVsTabs .sp-vs-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (VIEW === btn.dataset.view) return;
+    VIEW = btn.dataset.view;
+    document.querySelectorAll('#spVsTabs .sp-vs-tab').forEach(b => b.classList.toggle('active', b === btn));
+    HM_PICKED = null;  // reset heatmap picked day on view change
+    LIMIT = 50;        // reset pagination
+    if (MAP_INST && VIEW !== 'map'){ MAP_INST.remove(); MAP_INST = null; }
+    renderResults();
+    updateUrl(readFilters());
+  });
+});
+
 /* Type chips: multi-select + reveal sub-panels */
 document.querySelectorAll('.sp-chip[data-type]').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -1248,6 +2445,7 @@ function updateUrl(f){
   if (f.types.size !== all.length) p.set('t', [...f.types].join(','));
   if (f.timeFrom) p.set('tf', f.timeFrom);
   if (f.timeTo)   p.set('tt', f.timeTo);
+  if (VIEW !== 'list') p.set('view', VIEW);
   const qs = p.toString();
   const url = qs ? `?${qs}` : location.pathname;
   history.replaceState(null, '', url);
@@ -1277,6 +2475,14 @@ function restoreFromUrl(){
     const types = new Set(p.get('t').split(','));
     document.querySelectorAll('.sp-chip[data-type]').forEach(b => b.classList.toggle('active', types.has(b.dataset.type)));
     document.querySelectorAll('#spPresets .sp-preset').forEach(b => b.classList.remove('active'));
+  }
+  if (p.has('view')){
+    const v = p.get('view');
+    const valid = ['list','table','timeline','grouped','heatmap','map','stats'];
+    if (valid.includes(v)){
+      VIEW = v;
+      document.querySelectorAll('#spVsTabs .sp-vs-tab').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+    }
   }
 }
 

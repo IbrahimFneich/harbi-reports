@@ -152,6 +152,7 @@ def main():
     bayan_meta = {}
     siren_meta = {}
     ally_meta  = {}
+    coords     = {}  # location string → [lat, lng], aggregated from sirenPoints
 
     for fp in files:
         with open(fp, encoding='utf-8') as f:
@@ -201,6 +202,15 @@ def main():
         if a_arr:
             ally_meta[date] = a_arr
 
+        # Aggregate sirenPoints → coords lookup. Same location across days
+        # collapses to a single [lat, lng] pair (last write wins; coords are stable).
+        for sp in d.get('sirenPoints') or []:
+            loc = (sp.get('loc') or '').strip()
+            lat = sp.get('lat')
+            lng = sp.get('lng')
+            if loc and lat is not None and lng is not None:
+                coords[loc] = [lat, lng]
+
     vocab = {
         'weapons':      [[k, n] for k, n in weapons.most_common()],
         'targets_top':  [[k, n] for k, n in targets.most_common(TARGETS_MAX)],
@@ -216,6 +226,7 @@ def main():
         'bayan': bayan_meta,
         'siren': siren_meta,
         'allies': ally_meta,
+        'coords': coords,
     }
 
     out = os.path.join(DATA_DIR, 'search-facets.json')
@@ -234,6 +245,7 @@ def main():
     print(f'  bayan days: {len(bayan_meta):>5}')
     print(f'  siren days: {len(siren_meta):>5}')
     print(f'  ally days:  {len(ally_meta):>5}')
+    print(f'  geocoords:  {len(coords):>5} unique locations')
 
 
 if __name__ == '__main__':

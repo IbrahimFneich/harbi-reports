@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Search Results — 7 view modes</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ece3cc;
+    --surface:#f5efdf;
+    --surface-hi:#fbf7eb;
+    --surface-lo:#e8dec0;
+    --border:#d9cfb4;
+    --border-hi:#c7b98f;
+    --accent:#a88532;
+    --accent-hi:#c39f45;
+    --accent-dim:rgba(168,133,50,.12);
+    --accent-dim2:rgba(168,133,50,.22);
+    --accent-dim3:rgba(168,133,50,.42);
+    --accent-dim4:rgba(168,133,50,.65);
+    --text:#3d2f1a;
+    --text-dim:#6e5b36;
+    --muted:#9a8560;
+    --red:#a8322f;
+    --red-dim:rgba(168,50,47,.12);
+    --orange:#c4671c;
+    --orange-dim:rgba(196,103,28,.12);
+    --green:#2e5a28;
+    --green-dim:rgba(46,90,40,.12);
+    --blue:#2d5b7a;
+    --blue-dim:rgba(45,91,122,.12);
+    --purple:#6c3a7a;
+    --purple-dim:rgba(108,58,122,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-feature-settings:"lnum","tnum";font-variant-numeric:lining-nums tabular-nums}
+  body{
+    font-family:'Noto Kufi Arabic',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    padding:48px 20px 96px;
+    min-height:100vh;
+    line-height:1.5;
+  }
+  .page{max-width:1280px;margin:0 auto}
+
+  .page-head{text-align:center;margin-bottom:36px}
+  .page-head .eyebrow{
+    display:inline-block;font-size:.65rem;font-weight:700;letter-spacing:.18em;
+    color:var(--accent);background:var(--accent-dim);
+    padding:5px 14px;border-radius:999px;margin-bottom:14px;direction:ltr;
+  }
+  .page-head h1{
+    font-size:2rem;font-weight:800;color:var(--accent);
+    letter-spacing:-.5px;line-height:1.2;
+  }
+  .page-head p{
+    margin-top:10px;font-size:.85rem;color:var(--text-dim);
+    max-width:640px;margin-inline:auto;line-height:1.7;
+  }
+
+  /* ─── view switcher (shown once at top) ─── */
+  .view-switcher{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:14px 18px;
+    margin-bottom:48px;
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 2px 8px rgba(60,40,10,.04);
+  }
+  .vs-label{
+    font-size:.72rem;font-weight:700;color:var(--text-dim);
+    letter-spacing:.04em;
+  }
+  .vs-tabs{display:flex;flex-wrap:wrap;gap:5px}
+  .vs-tab{
+    font-family:inherit;cursor:pointer;
+    background:var(--surface-hi);border:1px solid var(--border);
+    color:var(--text-dim);font-size:.74rem;font-weight:600;
+    padding:8px 14px;border-radius:8px;
+    display:inline-flex;align-items:center;gap:6px;
+    transition:all .15s;
+  }
+  .vs-tab:hover{border-color:var(--accent);color:var(--text)}
+  .vs-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .vs-tab .ic{font-size:.95rem;line-height:1}
+  .vs-meta{
+    margin-right:auto;font-size:.7rem;color:var(--muted);direction:rtl;
+  }
+  .vs-meta b{color:var(--accent);font-weight:800;direction:ltr;display:inline-block}
+
+  /* ─── per-variant container ─── */
+  .variant{margin-bottom:60px}
+  .variant-head{
+    display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;
+  }
+  .variant-num{
+    flex-shrink:0;width:34px;height:34px;border-radius:9px;
+    background:var(--accent);color:#fff;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:.95rem;direction:ltr;
+  }
+  .variant-title{flex:1}
+  .variant-title h2{font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:4px}
+  .variant-title h2 .en{
+    color:var(--muted);font-weight:500;font-size:.7rem;
+    margin-right:8px;direction:ltr;display:inline-block;
+  }
+  .variant-title p{font-size:.72rem;color:var(--text-dim);line-height:1.7;max-width:760px}
+
+  .stage{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:22px 22px;
+    box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 2px 8px rgba(60,40,10,.04);
+  }
+  .stage-thin{padding:14px 16px}
+
+  /* ═══════════════════════════════════════════════════════════════
+     1. LIST VIEW (baseline / current)
+     ═══════════════════════════════════════════════════════════════ */
+  .list-card{
+    padding:14px 16px;border-radius:10px;
+    background:var(--surface-hi);border:1px solid var(--border);
+    margin-bottom:8px;
+    display:flex;gap:14px;align-items:flex-start;
+    transition:all .15s;cursor:pointer;
+  }
+  .list-card:hover{
+    border-color:var(--accent);
+    transform:translateX(-2px);
+    box-shadow:-2px 2px 8px rgba(60,40,10,.06);
+  }
+  .list-badge{
+    flex-shrink:0;min-width:60px;text-align:center;
+    padding:6px 8px;border-radius:6px;
+    font-size:.62rem;font-weight:700;letter-spacing:.02em;
+  }
+  .list-badge.bayan{background:var(--accent-dim);color:var(--accent)}
+  .list-badge.siren{background:var(--red-dim);color:var(--red)}
+  .list-badge.enemy{background:var(--orange-dim);color:var(--orange)}
+  .list-badge.allies{background:var(--blue-dim);color:var(--blue)}
+  .list-body{flex:1;min-width:0}
+  .list-meta{
+    font-size:.66rem;color:var(--muted);margin-bottom:4px;
+    display:flex;gap:10px;flex-wrap:wrap;
+  }
+  .list-meta .date{color:var(--accent);direction:ltr;display:inline-block}
+  .list-meta .time{direction:ltr;display:inline-block}
+  .list-text{
+    font-size:.82rem;color:var(--text);line-height:1.7;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .list-text mark{
+    background:var(--accent-dim2);color:var(--accent);
+    padding:0 3px;border-radius:3px;font-weight:700;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     2. COMPACT TABLE
+     ═══════════════════════════════════════════════════════════════ */
+  .data-table{
+    width:100%;
+    border-collapse:separate;border-spacing:0;
+    font-size:.72rem;
+  }
+  .data-table thead th{
+    background:var(--surface-lo);
+    color:var(--text-dim);
+    font-size:.66rem;font-weight:700;letter-spacing:.04em;
+    text-align:right;padding:9px 12px;
+    border-bottom:1px solid var(--border-hi);
+    position:sticky;top:0;cursor:pointer;
+    transition:color .15s;
+  }
+  .data-table thead th:hover{color:var(--accent)}
+  .data-table thead th.sorted{color:var(--accent)}
+  .data-table thead th .arrow{
+    display:inline-block;margin-right:4px;font-size:.6rem;opacity:.6;
+  }
+  .data-table thead th.sorted .arrow{opacity:1}
+  .data-table tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--border);
+    color:var(--text);vertical-align:top;
+  }
+  .data-table tbody tr{transition:background .1s;cursor:pointer}
+  .data-table tbody tr:hover td{background:var(--accent-dim)}
+  .data-table tbody tr:nth-child(2n) td{background:rgba(232,222,192,.35)}
+  .data-table tbody tr:nth-child(2n):hover td{background:var(--accent-dim)}
+  .data-table .col-date{color:var(--accent);font-weight:600;direction:ltr;white-space:nowrap}
+  .data-table .col-time{direction:ltr;color:var(--text-dim);white-space:nowrap;font-size:.68rem}
+  .data-table .col-snippet{
+    max-width:380px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .data-table .pill{
+    display:inline-block;padding:2px 9px;border-radius:999px;
+    font-size:.6rem;font-weight:700;letter-spacing:.02em;
+  }
+  .data-table .pill.bayan{background:var(--accent-dim);color:var(--accent)}
+  .data-table .pill.siren{background:var(--red-dim);color:var(--red)}
+  .data-table .pill.enemy{background:var(--orange-dim);color:var(--orange)}
+  .data-table .pill.allies{background:var(--blue-dim);color:var(--blue)}
+  .table-toolbar{
+    display:flex;align-items:center;gap:10px;
+    padding:8px 12px 12px;
+    border-bottom:1px dashed var(--border);
+    margin-bottom:6px;
+    font-size:.68rem;color:var(--text-dim);
+  }
+  .table-toolbar .right{margin-right:auto;display:flex;gap:6px}
+  .mini-btn{
+    font-family:inherit;background:var(--surface-hi);border:1px solid var(--border);
+    color:var(--text-dim);font-size:.66rem;font-weight:600;
+    padding:5px 10px;border-radius:6px;cursor:pointer;
+  }
+  .mini-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* ═══════════════════════════════════════════════════════════════
+     3. TIMELINE VIEW
+     ═══════════════════════════════════════════════════════════════ */
+  .tl-stage{position:relative;padding:14px 60px 14px 22px}
+  .tl-axis{
+    position:absolute;top:0;bottom:0;right:30px;
+    width:2px;background:linear-gradient(180deg,var(--accent) 0%,var(--accent-dim3) 100%);
+    border-radius:1px;
+  }
+  .tl-day{
+    position:relative;
+    margin-bottom:24px;
+  }
+  .tl-day-marker{
+    position:absolute;right:-37px;top:6px;
+    width:16px;height:16px;border-radius:50%;
+    background:var(--accent);color:#fff;
+    border:3px solid var(--surface);
+    box-shadow:0 0 0 1px var(--accent);
+  }
+  .tl-day-label{
+    display:inline-block;
+    background:var(--accent);color:#fff;
+    padding:5px 14px;border-radius:7px;
+    font-size:.7rem;font-weight:700;
+    margin-bottom:10px;
+  }
+  .tl-day-label .day-en{
+    direction:ltr;display:inline-block;margin-right:8px;
+    font-size:.65rem;opacity:.85;
+  }
+  .tl-events{display:flex;flex-direction:column;gap:8px;padding-right:6px}
+  .tl-event{
+    position:relative;
+    background:var(--surface-hi);border:1px solid var(--border);
+    border-right:3px solid var(--accent);
+    border-radius:8px;padding:10px 14px;
+    display:flex;gap:12px;align-items:flex-start;
+    transition:all .15s;cursor:pointer;
+  }
+  .tl-event:hover{
+    border-color:var(--accent-hi);
+    border-right-color:var(--accent-hi);
+    transform:translateX(-3px);
+  }
+  .tl-event.siren{border-right-color:var(--red)}
+  .tl-event.enemy{border-right-color:var(--orange)}
+  .tl-event.allies{border-right-color:var(--blue)}
+  .tl-event-time{
+    flex-shrink:0;font-size:.7rem;color:var(--accent);
+    font-weight:700;min-width:42px;direction:ltr;
+  }
+  .tl-event-body{flex:1;min-width:0}
+  .tl-event-title{
+    font-size:.78rem;color:var(--text);font-weight:600;line-height:1.5;
+  }
+  .tl-event-meta{
+    margin-top:3px;font-size:.62rem;color:var(--muted);
+    display:flex;gap:8px;flex-wrap:wrap;
+  }
+  .tl-event-cat{
+    flex-shrink:0;font-size:.58rem;font-weight:700;
+    padding:2px 8px;border-radius:999px;
+    background:var(--accent-dim);color:var(--accent);
+  }
+  .tl-event.siren .tl-event-cat{background:var(--red-dim);color:var(--red)}
+  .tl-event.enemy .tl-event-cat{background:var(--orange-dim);color:var(--orange)}
+  .tl-event.allies .tl-event-cat{background:var(--blue-dim);color:var(--blue)}
+
+  /* ═══════════════════════════════════════════════════════════════
+     4. GROUPED BY DAY
+     ═══════════════════════════════════════════════════════════════ */
+  .gd-day{
+    border:1px solid var(--border);
+    border-radius:11px;
+    margin-bottom:10px;
+    overflow:hidden;
+    background:var(--surface-hi);
+  }
+  .gd-day-head{
+    padding:12px 16px;
+    display:flex;align-items:center;gap:12px;
+    background:var(--surface-lo);
+    border-bottom:1px solid var(--border);
+    cursor:pointer;
+    transition:background .15s;
+  }
+  .gd-day-head:hover{background:var(--accent-dim)}
+  .gd-day.collapsed .gd-day-head{border-bottom-color:transparent}
+  .gd-day.collapsed .gd-day-body{display:none}
+  .gd-chevron{
+    font-size:.72rem;color:var(--accent);transition:transform .15s;
+  }
+  .gd-day.collapsed .gd-chevron{transform:rotate(-90deg)}
+  .gd-day-date{
+    font-size:.85rem;font-weight:800;color:var(--accent);direction:ltr;
+  }
+  .gd-day-name{
+    font-size:.72rem;color:var(--text-dim);font-weight:600;
+  }
+  .gd-day-stats{
+    margin-right:auto;display:flex;gap:6px;flex-wrap:wrap;
+  }
+  .gd-stat{
+    font-size:.62rem;font-weight:700;
+    padding:3px 10px;border-radius:999px;
+    background:var(--surface);color:var(--text-dim);
+    border:1px solid var(--border);
+  }
+  .gd-stat b{color:var(--accent);direction:ltr;display:inline-block}
+  .gd-stat.siren b{color:var(--red)}
+  .gd-stat.enemy b{color:var(--orange)}
+  .gd-day-body{padding:10px 14px}
+  .gd-day-body .list-card{margin-bottom:6px;background:var(--surface-hi)}
+
+  /* ═══════════════════════════════════════════════════════════════
+     5. HEATMAP CALENDAR
+     ═══════════════════════════════════════════════════════════════ */
+  .hm-stage{display:grid;grid-template-columns:1fr 280px;gap:24px}
+  @media(max-width:900px){.hm-stage{grid-template-columns:1fr}}
+  .hm-cal{
+    background:var(--surface-hi);border:1px solid var(--border);
+    border-radius:11px;padding:18px 18px 14px;
+  }
+  .hm-cal-head{
+    display:flex;align-items:center;gap:14px;
+    margin-bottom:14px;padding-bottom:10px;
+    border-bottom:1px dashed var(--border);
+  }
+  .hm-cal-head .nav{
+    background:var(--surface);border:1px solid var(--border);
+    color:var(--text-dim);font-family:inherit;font-size:.75rem;
+    padding:5px 11px;border-radius:6px;cursor:pointer;
+  }
+  .hm-cal-head .nav:hover{border-color:var(--accent);color:var(--accent)}
+  .hm-cal-head .month{
+    font-size:.95rem;font-weight:800;color:var(--accent);direction:ltr;
+  }
+  .hm-cal-head .total{
+    margin-right:auto;font-size:.7rem;color:var(--text-dim);
+  }
+  .hm-cal-head .total b{color:var(--accent);direction:ltr;display:inline-block}
+  .hm-grid{
+    display:grid;grid-template-columns:repeat(7,1fr);
+    gap:5px;
+  }
+  .hm-day-name{
+    text-align:center;font-size:.6rem;color:var(--muted);
+    font-weight:700;padding:4px 0;
+  }
+  .hm-cell{
+    aspect-ratio:1;border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:.7rem;font-weight:700;direction:ltr;
+    cursor:pointer;transition:all .12s;
+    border:1px solid transparent;
+    color:var(--text-dim);
+    background:var(--surface);
+  }
+  .hm-cell:hover{
+    border-color:var(--accent);
+    transform:scale(1.05);
+  }
+  .hm-cell[data-int="0"]{background:var(--surface);color:var(--muted)}
+  .hm-cell[data-int="1"]{background:var(--accent-dim);color:var(--text-dim)}
+  .hm-cell[data-int="2"]{background:var(--accent-dim2);color:var(--text)}
+  .hm-cell[data-int="3"]{background:var(--accent-dim3);color:var(--text)}
+  .hm-cell[data-int="4"]{background:var(--accent-dim4);color:#fff}
+  .hm-cell[data-int="5"]{background:var(--accent);color:#fff}
+  .hm-cell.empty{background:transparent;cursor:default;border:0}
+  .hm-cell.empty:hover{transform:none}
+
+  .hm-legend{
+    margin-top:14px;padding-top:12px;
+    border-top:1px dashed var(--border);
+    display:flex;align-items:center;gap:10px;
+    font-size:.62rem;color:var(--muted);
+  }
+  .hm-legend .scale{display:flex;gap:3px}
+  .hm-legend .scale span{
+    width:14px;height:14px;border-radius:3px;
+  }
+
+  .hm-side{
+    background:var(--surface-hi);border:1px solid var(--border);
+    border-radius:11px;padding:14px 16px;
+  }
+  .hm-side h3{
+    font-size:.74rem;font-weight:700;color:var(--accent);
+    margin-bottom:10px;letter-spacing:.04em;
+  }
+  .hm-side .picked{
+    background:var(--accent-dim);
+    border-radius:8px;padding:10px 12px;margin-bottom:12px;
+  }
+  .hm-side .picked .pdate{
+    font-size:.85rem;font-weight:800;color:var(--accent);direction:ltr;
+  }
+  .hm-side .picked .pcount{font-size:.66rem;color:var(--text-dim);margin-top:2px}
+  .hm-side .breakdown{
+    display:flex;flex-direction:column;gap:6px;
+  }
+  .hm-side .breakdown-row{
+    display:flex;align-items:center;gap:8px;
+    font-size:.7rem;color:var(--text);
+  }
+  .hm-side .breakdown-row .dot{
+    width:10px;height:10px;border-radius:50%;flex-shrink:0;
+  }
+  .hm-side .breakdown-row b{
+    margin-right:auto;color:var(--accent);direction:ltr;font-weight:800;
+  }
+  .hm-side .pdrill{
+    margin-top:12px;display:block;width:100%;
+    background:var(--accent);color:#fff;border:0;
+    padding:9px;border-radius:7px;
+    font-family:inherit;font-size:.74rem;font-weight:700;cursor:pointer;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     6. MAP VIEW
+     ═══════════════════════════════════════════════════════════════ */
+  .mp-stage{display:grid;grid-template-columns:1fr 260px;gap:22px}
+  @media(max-width:900px){.mp-stage{grid-template-columns:1fr}}
+  .mp-canvas{
+    position:relative;
+    height:380px;
+    border-radius:11px;
+    border:1px solid var(--border);
+    background:
+      radial-gradient(circle at 30% 40%, rgba(168,133,50,.06), transparent 50%),
+      radial-gradient(circle at 70% 60%, rgba(45,91,122,.05), transparent 50%),
+      linear-gradient(135deg, #ddd2b5 0%, #d8ccaa 100%);
+    overflow:hidden;
+  }
+  /* fake topographic squiggles */
+  .mp-canvas::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent 0, transparent 18px, rgba(168,133,50,.06) 18px, rgba(168,133,50,.06) 19px);
+    opacity:.6;
+  }
+  .mp-canvas::after{
+    content:"شمالاً ↑";
+    position:absolute;top:14px;left:14px;
+    background:rgba(255,255,255,.7);
+    padding:5px 11px;border-radius:6px;
+    font-size:.62rem;color:var(--text-dim);font-weight:700;
+  }
+  .mp-marker{
+    position:absolute;width:14px;height:14px;border-radius:50%;
+    border:2px solid #fff;
+    box-shadow:0 1px 4px rgba(0,0,0,.25);
+    cursor:pointer;transition:all .15s;
+  }
+  .mp-marker:hover{transform:scale(1.6)}
+  .mp-marker.bayan{background:var(--accent)}
+  .mp-marker.siren{background:var(--red)}
+  .mp-marker.cluster{
+    width:34px;height:34px;
+    background:var(--accent);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:.72rem;font-weight:800;direction:ltr;
+  }
+  .mp-controls{
+    position:absolute;top:14px;right:14px;
+    background:rgba(255,255,255,.85);
+    border-radius:7px;padding:4px;
+    display:flex;flex-direction:column;gap:2px;
+    backdrop-filter:blur(4px);
+  }
+  .mp-controls button{
+    width:28px;height:28px;border:0;background:transparent;
+    color:var(--text);font-family:inherit;font-size:1rem;font-weight:700;
+    cursor:pointer;border-radius:5px;
+  }
+  .mp-controls button:hover{background:var(--accent-dim);color:var(--accent)}
+  .mp-legend{
+    position:absolute;bottom:14px;right:14px;
+    background:rgba(255,255,255,.85);
+    padding:9px 12px;border-radius:7px;
+    backdrop-filter:blur(4px);
+    display:flex;flex-direction:column;gap:5px;
+    font-size:.62rem;color:var(--text);
+  }
+  .mp-legend .lg-row{display:flex;align-items:center;gap:7px}
+  .mp-legend .lg-dot{
+    width:10px;height:10px;border-radius:50%;
+    border:1.5px solid #fff;
+  }
+  .mp-side{
+    background:var(--surface-hi);border:1px solid var(--border);
+    border-radius:11px;padding:14px;
+  }
+  .mp-side h3{
+    font-size:.74rem;font-weight:700;color:var(--accent);
+    margin-bottom:10px;letter-spacing:.04em;
+  }
+  .mp-side .mp-list{display:flex;flex-direction:column;gap:5px}
+  .mp-side .mp-row{
+    display:flex;align-items:center;gap:8px;
+    padding:7px 9px;border-radius:6px;
+    background:var(--surface);
+    font-size:.68rem;color:var(--text);cursor:pointer;
+  }
+  .mp-side .mp-row:hover{background:var(--accent-dim)}
+  .mp-side .mp-row .dot{
+    width:8px;height:8px;border-radius:50%;flex-shrink:0;
+  }
+  .mp-side .mp-row b{
+    margin-right:auto;font-weight:700;color:var(--accent);
+    direction:ltr;display:inline-block;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     7. STATS DASHBOARD
+     ═══════════════════════════════════════════════════════════════ */
+  .st-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  @media(max-width:780px){.st-grid{grid-template-columns:1fr}}
+  .st-panel{
+    background:var(--surface-hi);border:1px solid var(--border);
+    border-radius:11px;padding:16px 18px;
+  }
+  .st-panel h3{
+    font-size:.74rem;font-weight:700;color:var(--accent);
+    margin-bottom:14px;letter-spacing:.04em;
+    display:flex;align-items:center;gap:8px;
+  }
+  .st-panel h3::before{
+    content:"";width:4px;height:14px;background:var(--accent);border-radius:2px;
+  }
+  /* horizontal bar list */
+  .st-bars{display:flex;flex-direction:column;gap:8px}
+  .st-bar-row{display:flex;align-items:center;gap:10px;font-size:.7rem}
+  .st-bar-name{flex-shrink:0;width:120px;color:var(--text);font-weight:600}
+  .st-bar-track{
+    flex:1;background:var(--surface-lo);border-radius:5px;
+    height:18px;overflow:hidden;position:relative;
+  }
+  .st-bar-fill{
+    height:100%;background:linear-gradient(90deg,var(--accent-hi),var(--accent));
+    border-radius:5px;
+  }
+  .st-bar-cnt{
+    flex-shrink:0;width:46px;text-align:left;
+    font-size:.66rem;font-weight:700;color:var(--accent);direction:ltr;
+  }
+  /* hour histogram */
+  .st-hours{
+    display:grid;grid-template-columns:repeat(24,1fr);
+    gap:3px;height:100px;align-items:end;
+  }
+  .st-hour-col{
+    background:var(--accent-dim2);border-radius:3px 3px 0 0;
+    transition:background .15s;cursor:pointer;
+  }
+  .st-hour-col:hover{background:var(--accent)}
+  .st-hour-axis{
+    margin-top:6px;display:grid;grid-template-columns:repeat(8,1fr);
+    font-size:.55rem;color:var(--muted);direction:ltr;text-align:center;
+  }
+  /* daily activity sparkline */
+  .st-sparkline{
+    height:90px;background:var(--surface-lo);border-radius:7px;
+    position:relative;overflow:hidden;
+    padding:8px 10px;
+  }
+  .st-spark-svg{width:100%;height:100%;display:block}
+  /* category donut placeholder */
+  .st-donut{
+    display:flex;align-items:center;gap:18px;
+  }
+  .st-donut-svg{width:130px;height:130px;flex-shrink:0}
+  .st-donut-legend{
+    flex:1;display:flex;flex-direction:column;gap:6px;
+  }
+  .st-donut-row{
+    display:flex;align-items:center;gap:8px;font-size:.66rem;
+  }
+  .st-donut-row .dot{width:10px;height:10px;border-radius:2px}
+  .st-donut-row .name{flex:1;color:var(--text)}
+  .st-donut-row .pct{color:var(--accent);font-weight:700;direction:ltr}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="page-head">
+    <span class="eyebrow">SEARCH RESULTS — VIEW MODES</span>
+    <h1>سبع طرق لعرض النتائج</h1>
+    <p>كل وضع عرض مُحسَّن لمهمة مختلفة — المسح السريع، التحليل العميق، الاستكشاف الزمني، الفهم الجغرافي، أو الرؤية الإحصائية. اختر ما يناسبك.</p>
+  </div>
+
+  <!-- ─── view switcher (shown once at top) ─── -->
+  <div class="view-switcher">
+    <span class="vs-label">عرض:</span>
+    <div class="vs-tabs">
+      <button class="vs-tab active"><span class="ic">☰</span> قائمة</button>
+      <button class="vs-tab"><span class="ic">▦</span> جدول</button>
+      <button class="vs-tab"><span class="ic">⏱</span> خط زمني</button>
+      <button class="vs-tab"><span class="ic">📅</span> تجميع باليوم</button>
+      <button class="vs-tab"><span class="ic">🔥</span> خريطة حرارية</button>
+      <button class="vs-tab"><span class="ic">🗺</span> خريطة جغرافية</button>
+      <button class="vs-tab"><span class="ic">📊</span> إحصاءات</button>
+    </div>
+    <div class="vs-meta"><b>1,247</b> نتيجة عبر <b>324</b> يوماً</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       1. LIST VIEW
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="variant">
+    <div class="variant-head">
+      <div class="variant-num">1</div>
+      <div class="variant-title">
+        <h2>قائمة <span class="en">List · current default</span></h2>
+        <p>الوضع الافتراضي. بطاقات مريحة بعرض كامل، واحدة لكل نتيجة. مثالية للقراءة المتأنية واتخاذ القرار حول كل نتيجة على حدة. الأفضل لعدد قليل (≤50) من النتائج.</p>
+      </div>
+    </div>
+    <div class="stage">
+      <a class="list-card">
+        <div class="list-badge bayan">بيان</div>
+        <div class="list-body">
+          <div class="list-meta">
+            <span class="date">2024-03-15</span><span>الجمعة</span>
+            <span class="time">14:22</span>
+            <span>· صلية صاروخية</span>
+            <span>· ثكنة برانيت</span>
+          </div>
+          <div class="list-text">استهدفت قواتنا تجمعاً لجنود العدو الإسرائيلي في ثكنة <mark>برانيت</mark> بصلية من صواريخ بركان الثقيلة، وأصابت أهدافها بدقة عالية وفقاً للتقارير الميدانية…</div>
+        </div>
+      </a>
+      <a class="list-card">
+        <div class="list-badge siren">صفارة</div>
+        <div class="list-body">
+          <div class="list-meta">
+            <span class="date">2024-03-15</span>
+            <span class="time">14:30</span>
+            <span>· الجليل الأعلى</span>
+          </div>
+          <div class="list-text">تفعيل صفارات الإنذار في مستوطنة كريات شمونة وما حولها بسبب رشقات صاروخية من جنوب لبنان، مع إغلاق الطرق المؤدية إلى المنطقة…</div>
+        </div>
+      </a>
+      <a class="list-card">
+        <div class="list-badge enemy">عدو</div>
+        <div class="list-body">
+          <div class="list-meta">
+            <span class="date">2024-03-14</span>
+            <span class="time">19:05</span>
+          </div>
+          <div class="list-text">اعترفت وسائل إعلام العدو بإصابة آلية عسكرية في الجليل الأعلى نتيجة قصف من جنوب لبنان…</div>
+        </div>
+      </a>
+      <a class="list-card">
+        <div class="list-badge allies">حليف</div>
+        <div class="list-body">
+          <div class="list-meta">
+            <span class="date">2024-03-14</span>
+            <span>🇮🇶 العراق — المقاومة الإسلامية</span>
+          </div>
+          <div class="list-text">أعلنت المقاومة الإسلامية في العراق استهداف هدف حيوي في الجولان السوري المحتل بطائرات مسيرة…</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       2. COMPACT TABLE
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="variant">
+    <div class="variant-head">
+      <div class="variant-num">2</div>
+      <div class="variant-title">
+        <h2>جدول مدمج <span class="en">Compact data table</span></h2>
+        <p>عرض كثيف بصفوف وأعمدة، مرتب وقابل للترتيب حسب أي عمود. يُظهر 30–50 نتيجة في الشاشة الواحدة. مناسب للمحلل الذي يريد مسح كميات كبيرة، تحديد الأنماط، أو تصدير CSV. النقر على أي صف يفتح التفاصيل.</p>
+      </div>
+    </div>
+    <div class="stage stage-thin">
+      <div class="table-toolbar">
+        <span>عرض <b style="color:var(--accent)">50</b> من <b style="color:var(--accent)">1,247</b></span>
+        <div class="right">
+          <button class="mini-btn">إخفاء الأعمدة</button>
+          <button class="mini-btn">تصدير CSV</button>
+          <button class="mini-btn">طباعة</button>
+        </div>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th class="sorted">التاريخ <span class="arrow">▾</span></th>
+            <th>الوقت</th>
+            <th>النوع</th>
+            <th>السلاح</th>
+            <th>الهدف / الموقع</th>
+            <th>المصدر</th>
+            <th>النص</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-date">2024-03-15</td>
+            <td class="col-time">14:22</td>
+            <td><span class="pill bayan">بيان</span></td>
+            <td>صلية صاروخية</td>
+            <td>ثكنة برانيت</td>
+            <td>—</td>
+            <td class="col-snippet">استهدفت قواتنا تجمعاً لجنود العدو في ثكنة برانيت…</td>
+          </tr>
+          <tr>
+            <td class="col-date">2024-03-15</td>
+            <td class="col-time">14:30</td>
+            <td><span class="pill siren">صفارة</span></td>
+            <td>—</td>
+            <td>كريات شمونة</td>
+            <td>—</td>
+            <td class="col-snippet">تفعيل صفارات الإنذار في مستوطنة كريات شمونة…</td>
+          </tr>
+          <tr>
+            <td class="col-date">2024-03-15</td>
+            <td class="col-time">15:08</td>
+            <td><span class="pill bayan">بيان</span></td>
+            <td>مسيّرة انقضاضية</td>
+            <td>موقع المالكية</td>
+            <td>—</td>
+            <td class="col-snippet">استهدف المجاهدون موقع المالكية بمسيّرة انقضاضية…</td>
+          </tr>
+          <tr>
+            <td class="col-date">2024-03-14</td>
+            <td class="col-time">19:05</td>
+            <td><span class="pill enemy">عدو</span></td>
+            <td>—</td>
+            <td>الجليل الأعلى</td>
+            <td>i24 News</td>
+            <td class="col-snippet">اعترفت وسائل إعلام العدو بإصابة آلية عسكرية…</td>
+          </tr>
+          <tr>
+            <td class="col-date">2024-03-14</td>
+            <td class="col-time">11:42</td>
+            <td><span class="pill allies">حليف</span></td>
+            <td>طائرة مسيرة</td>
+            <td>الجولان السوري</td>
+            <td>🇮🇶 العراق</td>
+            <td class="col-snippet">أعلنت المقاومة الإسلامية في العراق استهداف هدف حيوي…</td>
+          </tr>
+          <tr>
+            <td class="col-date">2024-03-13</td>
+            <td class="col-time">16:00</td>
+            <td><span class="pill bayan">بيان</span></td>
+            <td>قذائف مدفعية</td>
+            <td>الطيبة</td>
+            <td>—</td>
+            <td class="col-snippet">استهدف المجاهدون موقع الراهب بقذائف المدفعية الثقيلة…</td>
+          </tr>
+          <tr>
+            <td class="col-date">2024-03-13</td>
+            <td class="col-time">12:15</td>
+            <td><span class="pill bayan">بيان</span></td>
+            <td>صاروخ موجه</td>
+            <td>ثكنة زرعيت</td>
+            <td>—</td>
+            <td class="col-snippet">استهداف ثكنة زرعيت بصاروخ موجه أصاب هدفه بدقة…</td>
+          </tr>
+          <tr>
+            <td class="col-date">2024-03-12</td>
+            <td class="col-time">22:31</td>
+            <td><span class="pill siren">صفارة</span></td>
+            <td>—</td>
+            <td>المطلة</td>
+            <td>—</td>
+            <td class="col-snippet">صفارات الإنذار تدوّي في المطلة وإصبع الجليل…</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       3. TIMELINE VIEW
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="variant">
+    <div class="variant-head">
+      <div class="variant-num">3</div>
+      <div class="variant-title">
+        <h2>خط زمني <span class="en">Vertical timeline</span></h2>
+        <p>محور زمني عمودي مع علامات يومية، الأحداث متفرعة كبطاقات صغيرة. يكشف الإيقاع الزمني والمجموعات النشطة بوضوح بصري. ممتاز عندما تريد فهم تتابع الأحداث خلال فترة محددة.</p>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="tl-stage">
+        <div class="tl-axis"></div>
+
+        <div class="tl-day">
+          <div class="tl-day-marker"></div>
+          <div class="tl-day-label"><span class="day-en">2024-03-15</span> الجمعة</div>
+          <div class="tl-events">
+            <div class="tl-event">
+              <div class="tl-event-time">14:22</div>
+              <div class="tl-event-body">
+                <div class="tl-event-title">استهداف ثكنة برانيت بصلية من صواريخ بركان</div>
+                <div class="tl-event-meta"><span class="tl-event-cat">بيان</span><span>صلية صاروخية</span><span>· برانيت</span></div>
+              </div>
+            </div>
+            <div class="tl-event siren">
+              <div class="tl-event-time">14:30</div>
+              <div class="tl-event-body">
+                <div class="tl-event-title">صفارات إنذار في كريات شمونة</div>
+                <div class="tl-event-meta"><span class="tl-event-cat">صفارة</span><span>الجليل الأعلى</span></div>
+              </div>
+            </div>
+            <div class="tl-event">
+              <div class="tl-event-time">15:08</div>
+              <div class="tl-event-body">
+                <div class="tl-event-title">استهداف موقع المالكية بمسيّرة انقضاضية</div>
+                <div class="tl-event-meta"><span class="tl-event-cat">بيان</span><span>مسيّرة انقضاضية</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-day">
+          <div class="tl-day-marker"></div>
+          <div class="tl-day-label"><span class="day-en">2024-03-14</span> الخميس</div>
+          <div class="tl-events">
+            <div class="tl-event allies">
+              <div class="tl-event-time">11:42</div>
+              <div class="tl-event-body">
+                <div class="tl-event-title">المقاومة الإسلامية في العراق تستهدف هدفاً في الجولان</div>
+                <div class="tl-event-meta"><span class="tl-event-cat">حليف</span><span>🇮🇶 العراق</span></div>
+              </div>
+            </div>
+            <div class="tl-event enemy">
+              <div class="tl-event-time">19:05</div>
+              <div class="tl-event-body">
+                <div class="tl-event-title">إعلام العدو يعترف بإصابة آلية عسكرية في الجليل</div>
+                <div class="tl-event-meta"><span class="tl-event-cat">عدو</span><span>i24 News</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-day">
+          <div class="tl-day-marker"></div>
+          <div class="tl-day-label"><span class="day-en">2024-03-13</span> الأربعاء</div>
+          <div class="tl-events">
+            <div class="tl-event">
+              <div class="tl-event-time">12:15</div>
+              <div class="tl-event-body">
+                <div class="tl-event-title">استهداف ثكنة زرعيت بصاروخ موجه</div>
+                <div class="tl-event-meta"><span class="tl-event-cat">بيان</span><span>صاروخ موجه</span></div>
+              </div>
+            </div>
+            <div class="tl-event">
+              <div class="tl-event-time">16:00</div>
+              <div class="tl-event-body">
+                <div class="tl-event-title">قصف موقع الراهب بقذائف المدفعية</div>
+                <div class="tl-event-meta"><span class="tl-event-cat">بيان</span><span>قذائف مدفعية</span><span>· الطيبة</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       4. GROUPED BY DAY
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="variant">
+    <div class="variant-head">
+      <div class="variant-num">4</div>
+      <div class="variant-title">
+        <h2>تجميع باليوم <span class="en">Grouped by date</span></h2>
+        <p>أقسام قابلة للطيّ، كل يوم في رأس منفصل مع إحصائياته. يسمح بالاسترعاء على يوم محدد دون فقدان السياق. ممتاز عند البحث في فترة طويلة وتريد فهم النشاط اليومي.</p>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="gd-day">
+        <div class="gd-day-head">
+          <span class="gd-chevron">▾</span>
+          <span class="gd-day-date">2024-03-15</span>
+          <span class="gd-day-name">الجمعة</span>
+          <div class="gd-day-stats">
+            <span class="gd-stat"><b>12</b> نتيجة</span>
+            <span class="gd-stat"><b>3</b> بيانات</span>
+            <span class="gd-stat siren"><b>8</b> صفارات</span>
+            <span class="gd-stat"><b>1</b> عدو</span>
+          </div>
+        </div>
+        <div class="gd-day-body">
+          <a class="list-card">
+            <div class="list-badge bayan">بيان</div>
+            <div class="list-body">
+              <div class="list-meta"><span class="time">14:22</span><span>· صلية صاروخية</span><span>· ثكنة برانيت</span></div>
+              <div class="list-text">استهدفت قواتنا تجمعاً لجنود العدو الإسرائيلي في ثكنة <mark>برانيت</mark> بصلية من صواريخ بركان الثقيلة…</div>
+            </div>
+          </a>
+          <a class="list-card">
+            <div class="list-badge siren">صفارة</div>
+            <div class="list-body">
+              <div class="list-meta"><span class="time">14:30</span><span>· الجليل الأعلى</span></div>
+              <div class="list-text">تفعيل صفارات الإنذار في مستوطنة كريات شمونة وما حولها…</div>
+            </div>
+          </a>
+          <a class="list-card">
+            <div class="list-badge bayan">بيان</div>
+            <div class="list-body">
+              <div class="list-meta"><span class="time">15:08</span><span>· مسيّرة انقضاضية</span></div>
+              <div class="list-text">استهدف المجاهدون موقع المالكية بمسيّرة انقضاضية…</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="gd-day">
+        <div class="gd-day-head">
+          <span class="gd-chevron">▾</span>
+          <span class="gd-day-date">2024-03-14</span>
+          <span class="gd-day-name">الخميس</span>
+          <div class="gd-day-stats">
+            <span class="gd-stat"><b>7</b> نتائج</span>
+            <span class="gd-stat siren"><b>4</b> صفارات</span>
+            <span class="gd-stat enemy"><b>1</b> عدو</span>
+            <span class="gd-stat"><b>1</b> حليف</span>
+          </div>
+        </div>
+        <div class="gd-day-body">
+          <a class="list-card">
+            <div class="list-badge allies">حليف</div>
+            <div class="list-body">
+              <div class="list-meta"><span class="time">11:42</span><span>· 🇮🇶 العراق</span></div>
+              <div class="list-text">أعلنت المقاومة الإسلامية في العراق استهداف هدف حيوي في الجولان السوري المحتل…</div>
+            </div>
+          </a>
+          <a class="list-card">
+            <div class="list-badge enemy">عدو</div>
+            <div class="list-body">
+              <div class="list-meta"><span class="time">19:05</span><span>· i24 News</span></div>
+              <div class="list-text">اعترفت وسائل إعلام العدو بإصابة آلية عسكرية في الجليل الأعلى…</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="gd-day collapsed">
+        <div class="gd-day-head">
+          <span class="gd-chevron">▾</span>
+          <span class="gd-day-date">2024-03-13</span>
+          <span class="gd-day-name">الأربعاء</span>
+          <div class="gd-day-stats">
+            <span class="gd-stat"><b>5</b> نتائج</span>
+            <span class="gd-stat"><b>2</b> بيانات</span>
+            <span class="gd-stat siren"><b>3</b> صفارات</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       5. HEATMAP CALENDAR
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="variant">
+    <div class="variant-head">
+      <div class="variant-num">5</div>
+      <div class="variant-title">
+        <h2>خريطة حرارية <span class="en">Calendar heatmap</span></h2>
+        <p>تقويم شهري حيث كل يوم مُلوّن حسب كثافة النتائج المطابقة. يكشف فوراً متى كانت الفترات الأكثر نشاطاً. النقر على يوم يفتح تفاصيله في اللوحة الجانبية. مثالي للنظرة العليا قبل الغوص في التفاصيل.</p>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="hm-stage">
+        <div class="hm-cal">
+          <div class="hm-cal-head">
+            <button class="nav">→</button>
+            <span class="month">March 2024</span>
+            <button class="nav">←</button>
+            <div class="total">المجموع: <b>187</b> نتيجة</div>
+          </div>
+          <div class="hm-grid">
+            <div class="hm-day-name">س</div>
+            <div class="hm-day-name">ج</div>
+            <div class="hm-day-name">خ</div>
+            <div class="hm-day-name">ر</div>
+            <div class="hm-day-name">ث</div>
+            <div class="hm-day-name">ن</div>
+            <div class="hm-day-name">ح</div>
+            <!-- week 1 -->
+            <div class="hm-cell empty"></div>
+            <div class="hm-cell empty"></div>
+            <div class="hm-cell empty"></div>
+            <div class="hm-cell empty"></div>
+            <div class="hm-cell empty"></div>
+            <div class="hm-cell" data-int="2">1</div>
+            <div class="hm-cell" data-int="1">2</div>
+            <!-- week 2 -->
+            <div class="hm-cell" data-int="0">3</div>
+            <div class="hm-cell" data-int="3">4</div>
+            <div class="hm-cell" data-int="4">5</div>
+            <div class="hm-cell" data-int="2">6</div>
+            <div class="hm-cell" data-int="3">7</div>
+            <div class="hm-cell" data-int="5">8</div>
+            <div class="hm-cell" data-int="4">9</div>
+            <!-- week 3 -->
+            <div class="hm-cell" data-int="2">10</div>
+            <div class="hm-cell" data-int="1">11</div>
+            <div class="hm-cell" data-int="3">12</div>
+            <div class="hm-cell" data-int="2">13</div>
+            <div class="hm-cell" data-int="4">14</div>
+            <div class="hm-cell" data-int="5" style="border-color:var(--accent-hi);box-shadow:0 0 0 2px var(--accent-dim2)">15</div>
+            <div class="hm-cell" data-int="2">16</div>
+            <!-- week 4 -->
+            <div class="hm-cell" data-int="1">17</div>
+            <div class="hm-cell" data-int="0">18</div>
+            <div class="hm-cell" data-int="2">19</div>
+            <div class="hm-cell" data-int="3">20</div>
+            <div class="hm-cell" data-int="4">21</div>
+            <div class="hm-cell" data-int="5">22</div>
+            <div class="hm-cell" data-int="3">23</div>
+            <!-- week 5 -->
+            <div class="hm-cell" data-int="2">24</div>
+            <div class="hm-cell" data-int="1">25</div>
+            <div class="hm-cell" data-int="2">26</div>
+            <div class="hm-cell" data-int="4">27</div>
+            <div class="hm-cell" data-int="3">28</div>
+            <div class="hm-cell" data-int="2">29</div>
+            <div class="hm-cell" data-int="1">30</div>
+            <!-- week 6 -->
+            <div class="hm-cell" data-int="0">31</div>
+          </div>
+          <div class="hm-legend">
+            <span>أقل</span>
+            <div class="scale">
+              <span style="background:var(--surface)"></span>
+              <span style="background:var(--accent-dim)"></span>
+              <span style="background:var(--accent-dim2)"></span>
+              <span style="background:var(--accent-dim3)"></span>
+              <span style="background:var(--accent-dim4)"></span>
+              <span style="background:var(--accent)"></span>
+            </div>
+            <span>أكثر</span>
+          </div>
+        </div>
+
+        <div class="hm-side">
+          <h3>تفاصيل اليوم المختار</h3>
+          <div class="picked">
+            <div class="pdate">2024-03-15</div>
+            <div class="pcount">الجمعة · 12 نتيجة مطابقة</div>
+          </div>
+          <div class="breakdown">
+            <div class="breakdown-row"><span class="dot" style="background:var(--accent)"></span> بيانات حربية <b>3</b></div>
+            <div class="breakdown-row"><span class="dot" style="background:var(--red)"></span> صفارات إنذار <b>8</b></div>
+            <div class="breakdown-row"><span class="dot" style="background:var(--orange)"></span> أخبار العدو <b>1</b></div>
+          </div>
+          <button class="pdrill">عرض كل النتائج لهذا اليوم ←</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       6. MAP VIEW
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="variant">
+    <div class="variant-head">
+      <div class="variant-num">6</div>
+      <div class="variant-title">
+        <h2>خريطة جغرافية <span class="en">Geographic map</span></h2>
+        <p>رسم النتائج على خريطة فعلية. الصفارات نقاط حمراء (يحملها الفهرس بإحداثياتها)، البيانات الحربية نقاط ذهبية (أهداف معروفة الموقع)، والتجمعات الكبيرة تظهر كمجموعات قابلة للتكبير. يكشف الأنماط الجغرافية فوراً.</p>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="mp-stage">
+        <div class="mp-canvas">
+          <div class="mp-controls">
+            <button>+</button>
+            <button>−</button>
+          </div>
+          <div class="mp-marker bayan" style="top:42%;right:48%"></div>
+          <div class="mp-marker bayan" style="top:38%;right:55%"></div>
+          <div class="mp-marker bayan" style="top:51%;right:62%"></div>
+          <div class="mp-marker siren" style="top:29%;right:44%"></div>
+          <div class="mp-marker siren" style="top:32%;right:50%"></div>
+          <div class="mp-marker siren" style="top:35%;right:58%"></div>
+          <div class="mp-marker siren" style="top:46%;right:40%"></div>
+          <div class="mp-marker cluster" style="top:25%;right:35%">42</div>
+          <div class="mp-marker cluster" style="top:60%;right:55%">17</div>
+          <div class="mp-marker bayan" style="top:55%;right:30%"></div>
+          <div class="mp-marker siren" style="top:68%;right:70%"></div>
+          <div class="mp-legend">
+            <div class="lg-row"><span class="lg-dot" style="background:var(--accent)"></span><span>بيانات حربية (تجمّعات)</span></div>
+            <div class="lg-row"><span class="lg-dot" style="background:var(--red)"></span><span>صفارات إنذار</span></div>
+            <div class="lg-row"><span class="lg-dot" style="background:var(--accent);width:14px;height:14px"></span><span>تجمّع — انقر للتكبير</span></div>
+          </div>
+        </div>
+        <div class="mp-side">
+          <h3>أبرز المواقع</h3>
+          <div class="mp-list">
+            <div class="mp-row"><span class="dot" style="background:var(--red)"></span>كريات شمونة <b>261</b></div>
+            <div class="mp-row"><span class="dot" style="background:var(--red)"></span>غلاف غزة <b>223</b></div>
+            <div class="mp-row"><span class="dot" style="background:var(--red)"></span>تل أبيب <b>122</b></div>
+            <div class="mp-row"><span class="dot" style="background:var(--red)"></span>المطلة <b>105</b></div>
+            <div class="mp-row"><span class="dot" style="background:var(--accent)"></span>الخيام <b>62</b></div>
+            <div class="mp-row"><span class="dot" style="background:var(--accent)"></span>الطيبة <b>58</b></div>
+            <div class="mp-row"><span class="dot" style="background:var(--accent)"></span>حيفا <b>46</b></div>
+            <div class="mp-row"><span class="dot" style="background:var(--accent)"></span>ثكنة زرعيت <b>31</b></div>
+            <div class="mp-row"><span class="dot" style="background:var(--accent)"></span>ثكنة برانيت <b>26</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       7. STATS DASHBOARD
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="variant">
+    <div class="variant-head">
+      <div class="variant-num">7</div>
+      <div class="variant-title">
+        <h2>لوحة إحصائية <span class="en">Stats dashboard</span></h2>
+        <p>نظرة عامة على مجموعة النتائج كلها — أهم الأسلحة، توزيع ساعات النشر، أهم الأهداف، نشاط يومي على شكل خط شراري، نسبة الفئات. لا تعرض النتائج الفردية بل الأنماط فيها. مثالي قبل أن تقرر كيف تضيق البحث.</p>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="st-grid">
+
+        <!-- top weapons -->
+        <div class="st-panel">
+          <h3>أكثر الأسلحة استخداماً</h3>
+          <div class="st-bars">
+            <div class="st-bar-row"><span class="st-bar-name">صلية صاروخية</span><span class="st-bar-track"><span class="st-bar-fill" style="width:100%"></span></span><span class="st-bar-cnt">1,439</span></div>
+            <div class="st-bar-row"><span class="st-bar-name">مسيّرة انقضاضية</span><span class="st-bar-track"><span class="st-bar-fill" style="width:11.6%"></span></span><span class="st-bar-cnt">167</span></div>
+            <div class="st-bar-row"><span class="st-bar-name">صاروخ موجه</span><span class="st-bar-track"><span class="st-bar-fill" style="width:11.3%"></span></span><span class="st-bar-cnt">163</span></div>
+            <div class="st-bar-row"><span class="st-bar-name">قذائف مدفعية</span><span class="st-bar-track"><span class="st-bar-fill" style="width:7.2%"></span></span><span class="st-bar-cnt">103</span></div>
+            <div class="st-bar-row"><span class="st-bar-name">صواريخ نوعية</span><span class="st-bar-track"><span class="st-bar-fill" style="width:1%"></span></span><span class="st-bar-cnt">15</span></div>
+          </div>
+        </div>
+
+        <!-- top targets -->
+        <div class="st-panel">
+          <h3>أكثر الأهداف استهدافاً</h3>
+          <div class="st-bars">
+            <div class="st-bar-row"><span class="st-bar-name">الخيام</span><span class="st-bar-track"><span class="st-bar-fill" style="width:100%"></span></span><span class="st-bar-cnt">62</span></div>
+            <div class="st-bar-row"><span class="st-bar-name">الطيبة</span><span class="st-bar-track"><span class="st-bar-fill" style="width:93%"></span></span><span class="st-bar-cnt">58</span></div>
+            <div class="st-bar-row"><span class="st-bar-name">حيفا</span><span class="st-bar-track"><span class="st-bar-fill" style="width:74%"></span></span><span class="st-bar-cnt">46</span></div>
+            <div class="st-bar-row"><span class="st-bar-name">كريات شمونة</span><span class="st-bar-track"><span class="st-bar-fill" style="width:71%"></span></span><span class="st-bar-cnt">44</span></div>
+            <div class="st-bar-row"><span class="st-bar-name">شبعا اللبنانية</span><span class="st-bar-track"><span class="st-bar-fill" style="width:66%"></span></span><span class="st-bar-cnt">41</span></div>
+          </div>
+        </div>
+
+        <!-- hour-of-day histogram -->
+        <div class="st-panel">
+          <h3>توزيع ساعات النشر</h3>
+          <div class="st-hours">
+            <div class="st-hour-col" style="height:8%"></div>
+            <div class="st-hour-col" style="height:5%"></div>
+            <div class="st-hour-col" style="height:3%"></div>
+            <div class="st-hour-col" style="height:4%"></div>
+            <div class="st-hour-col" style="height:6%"></div>
+            <div class="st-hour-col" style="height:12%"></div>
+            <div class="st-hour-col" style="height:22%"></div>
+            <div class="st-hour-col" style="height:38%"></div>
+            <div class="st-hour-col" style="height:55%"></div>
+            <div class="st-hour-col" style="height:72%"></div>
+            <div class="st-hour-col" style="height:80%"></div>
+            <div class="st-hour-col" style="height:88%"></div>
+            <div class="st-hour-col" style="height:92%"></div>
+            <div class="st-hour-col" style="height:100%"></div>
+            <div class="st-hour-col" style="height:96%"></div>
+            <div class="st-hour-col" style="height:90%"></div>
+            <div class="st-hour-col" style="height:84%"></div>
+            <div class="st-hour-col" style="height:78%"></div>
+            <div class="st-hour-col" style="height:65%"></div>
+            <div class="st-hour-col" style="height:50%"></div>
+            <div class="st-hour-col" style="height:36%"></div>
+            <div class="st-hour-col" style="height:24%"></div>
+            <div class="st-hour-col" style="height:14%"></div>
+            <div class="st-hour-col" style="height:9%"></div>
+          </div>
+          <div class="st-hour-axis">
+            <span>00</span><span>03</span><span>06</span><span>09</span><span>12</span><span>15</span><span>18</span><span>21</span>
+          </div>
+        </div>
+
+        <!-- category breakdown donut -->
+        <div class="st-panel">
+          <h3>توزيع الفئات</h3>
+          <div class="st-donut">
+            <svg class="st-donut-svg" viewBox="0 0 42 42">
+              <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#e8dec0" stroke-width="6"/>
+              <!-- cumulative dasharrays simulating segments -->
+              <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#a88532" stroke-width="6" stroke-dasharray="38 100" stroke-dashoffset="0" transform="rotate(-90 21 21)"/>
+              <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#a8322f" stroke-width="6" stroke-dasharray="42 100" stroke-dashoffset="-38" transform="rotate(-90 21 21)"/>
+              <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#c4671c" stroke-width="6" stroke-dasharray="11 100" stroke-dashoffset="-80" transform="rotate(-90 21 21)"/>
+              <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#2d5b7a" stroke-width="6" stroke-dasharray="9 100" stroke-dashoffset="-91" transform="rotate(-90 21 21)"/>
+            </svg>
+            <div class="st-donut-legend">
+              <div class="st-donut-row"><span class="dot" style="background:var(--red)"></span><span class="name">صفارات إنذار</span><span class="pct">42%</span></div>
+              <div class="st-donut-row"><span class="dot" style="background:var(--accent)"></span><span class="name">بيانات حربية</span><span class="pct">38%</span></div>
+              <div class="st-donut-row"><span class="dot" style="background:var(--orange)"></span><span class="name">أخبار العدو</span><span class="pct">11%</span></div>
+              <div class="st-donut-row"><span class="dot" style="background:var(--blue)"></span><span class="name">حلفاء</span><span class="pct">9%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- daily activity sparkline (full width) -->
+        <div class="st-panel" style="grid-column:1/-1">
+          <h3>النشاط اليومي عبر الفترة المحددة</h3>
+          <div class="st-sparkline">
+            <svg class="st-spark-svg" viewBox="0 0 600 80" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="sparkfill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#a88532" stop-opacity=".35"/>
+                  <stop offset="100%" stop-color="#a88532" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path d="M0,55 L20,52 L40,48 L60,42 L80,38 L100,35 L120,30 L140,28 L160,18 L180,12 L200,15 L220,22 L240,18 L260,10 L280,8 L300,15 L320,20 L340,25 L360,30 L380,28 L400,32 L420,38 L440,42 L460,45 L480,40 L500,35 L520,30 L540,25 L560,22 L580,28 L600,32 L600,80 L0,80 Z" fill="url(#sparkfill)"/>
+              <path d="M0,55 L20,52 L40,48 L60,42 L80,38 L100,35 L120,30 L140,28 L160,18 L180,12 L200,15 L220,22 L240,18 L260,10 L280,8 L300,15 L320,20 L340,25 L360,30 L380,28 L400,32 L420,38 L440,42 L460,45 L480,40 L500,35 L520,30 L540,25 L560,22 L580,28 L600,32" fill="none" stroke="#a88532" stroke-width="2"/>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

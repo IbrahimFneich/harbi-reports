@@ -1,5 +1,22 @@
 [
   {
+    "version": "2.5.23",
+    "date": "2026-04-13",
+    "title": "Seven view modes for advanced search results",
+    "changes": [
+      "search.html — added a view-switcher tab bar above the results that toggles between seven distinct rendering modes for the same FILTERED array: list (default), table, timeline, grouped-by-day, heatmap calendar, geographic map, and stats dashboard. Each mode optimizes for a different cognitive task (scanning vs reading vs analysis vs geography vs aggregation). View choice is persisted in the URL as &view=X so every search-and-view combination is shareable.",
+      "search.html — refactored renderResults() into a thin dispatcher that calls one of seven renderView*() functions. getSortedFiltered() centralizes the sort logic. Switching views is instant because the underlying FILTERED array doesn't change; only the rendering layer flips.",
+      "search.html — TABLE view: dense sortable spreadsheet with date/time/category/weapon/target/source/snippet columns, alternating row backgrounds, click-row-to-deep-link, ⤓ تصدير CSV button that emits a UTF-8 BOM CSV (Arabic-correct in Excel) of the entire FILTERED set, not just the visible page.",
+      "search.html — TIMELINE view: vertical accent-colored axis with day markers, results grouped under day labels with their times in monospace, category-colored right border on each event card. Reuses the same data shape as list view but visually emphasizes chronology.",
+      "search.html — GROUPED view: collapsible day cards with per-day stat pills broken down by category (3 بيانات · 8 صفارات · 1 عدو). First 3 days are expanded by default; click any day header to toggle. Each day's results render as the existing comfortable list cards.",
+      "search.html — HEATMAP view: month-grid calendar where each day cell is colored by activity intensity using a 6-step accent scale. Side panel shows the picked day's per-category breakdown. Prev/next month buttons walk only the months that have data. HM_MONTH and HM_PICKED state survive across rerenders so picking a day doesn't lose context.",
+      "search.html — MAP view: Leaflet circle markers plotted from FACETS.coords for sirens (red, by location) and bayanat (gold, by target). Marker radius scales logarithmically with count. Auto-fits to bounds on load. Sidebar lists mapped locations sorted by count plus a footer noting how many locations had no coordinates. Leaflet CSS+JS loaded eagerly (defer) from CDN.",
+      "search.html — STATS view: 5 panels in a grid — top weapons bars, top targets bars, hour-of-day histogram (24 columns), category donut (inline SVG), full-width daily activity sparkline (inline SVG with gradient fill). All aggregations derived from FILTERED + per-item enrichment in a single O(n) walk per render.",
+      "src/python/build_search_facets.py — added 'coords' top-level section to data/search-facets.json that aggregates location → [lat, lng] pairs from sirenPoints across every daily report. Walked 919 days to extract 54 unique geocoded locations. Backs the new MAP view.",
+      "search.html — sub-filter panels and view modes share a consistent theme: surface2/surface backgrounds, accent-dim hover, accent for active state, tabular-nums on every numeric pill so digits align in monospace columns regardless of count length."
+    ]
+  },
+  {
     "version": "2.5.22",
     "date": "2026-04-13",
     "title": "Fix deep-link from advanced search results",
