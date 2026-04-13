@@ -1,5 +1,13 @@
 [
   {
+    "version": "2.5.15",
+    "date": "2026-04-13",
+    "title": "Archive toolbar spans full viewport width",
+    "changes": [
+      "src/css/index.css — removed the 800px max-width cap on .archive-toolbar and restored the edge-to-edge banner look (border-bottom, no side border, no radius, no horizontal margin). The toolbar now spans the full viewport width while the calendar grid below continues to sit inside its 800px .container."
+    ]
+  },
+  {
     "version": "2.5.14",
     "date": "2026-04-13",
     "title": "Align archive toolbar width with calendar grid",
