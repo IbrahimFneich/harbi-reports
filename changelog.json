@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.5.17",
+    "date": "2026-04-13",
+    "title": "List view filters by the selected month",
+    "changes": [
+      "archive.html — list view now filters its rows by the month shown in the toolbar header, so clicking الشهر السابق / الشهر التالي while in list view re-renders the list scoped to the newly selected month key (YYYY-MM). renderList() filters reportStats dates against availableMonths[currentIdx] unless the user has opted in to «عرض الكل».",
+      "archive.html — added a listShowAll state flag and a «عرض الكل» button at the start of the sort bar. Clicking it toggles between month-scoped and all-months views; the button label swaps to «هذا الشهر فقط» and gains an .active gold style while the unfiltered view is active.",
+      "archive.html — changeMonth() now checks if list view is active and, if so, resets listShowAll to false, updates the scope button label, and re-renders the list so the header month and visible rows stay in sync.",
+      "archive.html — list sort bar markup wraps the existing ترتيب حسب / select / direction button in a .sort-group wrapper so flex space-between can pin the scope button to one edge and the sort controls to the other without all five children being distributed across the row.",
+      "src/css/index.css — .list-sort-bar switched from justify-content flex-end to space-between and added a .sort-group inline flex helper. New .scope-btn styles (gold hover + gold .active pill) and .sort-group layout round out the control row."
+    ]
+  },
+  {
     "version": "2.5.16",
     "date": "2026-04-13",
     "title": "Identical header in archive calendar and list views",

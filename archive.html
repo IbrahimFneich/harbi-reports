@@ -41,17 +41,20 @@
 
 <div class="list-section" id="listSection">
   <div class="list-sort-bar">
-    <label for="listSort">ترتيب حسب:</label>
-    <select id="listSort" onchange="renderList()">
-      <option value="date">التاريخ</option>
-      <option value="total">الإجمالي</option>
-      <option value="bayanat">البيانات العسكرية</option>
-      <option value="sirens">صفارات الإنذار</option>
-      <option value="enemy">إعلام العدو</option>
-      <option value="iran">إيران</option>
-      <option value="videos">الفيديوهات</option>
-    </select>
-    <button class="dir-btn" id="listDirBtn" onclick="toggleListDir()" title="تبديل الاتجاه">↓</button>
+    <button class="scope-btn" id="listScopeBtn" onclick="toggleListScope()">عرض الكل</button>
+    <div class="sort-group">
+      <label for="listSort">ترتيب حسب:</label>
+      <select id="listSort" onchange="renderList()">
+        <option value="date">التاريخ</option>
+        <option value="total">الإجمالي</option>
+        <option value="bayanat">البيانات العسكرية</option>
+        <option value="sirens">صفارات الإنذار</option>
+        <option value="enemy">إعلام العدو</option>
+        <option value="iran">إيران</option>
+        <option value="videos">الفيديوهات</option>
+      </select>
+      <button class="dir-btn" id="listDirBtn" onclick="toggleListDir()" title="تبديل الاتجاه">↓</button>
+    </div>
   </div>
   <div class="list-grid" id="listGrid"></div>
 </div>
@@ -80,10 +83,10 @@
     البيانات مأخوذة من تليغرام ومُعالَجة بواسطة ذكاء اصطناعي — قد تحتوي على أخطاء.
   </div>
   <div data-disclaimer-slot style="margin-top:10px;font-size:0.68rem;">
-    <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v2.5.16</span>
+    <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v2.5.17</span>
   </div>
 </div>
-<script src="src/js/ui/disclaimer.js?v=2.5.16"></script>
+<script src="src/js/ui/disclaimer.js?v=2.5.17"></script>
 
 <script>
 function showChangelog() {
@@ -320,11 +323,39 @@ function changeMonth(dir) {
   if (newIdx < 0 || newIdx >= availableMonths.length) return;
   currentIdx = newIdx;
   renderCalendar();
+  // If list view is active, re-filter it to the newly selected month
+  // and drop the "show all" scope so the header month matches the list contents.
+  var listSec = document.getElementById('listSection');
+  if (listSec && listSec.classList.contains('active')) {
+    listShowAll = false;
+    updateListScopeBtn();
+    renderList();
+  }
 }
 
 renderCalendar();
 
 // ═══════════════ VIEW TOGGLE + LIST VIEW ═══════════════
+
+var listShowAll = false;
+
+function toggleListScope() {
+  listShowAll = !listShowAll;
+  updateListScopeBtn();
+  renderList();
+}
+
+function updateListScopeBtn() {
+  var btn = document.getElementById('listScopeBtn');
+  if (!btn) return;
+  if (listShowAll) {
+    btn.textContent = 'هذا الشهر فقط';
+    btn.classList.add('active');
+  } else {
+    btn.textContent = 'عرض الكل';
+    btn.classList.remove('active');
+  }
+}
 
 var listDir = 'desc';
 
@@ -361,6 +392,14 @@ function toggleListDir() {
 function renderList() {
   var sortField = document.getElementById('listSort').value;
   var dates = Object.keys(reportStats);
+
+  // Filter to the month shown in the toolbar header unless the user opted in
+  // to "عرض الكل". Keeps the header month and list contents in sync.
+  if (!listShowAll) {
+    var cm = availableMonths[currentIdx];
+    var monthKey = cm.year + '-' + pad(cm.month + 1);
+    dates = dates.filter(function(d) { return d.indexOf(monthKey) === 0; });
+  }
 
   var rows = dates.map(function(d) {
     var s = reportStats[d];
