@@ -40,7 +40,6 @@
 </div>
 
 <div class="list-section" id="listSection">
-  <div class="list-summary" id="listSummary"></div>
   <div class="list-sort-bar">
     <label for="listSort">ترتيب حسب:</label>
     <select id="listSort" onchange="renderList()">
@@ -81,10 +80,10 @@
     البيانات مأخوذة من تليغرام ومُعالَجة بواسطة ذكاء اصطناعي — قد تحتوي على أخطاء.
   </div>
   <div data-disclaimer-slot style="margin-top:10px;font-size:0.68rem;">
-    <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v2.5.15</span>
+    <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v2.5.16</span>
   </div>
 </div>
-<script src="src/js/ui/disclaimer.js?v=2.5.15"></script>
+<script src="src/js/ui/disclaimer.js?v=2.5.16"></script>
 
 <script>
 function showChangelog() {
@@ -338,20 +337,17 @@ function setView(view) {
   var listSec = document.getElementById('listSection');
   var calBtn = document.getElementById('viewCalBtn');
   var listBtn = document.getElementById('viewListBtn');
-  var toolbar = document.getElementById('archiveToolbar');
   if (view === 'list') {
     calSec.classList.add('hidden');
     listSec.classList.add('active');
     calBtn.classList.remove('active');
     listBtn.classList.add('active');
-    if (toolbar) toolbar.classList.add('list-mode');
     renderList();
   } else {
     calSec.classList.remove('hidden');
     listSec.classList.remove('active');
     calBtn.classList.add('active');
     listBtn.classList.remove('active');
-    if (toolbar) toolbar.classList.remove('list-mode');
   }
   try { localStorage.setItem('harbi-view', view); } catch (e) {}
 }
@@ -384,25 +380,6 @@ function renderList() {
     if (av < bv) return listDir === 'asc' ? -1 : 1;
     if (av > bv) return listDir === 'asc' ? 1 : -1;
     return 0;
-  });
-
-  var totalEvents = 0;
-  for (var i = 0; i < rows.length; i++) totalEvents += rows[i].total;
-  var avg = rows.length ? Math.round(totalEvents / rows.length) : 0;
-  var summary = document.getElementById('listSummary');
-  _clearNode(summary);
-  var items = [
-    { n: rows.length, l: 'تقرير' },
-    { n: totalEvents.toLocaleString('en-US'), l: 'مجموع الأحداث' },
-    { n: avg, l: 'معدّل / يوم' }
-  ];
-  items.forEach(function(it) {
-    var div = document.createElement('div');
-    div.className = 'item';
-    var n = document.createElement('span'); n.className = 'n'; n.textContent = it.n;
-    var l = document.createElement('span'); l.className = 'l'; l.textContent = it.l;
-    div.appendChild(n); div.appendChild(l);
-    summary.appendChild(div);
   });
 
   var dayNames = {0:'الأحد',1:'الإثنين',2:'الثلاثاء',3:'الأربعاء',4:'الخميس',5:'الجمعة',6:'السبت'};

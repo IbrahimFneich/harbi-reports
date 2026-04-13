@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.5.16",
+    "date": "2026-04-13",
+    "title": "Identical header in archive calendar and list views",
+    "changes": [
+      "archive.html — removed the .list-summary div (تقرير / مجموع الأحداث / معدّل يوم) from the top of the list section so the list view no longer has an extra stats row above the sort bar.",
+      "archive.html — deleted the summary-building block inside renderList() that populated #listSummary with three stat items (rows.length, totalEvents, avg); renderList now goes straight from sorting to building the list grid.",
+      "archive.html — setView() no longer toggles a .list-mode class on the archive toolbar, so the month navigation and الوثيقة الشهرية chip stay visible in list view exactly like in calendar view.",
+      "src/css/index.css — removed the .archive-toolbar.list-mode rules (desktop and mobile) that used to hide the month nav / doc chip and re-center the view toggle when list view was active.",
+      "src/css/index.css — dropped the unused .list-summary styles (desktop flex row and mobile sizing) since the element no longer exists."
+    ]
+  },
+  {
     "version": "2.5.15",
     "date": "2026-04-13",
     "title": "Archive toolbar spans full viewport width",

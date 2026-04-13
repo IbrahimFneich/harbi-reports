@@ -71,10 +71,6 @@
     background: var(--surface2);
     border-bottom: 1px solid var(--border);
   }
-  .archive-toolbar.list-mode .month-nav,
-  .archive-toolbar.list-mode .doc-chip { display: none; }
-  .archive-toolbar.list-mode { justify-content: center; }
-
   .month-nav {
     display: flex; align-items: center; gap: 14px;
     direction: ltr;
@@ -350,15 +346,6 @@
   }
 
   /* ── List View ── */
-  .list-summary {
-    display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
-    padding: 16px 20px; background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 12px; margin-bottom: 14px;
-  }
-  .list-summary .item { text-align: center; }
-  .list-summary .item .n { display: block; font-size: 1.4rem; font-weight: 900; color: var(--accent); }
-  .list-summary .item .l { font-size: 0.68rem; color: var(--text-dim); margin-top: 2px; }
-
   .list-sort-bar {
     display: flex; gap: 10px; align-items: center; justify-content: flex-end;
     padding: 10px 4px 14px; font-size: 0.74rem; color: var(--text-dim);
@@ -452,9 +439,6 @@
       padding-top: 10px;
       border-top: 1px dashed var(--border);
     }
-    .archive-toolbar.list-mode { grid-template-areas: "toggle toggle"; }
-    .archive-toolbar.list-mode .view-toggle { justify-self: center; }
-
     .view-toggle button { padding: 6px 12px; font-size: 0.7rem; }
     .month-nav .btn { padding: 7px 10px; font-size: 0.68rem; min-width: 36px; }
     .month-nav .title-block { min-width: 0; }
@@ -488,9 +472,6 @@
     .footer { padding: 16px; font-size: 0.65rem; }
 
     .list-section { padding: 0 10px 30px; }
-    .list-summary { gap: 14px; padding: 12px 10px; }
-    .list-summary .item .n { font-size: 1.1rem; }
-    .list-summary .item .l { font-size: 0.58rem; }
     .list-sort-bar { font-size: 0.66rem; gap: 6px; }
     .list-sort-bar select { padding: 5px 8px; font-size: 0.66rem; }
     .list-row {
