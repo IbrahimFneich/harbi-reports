@@ -1,5 +1,14 @@
 [
   {
+    "version": "2.5.22",
+    "date": "2026-04-13",
+    "title": "Fix deep-link from advanced search results",
+    "changes": [
+      "search.html — result cards previously linked to report.html?date=YYYY-MM-DD#bayanat-N (URL fragment), but src/js/app.js boot logic at line 242 expects the deep-link in query-param form (?date=YYYY-MM-DD&tab=bayanat&idx=N). Clicking a result loaded the right report but never switched tabs or scrolled to the matching card.",
+      "search.html — makeCard() now generates report.html?date=X&tab=Y&idx=Z so app.js picks up the tab and idx params, switches to the right tab, and scrolls + highlights the exact card via its data-src-idx attribute (5-second .search-target highlight + 1-second fade-out). Tab IDs already matched the spotlight category names exactly (bayanat/sirens/enemy/iran/videos/allies) so no mapping was needed."
+    ]
+  },
+  {
     "version": "2.5.21",
     "date": "2026-04-13",
     "title": "Clean up noisy facet vocabulary in advanced search",

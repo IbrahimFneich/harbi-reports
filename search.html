@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>الإعلام الحربي — بحث متقدم</title>
-<link rel="stylesheet" href="src/css/enhancements.css?v=2.5.21"/>
-<link rel="stylesheet" href="src/css/index.css?v=2.5.21"/>
-<link rel="stylesheet" href="src/css/navbar.css?v=2.5.21"/>
-<link rel="stylesheet" href="src/css/spotlight.css?v=2.5.21"/>
+<link rel="stylesheet" href="src/css/enhancements.css?v=2.5.22"/>
+<link rel="stylesheet" href="src/css/index.css?v=2.5.22"/>
+<link rel="stylesheet" href="src/css/navbar.css?v=2.5.22"/>
+<link rel="stylesheet" href="src/css/spotlight.css?v=2.5.22"/>
 <script>
   (function(){try{var s=localStorage.getItem('harbi-theme');var l=s!=='dark';document.documentElement.classList.toggle('light',l);var f=function(){document.body&&document.body.classList.toggle('light',l);};if(document.body)f();else document.addEventListener('DOMContentLoaded',f);}catch(e){}})();
 </script>
@@ -1111,7 +1111,8 @@ function makeCard(item, parsed){
   const cat = item.c;
   const a = document.createElement('a');
   a.className = 'sp-card';
-  a.href = `report.html?date=${encodeURIComponent(item.d)}#${encodeURIComponent(cat + '-' + item.i)}`;
+  /* Deep-link format expected by src/js/app.js:242 — ?date=X&tab=Y&idx=N */
+  a.href = `report.html?date=${encodeURIComponent(item.d)}&tab=${encodeURIComponent(cat)}&idx=${encodeURIComponent(item.i)}`;
 
   const badge = document.createElement('div');
   badge.className = 'sp-badge';
