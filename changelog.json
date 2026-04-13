@@ -1,5 +1,18 @@
 [
   {
+    "version": "2.5.20",
+    "date": "2026-04-13",
+    "title": "Theme-aware multi-select widgets with beautiful count pills",
+    "changes": [
+      "search.html — replaced the native <select> and <input list>+<datalist> sub-filter controls with a custom theme-aware multi-select widget (createMultiSelect) so the dropdowns now match the site's light/dark theme via --surface/--surface2/--accent vars instead of leaking the OS-default appearance. Each widget has a clickable button with a label + count pill, opens a panel with a search filter input, a مسح الكل action, and a scrollable checkbox list. Click outside or on another widget closes the open one.",
+      "search.html — five filters are now multi-select (was single-value): weapon, target, tag, siren region, ally flag. Selected values are stored in a Set, the button label shows the first 3 picks plus a +N counter for the rest, and the checkbox list highlights selected items with the accent color.",
+      "search.html — passBayan/passSiren/passAllies updated for Set semantics: weapons/targets use OR within the set (item matches if its weapon is any of the picked ones), badges use OR set membership, tags use OR (item matches if any of its tags is in the picked set), siren regions use OR set membership, ally flags use OR. All filter groups still AND with each other.",
+      "search.html — count pills throughout the form (.sp-ms-cnt, .sp-bchip-cnt, .sp-count, .sp-ms-count) got a beauty pass: rounded background pills, tabular-nums + lining-nums via font-feature-settings + font-variant-numeric so digits align in monospace columns, min-width centering so 1-digit and 4-digit counts share the same visual weight, accent-dim background that flips to solid accent on selection, and smooth hover transitions.",
+      "src/js/app.js — bumped the report-page version footer from v2.5.17 to v2.5.20 (the pre-push hook had been failing to land its sync fix on origin since v2.5.18; this catches it up directly).",
+      "All html footers and asset cache busters bumped 2.5.19 → 2.5.20."
+    ]
+  },
+  {
     "version": "2.5.19",
     "date": "2026-04-13",
     "title": "Real dropdown vocab for advanced search sub-filters",

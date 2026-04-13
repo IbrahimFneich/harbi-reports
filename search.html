@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>الإعلام الحربي — بحث متقدم</title>
-<link rel="stylesheet" href="src/css/enhancements.css?v=2.5.19"/>
-<link rel="stylesheet" href="src/css/index.css?v=2.5.19"/>
-<link rel="stylesheet" href="src/css/navbar.css?v=2.5.19"/>
-<link rel="stylesheet" href="src/css/spotlight.css?v=2.5.19"/>
+<link rel="stylesheet" href="src/css/enhancements.css?v=2.5.20"/>
+<link rel="stylesheet" href="src/css/index.css?v=2.5.20"/>
+<link rel="stylesheet" href="src/css/navbar.css?v=2.5.20"/>
+<link rel="stylesheet" href="src/css/spotlight.css?v=2.5.20"/>
 <script>
   (function(){try{var s=localStorage.getItem('harbi-theme');var l=s!=='dark';document.documentElement.classList.toggle('light',l);var f=function(){document.body&&document.body.classList.toggle('light',l);};if(document.body)f();else document.addEventListener('DOMContentLoaded',f);}catch(e){}})();
 </script>
@@ -130,8 +130,12 @@
   .sp-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
   .sp-chip .sp-count{
     background:rgba(255,255,255,.22);
-    padding:1px 7px;border-radius:999px;
+    padding:2px 9px;border-radius:999px;
     font-size:.62rem;font-weight:700;direction:ltr;
+    min-width:32px;text-align:center;
+    font-feature-settings:"tnum","lnum";
+    font-variant-numeric:tabular-nums lining-nums;
+    letter-spacing:.02em;
   }
   .sp-chip:not(.active) .sp-count{background:var(--accent-dim);color:var(--accent)}
 
@@ -164,17 +168,174 @@
     font-family:inherit;cursor:pointer;
     background:var(--surface);border:1px solid var(--border);
     color:var(--text-dim);font-size:.7rem;font-weight:600;
-    padding:6px 14px;border-radius:999px;transition:all .15s;
+    padding:5px 6px 5px 14px;border-radius:999px;transition:all .15s;
+    display:inline-flex;align-items:center;gap:8px;
   }
   .sp-bchip:hover{border-color:var(--accent);color:var(--text)}
   .sp-bchip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .sp-bchip-cnt{
+    background:var(--accent-dim);color:var(--accent);
+    padding:2px 9px;border-radius:999px;
+    font-size:.6rem;font-weight:700;
+    min-width:30px;text-align:center;
+    direction:ltr;
+    font-feature-settings:"tnum","lnum";
+    font-variant-numeric:tabular-nums lining-nums;
+    letter-spacing:.02em;
+  }
+  .sp-bchip.active .sp-bchip-cnt{background:rgba(255,255,255,.25);color:#fff}
 
   /* bayan num range */
   .sp-range{display:flex;align-items:center;gap:8px}
   .sp-range input{flex:1;min-width:0}
   .sp-range .sep{color:var(--text-muted);font-size:.8rem;font-weight:700}
 
-  /* flag picker (allies) */
+  /* ─── custom multi-select widget ─── */
+  .sp-ms{position:relative;width:100%}
+  .sp-ms-btn{
+    width:100%;font-family:inherit;cursor:pointer;
+    background:var(--surface2);
+    border:1px solid var(--border);
+    color:var(--text);
+    border-radius:8px;padding:9px 12px;
+    font-size:.8rem;font-weight:500;
+    display:flex;align-items:center;gap:8px;
+    transition:all .15s;
+    text-align:right;
+  }
+  .sp-ms-btn:hover{border-color:var(--accent)}
+  .sp-ms.open .sp-ms-btn{
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px var(--accent-dim);
+  }
+  .sp-ms-label{
+    flex:1;min-width:0;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap;
+    color:var(--text);
+  }
+  .sp-ms-label.empty{color:var(--text-muted);font-weight:400}
+  .sp-ms-count{
+    background:var(--accent);color:#fff;
+    font-size:.62rem;font-weight:700;
+    padding:2px 9px;border-radius:999px;
+    direction:ltr;
+    min-width:24px;text-align:center;
+    font-feature-settings:"tnum","lnum";
+    font-variant-numeric:tabular-nums lining-nums;
+    letter-spacing:.02em;
+  }
+  .sp-ms-caret{
+    color:var(--text-dim);font-size:.7rem;
+    transition:transform .15s;
+  }
+  .sp-ms.open .sp-ms-caret{transform:rotate(180deg);color:var(--accent)}
+
+  .sp-ms-panel{
+    display:none;
+    position:absolute;top:calc(100% + 6px);right:0;left:0;
+    z-index:50;
+    background:var(--surface);
+    border:1px solid var(--accent);
+    border-radius:10px;
+    box-shadow:0 6px 24px rgba(0,0,0,.12),0 0 0 3px var(--accent-dim);
+    padding:10px;
+    max-height:320px;
+    overflow:hidden;
+    flex-direction:column;
+  }
+  .sp-ms.open .sp-ms-panel{display:flex}
+
+  .sp-ms-filter{
+    width:100%;
+    background:var(--surface2);
+    border:1px solid var(--border);
+    color:var(--text);
+    border-radius:7px;
+    padding:8px 10px;
+    font-family:inherit;font-size:.78rem;
+    margin-bottom:8px;
+  }
+  .sp-ms-filter:focus{
+    outline:none;border-color:var(--accent);
+    box-shadow:0 0 0 2px var(--accent-dim);
+  }
+  .sp-ms-filter::placeholder{color:var(--text-muted)}
+
+  .sp-ms-actions{
+    display:flex;gap:6px;margin-bottom:6px;
+  }
+  .sp-ms-action{
+    font-family:inherit;cursor:pointer;
+    background:transparent;border:1px solid var(--border);
+    color:var(--text-dim);
+    font-size:.64rem;font-weight:600;
+    padding:4px 10px;border-radius:6px;
+    transition:all .15s;
+  }
+  .sp-ms-action:hover{
+    background:var(--accent-dim);color:var(--accent);
+    border-color:var(--accent);
+  }
+
+  .sp-ms-list{
+    flex:1;overflow-y:auto;
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:7px;
+    padding:4px;
+    min-height:40px;
+  }
+  .sp-ms-list::-webkit-scrollbar{width:6px}
+  .sp-ms-list::-webkit-scrollbar-thumb{
+    background:var(--border);border-radius:3px;
+  }
+  .sp-ms-list::-webkit-scrollbar-thumb:hover{background:var(--accent-dim)}
+
+  .sp-ms-item{
+    display:flex;align-items:center;gap:10px;
+    padding:7px 10px;border-radius:6px;cursor:pointer;
+    font-size:.76rem;color:var(--text);
+    transition:background .1s;
+  }
+  .sp-ms-item:hover{background:var(--accent-dim)}
+  .sp-ms-item.selected{background:var(--accent-dim);color:var(--accent);font-weight:600}
+  .sp-ms-item input[type=checkbox]{
+    width:14px;height:14px;accent-color:var(--accent);
+    flex-shrink:0;cursor:pointer;
+  }
+  .sp-ms-item .sp-ms-name{
+    flex:1;min-width:0;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap;
+    padding-inline-start:2px;
+  }
+  .sp-ms-item .sp-ms-cnt{
+    flex-shrink:0;
+    font-size:.62rem;font-weight:700;
+    color:var(--accent);
+    background:var(--accent-dim);
+    padding:2px 9px;
+    border-radius:999px;
+    min-width:36px;
+    text-align:center;
+    direction:ltr;
+    letter-spacing:.02em;
+    font-feature-settings:"tnum","lnum";
+    font-variant-numeric:tabular-nums lining-nums;
+    transition:all .15s;
+  }
+  .sp-ms-item:hover .sp-ms-cnt{
+    background:var(--surface);
+  }
+  .sp-ms-item.selected .sp-ms-cnt{
+    background:var(--accent);
+    color:#fff;
+  }
+  .sp-ms-empty{
+    text-align:center;padding:20px 10px;
+    color:var(--text-muted);font-size:.72rem;font-style:italic;
+  }
+
+  /* flag picker (allies) — unused, replaced by multi-select */
   .sp-flags{display:flex;flex-wrap:wrap;gap:6px}
   .sp-flag{
     cursor:pointer;font-size:1.3rem;line-height:1;
@@ -312,6 +473,10 @@
     .sp-sub-head{font-size:.66rem}
     .sp-bchip{font-size:.66rem;padding:5px 11px}
     .sp-flag{font-size:1.2rem;padding:6px 9px}
+    .sp-ms-btn{font-size:.76rem;padding:10px 12px}
+    .sp-ms-panel{max-height:280px}
+    .sp-ms-item{font-size:.72rem;padding:8px 10px}
+    .sp-ms-item input[type=checkbox]{width:16px;height:16px}
     .sp-actions{flex-direction:column-reverse;gap:8px}
     .sp-btn, .sp-btn.primary{width:100%;justify-content:center;padding:12px}
     .sp-actions .sp-spacer{display:none}
@@ -411,14 +576,11 @@
         <div class="sp-row c2">
           <div class="sp-field">
             <label>السلاح المستخدم</label>
-            <select id="spBayanWeapon">
-              <option value="">— كل الأسلحة —</option>
-            </select>
+            <div class="sp-ms" id="msBayanWeapon"></div>
           </div>
           <div class="sp-field">
-            <label>الهدف / الموقع <span style="font-weight:400;color:var(--text-muted);font-size:.62rem">(اكتب أو اختر)</span></label>
-            <input type="text" id="spBayanTarget" list="spTargetsList" placeholder="اختر من القائمة أو اكتب…" autocomplete="off">
-            <datalist id="spTargetsList"></datalist>
+            <label>الهدف / الموقع</label>
+            <div class="sp-ms" id="msBayanTarget"></div>
           </div>
           <div class="sp-field">
             <label>مستوى الأهمية</label>
@@ -434,9 +596,7 @@
           </div>
           <div class="sp-field" style="grid-column:1/-1">
             <label>الوسوم</label>
-            <select id="spBayanTag">
-              <option value="">— كل الوسوم —</option>
-            </select>
+            <div class="sp-ms" id="msBayanTag"></div>
           </div>
         </div>
       </div>
@@ -446,9 +606,8 @@
         <div class="sp-sub-head">مرشحات صفارات الإنذار</div>
         <div class="sp-row c2">
           <div class="sp-field">
-            <label>المنطقة الجغرافية <span style="font-weight:400;color:var(--text-muted);font-size:.62rem">(اكتب أو اختر)</span></label>
-            <input type="text" id="spSirenRegion" list="spSirenLocsList" placeholder="اختر من القائمة أو اكتب…" autocomplete="off">
-            <datalist id="spSirenLocsList"></datalist>
+            <label>المنطقة الجغرافية</label>
+            <div class="sp-ms" id="msSirenRegion"></div>
           </div>
           <div class="sp-field">
             <label>عدد أدنى من الصفارات في اليوم</label>
@@ -461,10 +620,8 @@
       <div class="sp-sub" id="spSubAllies">
         <div class="sp-sub-head">مرشحات الحلفاء</div>
         <div class="sp-field">
-          <label>جهة الإعلان (Flag)</label>
-          <select id="spAlliesFlag">
-            <option value="">— كل الجهات —</option>
-          </select>
+          <label>جهة الإعلان</label>
+          <div class="sp-ms" id="msAlliesFlag"></div>
         </div>
       </div>
     </div>
@@ -550,6 +707,168 @@ let INDEX = [];
 let FACETS = null;   // loaded from data/search-facets.json — vocab + per-item enrichment
 let FILTERED = [];
 let LIMIT = 50;
+const MS = {};       // multi-select widget instances keyed by host id
+
+/* ─── createMultiSelect(host, options, opts) ──────────────────────────
+   Builds a theme-aware multi-select widget in `host`.
+   options: array of [value, label, count] tuples (label may equal value).
+   opts: { placeholder?, searchable? }
+   Returns: { values(): Set, clear(), setValues(arr), onChange(fn) }
+*/
+function createMultiSelect(host, options, opts = {}){
+  const placeholder = opts.placeholder || '— اختر —';
+  const searchable  = opts.searchable !== false;
+  const selected    = new Set();
+  let onChangeFn    = null;
+
+  host.classList.add('sp-ms');
+  host.replaceChildren();
+
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'sp-ms-btn';
+  const label = document.createElement('span');
+  label.className = 'sp-ms-label empty';
+  label.textContent = placeholder;
+  const count = document.createElement('span');
+  count.className = 'sp-ms-count';
+  count.style.display = 'none';
+  const caret = document.createElement('span');
+  caret.className = 'sp-ms-caret';
+  caret.textContent = '▾';
+  btn.append(label, count, caret);
+  host.appendChild(btn);
+
+  const panel = document.createElement('div');
+  panel.className = 'sp-ms-panel';
+
+  let filterInput = null;
+  if (searchable){
+    filterInput = document.createElement('input');
+    filterInput.type = 'text';
+    filterInput.className = 'sp-ms-filter';
+    filterInput.placeholder = 'ابحث…';
+    panel.appendChild(filterInput);
+  }
+
+  const actions = document.createElement('div');
+  actions.className = 'sp-ms-actions';
+  const clearBtn = document.createElement('button');
+  clearBtn.type = 'button';
+  clearBtn.className = 'sp-ms-action';
+  clearBtn.textContent = 'مسح الكل';
+  clearBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    selected.clear();
+    updateAll();
+    if (onChangeFn) onChangeFn();
+  });
+  actions.appendChild(clearBtn);
+  panel.appendChild(actions);
+
+  const list = document.createElement('div');
+  list.className = 'sp-ms-list';
+  panel.appendChild(list);
+  host.appendChild(panel);
+
+  /* Render the list (filtered by current search input if any) */
+  function renderList(){
+    const q = (filterInput?.value || '').trim().toLowerCase();
+    list.replaceChildren();
+    const filtered = !q
+      ? options
+      : options.filter(([, labelText]) => String(labelText).toLowerCase().includes(q));
+    if (filtered.length === 0){
+      const empty = document.createElement('div');
+      empty.className = 'sp-ms-empty';
+      empty.textContent = 'لا توجد خيارات مطابقة';
+      list.appendChild(empty);
+      return;
+    }
+    for (const [value, labelText, cnt] of filtered){
+      const item = document.createElement('label');
+      item.className = 'sp-ms-item' + (selected.has(value) ? ' selected' : '');
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = selected.has(value);
+      cb.addEventListener('change', () => {
+        if (cb.checked) selected.add(value); else selected.delete(value);
+        item.classList.toggle('selected', cb.checked);
+        updateLabel();
+        if (onChangeFn) onChangeFn();
+      });
+      const name = document.createElement('span');
+      name.className = 'sp-ms-name';
+      name.textContent = labelText;
+      item.append(cb, name);
+      if (cnt != null){
+        const cntEl = document.createElement('span');
+        cntEl.className = 'sp-ms-cnt';
+        cntEl.textContent = cnt.toLocaleString('en-US');
+        item.appendChild(cntEl);
+      }
+      list.appendChild(item);
+    }
+  }
+
+  /* Update button label + pill based on selected set */
+  function updateLabel(){
+    if (selected.size === 0){
+      label.textContent = placeholder;
+      label.classList.add('empty');
+      count.style.display = 'none';
+      return;
+    }
+    label.classList.remove('empty');
+    count.style.display = '';
+    count.textContent = selected.size.toLocaleString('en-US');
+    // show up to 3 names then "+N"
+    const picks = [...selected];
+    const first = picks.slice(0, 3).join('، ');
+    label.textContent = picks.length > 3
+      ? `${first} +${(picks.length - 3).toLocaleString('en-US')}`
+      : first;
+  }
+
+  function updateAll(){
+    updateLabel();
+    renderList();
+  }
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const wasOpen = host.classList.contains('open');
+    // close any other open widget
+    document.querySelectorAll('.sp-ms.open').forEach(h => h.classList.remove('open'));
+    if (!wasOpen){
+      host.classList.add('open');
+      renderList();
+      if (filterInput){ filterInput.value = ''; filterInput.focus(); }
+    }
+  });
+
+  if (filterInput){
+    filterInput.addEventListener('input', renderList);
+    filterInput.addEventListener('click', e => e.stopPropagation());
+  }
+  panel.addEventListener('click', e => e.stopPropagation());
+
+  updateLabel();
+  renderList();
+
+  const api = {
+    values: () => new Set(selected),
+    clear: () => { selected.clear(); updateAll(); },
+    setValues: (arr) => { selected.clear(); for (const v of arr) selected.add(v); updateAll(); },
+    onChange: (fn) => { onChangeFn = fn; },
+  };
+  return api;
+}
+
+/* Close any open multi-select when clicking outside */
+document.addEventListener('click', () => {
+  document.querySelectorAll('.sp-ms.open').forEach(h => h.classList.remove('open'));
+});
 
 /* Lenient Arabic normalization: strip diacritics and unify letter variants */
 function normAr(s){
@@ -605,23 +924,23 @@ function readFilters(){
     types,
     timeFrom: document.getElementById('spTimeFrom').value || null,
     timeTo:   document.getElementById('spTimeTo').value || null,
-    /* ─── bayan sub-filters ─── */
+    /* ─── bayan sub-filters (multi-select via MS.*) ─── */
     bayan: {
-      weapon:  document.getElementById('spBayanWeapon').value || '',  // exact match from select
-      target:  (document.getElementById('spBayanTarget').value || '').trim(),
+      weapons: MS.weapon ? MS.weapon.values() : new Set(),
+      targets: MS.target ? MS.target.values() : new Set(),
+      tags:    MS.tag    ? MS.tag.values()    : new Set(),
       badges:  new Set([...document.querySelectorAll('#spBayanBadge .sp-bchip.active')].map(b => b.dataset.badge)),
       numFrom: parseInt(document.getElementById('spBayanNumFrom').value, 10) || null,
       numTo:   parseInt(document.getElementById('spBayanNumTo').value, 10)   || null,
-      tag:     document.getElementById('spBayanTag').value || '',
     },
     /* ─── siren sub-filters ─── */
     siren: {
-      region:     (document.getElementById('spSirenRegion').value || '').trim(),
-      minPerDay:  parseInt(document.getElementById('spSirenMinPerDay').value, 10) || null,
+      regions:   MS.sirenRegion ? MS.sirenRegion.values() : new Set(),
+      minPerDay: parseInt(document.getElementById('spSirenMinPerDay').value, 10) || null,
     },
     /* ─── allies sub-filters ─── */
     allies: {
-      flag: document.getElementById('spAlliesFlag').value || '',
+      flags: MS.allyFlag ? MS.allyFlag.values() : new Set(),
     },
   };
 }
@@ -652,34 +971,33 @@ function getSirenCountByDay(){
   return m;
 }
 
-/* Bayan filter — uses enrichment fields w/t/b/g/n for precise match. */
+/* Bayan filter — uses enrichment fields w/t/b/g/n for precise match.
+   Set filters: weapons/targets/tags use OR semantics (any selected value matches);
+   badges use OR too (set membership). All filter groups AND together. */
 function passBayan(item, bf){
   if (!bf) return true;
-  const meta = metaFor(item);
-  const hasSub = bf.weapon || bf.target || (bf.badges && bf.badges.size) || bf.tag
+  const hasSub = (bf.weapons && bf.weapons.size) || (bf.targets && bf.targets.size)
+              || (bf.tags && bf.tags.size) || (bf.badges && bf.badges.size)
               || bf.numFrom != null || bf.numTo != null;
   if (!hasSub) return true;
 
+  const meta = metaFor(item);
   if (!meta){
     // No enrichment row — fall back to substring match on title so the item
-    // isn't silently dropped. Accepts the filter if nothing negative is found.
+    // isn't silently dropped. Accept the filter if any selected value matches.
     const hay = normAr((item.tt || '') + ' ' + (item.n || '') + ' ' + (item.st || ''));
-    if (bf.weapon && !hay.includes(normAr(bf.weapon))) return false;
-    if (bf.target && !hay.includes(normAr(bf.target))) return false;
-    if (bf.tag    && !hay.includes(normAr(bf.tag)))    return false;
+    if (bf.weapons.size && ![...bf.weapons].some(w => hay.includes(normAr(w)))) return false;
+    if (bf.targets.size && ![...bf.targets].some(t => hay.includes(normAr(t)))) return false;
+    if (bf.tags.size    && ![...bf.tags].some(g => hay.includes(normAr(g)))) return false;
     return true;
   }
 
-  if (bf.weapon && meta.w !== bf.weapon) return false;
-  if (bf.target){
-    if (!meta.t) return false;
-    if (!normAr(meta.t).includes(normAr(bf.target))) return false;
-  }
-  if (bf.badges && bf.badges.size){
-    if (!meta.b || !bf.badges.has(meta.b)) return false;
-  }
-  if (bf.tag){
-    if (!meta.g || !meta.g.includes(bf.tag)) return false;
+  if (bf.weapons.size && !bf.weapons.has(meta.w)) return false;
+  if (bf.targets.size && !bf.targets.has(meta.t)) return false;
+  if (bf.badges.size  && (!meta.b || !bf.badges.has(meta.b))) return false;
+  if (bf.tags.size){
+    const has = meta.g && meta.g.some(g => bf.tags.has(g));
+    if (!has) return false;
   }
   if (bf.numFrom != null || bf.numTo != null){
     const n = meta.n;
@@ -692,14 +1010,14 @@ function passBayan(item, bf){
 
 function passSiren(item, sf, sirenCounts){
   if (!sf) return true;
-  if (sf.region){
+  if (sf.regions && sf.regions.size){
     const meta = metaFor(item);
     if (meta && meta.l){
-      if (!normAr(meta.l).includes(normAr(sf.region))) return false;
+      if (!sf.regions.has(meta.l)) return false;
     } else {
       // fallback substring on spotlight title
       const hay = normAr((item.tt || '') + ' ' + (item.n || ''));
-      if (!hay.includes(normAr(sf.region))) return false;
+      if (![...sf.regions].some(r => hay.includes(normAr(r)))) return false;
     }
   }
   if (sf.minPerDay != null && (sirenCounts[item.d] || 0) < sf.minPerDay) return false;
@@ -707,9 +1025,9 @@ function passSiren(item, sf, sirenCounts){
 }
 
 function passAllies(item, af){
-  if (!af || !af.flag) return true;
+  if (!af || !af.flags || !af.flags.size) return true;
   const meta = metaFor(item);
-  return meta && meta.f === af.flag;
+  return meta && af.flags.has(meta.f);
 }
 
 function runSearch(){
@@ -910,6 +1228,7 @@ function resetForm(){
   document.querySelectorAll('.sp-scope').forEach((b,i) => b.classList.toggle('active', i === 0));
   document.querySelectorAll('#spPresets .sp-preset').forEach(b => b.classList.toggle('active', parseInt(b.dataset.days,10) === 0));
   document.querySelectorAll('#spBayanBadge .sp-bchip.active').forEach(b => b.classList.remove('active'));
+  Object.values(MS).forEach(w => w && w.clear && w.clear());
   syncSubPanels();
   runSearch();
 }
@@ -960,29 +1279,41 @@ function restoreFromUrl(){
   }
 }
 
-/* Populate the dropdown / datalist controls from FACETS.vocab */
+/* Populate the multi-select widgets from FACETS.vocab */
 function populateFacets(){
   if (!FACETS || !FACETS.vocab) return;
   const v = FACETS.vocab;
 
-  // Weapon select (exact match)
-  const wSel = document.getElementById('spBayanWeapon');
-  for (const [name, count] of v.weapons || []){
-    const opt = document.createElement('option');
-    opt.value = name;
-    opt.textContent = `${name} (${count.toLocaleString('en-US')})`;
-    wSel.appendChild(opt);
-  }
+  /* Tuple shape expected by createMultiSelect: [value, label, count] */
+  const asTuples = (arr) => (arr || []).map(([name, count]) => [name, name, count]);
 
-  // Target datalist (text input with browser-native suggestions)
-  const tList = document.getElementById('spTargetsList');
-  for (const [name] of v.targets_top || []){
-    const opt = document.createElement('option');
-    opt.value = name;
-    tList.appendChild(opt);
-  }
+  MS.weapon = createMultiSelect(
+    document.getElementById('msBayanWeapon'),
+    asTuples(v.weapons),
+    { placeholder: '— كل الأسلحة —', searchable: true }
+  );
+  MS.target = createMultiSelect(
+    document.getElementById('msBayanTarget'),
+    asTuples(v.targets_top),
+    { placeholder: '— كل الأهداف —', searchable: true }
+  );
+  MS.tag = createMultiSelect(
+    document.getElementById('msBayanTag'),
+    asTuples(v.tags),
+    { placeholder: '— كل الوسوم —', searchable: true }
+  );
+  MS.sirenRegion = createMultiSelect(
+    document.getElementById('msSirenRegion'),
+    asTuples(v.siren_locations_top),
+    { placeholder: '— كل المناطق —', searchable: true }
+  );
+  MS.allyFlag = createMultiSelect(
+    document.getElementById('msAlliesFlag'),
+    asTuples(v.ally_flags),
+    { placeholder: '— كل الجهات —', searchable: false }
+  );
 
-  // Badge chips (real categories with Arabic labels)
+  /* Badge chips (real categories with Arabic labels) — chip row with pill counter */
   const bHost = document.getElementById('spBayanBadge');
   bHost.replaceChildren();
   for (const [raw, label, count] of v.badges || []){
@@ -990,35 +1321,14 @@ function populateFacets(){
     btn.type = 'button';
     btn.className = 'sp-bchip';
     btn.dataset.badge = raw;
-    btn.textContent = `${label} (${count.toLocaleString('en-US')})`;
+    const labelSpan = document.createElement('span');
+    labelSpan.textContent = label;
+    const cntSpan = document.createElement('span');
+    cntSpan.className = 'sp-bchip-cnt';
+    cntSpan.textContent = count.toLocaleString('en-US');
+    btn.append(labelSpan, cntSpan);
     btn.addEventListener('click', () => btn.classList.toggle('active'));
     bHost.appendChild(btn);
-  }
-
-  // Tag select
-  const gSel = document.getElementById('spBayanTag');
-  for (const [name, count] of v.tags || []){
-    const opt = document.createElement('option');
-    opt.value = name;
-    opt.textContent = `${name} (${count.toLocaleString('en-US')})`;
-    gSel.appendChild(opt);
-  }
-
-  // Siren location datalist
-  const sList = document.getElementById('spSirenLocsList');
-  for (const [name] of v.siren_locations_top || []){
-    const opt = document.createElement('option');
-    opt.value = name;
-    sList.appendChild(opt);
-  }
-
-  // Ally flag select
-  const fSel = document.getElementById('spAlliesFlag');
-  for (const [name, count] of v.ally_flags || []){
-    const opt = document.createElement('option');
-    opt.value = name;
-    opt.textContent = `${name} (${count.toLocaleString('en-US')})`;
-    fSel.appendChild(opt);
   }
 }
 
