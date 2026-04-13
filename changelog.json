@@ -1,5 +1,19 @@
 [
   {
+    "version": "2.5.24",
+    "date": "2026-04-13",
+    "title": "Map and stats polish — neutral basemap + visible hour bars + hover tooltips",
+    "changes": [
+      "search.html — switched the map view's tile layer from default OpenStreetMap (which renders Israel/Lebanon labels in Hebrew) to CartoDB Positron light_nolabels. The basemap now has zero competing text in any language, leaving only our own Arabic markers and popups visible. Free, no API key, requires the © OpenStreetMap © CARTO attribution. There is no free OSM tile provider that serves Arabic-labeled tiles for this region without an API key, so the cleanest answer is no labels at all on the basemap.",
+      "search.html — fixed the hours histogram looking like a skeleton: bars now use a 12% baseline + 88% data-driven scale so even hours with 1 result get a visibly distinct bar (was previously 2px which was barely perceptible against a 110px panel). Bars use a vertical accent gradient instead of flat color, hover state scales the bar slightly with a darker accent border, and zero-result hours fade to 25% opacity for clear empty/non-empty differentiation.",
+      "search.html — added empty-state for the hours panel: when no items in the result set carry a time field, the histogram is replaced by 'لا توجد بيانات وقت في النتائج الحالية' instead of rendering 24 invisible bars.",
+      "search.html — added rich hover tooltips to the hours histogram: each column now reveals a positioned tooltip on hover (HH:00 — N نتيجة) with a small arrow pointing at the bar. CSS-only, uses ::before/::after pseudo-elements with data-tip attribute. Replaces the slow native title='' tooltip.",
+      "search.html — added hover effects to the bar rows in the weapons/targets panels: the entire row gets a subtle accent-dim background highlight on hover, the fill bar darkens to a stronger accent gradient, and padding shifts so the highlight feels deliberate.",
+      "search.html — added donut segment hover: hovering a category arc thickens its stroke from 6 to 8, and the parent SVG slightly thickens all segments together when hovered, drawing attention without losing context.",
+      "search.html — added sparkline hover with a moving cursor line + data dot + tooltip: as the user mouses across the daily activity sparkline, a vertical accent line tracks the cursor, a small dot appears on the nearest data point, and a positioned tooltip shows the exact date and count. Implemented via a single mousemove listener that converts viewport pixels to data indices, no SVG event listeners per point."
+    ]
+  },
+  {
     "version": "2.5.23",
     "date": "2026-04-13",
     "title": "Seven view modes for advanced search results",

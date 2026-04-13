@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>الإعلام الحربي — بحث متقدم</title>
-<link rel="stylesheet" href="src/css/enhancements.css?v=2.5.23"/>
-<link rel="stylesheet" href="src/css/index.css?v=2.5.23"/>
-<link rel="stylesheet" href="src/css/navbar.css?v=2.5.23"/>
-<link rel="stylesheet" href="src/css/spotlight.css?v=2.5.23"/>
+<link rel="stylesheet" href="src/css/enhancements.css?v=2.5.24"/>
+<link rel="stylesheet" href="src/css/index.css?v=2.5.24"/>
+<link rel="stylesheet" href="src/css/navbar.css?v=2.5.24"/>
+<link rel="stylesheet" href="src/css/spotlight.css?v=2.5.24"/>
 <!-- Leaflet for map view (loaded eagerly so map-view tab is instant) -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -753,18 +753,97 @@
     color:var(--text-muted);font-size:.7rem;font-style:italic;
   }
   .sp-st-hours{
+    position:relative;
     display:grid;grid-template-columns:repeat(24,1fr);
-    gap:3px;height:110px;align-items:end;
+    gap:3px;height:120px;align-items:end;
+    padding:8px 4px 0;
+    background:linear-gradient(180deg, transparent 0%, var(--surface) 100%);
+    border-radius:7px;
   }
   .sp-st-hcol{
-    background:var(--accent-dim2);border-radius:3px 3px 0 0;
-    transition:background .15s;cursor:pointer;min-height:2px;
+    position:relative;
+    background:linear-gradient(180deg, var(--accent-hi, var(--accent)) 0%, var(--accent-dim4, var(--accent-dim2)) 100%);
+    border-radius:3px 3px 0 0;
+    transition:all .15s;
+    cursor:pointer;
+    min-height:6px;
+    border-top:2px solid transparent;
   }
-  .sp-st-hcol:hover{background:var(--accent)}
+  .sp-st-hcol:hover{
+    background:var(--accent);
+    border-top-color:var(--accent-hi, var(--accent));
+    transform:scaleY(1.04);
+    transform-origin:bottom;
+  }
+  .sp-st-hcol::after{
+    content:attr(data-tip);
+    position:absolute;bottom:calc(100% + 8px);left:50%;
+    transform:translateX(-50%) translateY(4px);
+    background:var(--text);color:var(--surface-hi, #fff);
+    padding:5px 10px;border-radius:6px;
+    font-size:.66rem;font-weight:600;white-space:nowrap;
+    pointer-events:none;opacity:0;
+    transition:all .15s;direction:ltr;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+    z-index:20;
+  }
+  .sp-st-hcol::before{
+    content:"";position:absolute;
+    top:-8px;left:50%;transform:translateX(-50%) translateY(4px);
+    width:0;height:0;
+    border-left:5px solid transparent;border-right:5px solid transparent;
+    border-top:5px solid var(--text);
+    pointer-events:none;opacity:0;
+    transition:all .15s;z-index:20;
+  }
+  .sp-st-hcol:hover::after,
+  .sp-st-hcol:hover::before{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+  }
   .sp-st-haxis{
     margin-top:6px;display:grid;grid-template-columns:repeat(8,1fr);
     font-size:.55rem;color:var(--text-muted);direction:ltr;text-align:center;
   }
+  .sp-st-hours-empty{
+    text-align:center;padding:30px 10px;
+    color:var(--text-muted);font-size:.7rem;font-style:italic;
+  }
+
+  /* Bar row hover: highlight + reveal full name in tooltip */
+  .sp-st-bar{
+    position:relative;
+    padding:3px 0;border-radius:6px;
+    transition:background .15s;
+  }
+  .sp-st-bar:hover{background:var(--accent-dim);padding-inline:6px;margin-inline:-6px}
+  .sp-st-bar:hover .sp-st-bar-fill{
+    background:linear-gradient(90deg, var(--accent), var(--accent-hi, var(--accent)));
+  }
+
+  /* Donut segment hover */
+  .sp-st-donut-svg circle{transition:stroke-width .15s}
+  .sp-st-donut-svg:hover circle:not([stroke="rgba(168,133,50,.12)"]){stroke-width:5}
+  .sp-st-donut-svg circle:hover{stroke-width:8 !important}
+
+  /* Sparkline hover overlay */
+  .sp-st-spark{position:relative}
+  .sp-st-spark-tip{
+    position:absolute;
+    background:var(--text);color:var(--surface-hi, #fff);
+    padding:5px 10px;border-radius:6px;
+    font-size:.66rem;font-weight:600;white-space:nowrap;
+    pointer-events:none;opacity:0;transition:opacity .12s;
+    direction:ltr;box-shadow:0 2px 8px rgba(0,0,0,.15);
+    z-index:20;transform:translate(-50%,-130%);
+  }
+  .sp-st-spark.hover .sp-st-spark-tip{opacity:1}
+  .sp-st-spark-cursor{
+    position:absolute;width:1px;
+    background:var(--accent);
+    pointer-events:none;opacity:0;transition:opacity .12s;
+  }
+  .sp-st-spark.hover .sp-st-spark-cursor{opacity:.5}
   .sp-st-donut{display:flex;align-items:center;gap:18px}
   .sp-st-donut-svg{width:130px;height:130px;flex-shrink:0}
   .sp-st-donut-legend{flex:1;display:flex;flex-direction:column;gap:6px}
@@ -2044,17 +2123,33 @@ function makeHourPanel(hours){
   const h = document.createElement('h3');
   h.textContent = 'توزيع ساعات النشر';
   p.appendChild(h);
+
+  const total = hours.reduce((a, b) => a + b, 0);
+  if (total === 0){
+    const e = document.createElement('div');
+    e.className = 'sp-st-hours-empty';
+    e.textContent = 'لا توجد بيانات وقت في النتائج الحالية';
+    p.appendChild(e);
+    return p;
+  }
+
   const max = Math.max(1, ...hours);
   const grid = document.createElement('div');
   grid.className = 'sp-st-hours';
   for (let i = 0; i < 24; i++){
     const col = document.createElement('div');
     col.className = 'sp-st-hcol';
-    col.style.height = ((hours[i] / max) * 100).toFixed(1) + '%';
-    col.title = `${String(i).padStart(2,'0')}:00 — ${hours[i]} نتيجة`;
+    /* Two-stage scale: a baseline 12% + 88% based on actual ratio so even
+       1-result hours have a visible bar that's clearly distinct from empty. */
+    const ratio = hours[i] / max;
+    const visualPct = hours[i] === 0 ? 4 : (12 + ratio * 88);
+    col.style.height = visualPct.toFixed(1) + '%';
+    if (hours[i] === 0) col.style.opacity = '0.25';
+    col.dataset.tip = `${String(i).padStart(2,'0')}:00 — ${hours[i].toLocaleString('en-US')} ${hours[i] === 1 ? 'نتيجة' : 'نتيجة'}`;
     grid.appendChild(col);
   }
   p.appendChild(grid);
+
   const axis = document.createElement('div');
   axis.className = 'sp-st-haxis';
   for (const lbl of ['00','03','06','09','12','15','18','21']){
@@ -2144,12 +2239,13 @@ function makeSparkPanel(byDay){
   const points = dates.map((d, i) => {
     const v = byDay.get(d);
     const y = H - 8 - (v / max) * (H - 16);
-    return [i * stepX, y];
+    return [i * stepX, y, d, v];
   });
   const svgNS = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(svgNS, 'svg');
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.setAttribute('preserveAspectRatio', 'none');
+  svg.style.overflow = 'visible';
 
   const defs = document.createElementNS(svgNS, 'defs');
   const grad = document.createElementNS(svgNS, 'linearGradient');
@@ -2164,7 +2260,7 @@ function makeSparkPanel(byDay){
   defs.appendChild(grad);
   svg.appendChild(defs);
 
-  const pathD = 'M' + points.map(p => p.join(',')).join(' L');
+  const pathD = 'M' + points.map(p => p.slice(0,2).join(',')).join(' L');
   const fill = document.createElementNS(svgNS, 'path');
   fill.setAttribute('d', pathD + ` L${W},${H} L0,${H} Z`);
   fill.setAttribute('fill', 'url(#sparkfill)');
@@ -2176,7 +2272,53 @@ function makeSparkPanel(byDay){
   line.setAttribute('stroke-width', '2');
   svg.appendChild(line);
 
+  // Hover dot (hidden until mousemove)
+  const dot = document.createElementNS(svgNS, 'circle');
+  dot.setAttribute('r', '3');
+  dot.setAttribute('fill', '#a88532');
+  dot.setAttribute('stroke', '#fff');
+  dot.setAttribute('stroke-width', '1.5');
+  dot.setAttribute('opacity', '0');
+  svg.appendChild(dot);
+
   wrap.appendChild(svg);
+
+  // Tooltip + cursor
+  const tip = document.createElement('div');
+  tip.className = 'sp-st-spark-tip';
+  wrap.appendChild(tip);
+  const cursor = document.createElement('div');
+  cursor.className = 'sp-st-spark-cursor';
+  wrap.appendChild(cursor);
+
+  // Hover handling — find nearest data point in screen pixels, position tip
+  wrap.addEventListener('mousemove', (e) => {
+    const rect = svg.getBoundingClientRect();
+    const xPx = e.clientX - rect.left;
+    const xPct = xPx / rect.width;
+    // Find nearest point by index
+    const idx = Math.round(xPct * (dates.length - 1));
+    if (idx < 0 || idx >= points.length) return;
+    const [px, py, date, val] = points[idx];
+    // Convert SVG coords back to screen px relative to wrap
+    const sx = (px / W) * rect.width;
+    const sy = (py / H) * rect.height + (rect.top - wrap.getBoundingClientRect().top);
+    dot.setAttribute('cx', String(px));
+    dot.setAttribute('cy', String(py));
+    dot.setAttribute('opacity', '1');
+    tip.textContent = `${date} · ${val.toLocaleString('en-US')} ${val === 1 ? 'نتيجة' : 'نتيجة'}`;
+    tip.style.left = sx + 'px';
+    tip.style.top = sy + 'px';
+    cursor.style.left = sx + 'px';
+    cursor.style.top = '8px';
+    cursor.style.height = (rect.height - 16) + 'px';
+    wrap.classList.add('hover');
+  });
+  wrap.addEventListener('mouseleave', () => {
+    dot.setAttribute('opacity', '0');
+    wrap.classList.remove('hover');
+  });
+
   p.appendChild(wrap);
   return p;
 }
@@ -2227,8 +2369,12 @@ function renderViewMap(arr, host){
     if (MAP_INST){ MAP_INST.remove(); MAP_INST = null; }
     const map = L.map(canvas, { zoomControl: true, scrollWheelZoom: true });
     MAP_INST = map;
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18, attribution: '© OpenStreetMap'
+    /* CartoDB Positron — no labels = no Hebrew/English clutter, only our
+       Arabic markers and popups. Free, no API key, attribution required. */
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19,
+      subdomains: 'abcd',
+      attribution: '© OpenStreetMap © CARTO'
     }).addTo(map);
 
     const bounds = [];
