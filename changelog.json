@@ -1,5 +1,13 @@
 [
   {
+    "version": "2.5.26",
+    "date": "2026-04-13",
+    "title": "Fixed-size category pills in search results table",
+    "changes": [
+      "search.html — category pills in the search results table (.sp-tbl .pill) now render at a consistent min-width of 62px with centered text, so every badge (بيانات, صفارات, إيران, فيديوهات, غزة, اعداء, حلفاء) aligns uniformly in the category column instead of auto-sizing to label length. Chose min-width over fixed width so a future longer label would still render in full rather than being silently clipped — especially important on mobile where users can't hover to recover truncated Arabic text. Added box-sizing:border-box so the 9px horizontal padding is included in the 62px budget and pills never overflow their table cell on narrow viewports."
+    ]
+  },
+  {
     "version": "2.5.25",
     "date": "2026-04-13",
     "title": "Fix invisible stats bars — display:block + flex hours layout",
