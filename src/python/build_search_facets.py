@@ -18,6 +18,7 @@ Usage:
 import collections
 import json
 import os
+import re
 from glob import glob
 
 BASE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -36,6 +37,105 @@ BADGE_LABELS = {
 # via the free-text input on the form; the dropdown is just for discovery.
 TARGETS_MAX = 300
 SIREN_LOCS_MAX = 300
+
+# ─── Data cleanup rules ────────────────────────────────────────────────
+# The source data in data/*.json is produced by categorize.py and carries
+# some noise that leaks into dropdowns if passed through raw. These rules
+# normalize or drop the noisy values so the advanced-search facets show
+# only meaningful, deduplicated vocabulary.
+
+ARABIC_DIACRITICS = re.compile(r'[\u064B-\u065F\u0670]')
+
+
+def _strip_ar(s: str) -> str:
+    """Strip trailing punctuation and Arabic diacritics; trim whitespace."""
+    if not s:
+        return ''
+    s = s.strip()
+    while s and s[-1] in '.،,؟?!':
+        s = s[:-1].strip()
+    s = ARABIC_DIACRITICS.sub('', s)
+    return s.strip()
+
+
+# Canonical weapon name → substring patterns (on diacritic-stripped lowercase
+# form) that should collapse into it. First match wins.
+WEAPON_CANONICAL = [
+    ('صلية صاروخية', [
+        'صلية صاروخ', 'صليات صاروخ', 'بصلية صاروخ',
+        'صلية صاروخية كبيرة', 'صلياتٍ صاروخ',
+    ]),
+    ('صاروخ موجه', [
+        'صواريخ موجه', 'صاروخ موجه', 'بصاروخ موجه',
+    ]),
+    ('قذائف مدفعية', [
+        'قذائف مدفع', 'بقذائف المدفع',
+    ]),
+    ('مسيّرة انقضاضية', [
+        'مسيرات انقضاض', 'مسيرة انقضاض',
+        'محلقات انقضاض', 'محلقة انقضاض',
+        'سرب مسيرات انقضاض', 'سرب من المسيرات الانقضاض',
+        'بسرب من المسيرات الانقضاض', 'بمحلقة انقضاض',
+    ]),
+    ('صواريخ نوعية', [
+        'صواريخ نوعي', 'صاروخ نوعي',
+        'صلية من الصواريخ النوعي', 'صليات من الصواريخ النوعي',
+    ]),
+    ('صاروخ أرض-جو', [
+        'صاروخ أرض جو', 'صاروخ أرض-جو', 'صواريخ أرض جو',
+    ]),
+]
+
+# Generic/fallback weapon strings that carry no real information.
+WEAPON_DROPLIST = {'الأسلحة المناسبة', 'عملية قنص', 'قنص', 'بصلية من'}
+
+# Target fallback strings the categorizer emits for non-operational bayanat.
+TARGET_DROPLIST = {'الساعة'}
+
+# Tags that are actually badge categories mis-stored as tags.
+TAG_DROPLIST = {'بيان عام'}
+
+
+def canonicalize_weapon(raw: str) -> str:
+    """Return canonical weapon name, or '' if the raw value should be dropped."""
+    if not raw or raw in WEAPON_DROPLIST:
+        return ''
+    if len(raw) > 50:  # mis-classified long strings (probably a target)
+        return ''
+    norm = _strip_ar(raw).lower()
+    for canonical, patterns in WEAPON_CANONICAL:
+        for pat in patterns:
+            if pat in norm:
+                return canonical
+    return _strip_ar(raw)
+
+
+def clean_target(raw: str, badge: str) -> str:
+    """Return usable target, or '' if it's a communique fallback / noise."""
+    if badge == 'communique':
+        return ''
+    raw = (raw or '').strip()
+    if not raw or raw in TARGET_DROPLIST:
+        return ''
+    if raw.startswith('بيان '):  # category label mis-stored as target
+        return ''
+    if len(raw) < 3:
+        return ''
+    return raw
+
+
+def clean_tag(raw: str) -> str:
+    raw = (raw or '').strip()
+    if not raw or raw in TAG_DROPLIST:
+        return ''
+    return raw
+
+
+def clean_siren_location(raw: str) -> str:
+    raw = (raw or '').strip()
+    if not raw or len(raw) < 5:
+        return ''
+    return raw
 
 
 def main():
@@ -60,10 +160,10 @@ def main():
 
         b_arr = []
         for i, b in enumerate(d.get('bayanat') or []):
-            w  = (b.get('weapon') or '').strip()
-            t  = (b.get('target') or '').strip()
-            bg = (b.get('badge')  or '').strip()
-            gs = [g for g in (b.get('tags') or []) if g]
+            bg = (b.get('badge') or '').strip()
+            w  = canonicalize_weapon(b.get('weapon') or '')
+            t  = clean_target(b.get('target') or '', bg)
+            gs = [g for g in (clean_tag(g) for g in (b.get('tags') or [])) if g]
             num = b.get('num')
             if w:  weapons[w]  += 1
             if t:  targets[t]  += 1
@@ -81,7 +181,7 @@ def main():
 
         s_arr = []
         for i, s in enumerate(d.get('sirens') or []):
-            loc = (s.get('location') or '').strip()
+            loc = clean_siren_location(s.get('location') or '')
             if loc:
                 siren_locs[loc] += 1
             entry = {'i': i}

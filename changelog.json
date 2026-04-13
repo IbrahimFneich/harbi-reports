@@ -1,5 +1,19 @@
 [
   {
+    "version": "2.5.21",
+    "date": "2026-04-13",
+    "title": "Clean up noisy facet vocabulary in advanced search",
+    "changes": [
+      "src/python/build_search_facets.py — added a data-cleanup layer that normalizes and filters vocabulary before writing data/search-facets.json. Previously the dropdowns surfaced categorizer fallback strings (الساعة, بيان عام لحزب الله, بيان حول مجازر العدو بحق المدنيين, بيان إلى أهالي الجنوب والبقاع والضاحية) as if they were real targets, and weapon names appeared in 48 variants that were really diacritic/prefix/plural forms of ~12 canonical weapons.",
+      "src/python/build_search_facets.py — canonicalize_weapon() collapses weapon variants into a canonical form: صلية صاروخية absorbs its 6+ punctuation/prefix variants (was 1302 → now 1439 merged), مسيّرة انقضاضية absorbs 8 drone variants (was 86 → now 167), صاروخ موجه absorbs its variants (was 72 → now 163), قذائف مدفعية absorbs its variants, plus صواريخ نوعية and صاروخ أرض-جو families. Generic fallback strings (الأسلحة المناسبة, قنص, بصلية من) are dropped. Weapons above 50 chars are dropped as they're mis-classified targets.",
+      "src/python/build_search_facets.py — clean_target() drops targets from communique-badge bayanat entirely (statements have no operational target), drops the explicit الساعة fallback, drops any target starting with بيان (category label mis-stored as target), and drops targets < 3 chars. Top targets are now all real place names: الخيام, الطيبة, حيفا, كريات شمونة, شبعا اللبنانية, صفد, موقع الراهب, ثكنة زرعيت…",
+      "src/python/build_search_facets.py — clean_tag() drops بيان عام (a badge category mis-stored as a tag) from the tag vocabulary. clean_siren_location() drops the lone . entry (115 parse failures) and any location under 5 chars.",
+      "src/python/build_search_facets.py — the per-item enrichment (FACETS.bayan[date][i]) now stores CANONICALIZED values so when a user picks صلية صاروخية from the weapon dropdown the filter matches items whose original raw value was صليات صاروخية or بصلية صاروخيّة or any of the other variants. This keeps the dropdown values consistent with what the filter actually matches.",
+      "data/search-facets.json — regenerated: weapons 48 → 12, targets 1982 → 1978, tags 21 → 20, siren locations 2960 → 2957. File size slightly smaller (1086 → 1073 KB) despite storing canonical forms because the vocab lists got shorter.",
+      "index.html — footer version pill was stuck at v2.5.19 (missed in the v2.5.20 bump); corrected alongside the v2.5.21 bump."
+    ]
+  },
+  {
     "version": "2.5.20",
     "date": "2026-04-13",
     "title": "Theme-aware multi-select widgets with beautiful count pills",
