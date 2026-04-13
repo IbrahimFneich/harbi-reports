@@ -1,5 +1,15 @@
 [
   {
+    "version": "2.5.25",
+    "date": "2026-04-13",
+    "title": "Fix invisible stats bars — display:block + flex hours layout",
+    "changes": [
+      "search.html — fixed the top-weapons / top-targets bar fills rendering at 0 height (looking like empty white skeleton tracks): the .sp-st-bar-fill element was a <span> (inline by default) with height:100%, but inline elements ignore height. Added display:block to both .sp-st-bar-track and .sp-st-bar-fill so the percentage width and full track height now render correctly. Bumped track height to 20px, made it a rounded pill (border-radius:999px) with a darker surface-lo background and inset shadow so the empty track is clearly distinguishable from the panel, and gave the gold fill a soft drop shadow + min-width:6px so even tiny percentages have a visible nub.",
+      "search.html — fixed the hours histogram rendering completely empty: the panel used display:grid with align-items:end and percentage heights on grid items, which collapses in browsers when grid-template-rows isn't explicit. Switched to display:flex + align-items:flex-end with a definite parent height (130px), each column gets flex:1 for equal width and the inline percentage height now resolves correctly against the definite parent. Bars use the same gold gradient as the bar fills, with a recessed surface-lo track + inset shadow so the chart reads as a real chart instead of a placeholder skeleton.",
+      "search.html — both bar systems now share the same visual language: surface-lo recessed track, accent gradient fill (with hover gradient flip on the row bars and scale-on-hover for the hour columns), proper border + inset shadow on tracks, drop shadow on fills."
+    ]
+  },
+  {
     "version": "2.5.24",
     "date": "2026-04-13",
     "title": "Map and stats polish — neutral basemap + visible hour bars + hover tooltips",
