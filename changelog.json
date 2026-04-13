@@ -1,5 +1,25 @@
 [
   {
+    "version": "2.5.11",
+    "date": "2026-04-13",
+    "title": "Add report for 2026-04-12",
+    "changes": [
+      "data/2026-04-12.json — new daily report categorized from 113 messages: 44 بيانات, 29 صفارات, 17 إعلام العدو, 6 إيران, 3 فيديوهات, 1 يمن/عراق, 9 siren map points.",
+      "Regenerated data/reports-meta.js, data/spotlight-index.json, src/js/ui/nav.js, data/harbi.db (now 919 days indexed)."
+    ]
+  },
+  {
+    "version": "2.5.10",
+    "date": "2026-04-13",
+    "title": "Regenerate Apr 11 2026 report — override existing",
+    "changes": [
+      "data/2026-04-11.json — re-fetched 104 messages from الإعلام الحربي channel and re-ran categorize.py to override the prior version of this day's report. Final counts: 34 بيانات، 24 صفارات، 19 إعلام العدو، 4 إيران، 5 فيديوهات، 1 يمن/عراق.",
+      "data/reports-meta.js, data/spotlight-index.json, src/js/ui/nav.js — regenerated via build_index.py so the new Apr 11 counts and search entries replace the stale ones in the landing calendar, the Ctrl+K spotlight index, and the report prev/next navigation.",
+      "data/harbi.db — rebuilt the SQLite FTS index (29195 events across 919 reports) to pick up the overridden Apr 11 events.",
+      "validate_data.py passes with 0 errors; only the inherent 'missing bayan 1,2,3' warning remains (the channel did not publish those statement numbers on Apr 11 — source data gap, not a pipeline issue)."
+    ]
+  },
+  {
     "version": "2.5.9",
     "date": "2026-04-13",
     "title": "Strip final-CTA chrome on landing — keep only the action button",
