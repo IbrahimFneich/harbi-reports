@@ -1,5 +1,14 @@
 [
   {
+    "version": "2.5.28",
+    "date": "2026-04-13",
+    "title": "Lock spotlight filter pills to fixed width AND height",
+    "changes": [
+      "src/css/spotlight.css — .sl-filter-pill now uses fixed width:112px + height:32px + flex:0 0 auto instead of min-width. Previous min-width approach still let chips widen per label and allowed vertical drift between active and inactive states. Switched vertical padding to 0 (with align-items:center handling centering) because explicit height + vertical padding fight each other and cause baseline drift. flex:0 0 auto locks each chip against the flex parent so no chip can be squished or stretched.",
+      "src/css/spotlight.css — mobile override now mirrors the same pattern: width:92px + height:30px + padding 0/12px. Every chip — الكل, بيانات, صفارات, إعلام العدو, إيران, فيديو, حلفاء — renders at pixel-identical dimensions regardless of label length or active state, on both desktop and mobile."
+    ]
+  },
+  {
     "version": "2.5.27",
     "date": "2026-04-13",
     "title": "Fixed-size category filter pills in spotlight search",
