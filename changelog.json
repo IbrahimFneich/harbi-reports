@@ -1,5 +1,19 @@
 [
   {
+    "version": "2.5.19",
+    "date": "2026-04-13",
+    "title": "Real dropdown vocab for advanced search sub-filters",
+    "changes": [
+      "src/python/build_search_facets.py — new build script that walks every data/*.json daily report and extracts: (1) vocab lists for the search.html dropdowns — 48 weapons, top 300 targets, 5 badge categories with Arabic labels, 21 tags, top 300 siren locations, 2 ally flags — and (2) per-item enrichment keyed by date → array indexed by i, carrying the real weapon/target/badge/tags/num fields for bayanat, location for sirens, and flag for allies. Output: data/search-facets.json (~1.1 MB).",
+      "src/python/build_index.py — hooked the new facets build into the existing index pipeline as step 5 so a single `python3 src/python/build_index.py` run regenerates reports-meta, spotlight-index, nav, harbi.db, AND search-facets in one shot. The docstring was updated to list all five outputs.",
+      "search.html — replaced the four text inputs (weapon / target / siren region / ally source) with real dropdowns and datalists backed by search-facets.json. Weapon and tag use <select> (48 and 21 values with occurrence counts), target and siren location use <input list> + <datalist> for browser-native autocomplete against the top 300 values each, ally flag is a 2-option <select>.",
+      "search.html — badge chips are now dynamically rendered from search-facets.json with the real 5 categories: بيان عام (communique), ضربة عمق (deep), آلية / دبابة (tank), مستوطنة (settlement), متعدد الأهداف (multi). Each chip shows its occurrence count and toggles independently; populateFacets() creates them with their own click handler.",
+      "search.html — passBayan/passSiren/passAllies now use metaFor(item) to look up per-item enrichment from FACETS.bayan/siren/allies and do precise field-level matching: exact weapon equality, substring match on the real target/location strings, badge set membership, tag array includes check, and numeric range on the real bayan num. Falls back to substring-on-title when enrichment is missing so nothing is silently dropped.",
+      "search.html — SIREN_COUNT_BY_DAY now prefers FACETS.siren day-length (precomputed server-side) over walking the full INDEX at runtime, keeping the minPerDay filter O(1) per item.",
+      "search.html — loadIndex() fetches spotlight-index.json and search-facets.json in parallel via Promise.all so the form is hydrated with real vocab before the first render. Facets load is fault-tolerant: if the file is missing, filters fall back to substring matching and the dropdowns just show the placeholder option."
+    ]
+  },
+  {
     "version": "2.5.18",
     "date": "2026-04-13",
     "title": "Advanced search page with conditional sub-filters",

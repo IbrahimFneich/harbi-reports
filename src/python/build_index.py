@@ -6,6 +6,8 @@ Generates:
   1. data/reports-meta.js  — var reports, reportStats, searchIndex for index.html
   2. data/spotlight-index.json — pre-built flat search array for spotlight.js
   3. src/js/ui/nav.js — regenerated ALL_REPORTS + existing exports
+  4. data/harbi.db — SQLite database via build_db.py
+  5. data/search-facets.json — vocab + per-item enrichment for search.html
 
 Usage:
   python3 src/python/build_index.py
@@ -340,6 +342,13 @@ export function initNav() {{
         import subprocess
         print('\nBuilding SQLite database...')
         subprocess.run([sys.executable, build_db_script], check=True)
+
+    # ── 5. Build search-facets.json for advanced search page ──
+    facets_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'build_search_facets.py')
+    if os.path.exists(facets_script):
+        import subprocess
+        print('\nBuilding search facets...')
+        subprocess.run([sys.executable, facets_script], check=True)
 
     # Summary
     total_items = len(spotlight_entries)
