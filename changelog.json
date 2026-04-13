@@ -1,5 +1,16 @@
 [
   {
+    "version": "2.5.8",
+    "date": "2026-04-13",
+    "title": "Add favicon — gold H monogram on dark, fix silent 404",
+    "changes": [
+      "favicon.svg — created the asset that every page (report, analytics, archive, timeline, monthly chronicles) had been linking to but which never existed in the repo. Every page load was firing a silent 404 for /favicon.svg; the browser tab was rendering the default globe glyph instead of the brand mark. The new file is a 32x32 viewBox SVG built from pure <rect> elements (zero font dependency, so Chrome's favicon rasterizer can't fall back to a wrong glyph): a #0e0e10 rounded square base, a faint #c9a84c stroked inner border at 55% opacity, and a three-rect 'H' monogram (two 3.2px verticals + one 15px horizontal crossbar) in the site's --accent gold. Picks colors directly from existing CSS variables so it stays coherent with the report header glow without introducing a new palette entry.",
+      "index.html — added the missing <link rel=\"icon\" type=\"image/svg+xml\" href=\"favicon.svg\"> in <head>. Every other top-level HTML file already had this tag; index.html was the lone holdout, which meant the homepage had no favicon at all (not even a broken one). Inserted right after the <title> tag for parity with report.html / analytics.html / archive.html / timeline.html.",
+      "index.html — also fixed two stale 'Harbi Reports v2.5.5' version-pill strings (lines 780, 796) that had been missed by the v2.5.6 and v2.5.7 bump commits. Both now read v2.5.8 like the rest of the site.",
+      "Bumped cache-bust ?v= and version-pill strings to 2.5.8 across index, report, analytics, archive, timeline HTML files and the app.js footer pill."
+    ]
+  },
+  {
     "version": "2.5.7",
     "date": "2026-04-13",
     "title": "Tighten header — drop hairline and vertical whitespace above cockpit row",
