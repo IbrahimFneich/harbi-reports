@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>الإعلام الحربي — بحث متقدم</title>
-<link rel="stylesheet" href="src/css/enhancements.css?v=2.5.18"/>
-<link rel="stylesheet" href="src/css/index.css?v=2.5.18"/>
-<link rel="stylesheet" href="src/css/navbar.css?v=2.5.18"/>
-<link rel="stylesheet" href="src/css/spotlight.css?v=2.5.18"/>
+<link rel="stylesheet" href="src/css/enhancements.css?v=2.5.19"/>
+<link rel="stylesheet" href="src/css/index.css?v=2.5.19"/>
+<link rel="stylesheet" href="src/css/navbar.css?v=2.5.19"/>
+<link rel="stylesheet" href="src/css/spotlight.css?v=2.5.19"/>
 <script>
   (function(){try{var s=localStorage.getItem('harbi-theme');var l=s!=='dark';document.documentElement.classList.toggle('light',l);var f=function(){document.body&&document.body.classList.toggle('light',l);};if(document.body)f();else document.addEventListener('DOMContentLoaded',f);}catch(e){}})();
 </script>
@@ -411,19 +411,18 @@
         <div class="sp-row c2">
           <div class="sp-field">
             <label>السلاح المستخدم</label>
-            <input type="text" id="spBayanWeapon" placeholder="مثال: بركان، زلزال، صماد…" autocomplete="off">
+            <select id="spBayanWeapon">
+              <option value="">— كل الأسلحة —</option>
+            </select>
           </div>
           <div class="sp-field">
-            <label>الهدف / الموقع</label>
-            <input type="text" id="spBayanTarget" placeholder="مثال: ثكنة برانيت، تل أبيب…" autocomplete="off">
+            <label>الهدف / الموقع <span style="font-weight:400;color:var(--text-muted);font-size:.62rem">(اكتب أو اختر)</span></label>
+            <input type="text" id="spBayanTarget" list="spTargetsList" placeholder="اختر من القائمة أو اكتب…" autocomplete="off">
+            <datalist id="spTargetsList"></datalist>
           </div>
           <div class="sp-field">
-            <label>مستوى الأهمية (Badge)</label>
-            <div class="sp-badge-chips" id="spBayanBadge">
-              <button type="button" class="sp-bchip" data-badge="حرج">حرج</button>
-              <button type="button" class="sp-bchip" data-badge="عالي">عالي</button>
-              <button type="button" class="sp-bchip" data-badge="عادي">عادي</button>
-            </div>
+            <label>مستوى الأهمية</label>
+            <div class="sp-badge-chips" id="spBayanBadge"></div>
           </div>
           <div class="sp-field">
             <label>رقم البيان (نطاق)</label>
@@ -434,11 +433,12 @@
             </div>
           </div>
           <div class="sp-field" style="grid-column:1/-1">
-            <label>الوسوم (Tags)</label>
-            <input type="text" id="spBayanTags" placeholder="كلمات مفصولة بفواصل، مثال: قصف_مدفعي، عملية_نوعية" autocomplete="off">
+            <label>الوسوم</label>
+            <select id="spBayanTag">
+              <option value="">— كل الوسوم —</option>
+            </select>
           </div>
         </div>
-        <div class="sp-sub-note">المطابقة تتم على عنوان البيان — بعض الحقول قد لا تكون موجودة في كل بيان.</div>
       </div>
 
       <!-- Siren sub-filters -->
@@ -446,8 +446,9 @@
         <div class="sp-sub-head">مرشحات صفارات الإنذار</div>
         <div class="sp-row c2">
           <div class="sp-field">
-            <label>المنطقة الجغرافية</label>
-            <input type="text" id="spSirenRegion" placeholder="مثال: الجليل، تل أبيب، كريات شمونة…" autocomplete="off">
+            <label>المنطقة الجغرافية <span style="font-weight:400;color:var(--text-muted);font-size:.62rem">(اكتب أو اختر)</span></label>
+            <input type="text" id="spSirenRegion" list="spSirenLocsList" placeholder="اختر من القائمة أو اكتب…" autocomplete="off">
+            <datalist id="spSirenLocsList"></datalist>
           </div>
           <div class="sp-field">
             <label>عدد أدنى من الصفارات في اليوم</label>
@@ -460,8 +461,10 @@
       <div class="sp-sub" id="spSubAllies">
         <div class="sp-sub-head">مرشحات الحلفاء</div>
         <div class="sp-field">
-          <label>مصدر / جهة الإعلان</label>
-          <input type="text" id="spAlliesSource" placeholder="مثال: المقاومة الإسلامية، أنصار الله، الحوثي…" autocomplete="off">
+          <label>جهة الإعلان (Flag)</label>
+          <select id="spAlliesFlag">
+            <option value="">— كل الجهات —</option>
+          </select>
         </div>
       </div>
     </div>
@@ -544,6 +547,7 @@ const CAT_LABELS = {
 };
 
 let INDEX = [];
+let FACETS = null;   // loaded from data/search-facets.json — vocab + per-item enrichment
 let FILTERED = [];
 let LIMIT = 50;
 
@@ -593,7 +597,6 @@ function matchQuery(item, parsed, scope){
 
 function readFilters(){
   const types = new Set([...document.querySelectorAll('.sp-chip.active')].map(c => c.dataset.type));
-  const bayanTagsRaw = (document.getElementById('spBayanTags').value || '').trim();
   return {
     q:      parseQuery(document.getElementById('spQuery').value || ''),
     scope:  document.querySelector('.sp-scope.active')?.dataset.scope || 'all',
@@ -604,57 +607,82 @@ function readFilters(){
     timeTo:   document.getElementById('spTimeTo').value || null,
     /* ─── bayan sub-filters ─── */
     bayan: {
-      weapon:  normAr(document.getElementById('spBayanWeapon').value || ''),
-      target:  normAr(document.getElementById('spBayanTarget').value || ''),
-      badges:  new Set([...document.querySelectorAll('#spBayanBadge .sp-bchip.active')].map(b => normAr(b.dataset.badge))),
+      weapon:  document.getElementById('spBayanWeapon').value || '',  // exact match from select
+      target:  (document.getElementById('spBayanTarget').value || '').trim(),
+      badges:  new Set([...document.querySelectorAll('#spBayanBadge .sp-bchip.active')].map(b => b.dataset.badge)),
       numFrom: parseInt(document.getElementById('spBayanNumFrom').value, 10) || null,
       numTo:   parseInt(document.getElementById('spBayanNumTo').value, 10)   || null,
-      tags:    bayanTagsRaw ? bayanTagsRaw.split(/[,،]+/).map(t => normAr(t.trim())).filter(Boolean) : [],
+      tag:     document.getElementById('spBayanTag').value || '',
     },
     /* ─── siren sub-filters ─── */
     siren: {
-      region:     normAr(document.getElementById('spSirenRegion').value || ''),
+      region:     (document.getElementById('spSirenRegion').value || '').trim(),
       minPerDay:  parseInt(document.getElementById('spSirenMinPerDay').value, 10) || null,
     },
     /* ─── allies sub-filters ─── */
     allies: {
-      source: normAr(document.getElementById('spAlliesSource').value || ''),
+      flag: document.getElementById('spAlliesFlag').value || '',
     },
   };
 }
 
-/* Parse bayan number from spotlight subtitle e.g. "بيان #472" → 472 */
-function bayanNum(item){
-  const m = (item.st || '').match(/\d+/);
-  return m ? parseInt(m[0], 10) : null;
+/* Lookup per-item enrichment from FACETS (keyed by date → array indexed by i) */
+function metaFor(item){
+  if (!FACETS) return null;
+  const bucket = item.c === 'bayanat' ? FACETS.bayan
+               : item.c === 'sirens'  ? FACETS.siren
+               : item.c === 'allies'  ? FACETS.allies
+               : null;
+  if (!bucket) return null;
+  const day = bucket[item.d];
+  return day ? day[item.i] : null;
 }
 
-/* Count sirens per day across the index (for minPerDay filter) */
+/* Count sirens per day — precomputed from FACETS if available, else fall back to INDEX */
 let SIREN_COUNT_BY_DAY = null;
 function getSirenCountByDay(){
   if (SIREN_COUNT_BY_DAY) return SIREN_COUNT_BY_DAY;
   const m = {};
-  for (const it of INDEX) if (it.c === 'sirens') m[it.d] = (m[it.d] || 0) + 1;
+  if (FACETS && FACETS.siren){
+    for (const d of Object.keys(FACETS.siren)) m[d] = FACETS.siren[d].length;
+  } else {
+    for (const it of INDEX) if (it.c === 'sirens') m[it.d] = (m[it.d] || 0) + 1;
+  }
   SIREN_COUNT_BY_DAY = m;
   return m;
 }
 
-/* Per-type sub-filter checks. Return false → drop the item. */
+/* Bayan filter — uses enrichment fields w/t/b/g/n for precise match. */
 function passBayan(item, bf){
   if (!bf) return true;
-  const hay = normAr((item.tt || '') + ' ' + (item.n || '') + ' ' + (item.st || ''));
-  if (bf.weapon && !hay.includes(bf.weapon)) return false;
-  if (bf.target && !hay.includes(bf.target)) return false;
-  if (bf.badges && bf.badges.size){
-    let any = false;
-    for (const b of bf.badges) if (b && hay.includes(b)) { any = true; break; }
-    if (!any) return false;
+  const meta = metaFor(item);
+  const hasSub = bf.weapon || bf.target || (bf.badges && bf.badges.size) || bf.tag
+              || bf.numFrom != null || bf.numTo != null;
+  if (!hasSub) return true;
+
+  if (!meta){
+    // No enrichment row — fall back to substring match on title so the item
+    // isn't silently dropped. Accepts the filter if nothing negative is found.
+    const hay = normAr((item.tt || '') + ' ' + (item.n || '') + ' ' + (item.st || ''));
+    if (bf.weapon && !hay.includes(normAr(bf.weapon))) return false;
+    if (bf.target && !hay.includes(normAr(bf.target))) return false;
+    if (bf.tag    && !hay.includes(normAr(bf.tag)))    return false;
+    return true;
   }
-  if (bf.tags && bf.tags.length){
-    for (const t of bf.tags) if (!hay.includes(t)) return false;
+
+  if (bf.weapon && meta.w !== bf.weapon) return false;
+  if (bf.target){
+    if (!meta.t) return false;
+    if (!normAr(meta.t).includes(normAr(bf.target))) return false;
+  }
+  if (bf.badges && bf.badges.size){
+    if (!meta.b || !bf.badges.has(meta.b)) return false;
+  }
+  if (bf.tag){
+    if (!meta.g || !meta.g.includes(bf.tag)) return false;
   }
   if (bf.numFrom != null || bf.numTo != null){
-    const n = bayanNum(item);
+    const n = meta.n;
     if (n == null) return false;
     if (bf.numFrom != null && n < bf.numFrom) return false;
     if (bf.numTo   != null && n > bf.numTo)   return false;
@@ -665,17 +693,23 @@ function passBayan(item, bf){
 function passSiren(item, sf, sirenCounts){
   if (!sf) return true;
   if (sf.region){
-    const hay = normAr((item.tt || '') + ' ' + (item.n || ''));
-    if (!hay.includes(sf.region)) return false;
+    const meta = metaFor(item);
+    if (meta && meta.l){
+      if (!normAr(meta.l).includes(normAr(sf.region))) return false;
+    } else {
+      // fallback substring on spotlight title
+      const hay = normAr((item.tt || '') + ' ' + (item.n || ''));
+      if (!hay.includes(normAr(sf.region))) return false;
+    }
   }
   if (sf.minPerDay != null && (sirenCounts[item.d] || 0) < sf.minPerDay) return false;
   return true;
 }
 
 function passAllies(item, af){
-  if (!af || !af.source) return true;
-  const hay = normAr((item.tt || '') + ' ' + (item.n || '') + ' ' + (item.st || ''));
-  return hay.includes(af.source);
+  if (!af || !af.flag) return true;
+  const meta = metaFor(item);
+  return meta && meta.f === af.flag;
 }
 
 function runSearch(){
@@ -868,17 +902,14 @@ function syncSubPanels(){
   document.getElementById('spSubAllies').classList.toggle('open', active.has('allies'));
 }
 
-/* Badge chips: multi-select (independent) */
-document.querySelectorAll('#spBayanBadge .sp-bchip').forEach(btn => {
-  btn.addEventListener('click', () => btn.classList.toggle('active'));
-});
+/* Badge chips are populated dynamically by populateFacets() with their own click handlers */
 
 function resetForm(){
   document.getElementById('spForm').reset();
   document.querySelectorAll('.sp-chip[data-type]').forEach(b => b.classList.add('active'));
   document.querySelectorAll('.sp-scope').forEach((b,i) => b.classList.toggle('active', i === 0));
   document.querySelectorAll('#spPresets .sp-preset').forEach(b => b.classList.toggle('active', parseInt(b.dataset.days,10) === 0));
-  document.querySelectorAll('#spBayanBadge .sp-bchip').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#spBayanBadge .sp-bchip.active').forEach(b => b.classList.remove('active'));
   syncSubPanels();
   runSearch();
 }
@@ -929,16 +960,83 @@ function restoreFromUrl(){
   }
 }
 
+/* Populate the dropdown / datalist controls from FACETS.vocab */
+function populateFacets(){
+  if (!FACETS || !FACETS.vocab) return;
+  const v = FACETS.vocab;
+
+  // Weapon select (exact match)
+  const wSel = document.getElementById('spBayanWeapon');
+  for (const [name, count] of v.weapons || []){
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = `${name} (${count.toLocaleString('en-US')})`;
+    wSel.appendChild(opt);
+  }
+
+  // Target datalist (text input with browser-native suggestions)
+  const tList = document.getElementById('spTargetsList');
+  for (const [name] of v.targets_top || []){
+    const opt = document.createElement('option');
+    opt.value = name;
+    tList.appendChild(opt);
+  }
+
+  // Badge chips (real categories with Arabic labels)
+  const bHost = document.getElementById('spBayanBadge');
+  bHost.replaceChildren();
+  for (const [raw, label, count] of v.badges || []){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'sp-bchip';
+    btn.dataset.badge = raw;
+    btn.textContent = `${label} (${count.toLocaleString('en-US')})`;
+    btn.addEventListener('click', () => btn.classList.toggle('active'));
+    bHost.appendChild(btn);
+  }
+
+  // Tag select
+  const gSel = document.getElementById('spBayanTag');
+  for (const [name, count] of v.tags || []){
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = `${name} (${count.toLocaleString('en-US')})`;
+    gSel.appendChild(opt);
+  }
+
+  // Siren location datalist
+  const sList = document.getElementById('spSirenLocsList');
+  for (const [name] of v.siren_locations_top || []){
+    const opt = document.createElement('option');
+    opt.value = name;
+    sList.appendChild(opt);
+  }
+
+  // Ally flag select
+  const fSel = document.getElementById('spAlliesFlag');
+  for (const [name, count] of v.ally_flags || []){
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = `${name} (${count.toLocaleString('en-US')})`;
+    fSel.appendChild(opt);
+  }
+}
+
 async function loadIndex(){
   try {
-    const resp = await fetch('data/spotlight-index.json');
-    INDEX = await resp.json();
+    const [spotlight, facets] = await Promise.all([
+      fetch('data/spotlight-index.json').then(r => r.json()),
+      fetch('data/search-facets.json').then(r => r.json()).catch(() => null),
+    ]);
+    INDEX = spotlight;
+    FACETS = facets;
     const counts = {};
     for (const it of INDEX) counts[it.c] = (counts[it.c] || 0) + 1;
     document.querySelectorAll('[data-count]').forEach(el => {
       const n = counts[el.dataset.count] || 0;
       el.textContent = n.toLocaleString('en-US');
     });
+    populateFacets();
     restoreFromUrl();
     syncSubPanels();
     runSearch();
