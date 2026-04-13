@@ -18,6 +18,7 @@ export function initNavbar() {
   if (path.indexOf('analytics') !== -1) page = 'analytics';
   if (path.indexOf('timeline') !== -1) page = 'timeline';
   if (path.indexOf('monthly') !== -1) page = 'monthly';
+  if (path.indexOf('search') !== -1) page = 'search';
 
   // Detect if we're in a subdirectory (e.g. monthly/)
   var prefix = (path.indexOf('/monthly/') !== -1) ? '../' : '';
@@ -36,6 +37,7 @@ export function initNavbar() {
   var items = [
     { href: prefix + 'index.html', label: '\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629', id: 'index' },
     { href: prefix + 'archive.html', label: '\u0627\u0644\u0623\u0631\u0634\u064A\u0641', id: 'archive' },
+    { href: prefix + 'search.html', label: '\u0628\u062D\u062B \u0645\u062A\u0642\u062F\u0645', id: 'search' },
     { href: prefix + 'timeline.html', label: '\u0627\u0644\u062A\u0633\u0644\u0633\u0644 \u0627\u0644\u0632\u0645\u0646\u064A', id: 'timeline' },
     { href: prefix + 'analytics.html', label: '\u0627\u0644\u062A\u062D\u0644\u064A\u0644\u0627\u062A', id: 'analytics' },
     { href: (page === 'monthly') ? '#' : (prefix + 'monthly/2023-10.html'), label: '\u0627\u0644\u0648\u062B\u064A\u0642\u0629 \u0627\u0644\u0634\u0647\u0631\u064A\u0629', id: 'monthly' }

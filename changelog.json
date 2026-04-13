@@ -1,5 +1,21 @@
 [
   {
+    "version": "2.5.18",
+    "date": "2026-04-13",
+    "title": "Advanced search page with conditional sub-filters",
+    "changes": [
+      "search.html — new standalone advanced search page that loads data/spotlight-index.json once and runs client-side filtering across all 923 days of the archive. Free-text input supports \"exact phrase\", -exclude and bare-word AND semantics with lenient Arabic normalization (ا/أ/إ/آ, ى/ي, ة/ه all unified).",
+      "search.html — search scope selector (كل الحقول / العناوين فقط / النص المُبسَّط) lets the user target which indexed fields the free-text query runs against. Date-range section has six quick presets (اليوم → كل الأرشيف) plus manual from/to pickers.",
+      "search.html — content-type chips (بيانات/صفارات/عدو/إيران/فيديوهات/حلفاء) are multi-select and reveal conditional sub-filter panels: bayan panel has weapon/target/badge chips/num-range/tags, siren panel has region text + minPerDay threshold, allies panel has a source text filter. syncSubPanels() toggles .open on the relevant panels based on active chips.",
+      "search.html — runSearch() applies all filters in AND semantics against the pre-built spotlight index. bayanNum() parses the number out of the subtitle field (بيان #N) for precise numeric range filtering, SIREN_COUNT_BY_DAY is a lazily-memoized per-day count for the minPerDay filter, and passBayan/passSiren/passAllies gate items by their type-specific sub-filters.",
+      "search.html — results render via DOM API (document.createElement + replaceChildren) instead of innerHTML templates so user query text flowing through highlightInto() can never inject HTML. Match highlighting wraps terms in <mark> via text nodes only. Each result card links to report.html?date=YYYY-MM-DD#cat-i.",
+      "search.html — fully responsive with breakpoints at 780px (form collapses to single column, scope chips switch to a 3-column grid, action bar stacks column-reverse, result cards condense) and 420px (smaller header and form padding). English digits enforced everywhere via font-feature-settings lnum/tnum and toLocaleString('en-US').",
+      "search.html — URL state sync: filter values are encoded as ?q=&from=&to=&t=bayanat,sirens&scope=title&tf=&tt= so every search is shareable as a URL. restoreFromUrl() rehydrates form state on page load and نسخ رابط البحث copies the current URL to clipboard with visual feedback.",
+      "src/js/ui/navbar.js — added بحث متقدم link to the main nav between الأرشيف and التسلسل الزمني, and added path.indexOf('search') page detection so the navbar highlights the active tab when on search.html.",
+      "mockups/advanced-search.html — reference mockup with the full filter vocabulary (including subfilters that require a richer index than spotlight-index carries today) kept in the mockups folder as the visual north star for the next index-enrichment pass."
+    ]
+  },
+  {
     "version": "2.5.17",
     "date": "2026-04-13",
     "title": "List view filters by the selected month",

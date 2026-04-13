@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإعلام الحربي — بحث متقدم</title>
+<link rel="stylesheet" href="src/css/enhancements.css?v=2.5.18"/>
+<link rel="stylesheet" href="src/css/index.css?v=2.5.18"/>
+<link rel="stylesheet" href="src/css/navbar.css?v=2.5.18"/>
+<link rel="stylesheet" href="src/css/spotlight.css?v=2.5.18"/>
+<script>
+  (function(){try{var s=localStorage.getItem('harbi-theme');var l=s!=='dark';document.documentElement.classList.toggle('light',l);var f=function(){document.body&&document.body.classList.toggle('light',l);};if(document.body)f();else document.addEventListener('DOMContentLoaded',f);}catch(e){}})();
+</script>
+<style>
+  /* ─── Advanced Search Page ─── */
+  .search-page, .search-page *{
+    font-feature-settings: "lnum", "tnum";
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .search-page{
+    max-width:1180px;margin:0 auto;padding:40px 20px 96px;
+    font-family:'Noto Kufi Arabic',sans-serif;
+  }
+
+  .sp-head{text-align:center;margin-bottom:32px}
+  .sp-head .sp-eyebrow{
+    display:inline-block;font-size:.65rem;font-weight:700;letter-spacing:.18em;
+    color:var(--accent);background:var(--accent-dim);
+    padding:5px 13px;border-radius:999px;margin-bottom:12px;direction:ltr;
+  }
+  .sp-head h1{
+    font-size:2rem;font-weight:800;color:var(--accent);
+    letter-spacing:-.5px;line-height:1.2;
+  }
+  .sp-head p{
+    margin-top:10px;font-size:.85rem;color:var(--text-dim);
+    max-width:560px;margin-inline:auto;line-height:1.7;
+  }
+
+  .sp-form{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:18px;padding:28px 26px;
+    box-shadow:0 2px 16px rgba(0,0,0,.08);
+  }
+  .sp-group{padding:20px 0;border-bottom:1px dashed var(--border)}
+  .sp-group:first-child{padding-top:0}
+  .sp-group:last-of-type{border-bottom:0}
+  .sp-group-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .sp-group-head .sp-icon{
+    width:26px;height:26px;border-radius:7px;
+    background:var(--accent-dim);color:var(--accent);
+    display:inline-flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:.72rem;direction:ltr;
+  }
+  .sp-group-head h2{font-size:.9rem;font-weight:700;color:var(--text);margin:0}
+  .sp-group-head .sp-hint{
+    font-size:.68rem;color:var(--text-muted);margin-right:auto;font-weight:400;
+  }
+
+  .sp-row{display:grid;gap:12px}
+  .sp-row.c2{grid-template-columns:1fr 1fr}
+  .sp-field label{
+    display:block;font-size:.68rem;font-weight:700;
+    color:var(--text-dim);letter-spacing:.04em;margin-bottom:6px;
+  }
+
+  .sp-form input[type=text],
+  .sp-form input[type=number],
+  .sp-form input[type=date],
+  .sp-form input[type=time],
+  .sp-form select{
+    font-family:inherit;width:100%;
+    background:var(--surface2);border:1px solid var(--border);
+    border-radius:8px;padding:9px 12px;
+    font-size:.82rem;color:var(--text);transition:all .15s;
+  }
+  .sp-form input:focus,.sp-form select:focus{
+    outline:none;border-color:var(--accent);
+    box-shadow:0 0 0 3px var(--accent-dim);
+  }
+
+  .sp-q{position:relative}
+  .sp-q input{padding:13px 44px 13px 14px;font-size:.95rem;font-weight:500}
+  .sp-q .sp-q-icon{
+    position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    color:var(--accent);font-size:1.1rem;pointer-events:none;
+  }
+
+  .sp-scope-row{margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .sp-scope-label{
+    font-size:.68rem;font-weight:700;color:var(--text-dim);letter-spacing:.04em;
+  }
+  .sp-scope-chips{display:flex;flex-wrap:wrap;gap:5px}
+  .sp-scope{
+    font-family:inherit;cursor:pointer;
+    background:var(--surface2);border:1px solid var(--border);
+    color:var(--text-dim);font-size:.7rem;font-weight:600;
+    padding:6px 11px;border-radius:7px;transition:all .15s;
+  }
+  .sp-scope:hover{border-color:var(--accent);color:var(--text)}
+  .sp-scope.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  .sp-syntax{margin-top:10px;font-size:.66rem;color:var(--text-muted);line-height:1.8}
+  .sp-syntax code{
+    background:var(--accent-dim);color:var(--accent);
+    padding:1px 6px;border-radius:4px;
+    font-family:'SF Mono',Menlo,monospace;font-size:.62rem;
+    direction:ltr;display:inline-block;
+  }
+
+  .sp-presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+  .sp-preset{
+    font-family:inherit;cursor:pointer;
+    background:transparent;border:1px solid var(--border);
+    color:var(--text-dim);font-size:.68rem;font-weight:600;
+    padding:5px 11px;border-radius:6px;transition:all .15s;
+  }
+  .sp-preset:hover{background:var(--surface2);color:var(--accent);border-color:var(--accent)}
+  .sp-preset.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  .sp-chips{display:flex;flex-wrap:wrap;gap:8px}
+  .sp-chip{
+    font-family:inherit;cursor:pointer;
+    background:var(--surface2);border:1px solid var(--border);
+    color:var(--text-dim);font-size:.74rem;font-weight:600;
+    padding:8px 14px;border-radius:999px;
+    display:inline-flex;align-items:center;gap:6px;transition:all .15s;
+  }
+  .sp-chip:hover{border-color:var(--accent);color:var(--text)}
+  .sp-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .sp-chip .sp-count{
+    background:rgba(255,255,255,.22);
+    padding:1px 7px;border-radius:999px;
+    font-size:.62rem;font-weight:700;direction:ltr;
+  }
+  .sp-chip:not(.active) .sp-count{background:var(--accent-dim);color:var(--accent)}
+
+  /* ─── conditional sub-filter panels ─── */
+  .sp-sub{
+    display:none;
+    margin-top:14px;padding:16px 18px;
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-right:3px solid var(--accent);
+    border-radius:11px;
+  }
+  .sp-sub.open{display:block}
+  .sp-sub-head{
+    font-size:.7rem;font-weight:700;color:var(--accent);
+    letter-spacing:.04em;margin-bottom:12px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .sp-sub-head::before{
+    content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);
+  }
+  .sp-sub-note{
+    margin-top:10px;font-size:.62rem;color:var(--text-muted);
+    line-height:1.6;font-style:italic;
+  }
+
+  /* badge-level mini chips */
+  .sp-badge-chips{display:flex;flex-wrap:wrap;gap:6px}
+  .sp-bchip{
+    font-family:inherit;cursor:pointer;
+    background:var(--surface);border:1px solid var(--border);
+    color:var(--text-dim);font-size:.7rem;font-weight:600;
+    padding:6px 14px;border-radius:999px;transition:all .15s;
+  }
+  .sp-bchip:hover{border-color:var(--accent);color:var(--text)}
+  .sp-bchip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  /* bayan num range */
+  .sp-range{display:flex;align-items:center;gap:8px}
+  .sp-range input{flex:1;min-width:0}
+  .sp-range .sep{color:var(--text-muted);font-size:.8rem;font-weight:700}
+
+  /* flag picker (allies) */
+  .sp-flags{display:flex;flex-wrap:wrap;gap:6px}
+  .sp-flag{
+    cursor:pointer;font-size:1.3rem;line-height:1;
+    padding:7px 11px;border-radius:8px;
+    border:1px solid var(--border);
+    background:var(--surface);transition:all .15s;
+  }
+  .sp-flag:hover{border-color:var(--accent)}
+  .sp-flag.active{
+    border-color:var(--accent);background:var(--accent-dim);
+    box-shadow:0 0 0 2px var(--accent-dim);
+  }
+
+  .sp-actions{
+    margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;
+    padding-top:20px;border-top:1px solid var(--border);
+  }
+  .sp-btn{
+    font-family:inherit;cursor:pointer;
+    background:var(--surface2);border:1px solid var(--border);
+    color:var(--text);font-size:.8rem;font-weight:600;
+    padding:10px 18px;border-radius:9px;
+    display:inline-flex;align-items:center;gap:7px;transition:all .15s;
+  }
+  .sp-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .sp-btn.primary{
+    background:var(--accent);color:#fff;border-color:var(--accent);
+    padding:11px 26px;font-size:.85rem;
+  }
+  .sp-btn.primary:hover{background:var(--accent);opacity:.9;color:#fff}
+  .sp-btn.ghost{color:var(--text-dim)}
+  .sp-actions .sp-spacer{flex:1}
+
+  .sp-results{
+    margin-top:32px;
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:18px;padding:24px 26px;
+  }
+  .sp-results-head{
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    margin-bottom:16px;padding-bottom:14px;
+    border-bottom:1px solid var(--border);
+  }
+  .sp-results-head .sp-num{
+    font-size:1.5rem;font-weight:800;color:var(--accent);direction:ltr;
+  }
+  .sp-results-head .sp-lbl{font-size:.76rem;color:var(--text-dim)}
+  .sp-results-head .sp-sort{margin-right:auto}
+  .sp-results-head select{
+    width:auto;padding:6px 10px;font-size:.72rem;
+    background:var(--surface2);border:1px solid var(--border);
+    color:var(--text);border-radius:7px;font-family:inherit;
+  }
+
+  .sp-card{
+    padding:12px 14px;border-radius:10px;
+    background:var(--surface2);border:1px solid var(--border);
+    margin-bottom:8px;
+    display:flex;gap:12px;align-items:flex-start;
+    text-decoration:none;color:inherit;transition:all .15s;
+  }
+  .sp-card:hover{
+    border-color:var(--accent);
+    transform:translateX(-2px);
+    box-shadow:-2px 2px 8px rgba(0,0,0,.06);
+  }
+  .sp-card .sp-badge{
+    flex-shrink:0;min-width:58px;text-align:center;
+    padding:6px 8px;border-radius:6px;
+    font-size:.62rem;font-weight:700;letter-spacing:.02em;
+  }
+  .sp-card .sp-body{flex:1;min-width:0}
+  .sp-card .sp-meta{
+    font-size:.65rem;color:var(--text-muted);
+    margin-bottom:4px;display:flex;gap:10px;flex-wrap:wrap;
+  }
+  .sp-card .sp-meta .sp-date{direction:ltr;display:inline-block;color:var(--accent)}
+  .sp-card .sp-meta .sp-time{direction:ltr;display:inline-block}
+  .sp-card .sp-text{
+    font-size:.82rem;color:var(--text);line-height:1.7;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .sp-card .sp-text mark{
+    background:var(--accent-dim);color:var(--accent);
+    padding:0 3px;border-radius:3px;font-weight:700;
+  }
+
+  .sp-badge[data-cat=bayanat]{background:var(--accent-dim);color:var(--accent)}
+  .sp-badge[data-cat=sirens]{background:var(--red-dim);color:var(--red)}
+  .sp-badge[data-cat=enemy]{background:var(--orange-dim);color:var(--orange)}
+  .sp-badge[data-cat=iran]{background:var(--green-dim);color:var(--green)}
+  .sp-badge[data-cat=videos]{background:var(--purple-dim);color:var(--purple)}
+  .sp-badge[data-cat=allies]{background:var(--blue-dim);color:var(--blue)}
+
+  .sp-empty{text-align:center;padding:48px 20px;color:var(--text-muted);font-size:.85rem}
+  .sp-empty .sp-big{font-size:2.4rem;margin-bottom:8px;opacity:.5}
+  .sp-loading{text-align:center;padding:60px 20px;color:var(--text-dim);font-size:.82rem}
+  .sp-loading::before{
+    content:"";display:inline-block;width:18px;height:18px;
+    border:2px solid var(--border);border-top-color:var(--accent);
+    border-radius:50%;animation:sp-spin .8s linear infinite;
+    vertical-align:middle;margin-left:10px;
+  }
+  @keyframes sp-spin{to{transform:rotate(360deg)}}
+
+  .sp-more{
+    display:block;width:100%;margin-top:12px;padding:12px;text-align:center;
+    background:transparent;border:1px dashed var(--border);
+    color:var(--text-dim);font-family:inherit;font-size:.78rem;
+    border-radius:9px;cursor:pointer;transition:all .15s;
+  }
+  .sp-more:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* ─── RESPONSIVE ─── */
+  @media(max-width:780px){
+    .search-page{padding:24px 14px 80px}
+    .sp-head h1{font-size:1.5rem}
+    .sp-head p{font-size:.78rem}
+    .sp-form{padding:20px 16px;border-radius:14px}
+    .sp-row.c2{grid-template-columns:1fr}
+    .sp-group{padding:16px 0}
+    .sp-group-head{flex-wrap:wrap}
+    .sp-group-head .sp-hint{width:100%;margin-right:0;font-size:.65rem}
+    .sp-q input{font-size:.88rem;padding:12px 40px 12px 12px}
+    .sp-scope-row{flex-direction:column;align-items:stretch;gap:8px}
+    .sp-scope-label{font-size:.65rem}
+    .sp-scope-chips{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+    .sp-scope{text-align:center;font-size:.66rem;padding:8px 6px}
+    .sp-presets{gap:4px}
+    .sp-preset{font-size:.65rem;padding:5px 9px}
+    .sp-chip{font-size:.7rem;padding:7px 12px}
+    .sp-chip .sp-count{font-size:.58rem;padding:1px 5px}
+    .sp-sub{padding:14px 12px;border-radius:10px}
+    .sp-sub-head{font-size:.66rem}
+    .sp-bchip{font-size:.66rem;padding:5px 11px}
+    .sp-flag{font-size:1.2rem;padding:6px 9px}
+    .sp-actions{flex-direction:column-reverse;gap:8px}
+    .sp-btn, .sp-btn.primary{width:100%;justify-content:center;padding:12px}
+    .sp-actions .sp-spacer{display:none}
+    .sp-results{padding:18px 14px;border-radius:14px}
+    .sp-results-head{gap:8px}
+    .sp-results-head .sp-num{font-size:1.2rem}
+    .sp-results-head .sp-lbl{font-size:.68rem}
+    .sp-results-head .sp-sort{margin-right:0;width:100%}
+    .sp-results-head select{width:100%}
+    .sp-card{padding:10px 12px;gap:10px}
+    .sp-card .sp-badge{min-width:50px;font-size:.58rem;padding:5px 6px}
+    .sp-card .sp-text{font-size:.76rem}
+    .sp-card .sp-meta{font-size:.6rem;gap:8px}
+  }
+  @media(max-width:420px){
+    .sp-head h1{font-size:1.3rem}
+    .sp-form{padding:16px 12px}
+  }
+</style>
+</head>
+<body>
+
+<div class="search-page">
+
+  <div class="sp-head">
+    <span class="sp-eyebrow">ADVANCED SEARCH</span>
+    <h1>بحث متقدم في الأرشيف</h1>
+    <p>ابحث في كل البيانات، الصفارات، الأحداث والفيديوهات عبر مرشحات دقيقة</p>
+  </div>
+
+  <form class="sp-form" id="spForm" onsubmit="event.preventDefault();runSearch();">
+
+    <div class="sp-group">
+      <div class="sp-group-head">
+        <span class="sp-icon">1</span>
+        <h2>الكلمات المفتاحية</h2>
+        <span class="sp-hint">يدعم عوامل بحث متقدمة</span>
+      </div>
+      <div class="sp-q">
+        <span class="sp-q-icon">⌕</span>
+        <input type="text" id="spQuery" placeholder='ابحث... مثال: "صاروخ بركان" -غزة' autocomplete="off">
+      </div>
+      <div class="sp-scope-row">
+        <span class="sp-scope-label">ابحث في:</span>
+        <div class="sp-scope-chips">
+          <button type="button" class="sp-scope active" data-scope="all">كل الحقول</button>
+          <button type="button" class="sp-scope" data-scope="title">العناوين فقط</button>
+          <button type="button" class="sp-scope" data-scope="normalized">النص المُبسَّط</button>
+        </div>
+      </div>
+      <div class="sp-syntax">
+        <code>"عبارة بالضبط"</code>
+        <code>-استثناء</code>
+        <code>كلمتان معاً</code>
+        — افصل بمسافة للبحث عن كل الكلمات معاً (AND)
+      </div>
+    </div>
+
+    <div class="sp-group">
+      <div class="sp-group-head">
+        <span class="sp-icon">2</span>
+        <h2>النطاق الزمني</h2>
+        <span class="sp-hint">اختر فترة محددة أو فترة سريعة</span>
+      </div>
+      <div class="sp-presets" id="spPresets">
+        <button type="button" class="sp-preset" data-days="1">اليوم</button>
+        <button type="button" class="sp-preset" data-days="7">آخر أسبوع</button>
+        <button type="button" class="sp-preset" data-days="30">آخر شهر</button>
+        <button type="button" class="sp-preset" data-days="90">آخر 3 أشهر</button>
+        <button type="button" class="sp-preset" data-days="365">آخر سنة</button>
+        <button type="button" class="sp-preset active" data-days="0">كل الأرشيف</button>
+      </div>
+      <div class="sp-row c2">
+        <div class="sp-field"><label>من تاريخ</label><input type="date" id="spFrom"></div>
+        <div class="sp-field"><label>إلى تاريخ</label><input type="date" id="spTo"></div>
+      </div>
+    </div>
+
+    <div class="sp-group">
+      <div class="sp-group-head">
+        <span class="sp-icon">3</span>
+        <h2>نوع المحتوى</h2>
+        <span class="sp-hint">اختر نوعاً واحداً أو أكثر</span>
+      </div>
+      <div class="sp-chips" id="spTypes">
+        <button type="button" class="sp-chip active" data-type="bayanat">بيانات حربية <span class="sp-count" data-count="bayanat">0</span></button>
+        <button type="button" class="sp-chip active" data-type="sirens">صفارات إنذار <span class="sp-count" data-count="sirens">0</span></button>
+        <button type="button" class="sp-chip active" data-type="enemy">أخبار العدو <span class="sp-count" data-count="enemy">0</span></button>
+        <button type="button" class="sp-chip active" data-type="iran">أخبار إيران <span class="sp-count" data-count="iran">0</span></button>
+        <button type="button" class="sp-chip active" data-type="videos">فيديوهات <span class="sp-count" data-count="videos">0</span></button>
+        <button type="button" class="sp-chip active" data-type="allies">حلفاء <span class="sp-count" data-count="allies">0</span></button>
+      </div>
+
+      <!-- Bayan sub-filters -->
+      <div class="sp-sub" id="spSubBayan">
+        <div class="sp-sub-head">مرشحات البيانات الحربية</div>
+        <div class="sp-row c2">
+          <div class="sp-field">
+            <label>السلاح المستخدم</label>
+            <input type="text" id="spBayanWeapon" placeholder="مثال: بركان، زلزال، صماد…" autocomplete="off">
+          </div>
+          <div class="sp-field">
+            <label>الهدف / الموقع</label>
+            <input type="text" id="spBayanTarget" placeholder="مثال: ثكنة برانيت، تل أبيب…" autocomplete="off">
+          </div>
+          <div class="sp-field">
+            <label>مستوى الأهمية (Badge)</label>
+            <div class="sp-badge-chips" id="spBayanBadge">
+              <button type="button" class="sp-bchip" data-badge="حرج">حرج</button>
+              <button type="button" class="sp-bchip" data-badge="عالي">عالي</button>
+              <button type="button" class="sp-bchip" data-badge="عادي">عادي</button>
+            </div>
+          </div>
+          <div class="sp-field">
+            <label>رقم البيان (نطاق)</label>
+            <div class="sp-range">
+              <input type="number" id="spBayanNumFrom" placeholder="من" min="1">
+              <span class="sep">←</span>
+              <input type="number" id="spBayanNumTo" placeholder="إلى" min="1">
+            </div>
+          </div>
+          <div class="sp-field" style="grid-column:1/-1">
+            <label>الوسوم (Tags)</label>
+            <input type="text" id="spBayanTags" placeholder="كلمات مفصولة بفواصل، مثال: قصف_مدفعي، عملية_نوعية" autocomplete="off">
+          </div>
+        </div>
+        <div class="sp-sub-note">المطابقة تتم على عنوان البيان — بعض الحقول قد لا تكون موجودة في كل بيان.</div>
+      </div>
+
+      <!-- Siren sub-filters -->
+      <div class="sp-sub" id="spSubSiren">
+        <div class="sp-sub-head">مرشحات صفارات الإنذار</div>
+        <div class="sp-row c2">
+          <div class="sp-field">
+            <label>المنطقة الجغرافية</label>
+            <input type="text" id="spSirenRegion" placeholder="مثال: الجليل، تل أبيب، كريات شمونة…" autocomplete="off">
+          </div>
+          <div class="sp-field">
+            <label>عدد أدنى من الصفارات في اليوم</label>
+            <input type="number" id="spSirenMinPerDay" placeholder="مثال: 20" min="0">
+          </div>
+        </div>
+      </div>
+
+      <!-- Allies sub-filters -->
+      <div class="sp-sub" id="spSubAllies">
+        <div class="sp-sub-head">مرشحات الحلفاء</div>
+        <div class="sp-field">
+          <label>مصدر / جهة الإعلان</label>
+          <input type="text" id="spAlliesSource" placeholder="مثال: المقاومة الإسلامية، أنصار الله، الحوثي…" autocomplete="off">
+        </div>
+      </div>
+    </div>
+
+    <div class="sp-group">
+      <div class="sp-group-head">
+        <span class="sp-icon">4</span>
+        <h2>وقت اليوم</h2>
+        <span class="sp-hint">اختياري — ضيّق حسب ساعة النشر</span>
+      </div>
+      <div class="sp-row c2">
+        <div class="sp-field"><label>من الساعة</label><input type="time" id="spTimeFrom"></div>
+        <div class="sp-field"><label>إلى الساعة</label><input type="time" id="spTimeTo"></div>
+      </div>
+    </div>
+
+    <div class="sp-group">
+      <div class="sp-group-head">
+        <span class="sp-icon">5</span>
+        <h2>ترتيب النتائج</h2>
+      </div>
+      <div class="sp-row c2">
+        <div class="sp-field">
+          <label>ترتيب حسب</label>
+          <select id="spSort">
+            <option value="date-desc">التاريخ — الأحدث أولاً</option>
+            <option value="date-asc">التاريخ — الأقدم أولاً</option>
+            <option value="relevance">الصلة بكلمات البحث</option>
+          </select>
+        </div>
+        <div class="sp-field">
+          <label>عدد النتائج في البداية</label>
+          <select id="spLimit">
+            <option value="25">25</option>
+            <option value="50" selected>50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="sp-actions">
+      <button type="submit" class="sp-btn primary">⌕ بحث في الأرشيف</button>
+      <button type="button" class="sp-btn ghost" onclick="resetForm()">إعادة تعيين</button>
+      <div class="sp-spacer"></div>
+      <button type="button" class="sp-btn ghost" id="spShareBtn" onclick="copyLink()">نسخ رابط البحث</button>
+    </div>
+  </form>
+
+  <div class="sp-results">
+    <div class="sp-results-head">
+      <span class="sp-num" id="spResultCount">0</span>
+      <span class="sp-lbl" id="spResultLabel">نتيجة</span>
+      <span class="sp-sort">
+        <span style="font-size:.7rem;color:var(--text-dim);margin-left:6px">عرض:</span>
+        <select id="spSortLive" onchange="renderResults()">
+          <option value="date-desc">الأحدث أولاً</option>
+          <option value="date-asc">الأقدم أولاً</option>
+          <option value="relevance">الأكثر صلة</option>
+        </select>
+      </span>
+    </div>
+    <div id="spResults">
+      <div class="sp-loading">جاري تحميل فهرس البحث...</div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initNavbar } from './src/js/ui/navbar.js';
+initNavbar();
+</script>
+
+<script>
+/* ─── Advanced Search Engine ─── */
+const CAT_LABELS = {
+  bayanat: 'بيان', sirens: 'صفارة', enemy: 'عدو',
+  iran: 'إيران',  videos: 'فيديو', allies: 'حليف'
+};
+
+let INDEX = [];
+let FILTERED = [];
+let LIMIT = 50;
+
+/* Lenient Arabic normalization: strip diacritics and unify letter variants */
+function normAr(s){
+  if (!s) return '';
+  return String(s)
+    .replace(/[\u064B-\u065F\u0670]/g, '')
+    .replace(/[أإآ]/g, 'ا')
+    .replace(/ى/g, 'ي')
+    .replace(/ة/g, 'ه')
+    .replace(/ؤ/g, 'و')
+    .replace(/ئ/g, 'ي')
+    .toLowerCase();
+}
+
+/* Parse free-text query: "exact phrase", -exclude, bare words (AND default) */
+function parseQuery(raw){
+  const out = { phrases:[], excludes:[], words:[], raw: (raw || '').trim() };
+  if (!out.raw) return out;
+  const tokens = [...out.raw.matchAll(/"([^"]+)"|(-\S+)|(\S+)/g)];
+  for (const m of tokens){
+    if (m[1])      out.phrases.push(normAr(m[1]));
+    else if (m[2]) out.excludes.push(normAr(m[2].slice(1)));
+    else if (m[3]) out.words.push(normAr(m[3]));
+  }
+  return out;
+}
+
+function matchQuery(item, parsed, scope){
+  if (!parsed.raw) return { match:true, score:0 };
+  let haystack = '';
+  if      (scope === 'title')      haystack = item.tt || '';
+  else if (scope === 'normalized') haystack = item.n  || '';
+  else                             haystack = (item.tt || '') + ' ' + (item.n || '') + ' ' + (item.st || '');
+  const H = normAr(haystack);
+  for (const p of parsed.phrases)  if (!H.includes(p)) return { match:false };
+  for (const x of parsed.excludes) if (H.includes(x))  return { match:false };
+  let score = 0;
+  for (const w of parsed.words){
+    if (!H.includes(w)) return { match:false };
+    score += 1;
+  }
+  score += parsed.phrases.length * 3;
+  return { match:true, score };
+}
+
+function readFilters(){
+  const types = new Set([...document.querySelectorAll('.sp-chip.active')].map(c => c.dataset.type));
+  const bayanTagsRaw = (document.getElementById('spBayanTags').value || '').trim();
+  return {
+    q:      parseQuery(document.getElementById('spQuery').value || ''),
+    scope:  document.querySelector('.sp-scope.active')?.dataset.scope || 'all',
+    from:   document.getElementById('spFrom').value || null,
+    to:     document.getElementById('spTo').value || null,
+    types,
+    timeFrom: document.getElementById('spTimeFrom').value || null,
+    timeTo:   document.getElementById('spTimeTo').value || null,
+    /* ─── bayan sub-filters ─── */
+    bayan: {
+      weapon:  normAr(document.getElementById('spBayanWeapon').value || ''),
+      target:  normAr(document.getElementById('spBayanTarget').value || ''),
+      badges:  new Set([...document.querySelectorAll('#spBayanBadge .sp-bchip.active')].map(b => normAr(b.dataset.badge))),
+      numFrom: parseInt(document.getElementById('spBayanNumFrom').value, 10) || null,
+      numTo:   parseInt(document.getElementById('spBayanNumTo').value, 10)   || null,
+      tags:    bayanTagsRaw ? bayanTagsRaw.split(/[,،]+/).map(t => normAr(t.trim())).filter(Boolean) : [],
+    },
+    /* ─── siren sub-filters ─── */
+    siren: {
+      region:     normAr(document.getElementById('spSirenRegion').value || ''),
+      minPerDay:  parseInt(document.getElementById('spSirenMinPerDay').value, 10) || null,
+    },
+    /* ─── allies sub-filters ─── */
+    allies: {
+      source: normAr(document.getElementById('spAlliesSource').value || ''),
+    },
+  };
+}
+
+/* Parse bayan number from spotlight subtitle e.g. "بيان #472" → 472 */
+function bayanNum(item){
+  const m = (item.st || '').match(/\d+/);
+  return m ? parseInt(m[0], 10) : null;
+}
+
+/* Count sirens per day across the index (for minPerDay filter) */
+let SIREN_COUNT_BY_DAY = null;
+function getSirenCountByDay(){
+  if (SIREN_COUNT_BY_DAY) return SIREN_COUNT_BY_DAY;
+  const m = {};
+  for (const it of INDEX) if (it.c === 'sirens') m[it.d] = (m[it.d] || 0) + 1;
+  SIREN_COUNT_BY_DAY = m;
+  return m;
+}
+
+/* Per-type sub-filter checks. Return false → drop the item. */
+function passBayan(item, bf){
+  if (!bf) return true;
+  const hay = normAr((item.tt || '') + ' ' + (item.n || '') + ' ' + (item.st || ''));
+  if (bf.weapon && !hay.includes(bf.weapon)) return false;
+  if (bf.target && !hay.includes(bf.target)) return false;
+  if (bf.badges && bf.badges.size){
+    let any = false;
+    for (const b of bf.badges) if (b && hay.includes(b)) { any = true; break; }
+    if (!any) return false;
+  }
+  if (bf.tags && bf.tags.length){
+    for (const t of bf.tags) if (!hay.includes(t)) return false;
+  }
+  if (bf.numFrom != null || bf.numTo != null){
+    const n = bayanNum(item);
+    if (n == null) return false;
+    if (bf.numFrom != null && n < bf.numFrom) return false;
+    if (bf.numTo   != null && n > bf.numTo)   return false;
+  }
+  return true;
+}
+
+function passSiren(item, sf, sirenCounts){
+  if (!sf) return true;
+  if (sf.region){
+    const hay = normAr((item.tt || '') + ' ' + (item.n || ''));
+    if (!hay.includes(sf.region)) return false;
+  }
+  if (sf.minPerDay != null && (sirenCounts[item.d] || 0) < sf.minPerDay) return false;
+  return true;
+}
+
+function passAllies(item, af){
+  if (!af || !af.source) return true;
+  const hay = normAr((item.tt || '') + ' ' + (item.n || '') + ' ' + (item.st || ''));
+  return hay.includes(af.source);
+}
+
+function runSearch(){
+  LIMIT = parseInt(document.getElementById('spLimit').value, 10) || 50;
+  const f = readFilters();
+  const sirenCounts = getSirenCountByDay();
+  const out = [];
+  for (const item of INDEX){
+    if (!f.types.has(item.c)) continue;
+    if (f.from && item.d < f.from) continue;
+    if (f.to   && item.d > f.to)   continue;
+    if (f.timeFrom && item.t && item.t < f.timeFrom) continue;
+    if (f.timeTo   && item.t && item.t > f.timeTo)   continue;
+    if (item.c === 'bayanat' && !passBayan(item, f.bayan)) continue;
+    if (item.c === 'sirens'  && !passSiren(item, f.siren, sirenCounts)) continue;
+    if (item.c === 'allies'  && !passAllies(item, f.allies)) continue;
+    const r = matchQuery(item, f.q, f.scope);
+    if (!r.match) continue;
+    item._score = r.score;
+    out.push(item);
+  }
+  FILTERED = out;
+  document.getElementById('spSortLive').value = document.getElementById('spSort').value;
+  renderResults();
+  if (window.innerWidth < 780) {
+    document.querySelector('.sp-results')?.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+  updateUrl(f);
+}
+
+/* Render results using DOM API (safe — no innerHTML interpolation) */
+function renderResults(){
+  const sort = document.getElementById('spSortLive').value;
+  const arr = FILTERED.slice();
+  if (sort === 'date-desc')      arr.sort((a,b) => (b.d+b.t).localeCompare(a.d+a.t));
+  else if (sort === 'date-asc')  arr.sort((a,b) => (a.d+a.t).localeCompare(b.d+b.t));
+  else if (sort === 'relevance') arr.sort((a,b) => (b._score||0) - (a._score||0));
+
+  const host = document.getElementById('spResults');
+  document.getElementById('spResultCount').textContent = arr.length.toLocaleString('en-US');
+  document.getElementById('spResultLabel').textContent =
+    arr.length === 1 ? 'نتيجة واحدة' : (arr.length === 0 ? 'لا نتائج' : 'نتيجة');
+
+  host.replaceChildren();
+  if (arr.length === 0){
+    host.appendChild(makeEmpty());
+    return;
+  }
+  const parsed = readFilters().q;
+  const shown = arr.slice(0, LIMIT);
+  for (const item of shown) host.appendChild(makeCard(item, parsed));
+  if (arr.length > LIMIT){
+    const more = document.createElement('button');
+    more.className = 'sp-more';
+    more.textContent = `عرض المزيد (${(arr.length - LIMIT).toLocaleString('en-US')} متبقية)`;
+    more.addEventListener('click', loadMore);
+    host.appendChild(more);
+  }
+}
+
+function loadMore(){ LIMIT += 50; renderResults(); }
+
+function makeEmpty(){
+  const div = document.createElement('div');
+  div.className = 'sp-empty';
+  const big = document.createElement('div');
+  big.className = 'sp-big';
+  big.textContent = '⌕';
+  div.appendChild(big);
+  div.appendChild(document.createTextNode('لا توجد نتائج مطابقة'));
+  div.appendChild(document.createElement('br'));
+  const hint = document.createElement('span');
+  hint.style.cssText = 'font-size:.7rem;color:var(--text-muted)';
+  hint.textContent = 'جرّب تعديل المرشحات أو توسيع النطاق الزمني';
+  div.appendChild(hint);
+  return div;
+}
+
+/* Build one result card as real DOM nodes */
+function makeCard(item, parsed){
+  const cat = item.c;
+  const a = document.createElement('a');
+  a.className = 'sp-card';
+  a.href = `report.html?date=${encodeURIComponent(item.d)}#${encodeURIComponent(cat + '-' + item.i)}`;
+
+  const badge = document.createElement('div');
+  badge.className = 'sp-badge';
+  badge.dataset.cat = cat;
+  badge.textContent = CAT_LABELS[cat] || cat;
+  a.appendChild(badge);
+
+  const body = document.createElement('div');
+  body.className = 'sp-body';
+
+  const meta = document.createElement('div');
+  meta.className = 'sp-meta';
+  const date = document.createElement('span');
+  date.className = 'sp-date';
+  date.textContent = item.d || '';
+  meta.appendChild(date);
+  if (item.t){
+    const time = document.createElement('span');
+    time.className = 'sp-time';
+    time.textContent = item.t;
+    meta.appendChild(time);
+  }
+  body.appendChild(meta);
+
+  const text = document.createElement('div');
+  text.className = 'sp-text';
+  highlightInto(text, item.tt || item.st || '(بدون عنوان)', parsed);
+  body.appendChild(text);
+
+  a.appendChild(body);
+  return a;
+}
+
+/* Highlight matched terms: append text nodes + <mark> elements into a host.
+   Safe — no HTML parsing, no innerHTML. */
+function highlightInto(host, text, parsed){
+  const terms = parsed && parsed.raw
+    ? [...parsed.phrases, ...parsed.words].filter(Boolean)
+    : [];
+  if (!terms.length){
+    host.textContent = text;
+    return;
+  }
+  const pattern = terms
+    .map(t => t.replace(/[-/\\^$*+?.()|[\]{}]/g,'\\$&'))
+    .join('|');
+  const re = new RegExp(pattern, 'gi');
+  let last = 0;
+  let m;
+  while ((m = re.exec(text)) !== null){
+    if (m.index > last) host.appendChild(document.createTextNode(text.slice(last, m.index)));
+    const mark = document.createElement('mark');
+    mark.textContent = m[0];
+    host.appendChild(mark);
+    last = m.index + m[0].length;
+    if (m[0].length === 0) re.lastIndex++;
+  }
+  if (last < text.length) host.appendChild(document.createTextNode(text.slice(last)));
+}
+
+/* Date presets */
+document.querySelectorAll('#spPresets .sp-preset').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#spPresets .sp-preset').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const days = parseInt(btn.dataset.days, 10);
+    const fromEl = document.getElementById('spFrom');
+    const toEl   = document.getElementById('spTo');
+    if (days === 0){ fromEl.value = ''; toEl.value = ''; }
+    else {
+      const now = new Date();
+      const to = now.toISOString().slice(0,10);
+      const from = new Date(now.getTime() - (days-1)*86400000).toISOString().slice(0,10);
+      fromEl.value = from; toEl.value = to;
+    }
+  });
+});
+document.getElementById('spFrom').addEventListener('input', clearPreset);
+document.getElementById('spTo').addEventListener('input', clearPreset);
+function clearPreset(){
+  document.querySelectorAll('#spPresets .sp-preset').forEach(b => b.classList.remove('active'));
+}
+
+/* Scope chips: single-select */
+document.querySelectorAll('.sp-scope').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.sp-scope').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+/* Type chips: multi-select + reveal sub-panels */
+document.querySelectorAll('.sp-chip[data-type]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('active');
+    syncSubPanels();
+  });
+});
+
+function syncSubPanels(){
+  const active = new Set(
+    [...document.querySelectorAll('.sp-chip[data-type].active')].map(c => c.dataset.type)
+  );
+  document.getElementById('spSubBayan').classList.toggle('open',  active.has('bayanat'));
+  document.getElementById('spSubSiren').classList.toggle('open',  active.has('sirens'));
+  document.getElementById('spSubAllies').classList.toggle('open', active.has('allies'));
+}
+
+/* Badge chips: multi-select (independent) */
+document.querySelectorAll('#spBayanBadge .sp-bchip').forEach(btn => {
+  btn.addEventListener('click', () => btn.classList.toggle('active'));
+});
+
+function resetForm(){
+  document.getElementById('spForm').reset();
+  document.querySelectorAll('.sp-chip[data-type]').forEach(b => b.classList.add('active'));
+  document.querySelectorAll('.sp-scope').forEach((b,i) => b.classList.toggle('active', i === 0));
+  document.querySelectorAll('#spPresets .sp-preset').forEach(b => b.classList.toggle('active', parseInt(b.dataset.days,10) === 0));
+  document.querySelectorAll('#spBayanBadge .sp-bchip').forEach(b => b.classList.remove('active'));
+  syncSubPanels();
+  runSearch();
+}
+window.resetForm = resetForm;
+window.runSearch = runSearch;
+window.renderResults = renderResults;
+window.loadMore = loadMore;
+
+function updateUrl(f){
+  const p = new URLSearchParams();
+  if (f.q.raw) p.set('q', f.q.raw);
+  if (f.scope && f.scope !== 'all') p.set('scope', f.scope);
+  if (f.from) p.set('from', f.from);
+  if (f.to)   p.set('to',   f.to);
+  const all = ['bayanat','sirens','enemy','iran','videos','allies'];
+  if (f.types.size !== all.length) p.set('t', [...f.types].join(','));
+  if (f.timeFrom) p.set('tf', f.timeFrom);
+  if (f.timeTo)   p.set('tt', f.timeTo);
+  const qs = p.toString();
+  const url = qs ? `?${qs}` : location.pathname;
+  history.replaceState(null, '', url);
+}
+
+function copyLink(){
+  navigator.clipboard?.writeText(location.href).then(() => {
+    const btn = document.getElementById('spShareBtn');
+    const old = btn.textContent;
+    btn.textContent = '✓ تم النسخ';
+    setTimeout(() => { btn.textContent = old; }, 1400);
+  });
+}
+window.copyLink = copyLink;
+
+function restoreFromUrl(){
+  const p = new URLSearchParams(location.search);
+  if (p.has('q'))     document.getElementById('spQuery').value     = p.get('q');
+  if (p.has('from'))  document.getElementById('spFrom').value      = p.get('from');
+  if (p.has('to'))    document.getElementById('spTo').value        = p.get('to');
+  if (p.has('tf'))    document.getElementById('spTimeFrom').value  = p.get('tf');
+  if (p.has('tt'))    document.getElementById('spTimeTo').value    = p.get('tt');
+  if (p.has('scope')){
+    document.querySelectorAll('.sp-scope').forEach(b => b.classList.toggle('active', b.dataset.scope === p.get('scope')));
+  }
+  if (p.has('t')){
+    const types = new Set(p.get('t').split(','));
+    document.querySelectorAll('.sp-chip[data-type]').forEach(b => b.classList.toggle('active', types.has(b.dataset.type)));
+    document.querySelectorAll('#spPresets .sp-preset').forEach(b => b.classList.remove('active'));
+  }
+}
+
+async function loadIndex(){
+  try {
+    const resp = await fetch('data/spotlight-index.json');
+    INDEX = await resp.json();
+    const counts = {};
+    for (const it of INDEX) counts[it.c] = (counts[it.c] || 0) + 1;
+    document.querySelectorAll('[data-count]').forEach(el => {
+      const n = counts[el.dataset.count] || 0;
+      el.textContent = n.toLocaleString('en-US');
+    });
+    restoreFromUrl();
+    syncSubPanels();
+    runSearch();
+  } catch (e){
+    const host = document.getElementById('spResults');
+    host.replaceChildren();
+    const div = document.createElement('div');
+    div.className = 'sp-empty';
+    const big = document.createElement('div');
+    big.className = 'sp-big';
+    big.textContent = '⚠';
+    div.appendChild(big);
+    div.appendChild(document.createTextNode('تعذّر تحميل فهرس البحث '));
+    const small = document.createElement('span');
+    small.style.fontSize = '.7rem';
+    small.textContent = String(e.message || e);
+    div.appendChild(small);
+    host.appendChild(div);
+  }
+}
+
+loadIndex();
+</script>
+
+</body>
+</html>
