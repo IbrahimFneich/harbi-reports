@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.5.9",
+    "date": "2026-04-13",
+    "title": "Strip final-CTA chrome on landing — keep only the action button",
+    "changes": [
+      "index.html — removed the entire <h2>جاهز؟</h2> heading, the explanatory paragraph (\"أنت الآن تعرف كلّ ما تحتاجه. باقي الأرشيف سيُعلّمك نفسه عن طريق الاستخدام.\"), and the inline duplicate version pill from the .final-cta block at the bottom of the landing walkthrough. The CTA card was acting as a third footer surface (after the FAQ block and the actual <div class='site-footer'>) which made the page feel like it kept ending; collapsing it to just the action button removes that false ending and lets the real site-footer be the only terminal element.",
+      "index.html — also stripped the .final-cta CSS card chrome: removed max-width: 680px, padding: 50px 24px, border, border-radius, and the gold linear-gradient background. The selector now only carries margin: 60px auto 80px and text-align: center so the bare gold button floats centered in its original vertical rhythm without the boxed container framing it. Dropped the now-orphaned .final-cta h2 and .final-cta p rulesets entirely.",
+      "index.html — bumped the remaining footer version pill from v2.5.7 to v2.5.9 (it was missed by the v2.5.8 commit because that pass only touched the inline pill that lived inside .final-cta — which this commit deletes — not the canonical pill in <div class='site-footer'>).",
+      "src/js/app.js — bumped renderReport()'s footer pill textContent from 'Harbi Reports v2.5.7' to 'Harbi Reports v2.5.9'. This pill is the runtime-injected version label on report.html pages and was also missed by the v2.5.8 commit.",
+      "Bumped cache-bust ?v= and version-pill strings to 2.5.9 across index, report, analytics, archive, timeline HTML files."
+    ]
+  },
+  {
     "version": "2.5.8",
     "date": "2026-04-13",
     "title": "Add favicon — gold H monogram on dark, fix silent 404",
