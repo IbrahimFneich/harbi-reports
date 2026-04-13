@@ -1,5 +1,14 @@
 [
   {
+    "version": "2.5.14",
+    "date": "2026-04-13",
+    "title": "Align archive toolbar width with calendar grid",
+    "changes": [
+      "src/css/index.css — constrained .archive-toolbar to max-width 800px (matching the .container that holds the calendar grid below) so the toolbar no longer stretches edge-to-edge while the calendar sits centered at 800px.",
+      "src/css/index.css — promoted the toolbar from a full-width strip with border-bottom to a self-contained rounded card (border + 14px radius + 16px top / 20px bottom margin) so it visually reads as a single grouped control that sits above the calendar card."
+    ]
+  },
+  {
     "version": "2.5.13",
     "date": "2026-04-13",
     "title": "Custom zoom icon for analytics toolbox",
