@@ -1,5 +1,14 @@
 [
   {
+    "version": "2.5.27",
+    "date": "2026-04-13",
+    "title": "Fixed-size category filter pills in spotlight search",
+    "changes": [
+      "src/css/spotlight.css — .sl-filter-pill (the category chip bar at the top of the spotlight search modal: الكل / بيانات / صفارات / إعلام العدو / إيران / فيديو / حلفاء) now has min-width:108px + justify-content:center + box-sizing:border-box, so every chip renders at the same width regardless of label length. Active state no longer changes the visual footprint since the pill is already at its min-width budget. Padding bumped from 6px/14px to 8px/16px so the chips feel comfortably hittable on desktop.",
+      "src/css/spotlight.css — mobile override (@media) bumped .sl-filter-pill to min-width:88px and padding 7px/12px so chips stay uniform on narrow viewports without overflowing the chip row. Same rationale as the earlier table pill fix: min-width (not width) lets any future longer label grow instead of clipping Arabic text silently."
+    ]
+  },
+  {
     "version": "2.5.26",
     "date": "2026-04-13",
     "title": "Fixed-size category pills in search results table",

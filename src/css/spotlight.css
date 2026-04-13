@@ -215,20 +215,23 @@ body.light .sl-modal {
 }
 
 .sl-filter-pill {
-  padding:       6px 14px;
-  border-radius: 8px;
-  font-size:     12px;
-  font-weight:   500;
-  font-family:   inherit;
-  border:        1px solid var(--sl-border);
-  background:    var(--sl-bg-elevated);
-  color:         var(--sl-text-secondary);
-  cursor:        pointer;
-  white-space:   nowrap;
-  display:       inline-flex;
-  align-items:   center;
-  gap:           6px;
-  transition:    border-color var(--sl-transition), background var(--sl-transition), color var(--sl-transition);
+  padding:         8px 16px;
+  border-radius:   8px;
+  font-size:       12px;
+  font-weight:     500;
+  font-family:     inherit;
+  border:          1px solid var(--sl-border);
+  background:      var(--sl-bg-elevated);
+  color:           var(--sl-text-secondary);
+  cursor:          pointer;
+  white-space:     nowrap;
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  gap:             6px;
+  min-width:       108px;
+  box-sizing:      border-box;
+  transition:      border-color var(--sl-transition), background var(--sl-transition), color var(--sl-transition);
 }
 
 .sl-filter-pill.active {
@@ -706,8 +709,9 @@ body.light .sl-modal {
   }
 
   .sl-filter-pill {
-    padding:   5px 11px;
+    padding:   7px 12px;
     font-size: 11.5px;
+    min-width: 88px;
   }
 
   /* Top bars stay above the backdrop and clickable at all times */
