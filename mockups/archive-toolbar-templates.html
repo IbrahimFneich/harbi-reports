@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Archive Toolbar — V1 Refined (Desktop + Mobile)</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ece3cc;
+    --surface:#f5efdf;
+    --surface-hi:#fbf7eb;
+    --border:#d9cfb4;
+    --border-hi:#c7b98f;
+    --accent:#a88532;
+    --accent-hi:#c39f45;
+    --accent-dim:rgba(168,133,50,.12);
+    --accent-dim2:rgba(168,133,50,.22);
+    --text:#3d2f1a;
+    --text-dim:#6e5b36;
+    --muted:#9a8560;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Noto Kufi Arabic',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    padding:56px 20px 96px;
+    min-height:100vh;
+  }
+  .page{max-width:1280px;margin:0 auto}
+  .page-head{text-align:center;margin-bottom:40px}
+  .page-head h1{font-size:1.6rem;font-weight:800;color:var(--accent);letter-spacing:-.5px}
+  .page-head p{margin-top:8px;font-size:.82rem;color:var(--text-dim);max-width:620px;margin-inline:auto;line-height:1.7}
+
+  .variant{margin-bottom:44px}
+  .variant-label{
+    display:flex;align-items:center;gap:10px;
+    font-size:.72rem;font-weight:700;color:var(--accent);
+    letter-spacing:.08em;margin-bottom:14px;padding-right:4px;
+  }
+  .variant-label .num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:22px;height:22px;border-radius:50%;
+    background:var(--accent-dim);color:var(--accent);
+    font-size:.7rem;font-weight:800;
+  }
+  .variant-label .note{color:var(--text-dim);font-weight:400;font-size:.68rem;margin-right:auto}
+  .stage{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:26px 22px;
+    box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 2px 8px rgba(60,40,10,.04);
+  }
+
+  /* ─── shared controls ─── */
+  .btn{
+    font-family:inherit;
+    background:var(--surface-hi);
+    border:1px solid var(--border);
+    color:var(--text);
+    font-size:.78rem;font-weight:600;
+    padding:8px 14px;border-radius:8px;
+    cursor:pointer;transition:all .15s;
+    white-space:nowrap;
+  }
+  .btn:hover{border-color:var(--border-hi);background:#fff}
+
+  .seg{
+    display:inline-flex;
+    background:var(--surface-hi);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:3px;gap:2px;
+  }
+  .seg button{
+    font-family:inherit;background:transparent;border:0;
+    font-size:.76rem;font-weight:600;color:var(--text-dim);
+    padding:6px 14px;border-radius:6px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+  }
+  .seg button.active{
+    background:var(--accent);color:#fff;
+    box-shadow:0 1px 2px rgba(168,133,50,.35);
+  }
+
+  .title-block{text-align:center;min-width:140px}
+  .month-title{font-size:1.1rem;font-weight:800;color:var(--text);line-height:1.1}
+  .month-sub{font-size:.66rem;color:var(--muted);letter-spacing:.15em;margin-top:3px;direction:ltr}
+
+  /* ─── THE REFINED MONTHLY-DOC CHIP ─── */
+  .doc-chip{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:inherit;
+    font-size:.72rem;font-weight:700;
+    color:var(--accent);
+    background:linear-gradient(135deg,var(--accent-dim) 0%,rgba(168,133,50,.04) 100%);
+    border:1px solid var(--accent-dim2);
+    padding:7px 12px 7px 14px;
+    border-radius:999px;
+    text-decoration:none;
+    transition:all .2s;
+    white-space:nowrap;
+    position:relative;
+    overflow:hidden;
+  }
+  .doc-chip::before{
+    content:'';
+    position:absolute;inset:0;
+    background:linear-gradient(135deg,transparent 0%,rgba(255,255,255,.4) 50%,transparent 100%);
+    transform:translateX(-100%);transition:transform .5s;
+  }
+  .doc-chip:hover{
+    color:#fff;
+    background:linear-gradient(135deg,var(--accent) 0%,var(--accent-hi) 100%);
+    border-color:var(--accent);
+    box-shadow:0 3px 10px rgba(168,133,50,.3);
+    transform:translateY(-1px);
+  }
+  .doc-chip:hover::before{transform:translateX(100%)}
+  .doc-chip .doc-icon{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:18px;height:18px;
+    background:rgba(255,255,255,.6);
+    border-radius:50%;
+    font-size:.7rem;
+    flex-shrink:0;
+  }
+  .doc-chip:hover .doc-icon{background:rgba(255,255,255,.25)}
+  .doc-chip .arrow{font-size:.85rem;line-height:1;transition:transform .2s}
+  .doc-chip:hover .arrow{transform:translateX(-3px)}
+
+  /* ═══════════════════════════════════════
+     V1 — CENTERED (desktop)
+     ═══════════════════════════════════════ */
+  .v1{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    flex-wrap:nowrap;
+  }
+  .v1 .center{display:flex;align-items:center;gap:14px}
+
+  /* ═══════════════════════════════════════
+     LAYOUT: side-by-side stage row
+     ═══════════════════════════════════════ */
+  .preview-row{
+    display:grid;
+    grid-template-columns:1fr 380px;
+    gap:28px;
+    align-items:start;
+  }
+  .col-head{
+    font-size:.62rem;font-weight:700;
+    color:var(--text-dim);
+    letter-spacing:.15em;text-transform:uppercase;
+    margin-bottom:10px;padding-right:4px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .col-head::before{
+    content:'';width:14px;height:1px;background:var(--border-hi);
+  }
+
+  /* ─── Phone frame ─── */
+  .phone-frame{
+    background:#2a2318;
+    border-radius:36px;
+    padding:12px;
+    box-shadow:0 20px 40px rgba(60,40,10,.18),0 6px 14px rgba(60,40,10,.08);
+    max-width:340px;margin:0 auto;
+  }
+  .phone-screen{
+    background:var(--bg);
+    border-radius:26px;
+    overflow:hidden;
+    min-height:560px;
+    position:relative;
+  }
+  .phone-notch{
+    position:absolute;top:10px;left:50%;transform:translateX(-50%);
+    width:90px;height:22px;background:#2a2318;border-radius:0 0 14px 14px;
+    z-index:5;
+  }
+  .phone-body{
+    padding:50px 14px 24px;
+  }
+  .phone-header{
+    text-align:center;margin-bottom:16px;
+  }
+  .phone-header .logo{
+    font-size:.72rem;color:var(--accent);font-weight:800;
+    letter-spacing:.05em;
+  }
+
+  /* ─── V1 Mobile layout ─── */
+  .v1-mobile{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:12px 12px 14px;
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .v1-mobile .row-top{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+  }
+  .v1-mobile .seg{flex-shrink:0}
+  .v1-mobile .seg button{padding:6px 10px;font-size:.68rem}
+  .v1-mobile .doc-chip{
+    font-size:.62rem;padding:5px 10px 5px 11px;
+  }
+  .v1-mobile .doc-chip .doc-icon{width:15px;height:15px;font-size:.6rem}
+  .v1-mobile .row-nav{
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;gap:8px;
+    padding-top:8px;
+    border-top:1px dashed var(--border);
+  }
+  .v1-mobile .row-nav .btn{
+    padding:7px 10px;font-size:.7rem;
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:36px;
+  }
+  .v1-mobile .row-nav .title-block{min-width:0}
+  .v1-mobile .month-title{font-size:.92rem}
+  .v1-mobile .month-sub{font-size:.58rem;margin-top:2px}
+
+  /* ─── A mobile calendar-day stub so it feels real ─── */
+  .phone-cal-stub{
+    margin-top:14px;
+    display:grid;grid-template-columns:repeat(7,1fr);gap:4px;
+  }
+  .phone-cal-stub .day{
+    aspect-ratio:1;
+    background:var(--surface-hi);
+    border:1px solid var(--border);
+    border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:.58rem;color:var(--text-dim);font-weight:600;
+  }
+  .phone-cal-stub .day.active{
+    background:var(--accent-dim);border-color:var(--accent);color:var(--accent);
+  }
+  .phone-cal-stub .day.dim{opacity:.4}
+
+  /* ─── annotation callouts ─── */
+  .notes{
+    margin-top:18px;padding:14px 16px;
+    background:var(--surface-hi);
+    border:1px dashed var(--border-hi);
+    border-radius:10px;
+    font-size:.7rem;line-height:1.8;color:var(--text-dim);
+  }
+  .notes strong{color:var(--accent);font-weight:700}
+  .notes ul{list-style:none;padding:0;margin:0}
+  .notes li{padding:3px 0}
+  .notes li::before{content:'←';color:var(--accent);margin-left:8px;font-weight:700}
+
+  @media(max-width:900px){
+    .preview-row{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="page-head">
+    <h1>V1 — متوازن (Centered Balance)</h1>
+    <p>النسخة المحسّنة: رابط «الوثيقة الشهرية» أصبح شارة ذهبية أنيقة مع أيقونة وحركة عند التمرير، مع عرض كامل لكيفية ظهور الشريط على الهاتف.</p>
+  </div>
+
+  <div class="preview-row">
+
+    <!-- ═══════ DESKTOP ═══════ -->
+    <div>
+      <div class="col-head">سطح المكتب · Desktop</div>
+      <div class="stage">
+        <div class="v1">
+          <div class="seg">
+            <button class="active">📅 التقويم</button>
+            <button>📋 القائمة</button>
+          </div>
+
+          <div class="center">
+            <button class="btn">&larr; الشهر السابق</button>
+            <div class="title-block">
+              <div class="month-title">نيسان 2026</div>
+              <div class="month-sub">04 / 2026</div>
+            </div>
+            <button class="btn">الشهر التالي &rarr;</button>
+          </div>
+
+          <a class="doc-chip" href="#">
+            <span class="doc-icon">📄</span>
+            <span>الوثيقة الشهرية</span>
+            <span class="arrow">&larr;</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="notes">
+        <strong>تحسينات شارة الوثيقة الشهرية:</strong>
+        <ul>
+          <li>شكل حبة مدوّرة (pill) بدل رابط نصّي عادي</li>
+          <li>أيقونة ورقة داخل دائرة بيضاء شفافة</li>
+          <li>تدرّج ذهبي خفيف في الحالة العادية</li>
+          <li>عند التمرير: خلفية ذهبية ممتلئة + ظل + انزياح السهم + وميض ضوئي</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ═══════ MOBILE ═══════ -->
+    <div>
+      <div class="col-head">الهاتف · Mobile (375px)</div>
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="phone-notch"></div>
+          <div class="phone-body">
+            <div class="phone-header">
+              <div class="logo">أرشيف التقارير اليومية</div>
+            </div>
+
+            <div class="v1-mobile">
+              <!-- Row 1: toggle + doc chip -->
+              <div class="row-top">
+                <div class="seg">
+                  <button class="active">📅 التقويم</button>
+                  <button>📋</button>
+                </div>
+                <a class="doc-chip" href="#">
+                  <span class="doc-icon">📄</span>
+                  <span>الوثيقة</span>
+                  <span class="arrow">&larr;</span>
+                </a>
+              </div>
+              <!-- Row 2: nav -->
+              <div class="row-nav">
+                <button class="btn">&larr;</button>
+                <div class="title-block">
+                  <div class="month-title">نيسان 2026</div>
+                  <div class="month-sub">04 / 2026</div>
+                </div>
+                <button class="btn">&rarr;</button>
+              </div>
+            </div>
+
+            <div class="phone-cal-stub">
+              <div class="day dim">٢٩</div>
+              <div class="day dim">٣٠</div>
+              <div class="day dim">٣١</div>
+              <div class="day">١</div>
+              <div class="day">٢</div>
+              <div class="day">٣</div>
+              <div class="day">٤</div>
+              <div class="day">٥</div>
+              <div class="day">٦</div>
+              <div class="day">٧</div>
+              <div class="day">٨</div>
+              <div class="day">٩</div>
+              <div class="day">١٠</div>
+              <div class="day">١١</div>
+              <div class="day">١٢</div>
+              <div class="day active">١٣</div>
+              <div class="day">١٤</div>
+              <div class="day">١٥</div>
+              <div class="day">١٦</div>
+              <div class="day">١٧</div>
+              <div class="day">١٨</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <strong>التكيّف على الهاتف:</strong>
+        <ul>
+          <li>الصفّ الواحد يصبح صفّين داخل نفس البطاقة</li>
+          <li>أعلى: أزرار العرض + شارة الوثيقة (مختصرة لكلمة «الوثيقة»)</li>
+          <li>أسفل: ملاحة الشهر بعنوان في المنتصف وسهمَين على الأطراف</li>
+          <li>خط متقطّع يفصل الصفّين داخل نفس البطاقة</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

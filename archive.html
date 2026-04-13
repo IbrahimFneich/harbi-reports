@@ -17,9 +17,26 @@
 </head>
 <body>
 
-<div class="view-toggle">
-  <button id="viewCalBtn" class="active" onclick="setView('cal')">📅 التقويم</button>
-  <button id="viewListBtn" onclick="setView('list')">📋 القائمة</button>
+<div class="archive-toolbar" id="archiveToolbar">
+  <div class="view-toggle">
+    <button id="viewCalBtn" class="active" onclick="setView('cal')">📅 التقويم</button>
+    <button id="viewListBtn" onclick="setView('list')">📋 القائمة</button>
+  </div>
+
+  <div class="month-nav" id="monthNav">
+    <button class="btn" id="prevBtn" onclick="changeMonth(-1)">&larr; الشهر السابق</button>
+    <div class="title-block">
+      <div class="current-month" id="currentMonth"></div>
+      <div class="month-sub" id="currentMonthNum"></div>
+    </div>
+    <button class="btn" id="nextBtn" onclick="changeMonth(1)">الشهر التالي &rarr;</button>
+  </div>
+
+  <a class="doc-chip" id="monthlyLink" href="#">
+    <span class="doc-icon">📄</span>
+    <span class="doc-label">الوثيقة الشهرية</span>
+    <span class="arrow">&larr;</span>
+  </a>
 </div>
 
 <div class="list-section" id="listSection">
@@ -41,18 +58,6 @@
 </div>
 
 <div class="calendar-section" id="calSection">
-<div class="stats-strip" id="statsStrip"></div>
-
-<div class="month-nav">
-  <button class="btn" id="prevBtn" onclick="changeMonth(-1)">&larr; الشهر السابق</button>
-  <div style="text-align:center">
-    <div class="current-month" id="currentMonth"></div>
-    <div id="currentMonthNum" style="font-size:0.85rem;color:#9ca3af;letter-spacing:0.15em;margin-top:2px"></div>
-    <a id="monthlyLink" href="#" style="font-size:0.75rem;color:var(--accent);text-decoration:none;margin-top:4px;display:inline-block;opacity:0.7;transition:opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">الوثيقة الشهرية &larr;</a>
-  </div>
-  <button class="btn" id="nextBtn" onclick="changeMonth(1)">الشهر التالي &rarr;</button>
-</div>
-
 <div class="container">
   <div class="cal-grid" id="calGrid"></div>
   <div class="legend">
@@ -76,10 +81,10 @@
     البيانات مأخوذة من تليغرام ومُعالَجة بواسطة ذكاء اصطناعي — قد تحتوي على أخطاء.
   </div>
   <div data-disclaimer-slot style="margin-top:10px;font-size:0.68rem;">
-    <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v2.5.11</span>
+    <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;" onclick="showChangelog()">Harbi Reports v2.5.12</span>
   </div>
 </div>
-<script src="src/js/ui/disclaimer.js?v=2.5.11"></script>
+<script src="src/js/ui/disclaimer.js?v=2.5.12"></script>
 
 <script>
 function showChangelog() {
@@ -186,37 +191,6 @@ availableMonths.sort(function(a, b) {
 var currentIdx = availableMonths.length - 1; // Start at most recent month
 
 function pad(n) { return n < 10 ? '0' + n : '' + n; }
-
-function renderStats() {
-  var strip = document.getElementById('statsStrip');
-  strip.textContent = '';
-
-  var totalReports = reports.length;
-
-  // Count per month for current view
-  var currentM = availableMonths[currentIdx];
-  var monthKey = currentM.year + '-' + pad(currentM.month + 1);
-  var monthCount = 0;
-  reports.forEach(function(d) { if (d.indexOf(monthKey) === 0) monthCount++; });
-
-  var s1 = document.createElement('div'); s1.className = 'stat';
-  var n1 = document.createElement('span'); n1.className = 'n'; n1.textContent = totalReports;
-  s1.appendChild(n1);
-  s1.appendChild(document.createTextNode('تقرير إجمالي'));
-  strip.appendChild(s1);
-
-  var s2 = document.createElement('div'); s2.className = 'stat';
-  var n2 = document.createElement('span'); n2.className = 'n'; n2.textContent = monthCount;
-  s2.appendChild(n2);
-  s2.appendChild(document.createTextNode('هذا الشهر'));
-  strip.appendChild(s2);
-
-  var s3 = document.createElement('div'); s3.className = 'stat';
-  var n3 = document.createElement('span'); n3.className = 'n'; n3.textContent = availableMonths.length;
-  s3.appendChild(n3);
-  s3.appendChild(document.createTextNode('شهر مغطى'));
-  strip.appendChild(s3);
-}
 
 function renderCalendar() {
   var cm = availableMonths[currentIdx];
@@ -340,8 +314,6 @@ function renderCalendar() {
       grid.appendChild(cell);
     }
   }
-
-  renderStats();
 }
 
 function changeMonth(dir) {
@@ -366,17 +338,20 @@ function setView(view) {
   var listSec = document.getElementById('listSection');
   var calBtn = document.getElementById('viewCalBtn');
   var listBtn = document.getElementById('viewListBtn');
+  var toolbar = document.getElementById('archiveToolbar');
   if (view === 'list') {
     calSec.classList.add('hidden');
     listSec.classList.add('active');
     calBtn.classList.remove('active');
     listBtn.classList.add('active');
+    if (toolbar) toolbar.classList.add('list-mode');
     renderList();
   } else {
     calSec.classList.remove('hidden');
     listSec.classList.remove('active');
     calBtn.classList.add('active');
     listBtn.classList.remove('active');
+    if (toolbar) toolbar.classList.remove('list-mode');
   }
   try { localStorage.setItem('harbi-view', view); } catch (e) {}
 }

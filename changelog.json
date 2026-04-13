@@ -1,5 +1,18 @@
 [
   {
+    "version": "2.5.12",
+    "date": "2026-04-13",
+    "title": "Archive toolbar rework — single-row header",
+    "changes": [
+      "archive.html — merged the three stacked rows (view toggle, stats strip, month navigation) into a single unified .archive-toolbar that contains the view toggle, prev/title/next month navigation, and a new monthly-document chip.",
+      "archive.html — removed the stats strip (تقرير إجمالي / هذا الشهر / شهر مغطى) along with the renderStats() function and its call inside renderCalendar().",
+      "archive.html — setView() now toggles a .list-mode class on the toolbar so the month navigation and monthly-doc chip hide automatically when the list view is active, while the view toggle re-centers itself.",
+      "src/css/index.css — replaced the legacy .stats-strip and standalone .month-nav styles with the new .archive-toolbar flex row, redesigned .view-toggle as a segmented pill inside the toolbar, restyled .month-nav with a compact title-block, and added the gold .doc-chip with gradient background, icon badge, hover shimmer, and arrow slide.",
+      "src/css/index.css — new mobile media query for .archive-toolbar collapses the row into a CSS grid with two areas (toggle+chip on top, month navigation below a dashed divider) so the layout stays one cohesive card on phones.",
+      "mockups/archive-toolbar-templates.html — refined V1 mockup with the new doc chip and a 375px mobile phone preview for design reference."
+    ]
+  },
+  {
     "version": "2.5.11",
     "date": "2026-04-13",
     "title": "Add report for 2026-04-12",
