@@ -1,5 +1,14 @@
 [
   {
+    "version": "2.5.13",
+    "date": "2026-04-13",
+    "title": "Custom zoom icon for analytics toolbox",
+    "changes": [
+      "src/js/analytics/charts.js — overrode the ECharts dataZoom default crop-corners icon with a custom magnifying-glass + plus SVG path on the toolbox feature, so the تكبير control now reads as a zoom lens instead of a selection frame. The back arrow is left untouched to preserve ECharts' default.",
+      "mockups/zoom-icon-preview.html — new design-reference page showing the old icon next to three candidate replacements (magnifier with plus, bracket frame, plain magnifier) in the toolbar's gold accent, used to pick the final design."
+    ]
+  },
+  {
     "version": "2.5.12",
     "date": "2026-04-13",
     "title": "Archive toolbar rework — single-row header",

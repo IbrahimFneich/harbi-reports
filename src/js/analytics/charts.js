@@ -165,6 +165,9 @@ export function renderLineChart(containerId, datasets, height, opts) {
         dataZoom: {
           yAxisIndex: 'none',
           title: { zoom: '\u062A\u0643\u0628\u064A\u0631', back: '\u0631\u062C\u0648\u0639' },
+          icon: {
+            zoom: 'path://M4 11A7 7 0 1 1 18 11A7 7 0 1 1 4 11ZM16 16L21 21M8 11L14 11M11 8L11 14'
+          },
           brushStyle: { color: 'rgba(201,168,76,0.15)', borderColor: accentColor }
         },
         brush: {
