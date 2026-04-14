@@ -1,5 +1,13 @@
 [
   {
+    "version": "2.5.31",
+    "date": "2026-04-15",
+    "title": "Fix version tag across all pages",
+    "changes": [
+      "src/js/app.js, analytics.html, archive.html, index.html, timeline.html — updated hardcoded version strings from v2.5.28/v2.5.29 to v2.5.30. Pages were showing stale version numbers because the pre-push hook only bumps app.js and index.html; other pages had manually set versions that drifted behind."
+    ]
+  },
+  {
     "version": "2.5.30",
     "date": "2026-04-14",
     "title": "Add report for 2026-04-14",
