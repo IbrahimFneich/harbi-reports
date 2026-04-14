@@ -1,5 +1,14 @@
 [
   {
+    "version": "2.5.29",
+    "date": "2026-04-13",
+    "title": "Add report for 2026-04-13",
+    "changes": [
+      "data/2026-04-13.json — new daily report: 48 بيانات, 48 صفارات, 19 إعلام عدو, 5 إيران, 2 فيديوهات, 1 حلفاء, 10 مواقع صفارات على الخريطة",
+      "Auto-regenerated reports-meta.js, spotlight-index.json, nav.js, harbi.db, search-facets.json via build_index.py"
+    ]
+  },
+  {
     "version": "2.5.28",
     "date": "2026-04-13",
     "title": "Lock spotlight filter pills to fixed width AND height",
