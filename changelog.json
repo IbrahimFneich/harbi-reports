@@ -1,5 +1,14 @@
 [
   {
+    "version": "2.5.30",
+    "date": "2026-04-14",
+    "title": "Add report for 2026-04-14",
+    "changes": [
+      "data/2026-04-14.json — new daily report: 34 بيانات, 30 صفارات, 16 إعلام عدو, 0 إيران, 5 فيديوهات, 0 حلفاء, 8 مواقع صفارات على الخريطة",
+      "Auto-regenerated reports-meta.js, spotlight-index.json, nav.js, harbi.db, search-facets.json via build_index.py"
+    ]
+  },
+  {
     "version": "2.5.29",
     "date": "2026-04-13",
     "title": "Add report for 2026-04-13",
