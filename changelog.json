@@ -1,5 +1,13 @@
 [
   {
+    "version": "2.5.33",
+    "date": "2026-04-17",
+    "title": "Refresh report for 2026-04-16",
+    "changes": [
+      "data/2026-04-16.json — refreshed daily report: 53 بيانات, 24 صفارات, 20 إعلام عدو, 6 إيران, 11 فيديوهات, 2 حلفاء, 8 مواقع صفارات على الخريطة (re-fetched with full-day coverage)"
+    ]
+  },
+  {
     "version": "2.5.32",
     "date": "2026-04-17",
     "title": "Add report for 2026-04-16",
