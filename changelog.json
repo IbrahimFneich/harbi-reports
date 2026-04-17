@@ -1,5 +1,13 @@
 [
   {
+    "version": "2.5.34",
+    "date": "2026-04-17",
+    "title": "Sync version tag across all page footers",
+    "changes": [
+      "analytics.html, archive.html, timeline.html — bumped footer from v2.5.30 to v2.5.33 to match current deploy. Pre-push hook only updates app.js and index.html, so other pages drift behind each release."
+    ]
+  },
+  {
     "version": "2.5.33",
     "date": "2026-04-17",
     "title": "Refresh report for 2026-04-16",
