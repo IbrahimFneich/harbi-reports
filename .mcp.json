@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "telegram": {
+      "type": "stdio",
+      "command": "/Users/ibrahimfneich/.local/bin/uv",
+      "args": [
+        "--directory",
+        "/Users/ibrahimfneich/.claude/mcp-servers/telegram-mcp",
+        "run",
+        "main.py"
+      ],
+      "env": {}
+    }
+  }
+}

@@ -1,5 +1,13 @@
 [
   {
+    "version": "2.5.32",
+    "date": "2026-04-17",
+    "title": "Add report for 2026-04-15",
+    "changes": [
+      "data/2026-04-15.json — new daily report: 38 بيانات, 17 صفارات, 17 إعلام عدو, 3 إيران, 8 فيديوهات, 0 حلفاء, 7 مواقع صفارات على الخريطة"
+    ]
+  },
+  {
     "version": "2.5.31",
     "date": "2026-04-15",
     "title": "Fix version tag across all pages",
