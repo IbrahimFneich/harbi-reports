@@ -1,5 +1,14 @@
 [
   {
+    "version": "2.5.35",
+    "date": "2026-04-17",
+    "title": "Custom date picker on advanced search",
+    "changes": [
+      "search.html — replaced native <input type=\"date\"> on 'من تاريخ'/'إلى تاريخ' with the custom createDatePicker used on analytics. Trigger buttons mirror state via data-value; dd/mm/yyyy display with placeholder when empty. Added sp-date-trigger + dp-* popup CSS (analytics.css isn't loaded here). Presets, URL-restore, and readFilters updated to read data-value; new sp-date-change event replaces native input event for clearing active preset on manual selection.",
+      "search.html — bumped CSS cache-busters from v=2.5.28 to v=2.5.35."
+    ]
+  },
+  {
     "version": "2.5.34",
     "date": "2026-04-17",
     "title": "Sync version tag across all page footers",
