@@ -357,7 +357,9 @@ def parse_bayan(msg):
         if badge == 'deep':
             tags.append('ضربة عمق')
 
-    return {
+    bayan_type = classify_bayan_type(text, num)
+
+    result = {
         'num': num,
         'postTime': time,
         'opTime': op_time,
@@ -365,9 +367,18 @@ def parse_bayan(msg):
         'weapon': weapon,
         'badge': badge,
         'tags': tags,
-        'bayan_type': classify_bayan_type(text, num),
+        'bayan_type': bayan_type,
         'fullText': text
     }
+
+    # For list_strikes bayanat, expand the enumerated bullets/inline lines into
+    # a strikes[] sub-array so downstream stats can count each istihdaf.
+    if bayan_type == 'list_strikes':
+        strikes = parse_list_strikes(text, target)
+        if strikes:
+            result['strikes'] = strikes
+
+    return result
 
 def _clean_body_for_target(text):
     """Strip Quran verses, dates, times, weekdays, and the common preamble."""
@@ -419,8 +430,11 @@ def _clean_body_for_target(text):
 
 def _clean_location(loc):
     """Clean a captured location string."""
-    loc = re.sub(r'^[\s،,و]+', '', loc)
-    loc = re.sub(r'[\s،,و]+$', '', loc)
+    # Strip leading whitespace/commas, and a leading "و" only when it's a
+    # standalone connective (followed by space). Don't chop the first letter
+    # of place names like "وادي" / "وبلدة" that legitimately start with و.
+    loc = re.sub(r'^(?:[\s،,]+|و\s+)+', '', loc)
+    loc = re.sub(r'(?:[\s،,]+|\sو)+$', '', loc)
     loc = re.sub(r'\s+', ' ', loc).strip()
     # Strip leading "من " (source marker, not a target)
     loc = re.sub(r'^(?:من|مِن)\s+', '', loc)
@@ -640,6 +654,117 @@ def classify_bayan_type(text, num):
     if re.search(r'اشتبك|تصدّى|تصدى|كمين|تسلّل|محاولة\s+التقدّم|محاولة\s+التسلّل', text):
         return 'defensive'
     return 'offensive'
+
+
+_LIST_MARKER_RE = re.compile(
+    r'على\s+النحو\s+الآتي|على\s+الشكل\s+الآتي|على\s+النحو\s+التالي|كالآتي\s*:|كالتّالي\s*:|وفق\s+الآتي'
+)
+# Weapon-preposition prefix — "ب" + weapon noun. When this starts the post-time
+# segment, the line has no per-strike sub-location (shared parent target used).
+_WEAPON_PREFIX_RE = re.compile(
+    r'ب[ِ]?(?:صلي|سرب|قذائف|قذيفة|محلّق|صاروخ|صاروخاً|الصواريخ|صواريخ|'
+    r'الأسلحة|أسلحة|سلاح|عبوة|عبوات|مسيّرة|مسيّرات|مسيرة|مسيرات|'
+    r'رشقة|رشقات|الرشّاشات|الرشاشات|رشّاش|المدفعيّة|المدفعية|مدفعية|'
+    r'كمية|كميات|الكميات|تفجير|هدف)'
+    r'|بالأسلحة|بالصاروخ|بالصواريخ|بالرشّاشات|بالرشاشات|بالمدفعيّة|بالمدفعية|بالاشتباك'
+)
+
+
+def parse_list_strikes(text, primary_target):
+    """Parse a list_strikes bayan into a list of individual strike dicts.
+
+    Recognizes two formats after the list marker ("على النحو الآتي:"):
+      1. Bullet — "- HH:MM LOCATION WEAPON_PHRASE."
+      2. Inline — "عند الساعة HH:MM [LOCATION] WEAPON_PHRASE."
+         (location may be absent → strike inherits primary_target).
+
+    Returns [{opTime, target, weapon}, ...]. Empty list when no enumeration
+    is parseable.
+    """
+    m = _LIST_MARKER_RE.search(text)
+    if not m:
+        return []
+
+    # Part of text BEFORE the marker — lets us fall back to the parent's
+    # weapon when a bullet lists only time + location.
+    parent_weapon = extract_weapon(text[:m.start()]) or extract_weapon(text) or ''
+
+    body = text[m.end():]
+    # Stop at the closing Quran verse or first hashtag / Hijri date
+    body = re.split(r'﴿وَمَا النَّصْرُ|#[\u0621-\u064A_]+|\d+\s+(?:شوال|رمضان|شعبان)', body)[0]
+    body = body.strip(" :\n\u200F")
+
+    strikes = []
+
+    def _split_loc_weapon(segment):
+        """Split 'LOCATION WEAPON_PHRASE' on the first weapon preposition."""
+        segment = segment.strip(" .،\n\u200F")
+        # Strip leading "في " (preposition before location in some formats)
+        segment = re.sub(r'^في\s+', '', segment)
+        wm = _WEAPON_PREFIX_RE.search(segment)
+        if wm:
+            loc = segment[:wm.start()].strip(" ،-\n\u200F")
+            weapon_phrase = segment[wm.start():].strip(" .،\n\u200F")
+        else:
+            loc = segment
+            weapon_phrase = ''
+        return loc, weapon_phrase
+
+    # Bullet form (preferred): "[dash] [optional الساعة] HH:MM REST."
+    bullet_pat = re.compile(
+        r'[-•‐–—]\s*(?:الس[ّ]?اعة\s*)?(\d{1,2})[:.](\d{2})\s+([^\n]+?)\s*\.',
+        re.MULTILINE
+    )
+    for hh, mm, rest in bullet_pat.findall(body):
+        loc, weapon_phrase = _split_loc_weapon(rest)
+        if not loc:
+            loc = primary_target
+        strikes.append({
+            'opTime': f"{int(hh):02d}:{mm}",
+            'target': _clean_location(loc) if loc else '',
+            'weapon': extract_weapon(weapon_phrase) or parent_weapon or weapon_phrase,
+        })
+    if strikes:
+        return strikes
+
+    # Inline form: "عند الساعة HH:MM [LOC] [WEAPON_PHRASE]."
+    inline_pat = re.compile(
+        r'(?:عند|في|وعند|وفي|ثمّ\s+عند|ثم\s+عند)\s+(?:الس[ّ]?اعة)\s*'
+        r'(\d{1,2})[:.](\d{2})\s+([^\n]+?)\s*\.',
+        re.MULTILINE
+    )
+    for hh, mm, rest in inline_pat.findall(body):
+        loc, weapon_phrase = _split_loc_weapon(rest)
+        if not loc:
+            loc = primary_target
+        strikes.append({
+            'opTime': f"{int(hh):02d}:{mm}",
+            'target': _clean_location(loc) if loc else '',
+            'weapon': extract_weapon(weapon_phrase) or parent_weapon or weapon_phrase,
+        })
+    if strikes:
+        return strikes
+
+    # Shared-time bullets: parent states "عند الساعة HH:MM … على النحو الآتي:"
+    # and each bullet is just "- LOCATION." inheriting that time + weapon.
+    parent_time_m = re.search(
+        r'(?:عند|في)\s+(?:الس[ّ]?اعة)\s*(\d{1,2})[:.](\d{2})', text[:m.start()]
+    )
+    parent_time = (
+        f"{int(parent_time_m.group(1)):02d}:{parent_time_m.group(2)}"
+        if parent_time_m else ''
+    )
+    shared_bullet_pat = re.compile(r'[-•‐–—]\s*([^\n]+?)\s*\.', re.MULTILINE)
+    for seg in shared_bullet_pat.findall(body):
+        loc, weapon_phrase = _split_loc_weapon(seg)
+        if not loc:
+            continue
+        strikes.append({
+            'opTime': parent_time,
+            'target': _clean_location(loc),
+            'weapon': extract_weapon(weapon_phrase) or parent_weapon or weapon_phrase,
+        })
+    return strikes
 
 # ═══════════════ SIREN POINTS ═══════════════
 def compute_siren_points(sirens):
