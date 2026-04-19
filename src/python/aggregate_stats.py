@@ -2,16 +2,19 @@
 """Aggregate strike/loss statistics across a date range — replicates the
 Hezbollah "الحصاد العام للعمليات العسكرية" infographic schema.
 
-Two sources:
-  1. `bayanat` — offensive strikes announced by the resistance.
-     For `bayan_type == "list_strikes"` the enumerated `strikes[]` entries
-     are counted individually; for all other combat bayanat the row counts
-     as one strike.
-     `bayan_type == "statement"` is excluded.
-  2. `enemy[]` — for defensive counter-operations we filter by clash
-     keywords (اشتباك / تصدّي / تقدّم / تسلّل / إنزال) since the published
-     infographic's "داخل الأراضي اللبنانية" number includes ground
-     engagements, not just bayanat.
+Source: `bayanat[]` only.
+  - `bayan_type == "statement"` is excluded.
+  - `bayan_type == "list_strikes"`: each entry in `strikes[]` counts as one strike.
+  - `bayan_type == "defensive"`: one defensive op; counter-advance / counter-landing
+    recognised via keyword on fullText.
+  - All other combat bayanat count as one strike.
+
+Equipment losses (tanks, hummers, bulldozers, Hermes, choppers…) and casualty
+numbers are extracted from bayan fullText ONLY. `enemy[]` is intentionally not
+scanned: the same incident is echoed across multiple channels (Al-Manar,
+Al-Mayadeen, IDF statement, wire agencies) and summing regex hits across those
+echoes inflates counts 3-5× versus reality. Bayan claims give one authoritative
+mention per incident.
 
 Usage:
     python3 src/python/aggregate_stats.py <from> <to> [--out path]
@@ -176,11 +179,14 @@ def classify_weapon_family(weapon):
 def extract_losses(text, losses, include_casualty_numbers=False):
     """Scan text and bump loss counters. `losses` is a Counter mutated in place.
 
-    Equipment counts (tanks, hummers, etc.) count once per mention. Casualty
-    numbers are intentionally NOT summed from media reports (enemy[]) since
-    the same incident is typically echoed across multiple channels — summing
-    inflates the count 3-5× versus reality. Set include_casualty_numbers=True
-    only when scanning resistance bayan claims.
+    Only bayan fullText should be passed. enemy[] media echoes are NOT scanned
+    because a single destroyed tank / dead soldier appears across Al-Manar,
+    Al-Mayadeen, IDF statement and wire-agency entries — counting regex hits
+    across those echoes inflates equipment + casualty totals 3-5×. One bayan
+    mention = one authoritative claim per incident.
+
+    Set include_casualty_numbers=True to additionally accumulate قتيل/جريح
+    counts from explicit number patterns.
     """
     if not text:
         return
@@ -290,9 +296,11 @@ def aggregate(from_date, to_date):
                 target_counts[ttype] += 1
                 weapon_counts[wfam] += 1
 
-        # Scan enemy[] for losses
-        for e in data.get('enemy', []) or []:
-            extract_losses(e.get('fullText') or e.get('summary',''), losses)
+        # NOTE: enemy[] is intentionally not scanned for losses. A single
+        # destroyed vehicle is echoed across 3-5 media entries (Al-Manar,
+        # Al-Mayadeen, IDF, wires) — summing regex hits across echoes
+        # inflates totals 3-5×. Bayan fullText above is the single
+        # authoritative source per incident.
 
         if day_strikes:
             active_days += 1

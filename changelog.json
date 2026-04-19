@@ -1,5 +1,19 @@
 [
   {
+    "version": "2.6.2",
+    "date": "2026-04-20",
+    "title": "Equipment loss counters bayanat-only — removed enemy[] echo double-count",
+    "changes": [
+      "Root cause: aggregate_stats.py + stats.html both counted equipment losses (tanks, hummers, bulldozers, Hermes, choppers, MRAPs) from BOTH bayanat[].fullText AND enemy[].fullText. enemy[] is a media-echo layer — a single destroyed vehicle is repeated across Al-Manar / Al-Mayadeen / IDF statement / wire-agency entries, so summing regex hits across those echoes inflated totals 3-5×.",
+      "Internal inconsistency: the code already applied echo-dedup logic to casualty numbers (bayanat-only, with an explicit comment at extract_losses about 3-5× inflation) but not to equipment. Now both equipment and casualties are bayanat-only — one authoritative mention per incident.",
+      "src/python/aggregate_stats.py — removed the `for e in data.get(enemy, [])` loss-scan loop. Module + extract_losses docstrings updated to document enemy[] exclusion rationale.",
+      "stats.html — removed the mirror-copy of that loop in the client-side aggregator so browser and Python produce identical counters.",
+      "Empirical impact over the full war window 2024-09-23 → 2024-11-27: helicopters 15 → 2 (7.5× over-count corrected), tanks 49 → 48, Hermes drones 13 → 13, bulldozers 6 → 6. Most equipment was already bayanat-dominated; helicopters were the main offender because every channel echo of an Israeli sortie read as an additional chopper-down mention.",
+      "No change to operation counts (offensive strikes, defensive ops, counter-advance, counter-landing) — those were already bayanat-only before this patch.",
+      "Validator: 0 errors, 17 warnings, 907/924 clean days — unchanged from v2.6.1 (data files untouched, only the aggregator logic changed)."
+    ]
+  },
+  {
     "version": "2.6.1",
     "date": "2026-04-20",
     "title": "Corpus-wide re-categorise — eliminated 231 cross-category double-counts",

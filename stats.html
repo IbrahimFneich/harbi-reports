@@ -89,7 +89,7 @@
 
 <footer>
   <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;"
-        onclick="window.location='index.html'">Harbi Reports v2.6.1</span>
+        onclick="window.location='index.html'">Harbi Reports v2.6.2</span>
 </footer>
 
 <script type="module">
@@ -250,10 +250,9 @@ async function run(){
         weapons[wf] = (weapons[wf]||0)+1;
       }
     }
-    for (const e of (data.enemy||[])){
-      const t = e.fullText || e.summary || '';
-      LOSS.forEach(([k,rx])=>{ const m = t.match(rx); if (m) losses[k] = (losses[k]||0)+m.length; });
-    }
+    // enemy[] intentionally NOT scanned for losses — echo channels inflate
+    // equipment counts ~7× (e.g. helicopters 15 → 2 across the war window).
+    // Bayan fullText above is the single authoritative source per incident.
     if (dayCount){ active++; if (dayCount > dayMax){ dayMax = dayCount; dayMaxDate = d; } }
   }
   const total = off + def + ca;
