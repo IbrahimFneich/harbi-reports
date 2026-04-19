@@ -1,5 +1,22 @@
 [
   {
+    "version": "2.6.0",
+    "date": "2026-04-20",
+    "title": "Phase A raw re-pull — corpus now authoritative (11 new day files + 4 batches, 0 validator errors)",
+    "changes": [
+      "Re-pulled 29 items directly from Telegram channel الإعلام الحربي (chat_id=1048208601) via Telethon to close gaps flagged by RAW_COVERAGE_AUDIT.md.",
+      "Priority 1 (11 dates with no raw file): 2026-03-31, 2026-04-01, 2026-04-02, 2026-04-03, 2026-04-04, 2026-04-05, 2026-04-06, 2026-04-07, 2026-04-09, 2026-04-13, 2026-04-14 — each now has a first-class raw/DATE.json pull (133–260 messages each) instead of relying on neighbour-day spillover. Net impact on those 11 days: +3,127 spotlight entries (derived data re-categorised from own-day raw, not adjacent-day fragments).",
+      "Priority 2 (14 dates flagged as truncated in the audit): 2026-04-08, 2026-03-02, 2024-04-10, 2024-04-11, 2024-05-01, 2024-05-02, 2024-05-03, 2024-05-04, 2024-06-22, 2024-09-06, 2025-06-09, 2026-02-06, 2025-11-21, 2025-03-22 — re-pulled and confirmed as genuinely quiet channel days (post-counts matched pre-counts within ±3 across all 14). The audit's < 50% threshold was a false positive for these; they are NOT truncations. Empirical evidence now on file.",
+      "Priority 3 (4 pre-2024-02 monthly-batch redundancy layer): generated raw/2023-10-batch.json (2,013 msgs), raw/2023-11-batch.json (2,060 msgs), raw/2023-12-batch.json (2,635 msgs), raw/2024-01-batch.json (1,974 msgs). Early war months now have the same batch-level cross-check coverage as 2024-02+.",
+      "src/python/fix_data.py spillover threshold lowered from 22:30 to 22:00 — caught 2026-04-13's legitimate 22:05 next-day bayan #1 that the old threshold missed.",
+      "src/python/fix_data.py: added fix_bayan_spillback() — detects and moves just-past-midnight bayans (postTime < 02:00, num > 3, continues prev day's sequence) back to the correct file. Caught 2 cases: 2026-04-16→2026-04-15 (num=39 @ 00:00) and 2026-04-17→2026-04-16 (num=52 @ 00:11).",
+      "src/python/categorize.py: fixed default --output path (was resolving to src/data/ instead of data/ after the src/python reshuffle).",
+      "src/python/phase_a_pull.py — new idempotent bulk-pull executor (Telethon via uv). Logs per-item pre/post message counts and skips days that already meet the ≥50%-of-month-median threshold. Run with `uv --directory ~/.claude/mcp-servers/telegram-mcp run python src/python/phase_a_pull.py`.",
+      "Validator: 2 pre-existing duplicate-bayan-num errors (2026-04-13 dup num=1, 2026-04-16 dup num=39) — FIXED by the spillover+spillback patches. Result: 0 errors, 23 warnings, 901/924 clean days (was 0→2 errors, 27 issues, 897 clean in v2.5.43).",
+      "Corpus totals at v2.6.0: 924 day-files, 5,121 bayanat, 7,739 sirens, 13,743 enemy, 1,073 iran, 1,037 videos, 7,959 allies, 166 summaries — 36,838 total events; spotlight index 36,672 entries."
+    ]
+  },
+  {
     "version": "2.5.43",
     "date": "2026-04-19",
     "title": "Arabic-prefix-tolerant markers + more sources — +488 entries",

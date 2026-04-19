@@ -1099,8 +1099,9 @@ def main():
             output = sys.argv[i + 1]
 
     if not output:
-        output = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                              'data', date_str + '.json')
+        # script lives at <repo>/src/python/categorize.py — go up 3 levels for repo root
+        repo_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        output = os.path.join(repo_root, 'data', date_str + '.json')
 
     # Parse messages
     messages = parse_raw_telegram(raw_file)

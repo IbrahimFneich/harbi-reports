@@ -53,6 +53,11 @@ def next_date(date_str):
     nd = dt_date(y, m, d) + timedelta(days=1)
     return nd.strftime('%Y-%m-%d')
 
+def prev_date(date_str):
+    y, m, d = map(int, date_str.split('-'))
+    pd = dt_date(y, m, d) - timedelta(days=1)
+    return pd.strftime('%Y-%m-%d')
+
 
 # ═══════════════ SIREN GEOCODING ═══════════════
 SIREN_COORDS = {
@@ -206,8 +211,10 @@ def fix_bayan_spillover(date_str, data):
     if not main:
         return 0
 
-    # Verify ALL spillover entries have late times (>= 22:30)
-    all_late = all(b.get('postTime', '00:00') >= '22:30' for b in spillover)
+    # Verify ALL spillover entries have late times (>= 22:00). Dropped from
+    # 22:30 to 22:00 after observing 2026-04-13 where bayan #1 of next day
+    # was posted at 22:05 — a legitimate spillover the old threshold missed.
+    all_late = all(b.get('postTime', '00:00') >= '22:00' for b in spillover)
     if not all_late:
         return 0
 
@@ -246,6 +253,53 @@ def fix_bayan_spillover(date_str, data):
     moved = len(spillover)
     print(f'  Moved {moved} spillover bayan(s) from {date_str} → {nxt}')
     return moved
+
+
+def fix_bayan_spillback(date_str, data):
+    """Detect and move prev-day bayans that spilled back into current day.
+
+    The channel often posts the previous day's final communiqué just past
+    midnight UTC (e.g. num=39 at 00:00 on the day after the 38 was posted
+    at 23:55). Detection: bayanat[0] has postTime < 02:00 AND num > 3 AND
+    the previous day's last bayan has num == current.num - 1 (or close).
+    """
+    bayanat = data.get('bayanat', [])
+    if not bayanat:
+        return 0
+
+    first = bayanat[0]
+    first_time = first.get('postTime', '23:59')
+    first_num = first.get('num', 0)
+
+    # Must be an early-morning (<02:00) post with a non-restart num
+    if first_time >= '02:00' or first_num <= 3:
+        return 0
+
+    prev = prev_date(date_str)
+    prev_data = load_data(prev)
+    if prev_data is None:
+        return 0
+
+    prev_bayanat = prev_data.get('bayanat', [])
+    if not prev_bayanat:
+        return 0
+
+    prev_last_num = prev_bayanat[-1].get('num', 0)
+
+    # Must continue the previous day's sequence (within 2)
+    if first_num - prev_last_num not in (1, 2):
+        return 0
+
+    # Move just the first entry back
+    spillback = [first]
+    data['bayanat'] = bayanat[1:]
+    prev_data['bayanat'] = prev_bayanat + spillback
+
+    save_data(date_str, data)
+    save_data(prev, prev_data)
+
+    print(f'  Moved 1 spillback bayan from {date_str} → {prev} (num={first_num} @ {first_time})')
+    return 1
 
 
 # ═══════════════ FIX: STATS ═══════════════
@@ -341,6 +395,19 @@ def main():
         if data is None:
             continue
         moved = fix_bayan_spillover(date_str, data)
+        if moved:
+            total_fixes['bayan_spillover'] += moved
+            total_fixes['files_modified'] += 1
+
+    # ── Phase 1b: Fix bayan spillback (midnight posts belonging to prev day) ──
+    print('\nPhase 1b: Fixing bayan spillback...')
+    files = sorted(glob(pattern))  # reload — spillover may have created files
+    for fpath in files:
+        date_str = os.path.basename(fpath).replace('.json', '')
+        data = load_data(date_str)
+        if data is None:
+            continue
+        moved = fix_bayan_spillback(date_str, data)
         if moved:
             total_fixes['bayan_spillover'] += moved
             total_fixes['files_modified'] += 1
