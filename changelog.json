@@ -1,5 +1,19 @@
 [
   {
+    "version": "2.7.0",
+    "date": "2026-04-20",
+    "title": "Stats page rework — A1 layout + B2 drill-down drawer",
+    "changes": [
+      "stats.html — replaced the totals tile grid with a 4-card hero KPI strip (primary total + offensive + counter-advance + daily average) and a compact 4-cell secondary strip (peak day, active/total, excluded, defensive).",
+      "stats.html — الاستهدافات and الأسلحة المستعملة render side-by-side on desktop (stacked on mobile), each row now has an inline gradient bar whose width scales with the value / section max.",
+      "stats.html — new drill-down drawer: clicking any row slides in a side panel (RTL-aware 52vw, full-width on mobile) listing every بيان that fed that cell, grouped by day (newest first) with sticky day headers and count badges. Items link to index.html?d=YYYY-MM-DD#b-<num>.",
+      "stats.html — drawer uses IntersectionObserver to paginate by 25 days per batch on scroll, keeping the initial paint fast even for the 2,395-item الأسلحة الصاروخية bucket.",
+      "stats.html — losses drawer carries a 'تقديري — مستخرج من النصّ' caveat banner since losses are regex-extracted from bayan fullText.",
+      "stats.html — full a11y pass on the drawer: role='dialog', aria-modal, focus trap, focus returns to the originating row on close, ESC / backdrop-click / × button all dismiss, keyboard Enter opens from a focused row.",
+      "stats.html — per-bucket scroll-position memory: switching drawers and returning preserves where you were."
+    ]
+  },
+  {
     "version": "2.6.2",
     "date": "2026-04-20",
     "title": "Equipment loss counters bayanat-only — removed enemy[] echo double-count",
