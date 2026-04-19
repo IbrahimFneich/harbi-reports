@@ -9,7 +9,8 @@
     "enemy": 25,
     "iran": 0,
     "videos": 0,
-    "allies": 0
+    "allies": 5,
+    "summaries": 0
   },
   "bayanat": [],
   "sirens": [
@@ -201,5 +202,37 @@
   ],
   "iran": [],
   "videos": [],
-  "allies": []
+  "allies": [
+    {
+      "flag": "فلسطين",
+      "time": "12:32",
+      "summary": "كتائب القسام: تمكنا بالاشتراك مع مجاهدي ألوية الناصر من إطلاق صاروخ \"سام\" باتجاه طائرة مروحية صهيونية من نوع \"أباتشي\" شرق مخيم البريج وسط القطاع.",
+      "fullText": "#فلسطين_المحتلة \n\nكتائب القسام: تمكنا بالاشتراك مع مجاهدي ألوية الناصر من إطلاق صاروخ \"سام\" باتجاه طائرة مروحية صهيونية من نوع \"أباتشي\" شرق مخيم البريج وسط القطاع.\n\n#الإعلام_الحربي"
+    },
+    {
+      "flag": "فلسطين",
+      "time": "12:44",
+      "summary": "سرايا القدس-طوباس : يخوض مقاتلونا في سرية طمون وسرية الفارعة معارك ضارية مع قوات الاحتلال المقتحمة بمحاور القتال في شكدا ويمطرون قوات الاحتلال بزخات كثيفة من الرصاص محققين إصابات مباشرة.",
+      "fullText": "#فلسطين_المحتلة \n\nسرايا القدس-طوباس : يخوض مقاتلونا في سرية طمون وسرية الفارعة معارك ضارية مع قوات الاحتلال المقتحمة بمحاور القتال في شكدا ويمطرون قوات الاحتلال بزخات كثيفة من الرصاص محققين إصابات مباشرة.\n\n#الإعلام_الحربي"
+    },
+    {
+      "flag": "اليمن",
+      "time": "13:32",
+      "summary": "بيانٌ صادرٌ عنِ القواتِ المسلحةِ اليمنية\n\nبسمِ اللهِ الرحمنِ الرحيم\nقال تعالى: {یَـٰۤأَیُّهَا ٱلَّذِینَ ءَامَنُوۤا۟ إِن تَنصُرُوا۟ ٱللَّهَ یَنصُرۡكُمۡ وَیُثَبِّتۡ أَقۡدَامَكُمۡ } صدقَ اللهُ العظيم\n\n\nا",
+      "fullText": "بيانٌ صادرٌ عنِ القواتِ المسلحةِ اليمنية\n\nبسمِ اللهِ الرحمنِ الرحيم\nقال تعالى: {یَـٰۤأَیُّهَا ٱلَّذِینَ ءَامَنُوۤا۟ إِن تَنصُرُوا۟ ٱللَّهَ یَنصُرۡكُمۡ وَیُثَبِّتۡ أَقۡدَامَكُمۡ } صدقَ اللهُ العظيم\n\n\nانتصاراً لمظلوميةِ الشعبِ الفلسطينيِّ ومجاهديه ورداً على المجازرِ بحق إخوانِنا في غزة، وضمنَ المرحلةِ الخامسةِ من مراحلِ الإسنادِ في معركةِ الفتحِ الموعودِ والجهادِ المقدسِ وفي إطارِ الردِّ على العدوانِ الإسرائيليِّ على بلدِنا\n\nوبعونِ اللهِ تعالى نفذتِ القوةُ الصاروخيةُ في القواتِ المسلحةِ اليمنيةِ عمليةً عسكريةً استهدفتْ محطةَ الكهرباءِ التابعةَ للعدوِّ الإسرائيليِّ شرقيَّ منطقةِ يافا المحتلةِ، وذلك بصاروخٍ بالستي فرط صوتيٍّ نوع فلسطين2.\n\nوقد أصابَ الصاروخُ هدفَهُ بدقةٍ بفضلِ الله.\n\nونفذَ سلاحُ الجوِّ المسيرُ في القواتِ المسلحةِ اليمنيةِ عمليةً عسكريةً استهدفتْ هدفاً عسكرياً للعدوِّ الإسرائيليِّ في منطقةِ يافا المحتلةِ وذلك بطائرةٍ مسيرةٍ نوع يافا وقدْ حققتِ العمليةُ هدفَها بنجاحٍ بفضلِ الله. \n\nإنَّ القواتِ المسلحةَ اليمنيةَ تؤكدُ جهوزيتَها العاليةَ لمواجهةِ أيِّ حماقةٍ لقوى العدوانِ الأمريكيِّ والإسرائيليِّ أو من يتورطُ معهم من أيِّ جهةٍ كانت وأنَّها بعونِ اللهِ قادرةٌ على الدفاعِ عنِ اليمنِ العزيزِ وسيادتِه وحقوقِه المشروعة.\n\nتجددُ القواتُ المسلحةُ اليمنيةُ دعوتَها لكافةِ الأحرارِ من أبناءِ أمتِنا العربيةِ والإسلاميةِ للتحركِ الجادِّ لوقفِ المجازرِ الإسرائيليةِ بحقِّ إخوانِنا في غزةَ، وتؤكدُ أنَّ عملياتِها العسكريةَ دعماً وإسناداً للمجاهدينَ في غزةَ مستمرةٌ بعونِ اللهِ وأنها لن تتوقفَ إلا بوقفِ العدوانِ على غزةَ ورفعِ الحصارِ عنها.\n\nواللهُ حسبُنا ونعمَ الوكيل، نعمَ المولى ونعمَ النصير\n\nعاشَ اليمنُ حراً عزيزاً مستقلاً\nوالنصرُ لليمنِ ولكلِّ أحرارِ الأمة\n\nصنعاء 3 من رجب 1446للهجرة\nالموافق للـ 3 يناير 2025م\n\nصادرٌ عنِ القواتِ المسلحةِ اليمنية\n...............................................\n...............................................\nTriumphing for the oppression of the Palestinian people and their Mujahideen, and in response to the massacres against our people in Gaza, and within the fifth phase of the supportive stages in the battle of the Promised conquest and the Holy jihad and in  retaliation to the aggression against our country.\n\nWith the help of Allah, the Missile Force of the Yemeni Armed Forces carried out a military operation targeting an enemy linked power station east of the occupied area of Yaffa, using a hypersonic ballistic missile, type Palestine 2.\n\nIt has successfully hit its target.\n\nThe UAVs force of Yemeni Armed Forces carried out a military operation targeting a military target in the occupied area Yaffa, using Yaffa drone, and it achieved its target successfully.\n\nThe Yemeni Armed Forces confirm their readiness to face any foolishness of the American and Israeli aggression forces or those involved with them from any other parties, and that they are able to defend beloved Yemen, its sovereignty and its ligit rights.\n\nThe Yemeni Armed Forces renew their call to all the free people of our Arab and Islamic nations to take serious action in order to stop the Israeli massacres against  our people in Gaza, and confirm that their military operations in support of the Mujahideen in Gaza will continue with Allah's help, and will not stop unless the the aggerssion on Gaza stopes and the siege is lifted .\n\n\nSanaa\nRajab 3, 1446 AH\nJanuary 3, 2025 AD\n\nIssued by the Yemeni Armed Forces\n\nhttp://t.me/army21ye"
+    },
+    {
+      "flag": "فلسطين",
+      "time": "15:11",
+      "summary": "كتائب القسام: دمرنا 4 دبابات \"ميركفاه\" صهيونية بعدد من العبوات شديدة الانفجار في محور التقدم شرق جباليا البلد شمال القطاع.",
+      "fullText": "#فلسطين_المحتلة \n\nكتائب القسام: دمرنا 4 دبابات \"ميركفاه\" صهيونية بعدد من العبوات شديدة الانفجار في محور التقدم شرق جباليا البلد شمال القطاع.\n\n#الإعلام_الحربي"
+    },
+    {
+      "flag": "فلسطين",
+      "time": "15:37",
+      "summary": "كتائب القسام: استهدفنا دبابة صهيونية من نوع \"ميركفاه\" بعبوة \"شواظ\" شرق شارع الصفطاوي غرب معسكر جباليا شمال القطاع.",
+      "fullText": "#فلسطين_المحتلة \n\nكتائب القسام: استهدفنا دبابة صهيونية من نوع \"ميركفاه\" بعبوة \"شواظ\" شرق شارع الصفطاوي غرب معسكر جباليا شمال القطاع.\n\n#الإعلام_الحربي"
+    }
+  ],
+  "summaries": []
 }

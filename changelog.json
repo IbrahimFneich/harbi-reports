@@ -1,5 +1,24 @@
 [
   {
+    "version": "2.5.41",
+    "date": "2026-04-19",
+    "title": "Arabic normaliser + Palestinian/Yemeni/Iraqi/summaries handlers — +6,352 entries recovered",
+    "changes": [
+      "src/python/categorize.py — new norm_ar() utility strips tatweel (U+0640), harakat (U+064B-0652 + U+0670), normalises alef variants (أ/إ/آ → ا) and yaa (ى → ي), converts Arabic-Indic digits (٠-٩ → 0-9), and removes zero-width/RTL marks (U+200B-U+200F / U+202A-U+202E / BOM / NBSP). Applied uniformly before every substring match and classification regex in categorize(), parse_bayan(), classify_bayan_type(), and compute_siren_points() — fixes tatweel/shadda-sensitive bayan markers, shadda'd sirens (صفّارات), Arabic-numeral bayan numbers, and case-sensitive place lookups.",
+      "categorize() dispatcher reordered — videos check moved LAST (previously swallowed بالفيديو messages that also matched iran/enemy/yemen content).",
+      "NEW: Palestinian-factions handler (حركة حماس / كتائب القسام / سرايا القدس / الجهاد الإسلامي / الجبهة الشعبية / #فلسطين_المحتلة / المقاومة الفلسطينية). Routed to allies[] with flag='فلسطين'. Previously: silently dropped into the 'other' bucket.",
+      "Yemen handler expanded: added يحيى سريع / العميد سريع / صنعاء / الحوثي / الحوثيين / الجيش اليمني / حركة أنصار الله.",
+      "Iraq handler expanded: added كتائب حزب الله العراقي / عصائب أهل الحق.",
+      "Iran handler expanded: added صاروخ إيراني / صواريخ إيرانية / طهران / قاآني / بزشكيان / القوة الجوفضائية / القوة البحرية الإيرانية.",
+      "NEW: summaries[] bucket — captures daily (الحصاد اليومي), weekly (الحصاد الأسبوعي), and cumulative (الحصاد العام) operation recaps previously silently dropped.",
+      "classify_bayan_type() priority reordered — defensive now takes priority over list_strikes so counter-advance bayanat that enumerate multiple counter-strikes stay correctly classified. parse_list_strikes() also fires on defensive bayanat with list markers, preserving per-strike detail.",
+      "SIREN_COORDS lookup in compute_siren_points() now uses norm_ar on both the dict key and the siren text, so 'المالكيّة' (with shadda) and 'المالكية' (without) both match the same coordinate. Previously relied on hand-added duplicate keys.",
+      "Schema additive change: data/*.json now includes stats.summaries + top-level summaries[]. Downstream code (validator, build_index, stats.html) tolerates the new field; it simply won't index or display summaries until wired up in a follow-up version.",
+      "Safe corpus-wide merge (no data regressions): +6,352 Palestinian/Yemeni/Iraqi entries recovered into allies[], +167 Iranian entries, +62 daily/weekly summaries. Spotlight index grew from 29,636 → 36,155 items (+22%).",
+      "All 5,079 existing bayanat preserved. 34 reclassified to correct bayan_type via the normaliser (previously mis-bucketed due to tatweel/shadda variants). Validator clean (same 2 pre-existing duplicate-num errors unchanged)."
+    ]
+  },
+  {
     "version": "2.5.40",
     "date": "2026-04-19",
     "title": "Wire stats page into nav + close aircraft/drone classification gap",
