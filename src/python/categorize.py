@@ -16,6 +16,32 @@ import sys
 import os
 from collections import defaultdict
 
+# ═══════════════ ARABIC TEXT NORMALISER ═══════════════
+# Apply before every substring check / classification regex so that tatweel,
+# shadda/other harakat, alef/yaa variants, and Arabic-Indic digits don't cause
+# silent matching failures. The ORIGINAL text is preserved in fullText fields;
+# only matching/classification uses the normalised form.
+_AR_DIACRITICS_RE = re.compile(r'[\u064B-\u0652\u0670\u0640]')  # harakat + tatweel
+_AR_ALEF_MAP  = str.maketrans({'أ': 'ا', 'إ': 'ا', 'آ': 'ا'})
+_AR_YAA_MAP   = str.maketrans({'ى': 'ي'})
+_AR_DIGIT_MAP = str.maketrans('٠١٢٣٤٥٦٧٨٩', '0123456789')
+# Zero-width marks that sneak in from Telegram rendering (LRM/RLM/ZWJ/ZWNJ/NBSP).
+_AR_INVISIBLES_RE = re.compile(r'[\u200B-\u200F\u202A-\u202E\u2060\uFEFF\u00A0]')
+
+
+def norm_ar(s):
+    """Normalise Arabic text for matching. Preserves original in fullText;
+    use the return value only for `in` checks and classification regex."""
+    if not s:
+        return ''
+    s = _AR_INVISIBLES_RE.sub('', s)
+    s = _AR_DIACRITICS_RE.sub('', s)
+    s = s.translate(_AR_ALEF_MAP)
+    s = s.translate(_AR_YAA_MAP)
+    s = s.translate(_AR_DIGIT_MAP)
+    return s
+
+
 # ═══════════════ LOCATION → COORDINATES LOOKUP ═══════════════
 # Pre-computed lat/lng for known siren locations
 SIREN_COORDS = {
@@ -194,27 +220,82 @@ def categorize(messages):
     allies = []
     other = []
 
+    summaries = []
+
+    # Keyword sets — match against norm_ar(text). norm_ar keeps ة/ه as-is,
+    # so use the same form as the source text (ة for feminine words like
+    # المقاومة / الإسلامية / غرفة / عملية / الجمهورية / جريدة / ...).
+    BAYAN_MARKERS = (
+        'بيان صادر عن المقاومة الاسلامية',     # resistance statement
+        'بيان صادر عن غرفة عمليات المقاومة',   # ops-room statement (normalised)
+        'بيان صادر عن غرفة العمليات',
+        'بيان صادر عن حزب الله',               # Hezbollah political communique
+    )
+    IRAN_MARKERS = (
+        'الجمهورية الاسلامية', 'حرس الثورة', 'الحرس الثوري',
+        'الجيش الايراني', 'خاتم الانبياء', '#الجمهورية_الاسلامية',
+        '#ايران', 'الوعد الصادق', 'صاروخ ايراني', 'صواريخ ايرانية',
+        'طهران', 'قاآني', 'قاانی', 'بزشكيان', 'پزشكيان',
+        'القوة الجوفضاية', 'القوة البحرية الايرانية',
+    )
+    IRAN_SOURCES = (
+        'حرس الثورة الاسلامية', 'الحرس الثوري', 'الجيش الايراني',
+        'خاتم الانبياء', 'القوة البحرية', 'القوة الجوفضاية',
+    )
+    ENEMY_MARKERS = (
+        '#اعلام_العدو', 'اعلام العدو', 'اعلام اسراييلي',
+        'وسايل اعلام اسراييلية', 'وسايل الاعلام الاسراييلية',
+        'المتحدث باسم جيش العدو', 'اذاعة جيش العدو',
+        'القناة 12', 'القناة 14', 'القناة 13',
+    )
+    YEMEN_MARKERS = (
+        'القوات المسلحة اليمنية', 'انصار الله', 'حركة انصار الله',
+        'يحيي سريع', 'العميد سريع', 'العميد يحيي سريع',
+        'صنعاء', 'الحوثي', 'الحوثيين', 'الجيش اليمني',
+    )
+    IRAQ_MARKERS = (
+        'المقاومة الاسلامية في العراق', 'كتاييب سيد الشهداء',
+        'حركة النجباء', 'اكرم الكعبي', '#العراق',
+        'كتاييب حزب الله العراقي', 'عصايب اهل الحق',
+    )
+    PALESTINE_MARKERS = (
+        'حركة حماس', 'كتاييب القسام', 'سرايا القدس',
+        'الجهاد الاسلامي في فلسطين', 'الجبهة الشعبية',
+        '#فلسطين_المحتلة', 'المقاومة الفلسطينية',
+        'صادر عن حركة حماس',
+    )
+    SUMMARY_MARKERS = (
+        'الحصاد اليومي لعمليات المقاومة',
+        'الحصاد الاسبوعي لعمليات المقاومة',
+        'وضعية عمليات المقاومة',
+        'الحصاد العام للعمليات',
+    )
+    MEDIA_PLACEHOLDER = ('[media/no text]', '[media / no text]')
+
     for msg in messages:
         text = msg['text']
         time = msg['time']
+        # Normalised copy for matching. Never mutates msg or text.
+        ntext = norm_ar(text).lower().replace('يّ', 'يي')
+        # Treat empty / media-placeholder messages as noise
+        stripped = _AR_INVISIBLES_RE.sub('', text or '').strip()
+        if not stripped or any(p in stripped.lower() for p in MEDIA_PLACEHOLDER):
+            continue
 
-        # ── Bayanat (resistance statements) ──
-        if ('بيان صادر عن المقاومة الإسلامية' in text
-                or 'بيـان صادر عن غرفة عمليّـات' in text
-                or 'بيان صادر عن حزب الله' in text):
+        # ── Bayanat (resistance statements) — highest priority ──
+        if any(m in ntext for m in BAYAN_MARKERS):
             bayan = parse_bayan(msg)
             bayanat.append(bayan)
             continue
 
         # ── Sirens ──
-        if 'صفارات الإنذار' in text or 'صفارات إنذار' in text:
+        # Normalised match handles shadda'd صفّارات and tatweel variants.
+        if 'صفارات الانذار' in ntext or 'صفارات انذار' in ntext or 'صفاره انذار' in ntext:
             loc = text
             # Strip hashtags and common prefixes
             loc = re.sub(r'#\S+', '', loc).strip()
-            loc = re.sub(r'^.*?صفارات (?:الإنذار|إنذار)\s*(?:تدوي\s*)?', '', loc).strip()
+            loc = re.sub(r'^.*?صفّ?ارات\s*(?:الإنذار|إنذار)?\s*(?:تدوي\s*)?', '', loc).strip()
             loc = re.sub(r'\s+', ' ', loc).strip()
-            if loc.startswith('في '):
-                pass  # keep "في ..." as location
             sirens.append({
                 'time': time,
                 'location': loc or text[:80],
@@ -222,15 +303,79 @@ def categorize(messages):
             })
             continue
 
-        # ── Videos ──
-        if 'بالفيديو' in text or '#فيديو' in text:
+        # ── Palestinian factions (NEW — previously silently dropped) ──
+        if any(m in ntext for m in PALESTINE_MARKERS):
+            allies.append({
+                'flag': 'فلسطين',
+                'time': time,
+                'summary': re.sub(r'#\S+', '', text).strip()[:200],
+                'fullText': text
+            })
+            continue
+
+        # ── Yemen (Ansar Allah / Yemeni Armed Forces) ──
+        if any(m in ntext for m in YEMEN_MARKERS):
+            allies.append({
+                'flag': 'اليمن',
+                'time': time,
+                'summary': re.sub(r'#\S+', '', text).strip()[:200],
+                'fullText': text
+            })
+            continue
+
+        # ── Iraq (Islamic Resistance in Iraq + named factions) ──
+        if any(m in ntext for m in IRAQ_MARKERS):
+            allies.append({
+                'flag': 'العراق',
+                'time': time,
+                'summary': re.sub(r'#\S+', '', text).strip()[:200],
+                'fullText': text
+            })
+            continue
+
+        # ── Iran ──
+        if any(m in ntext for m in IRAN_MARKERS):
+            source = 'إيران'
+            for src in IRAN_SOURCES:
+                if src in ntext:
+                    source = src
+                    break
+            iran.append({
+                'time': time,
+                'source': source,
+                'summary': re.sub(r'#\S+', '', text).strip()[:200],
+                'fullText': text
+            })
+            continue
+
+        # ── Daily / weekly / cumulative summaries ──
+        if any(m in ntext for m in SUMMARY_MARKERS):
+            summaries.append({
+                'time': time,
+                'kind': ('weekly' if 'اسبوعي' in ntext
+                         else 'general' if 'عام' in ntext
+                         else 'daily'),
+                'summary': re.sub(r'#\S+', '', text).strip()[:300],
+                'fullText': text
+            })
+            continue
+
+        # ── Enemy media (Israeli news echoed by the channel) ──
+        if any(m in ntext for m in ENEMY_MARKERS):
+            enemy.append({
+                'time': time,
+                'summary': re.sub(r'#\S+', '', text).strip()[:200],
+                'fullText': text
+            })
+            continue
+
+        # ── Videos — LAST, treated as a tag over content domains above ──
+        if 'بالفيديو' in ntext or '#فيديو' in ntext:
             desc = text
             desc = re.sub(r'#\S+', '', desc).strip()
             desc = re.sub(r'⭕️?', '', desc).strip()
-            # Strip quality suffix for dedup key
             desc_key = re.sub(r'\s*جودة\s+(?:عالية|متوسطة|منخفضة|مرتفعة|عاديّة)\s*', ' ', desc).strip()
             desc_key = re.sub(r'\s+', ' ', desc_key)
-            # Dedup: same time + same description (quality stripped) = same operation
             dup = next((v for v in videos if v.get('_key') == (time, desc_key)), None)
             if dup:
                 continue
@@ -242,60 +387,6 @@ def categorize(messages):
             })
             continue
 
-        # ── Iran ──
-        if any(kw in text for kw in ['الجمهورية الإسلامية', 'حرس الثورة', 'الحرس الثوري',
-                                       'الجيش الإيراني', 'الجيش الايراني', 'خاتم الأنبياء',
-                                       '#الجمهورية_الإسلامية', '#إيران', 'الوعد الصادق']):
-            source = 'إيران'
-            for src in ['حرس الثورة الإسلامية', 'الحرس الثوري', 'الجيش الإيراني',
-                        'الجيش الايراني', 'خاتم الأنبياء', 'القوة البحرية', 'القوة الجوفضائية']:
-                if src in text:
-                    source = src
-                    break
-            summary = re.sub(r'#\S+', '', text).strip()[:200]
-            iran.append({
-                'time': time,
-                'source': source,
-                'summary': summary,
-                'fullText': text
-            })
-            continue
-
-        # ── Enemy media ──
-        if '#إعلام_العدو' in text or 'إعلام العدو' in text or 'إعلام إسرائيلي' in text:
-            summary = re.sub(r'#\S+', '', text).strip()[:200]
-            enemy.append({
-                'time': time,
-                'summary': summary,
-                'fullText': text
-            })
-            continue
-
-        # ── Yemen ──
-        if any(kw in text for kw in ['القوات المسلحة اليمنية', 'أنصار الله']):
-            allies.append({
-                'flag': 'اليمن',
-                'time': time,
-                'summary': re.sub(r'#\S+', '', text).strip()[:200],
-                'fullText': text
-            })
-            continue
-
-        # ── Iraq ──
-        if ('المقاومة الإسلامية في العراق' in text
-                or 'المقاومة الاسلامية في العراق' in text
-                or 'كتائب سيد الشهداء' in text
-                or 'حركة النجباء' in text
-                or 'أكرم الكعبي' in text
-                or '#العراق' in text):
-            allies.append({
-                'flag': 'العراق',
-                'time': time,
-                'summary': re.sub(r'#\S+', '', text).strip()[:200],
-                'fullText': text
-            })
-            continue
-
         # ── Other (skip) ──
         other.append(msg)
 
@@ -303,22 +394,23 @@ def categorize(messages):
     for v in videos:
         v.pop('_key', None)
 
-    return bayanat, sirens, enemy, iran, videos, allies
+    return bayanat, sirens, enemy, iran, videos, allies, summaries
 
 def parse_bayan(msg):
     """Parse a resistance statement into structured data."""
     text = msg['text']
     time = msg['time']
+    ntext = norm_ar(text)  # diacritic/tatweel/alef/digit-normalised
 
-    # Statement number
-    num_m = re.search(r'بيان صادر عن المقاومة الإسلامية\s*\((\d+)\)', text)
+    # Statement number — accepts Arabic-Indic digits via norm_ar translation
+    num_m = re.search(r'بيان صادر عن المقاومة الاسلامية\s*\((\d+)\)', ntext)
     num = int(num_m.group(1)) if num_m else 0
 
     # Hezbollah general communique (no number) — short-circuit with descriptive title
-    if 'بيان صادر عن حزب الله' in text and not num_m:
-        if 'مجازر' in text or 'مجزرة' in text or 'المدنيين' in text:
+    if 'بيان صادر عن حزب الله' in ntext and not num_m:
+        if 'مجازر' in ntext or 'مجزرة' in ntext or 'المدنيين' in ntext:
             target_h = 'بيان حول مجازر العدو بحق المدنيين'
-        elif 'وقف إطلاق النار' in text or 'القرى والبلدات' in text:
+        elif 'وقف اطلاق النار' in ntext or 'القري والبلدات' in ntext:
             target_h = 'بيان إلى أهالي الجنوب والبقاع والضاحية'
         else:
             target_h = 'بيان عام لحزب الله'
@@ -334,9 +426,16 @@ def parse_bayan(msg):
             'fullText': text,
         }
 
-    # Operation time
-    op_time_m = re.search(r'عند\s+الس[ّ]?اعة\s*(\d{2}:\d{2})', text)
+    # Operation time — match against normalised text so shadda/tatweel and
+    # Arabic-Indic digits don't fail the match. Accept single-digit hours.
+    op_time_m = re.search(
+        r'(?:عند|في|وعند|وفي|في\s+تمام)\s+الساعة\s*(\d{1,2}:\d{2})',
+        ntext
+    )
     op_time = op_time_m.group(1) if op_time_m else ''
+    if op_time and len(op_time) < 5:  # zero-pad '9:30' -> '09:30'
+        h, m = op_time.split(':')
+        op_time = f"{int(h):02d}:{m}"
 
     # Target - extract from the statement body
     target = extract_target(text)
@@ -371,9 +470,11 @@ def parse_bayan(msg):
         'fullText': text
     }
 
-    # For list_strikes bayanat, expand the enumerated bullets/inline lines into
-    # a strikes[] sub-array so downstream stats can count each istihdaf.
-    if bayan_type == 'list_strikes':
+    # Expand any enumerated strikes into a strikes[] sub-array — fires for
+    # both list_strikes AND defensive bayanat that happen to enumerate
+    # multiple counter-strikes. The existence of a list marker in the text is
+    # the trigger; bayan_type doesn't gate it.
+    if _LIST_MARKER_RE.search(text):
         strikes = parse_list_strikes(text, target)
         if strikes:
             result['strikes'] = strikes
@@ -638,21 +739,28 @@ def classify_bayan_type(text, num):
                         via 'على النحو الآتي:' (or variants)
     - defensive       : engagement/counter-advance/counter-infiltration
     - offensive       : default — outward strike(s) described in a single bayan
+
+    All comparisons done on norm_ar(text) so tatweel / shadda / alef-variant /
+    Arabic-Indic-digit differences don't cause silent misclassification.
+    Priority: defensive > list_strikes — a defensive bayan that happens to
+    enumerate multiple counter-strikes stays classified as defensive.
     """
-    if (num == 0 and 'بيان صادر عن المقاومة الإسلامية' not in text) or \
-       'بيان صادر عن حزب الله' in text or \
-       'بيان عام لحزب الله' in text or \
-       'بيان إلى أهالي' in text or \
-       'حول انتخاب' in text or \
-       'حول استشهاد' in text:
+    n = norm_ar(text)
+    if (num == 0 and 'بيان صادر عن المقاومة الاسلامية' not in n) or \
+       'بيان صادر عن حزب الله' in n or \
+       'بيان عام لحزب الله' in n or \
+       'بيان الي اهالي' in n or \
+       'حول انتخاب' in n or \
+       'حول استشهاد' in n:
         return 'statement'
-    if 'غرفة عمليّات المقاومة' in text or 'غرفة عمليات المقاومة' in text or \
-       'غرفة العمليات' in text:
+    if 'غرفة عمليات المقاومة' in n or 'غرفة العمليات' in n:
         return 'narrative_recap'
-    if re.search(r'على\s+النحو\s+الآتي|على\s+الشكل\s+الآتي|كالآتي\s*:|كالتّالي\s*:', text):
-        return 'list_strikes'
-    if re.search(r'اشتبك|تصدّى|تصدى|كمين|تسلّل|محاولة\s+التقدّم|محاولة\s+التسلّل', text):
+    # Defensive takes priority over list_strikes so counter-advance bayanat that
+    # enumerate multiple targets stay in the defensive bucket.
+    if re.search(r'اشتبك|تصدي|تصدت|تصدوا|كمين|تسلل|محاولة التقدم|محاولة التسلل', n):
         return 'defensive'
+    if re.search(r'علي النحو الاتي|علي الشكل الاتي|علي النحو التالي|كالاتي\s*:|كالتالي\s*:', n):
+        return 'list_strikes'
     return 'offensive'
 
 
@@ -768,19 +876,27 @@ def parse_list_strikes(text, primary_target):
 
 # ═══════════════ SIREN POINTS ═══════════════
 def compute_siren_points(sirens):
-    """Aggregate sirens by location into map points."""
+    """Aggregate sirens by location into map points.
+
+    Matching is done on normalised strings (tatweel/shadda/alef stripped) so
+    'المالكيّة' and 'المالكية' both map to the same coord, and 'كرمئيل'
+    matches when the dict has 'الكرمئيل'.
+    """
+    # Pre-normalise the dict keys once.
+    norm_coords = {norm_ar(k): (k, v) for k, v in SIREN_COORDS.items()}
     loc_groups = defaultdict(list)
 
     for s in sirens:
         loc = s['location']
-        # Find best matching coordinate
+        nloc = norm_ar(loc)
         best_key = None
-        for key in SIREN_COORDS:
-            if key in loc:
-                if best_key is None or len(key) > len(best_key):
-                    best_key = key
+        for nkey in norm_coords:
+            if nkey in nloc or nloc.startswith(nkey):
+                if best_key is None or len(nkey) > len(best_key):
+                    best_key = nkey
         if best_key:
-            loc_groups[best_key].append(s['time'])
+            orig_key = norm_coords[best_key][0]
+            loc_groups[orig_key].append(s['time'])
 
     points = []
     for loc, times in loc_groups.items():
@@ -821,7 +937,7 @@ def main():
     hijri = extract_hijri_simple(messages)
 
     # Categorize
-    bayanat, sirens, enemy, iran, videos, allies = categorize(messages)
+    bayanat, sirens, enemy, iran, videos, allies, summaries = categorize(messages)
 
     # Compute siren map points
     siren_points = compute_siren_points(sirens)
@@ -833,7 +949,8 @@ def main():
         'enemy': len(enemy),
         'iran': len(iran),
         'videos': len(videos),
-        'allies': len(allies)
+        'allies': len(allies),
+        'summaries': len(summaries),
     }
 
     data = {
@@ -848,7 +965,8 @@ def main():
         'enemy': enemy,
         'iran': iran,
         'videos': videos,
-        'allies': allies
+        'allies': allies,
+        'summaries': summaries,
     }
 
     # Ensure output directory exists
@@ -857,9 +975,9 @@ def main():
     with open(output, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-    print('Output: {} — bayanat:{} sirens:{} enemy:{} iran:{} videos:{} allies:{} sirenPoints:{}'.format(
-        output, stats['bayanat'], stats['sirens'], stats['enemy'], stats['iran'], stats['videos'], stats['allies'],
-        len(siren_points)))
+    print('Output: {} — bayanat:{} sirens:{} enemy:{} iran:{} videos:{} allies:{} summaries:{} sirenPoints:{}'.format(
+        output, stats['bayanat'], stats['sirens'], stats['enemy'], stats['iran'],
+        stats['videos'], stats['allies'], stats['summaries'], len(siren_points)))
 
     # Rebuild derived indexes (spotlight-index.json, reports-meta.js, nav.js)
     if '--skip-build' not in sys.argv:
