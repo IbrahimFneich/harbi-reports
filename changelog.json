@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.5.38",
+    "date": "2026-04-19",
+    "title": "Expand list-format bayanat into strikes[] sub-arrays",
+    "changes": [
+      "src/python/categorize.py — new parse_list_strikes() parses bayanat that enumerate multiple strikes after 'على النحو الآتي:'. Handles 3 format variants: bullet with timestamp ('- HH:MM LOC WEAPON.'), inline with timestamp ('عند الساعة HH:MM LOC WEAPON.'), and shared-time bullets where each bullet lists only a target and inherits time + weapon from the parent sentence.",
+      "parse_bayan now attaches a strikes[] sub-array to list_strikes bayanat — each entry is {opTime, target, weapon}. Preserves 1 announcement = 1 bayan row for the UI, while giving downstream stats accurate per-istihdaf rows.",
+      "_clean_location — only strips leading 'و' when it's a standalone connective (followed by whitespace). Fixes 11 targets like 'وادي X' that were being chopped to 'ادي X'.",
+      "data/*.json — all 16 list_strikes bayanat now carry a strikes[] array totaling 81 strikes (previously counted as 16). Corpus-wide strike uplift: +65. True estimated istihdafat: 5,059 (vs 5,079 bayanat — statements removed, list_strikes expanded).",
+      "AMBIGUITY_REPORT.md — updated TL;DR with corrected numbers; the original scanner undercounted list_strikes by using a stricter bullet pattern than the actual content format."
+    ]
+  },
+  {
     "version": "2.5.37",
     "date": "2026-04-19",
     "title": "Fix target-field data bugs and add bayan_type classifier",

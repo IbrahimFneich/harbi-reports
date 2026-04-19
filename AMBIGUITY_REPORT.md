@@ -3,10 +3,12 @@
 **Total bayanat scanned:** 5,079
 
 ## TL;DR
-- Our data treats 1 bayan = 1 istihdaf. That is wrong for **10 bayanat** corpus-wide (all in 2026).
-- True estimated istihdaf count: **5,037 combat strikes** from 4,995 combat bayanat (uplift **+42**).
+- Our data treats 1 bayan = 1 istihdaf. That is wrong for **16 bayanat** corpus-wide (all in 2026) covering **81 individual strikes**.
+- True estimated istihdaf count: **5,059 combat strikes** from 4,978 non-statement bayanat (uplift **+65** vs the 16 stored list_strikes rows).
 - All multi-strike ambiguity is concentrated in the **Mar–Apr 2026 resumption period** — the 2023–2024 war and the 2025 truce produced no list-format or narrative-recap bayanat.
-- Found **17 data-quality bugs** in `target` field (12 list-marker corruption, 5 action-verb capture).
+- Found **17 data-quality bugs** in `target` field (12 list-marker corruption, 5 action-verb capture) — **all fixed in v2.5.37**.
+- **Tier 1 (v2.5.37)** fixed the target bugs and added `bayan_type`.
+- **Tier 2 (v2.5.38)** added `strikes[]` sub-arrays on all 16 list_strikes bayanat. Final numbers above reflect Tier 2 parsing (broader format coverage than the initial scanner, which missed 7 list_strikes and 34 strikes).
 
 ---
 
