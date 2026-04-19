@@ -1,5 +1,18 @@
 [
   {
+    "version": "2.5.39",
+    "date": "2026-04-19",
+    "title": "Infographic-style stats aggregator + stats.html page",
+    "changes": [
+      "src/python/aggregate_stats.py — new CLI that takes a date range and emits JSON matching the Hezbollah 'الحصاد العام' infographic schema: target-type counts (قواعد/ثكنات/مستوطنات/مواقع حدودية/طائرات/بارجة/تصدي تقدّم/تصدي إنزال), weapon-family counts (صاروخية/مسيّرات/موجّهة/نوعية/مدفعية/دفاع جوي/هندسة/بحرية/…), enemy-loss estimates, offensive/defensive/counter-advance split, daily average, max single-day.",
+      "Two-source design: pulls from bayanat (offensive + defensive clash bayanat) with list_strikes expanded via strikes[]; scans enemy[] + bayan fullText for equipment losses (tanks, APCs, helicopters, Hermes, Hummers, bulldozers, quadcopters).",
+      "Lebanese-border-town lookup (Tayba, Khiam, Qantara, Aynata, …) reclassifies strikes at enemy gatherings inside these towns as counter-advance operations (تصدي لعملية تقدّم), not outward strikes.",
+      "Israeli-location lookup re-uses SIREN_COORDS from categorize.py + Arabic diacritic-normalization so 'عكّا' matches 'عكا'.",
+      "stats.html — new client-side page that runs the same classifier in the browser and renders a date-range dashboard: totals tiles + target/weapon/losses tables. Includes a disclaimer about classification limits vs the published infographic.",
+      "Validation on 2026-03-02 → 2026-04-16: total 1,860 ops (vs 2,184 published, 85%); counter-advance 910 (vs 957); settlements 599 (vs 657); max day 94 (vs 98). Gaps come from aircraft/drone shootdowns (tracked in enemy[] media events we don't fully parse) and finer base/barrack classification we can't replicate from text alone."
+    ]
+  },
+  {
     "version": "2.5.38",
     "date": "2026-04-19",
     "title": "Expand list-format bayanat into strikes[] sub-arrays",

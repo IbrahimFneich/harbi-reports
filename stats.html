@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>إحصاءات العمليات — Harbi Reports</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root {
+    --bg: #fafaf7; --fg: #1a1a1a; --accent: #b87333; --muted: #666;
+    --card: #fff; --border: #e8e3d4; --teal: #3b7a70;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: 'Amiri', 'Noto Naskh Arabic', 'Times New Roman', serif;
+         margin: 0; background: var(--bg); color: var(--fg); line-height: 1.6; }
+  header { padding: 24px 32px; border-bottom: 2px solid var(--border); }
+  h1 { margin: 0 0 6px; font-size: 1.8rem; color: var(--accent); }
+  .sub { color: var(--muted); font-size: 0.95rem; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 32px; }
+  .range { display: flex; gap: 12px; align-items: center; margin: 18px 0 24px;
+           flex-wrap: wrap; }
+  .range label { font-weight: 600; }
+  .range input { padding: 6px 10px; border: 1px solid var(--border);
+                 border-radius: 6px; background: #fff; font-family: inherit; }
+  .range button { padding: 6px 18px; background: var(--accent); color: #fff;
+                  border: 0; border-radius: 6px; cursor: pointer; font-family: inherit; }
+  .totals { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+            gap: 14px; margin: 20px 0; }
+  .tile { background: var(--card); border: 1px solid var(--border);
+          border-radius: 10px; padding: 16px; text-align: center; }
+  .tile .big { font-size: 2rem; font-weight: 700; color: var(--accent); display: block; }
+  .tile .small { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+  section { margin: 28px 0; }
+  section h2 { border-bottom: 2px solid var(--teal); padding-bottom: 4px;
+               margin: 0 0 14px; color: var(--teal); font-size: 1.3rem; }
+  table { width: 100%; border-collapse: collapse; background: var(--card);
+          border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+  table th, table td { padding: 10px 14px; text-align: right;
+                       border-bottom: 1px solid var(--border); }
+  table th { background: #f2ede0; font-weight: 600; }
+  table td.num { font-weight: 700; color: var(--accent); width: 100px; }
+  .note { background: #fff3cd; border: 1px solid #ffeaa0; border-radius: 8px;
+          padding: 12px 16px; color: #665500; font-size: 0.9rem; margin-top: 24px; }
+  footer { text-align: center; padding: 20px; color: var(--muted); font-size: 0.85rem; }
+  #status { color: var(--muted); margin: 8px 0; }
+  .empty { color: var(--muted); font-style: italic; padding: 14px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>إحصاءات العمليات العسكرية</h1>
+  <div class="sub">الحصاد العام — Harbi Reports</div>
+</header>
+
+<div class="container">
+  <div class="range">
+    <label>من: <input type="date" id="from" value="2026-03-02"></label>
+    <label>إلى: <input type="date" id="to"   value="2026-04-16"></label>
+    <button id="run">عرض الإحصاءات</button>
+    <span id="status"></span>
+  </div>
+
+  <div id="totals-wrap" class="totals"></div>
+
+  <section id="sec-targets">
+    <h2>الاستهدافات</h2>
+    <div id="targets"></div>
+  </section>
+
+  <section id="sec-weapons">
+    <h2>الأسلحة المستعملة</h2>
+    <div id="weapons"></div>
+  </section>
+
+  <section id="sec-losses">
+    <h2>خسائر العدو (تقديريّة)</h2>
+    <div id="losses"></div>
+  </section>
+
+  <div class="note">
+    <strong>ملاحظة:</strong> هذه الإحصاءات مبنيّة على بيانات المقاومة الإسلامية المسجّلة
+    في هذا الأرشيف فقط. قد تختلف الأرقام قليلاً عن النشرات الرسمية للإعلام الحربي لأنّ
+    تصنيف الأهداف (قاعدة/ثكنة/موقع حدودي) يعتمد على تحليل نصّي، ولأنّ بعض العمليات
+    (كإسقاط الطائرات والمسيّرات) قد لا تظهر في بياناتنا بشكل صريح. أرقام الخسائر تقديرية
+    لأنّها تُحسب من مجموع الذكر في البيانات دون تطابق الحوادث بين المصادر.
+  </div>
+</div>
+
+<footer>
+  <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;"
+        onclick="window.location='index.html'">Harbi Reports v2.5.39</span>
+</footer>
+
+<script>
+// Simple client-side aggregator — reads data/YYYY-MM-DD.json directly.
+// Classifier logic mirrors src/python/aggregate_stats.py.
+
+const ISRAELI_LOCS = ['تل أبيب','حيفا','كريات شمونة','كريات شمونه','نهاريا',
+  'معالوت ترشيحا','صفد','مسكافعام','مسكاف عام','أفيفيم','يرؤون','الكرمئيل',
+  'ميرون','المطلة','المالكية','المالكيّة','كفار جلعادي','كفاريوفال','المنارة',
+  'مرغليوت','شلومي','حانيتا','الجليل الغربي','الجليل الأعلى','إصبع الجليل',
+  'عكا','عكّا','الكريوت','بئر السبع','ديمونا','الجولان','القدس','عسقلان','النقب',
+  'نتانيا','نتيفوت','عرب العرامشة','غوش حلاف','جيشر هزيف','كابري','تبنين',
+  'إيلات','ايلات','غلاف غزة','سديروت','أسدود','أشدود','الخضيرة','شوميرا',
+  'كرميئيل','روش بينا','ديشون'];
+
+const LEB_TOWNS = ['الطيبة','الخيام','البياضة','البيّاضة','القنطرة','عيناتا','عيناثا',
+  'دير سريان','بنت جبيل','كفركلا','كفر كلا','مارون الراس','مارون الرأس','دبل',
+  'بيت ليف','مركبا','القوزح','جديدة ميس الجبل','ميس الجبل','شمع','رشاف','يارون',
+  'يارين','عيترون','حولا','الضهيرة','العديسة','العباد','المالكية','معتقل الخيام',
+  'مشروع الطيبة','العيشية','حانين','بليدا','الناقورة','الطيري','عيتا الشعب',
+  'راميه','شبعا','كفرشوبا','حاصبيا','المنصوري','النبطية','علما الشعب','البقاع',
+  'مشروع الليطاني','الليطاني','الزاعورة','عين إبل','خربة ماعر','ساحة البلدة',
+  'بوابة فاطمة'];
+
+function normAr(s){ return (s||'').replace(/[\u064B-\u0652ّ]/g,''); }
+
+function classifyTarget(target, badge){
+  if (!target) return 'أخرى';
+  // Military installations
+  if (/بارجة|سفينة حربي/.test(target)) return 'بارجة_حربية';
+  if (/قاعدة\s+(?!جوّ|أرض)|قواعد عسكري/.test(target)) return 'قواعد_عسكرية';
+  if (/ثكنة|ثكنات|معسكر/.test(target)) return 'ثكنات_عسكرية';
+  if (/طائرة|مروحية|هرمز/.test(target)) return 'طائرات_ومسيّرات';
+  const n = normAr(target);
+  if (LEB_TOWNS.some(t => n.includes(normAr(t)))) return 'تصدي_لعملية_تقدم';
+  if (badge === 'settlement') return 'مدن_ومستوطنات';
+  if (ISRAELI_LOCS.some(l => n.includes(normAr(l)))) return 'مدن_ومستوطنات';
+  if (/مستوطنة|مستعمرة|مدينة|حيّ\s|حي\s/.test(target)) return 'مدن_ومستوطنات';
+  if (/موقع|تلّة|تلة|مرتفع|خلّة|خلة|حدود|مستحدث/.test(target)) return 'مواقع_حدودية_ومستحدثة';
+  return 'أخرى';
+}
+
+const W = [
+  ['سلاح_البحرية',      /بحرية|بحر\s/],
+  ['الدفاع_الجوي',      /دفاع جو|أرض[- ]?جو/],
+  ['سلاح_الهندسة',      /عبوة|شواظ|هندس|تشريك|لغم/],
+  ['مسيّرات_ومحلقات',   /مسيّرة|مسيّرات|مسيرة|مسيرات|محلّق|محلق|كواد/],
+  ['الصواريخ_الموجهة',  /موجّ?ه/],
+  ['الصواريخ_النوعية',  /نوعي/],
+  ['القذائف_المدفعية',  /مدفعي|قذائف|قذيفة/],
+  ['الأسلحة_المناسبة',  /الأسلحة المناسبة|أسلحة مناسبة/],
+  ['الخفيفة_والمتوسطة', /خفيف|متوسط|رشّ?اش/],
+  ['الأسلحة_الصاروخية', /صلي|صلية|صاروخ|كاتيوشا/]
+];
+function classifyWeapon(w){
+  if (!w) return 'أخرى';
+  for (const [name, rx] of W) if (rx.test(w)) return name;
+  return 'أخرى';
+}
+
+const LOSS = [
+  ['مروحيّة',       /مروحيّ?ة/g],
+  ['دبابات',        /دبّ?ابة|ميركافا/g],
+  ['هامر',          /هامر|هامفي|Hummer/gi],
+  ['ناقلة_جند',     /ناقل(?:ة|تي) جنود?/g],
+  ['جرافة',         /جرّ?افة|جرافات|D9/g],
+  ['هرمز',          /هرمز|هيرمس|Hermes/gi],
+  ['كواد_كوبتر',    /كواد\s*كوبتر|quadcopter/gi],
+  ['آلية_لوجستية',  /آليّ?ة لوجستيّ?ة/g]
+];
+
+const TARGET_LABELS = {
+  'قواعد_عسكرية':        'قواعد عسكرية',
+  'ثكنات_عسكرية':        'ثكنات عسكرية',
+  'مدن_ومستوطنات':       'مدن ومستوطنات',
+  'مواقع_حدودية_ومستحدثة':'مواقع حدودية ومستحدثة',
+  'طائرات_ومسيّرات':     'طائرات ومسيّرات',
+  'بارجة_حربية':         'بارجة حربية',
+  'تصدي_لعملية_تقدم':    'تصدّي لعملية تقدّم',
+  'أخرى':                'أخرى'
+};
+const WEAPON_LABELS = {
+  'الأسلحة_الصاروخية':  'الأسلحة الصاروخية',
+  'مسيّرات_ومحلقات':    'مسيّرات ومحلّقات',
+  'القذائف_المدفعية':   'القذائف المدفعية',
+  'الصواريخ_الموجهة':   'الصواريخ الموجّهة',
+  'الصواريخ_النوعية':   'الصواريخ النوعية',
+  'الأسلحة_المناسبة':   'الأسلحة المناسبة',
+  'الخفيفة_والمتوسطة': 'الأسلحة الخفيفة والمتوسطة',
+  'الدفاع_الجوي':       'الدفاع الجوي',
+  'سلاح_الهندسة':       'سلاح الهندسة',
+  'سلاح_البحرية':       'سلاح البحرية',
+  'أخرى':               'أخرى'
+};
+const LOSS_LABELS = {
+  'دبابات':       'دبابات (ميركافا)',
+  'مروحيّة':       'مروحيات',
+  'هامر':         'هامر',
+  'ناقلة_جند':    'ناقلة جند',
+  'جرافة':        'جرافة (D9)',
+  'هرمز':         'طائرة هرمز',
+  'كواد_كوبتر':   'كواد كوبتر',
+  'آلية_لوجستية': 'آلية لوجستية'
+};
+
+function datesInRange(fromStr, toStr){
+  const out = []; const d = new Date(fromStr+'T00:00');
+  const e = new Date(toStr+'T00:00');
+  while (d <= e){ out.push(d.toISOString().slice(0,10)); d.setDate(d.getDate()+1); }
+  return out;
+}
+
+async function run(){
+  const from = document.getElementById('from').value;
+  const to   = document.getElementById('to').value;
+  const status = document.getElementById('status');
+  if (from > to){ status.textContent = 'نطاق التاريخ غير صالح'; return; }
+  status.textContent = 'جارٍ تحميل البيانات…';
+  const dates = datesInRange(from, to);
+  const targets = {}, weapons = {}, losses = {};
+  let off=0, def=0, ca=0, stmt=0, active=0, dayMax=0, dayMaxDate='';
+  for (const d of dates){
+    let data;
+    try { const r = await fetch('data/'+d+'.json'); if (!r.ok) continue;
+          data = await r.json(); } catch(e){ continue; }
+    let dayCount = 0;
+    for (const b of (data.bayanat||[])){
+      const bt = b.bayan_type;
+      if (bt === 'statement'){ stmt++; continue; }
+      const ft = b.fullText || '';
+      LOSS.forEach(([k,rx])=>{ const m = ft.match(rx); if (m) losses[k] = (losses[k]||0)+m.length; });
+      if (bt === 'defensive'){
+        def++; dayCount++;
+        const tt = classifyTarget(b.target, b.badge);
+        targets[tt] = (targets[tt]||0)+1;
+        weapons[classifyWeapon(b.weapon)] = (weapons[classifyWeapon(b.weapon)]||0)+1;
+        continue;
+      }
+      const items = (bt==='list_strikes' && b.strikes) ? b.strikes : [b];
+      for (const it of items){
+        const tgt = it.target || '';
+        const tt = classifyTarget(tgt, b.badge);
+        if (tt === 'تصدي_لعملية_تقدم') ca++;
+        else off++;
+        dayCount++;
+        targets[tt] = (targets[tt]||0)+1;
+        const w = it.weapon || b.weapon || '';
+        weapons[classifyWeapon(w)] = (weapons[classifyWeapon(w)]||0)+1;
+      }
+    }
+    for (const e of (data.enemy||[])){
+      const t = e.fullText || e.summary || '';
+      LOSS.forEach(([k,rx])=>{ const m = t.match(rx); if (m) losses[k] = (losses[k]||0)+m.length; });
+    }
+    if (dayCount){ active++; if (dayCount > dayMax){ dayMax = dayCount; dayMaxDate = d; } }
+  }
+  const total = off + def + ca;
+  const avg = active ? Math.round(total/active*10)/10 : 0;
+
+  // Render totals
+  const tiles = [
+    ['إجمالي العمليات', total],
+    ['هجومية', off],
+    ['تصدّي تقدّم', ca],
+    ['دفاعية (اشتباك)', def],
+    ['المعدّل اليومي', avg],
+    ['أعلى يوم', `${dayMax} (${dayMaxDate})`],
+    ['أيام نشطة', `${active} / ${dates.length}`],
+    ['بيانات مستبعدة', stmt]
+  ];
+  document.getElementById('totals-wrap').innerHTML = tiles.map(([l,v]) =>
+    `<div class="tile"><span class="big">${v}</span><div class="small">${l}</div></div>`
+  ).join('');
+
+  function renderTable(dest, counts, labels){
+    const rows = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+    if (!rows.length){ dest.innerHTML = '<div class="empty">لا توجد بيانات</div>'; return; }
+    dest.innerHTML = '<table><thead><tr><th>الفئة</th><th>العدد</th></tr></thead><tbody>'
+      + rows.map(([k,v]) =>
+          `<tr><td>${labels[k] || k.replace(/_/g,' ')}</td><td class="num">${v}</td></tr>`
+        ).join('')
+      + '</tbody></table>';
+  }
+  renderTable(document.getElementById('targets'), targets, TARGET_LABELS);
+  renderTable(document.getElementById('weapons'), weapons, WEAPON_LABELS);
+  renderTable(document.getElementById('losses'),  losses,  LOSS_LABELS);
+
+  status.textContent = `تمّ — ${active} يوم نشط من أصل ${dates.length}`;
+}
+
+document.getElementById('run').addEventListener('click', run);
+// Auto-run on load
+run();
+</script>
+
+</body>
+</html>
