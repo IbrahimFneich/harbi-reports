@@ -9,7 +9,8 @@
     "enemy": 2,
     "iran": 0,
     "videos": 0,
-    "allies": 0
+    "allies": 0,
+    "summaries": 0
   },
   "bayanat": [
     {
@@ -40,14 +41,22 @@
   ],
   "sirenPoints": [
     {
-      "loc": "غلاف غزة",
+      "lat": 31.22,
+      "lng": 34.27,
+      "loc": "كرم أبو سالم",
+      "times": [
+        "11:09"
+      ],
+      "count": 1
+    },
+    {
       "lat": 31.35,
       "lng": 34.38,
-      "count": 2,
+      "loc": "غلاف غزة",
       "times": [
-        "11:09",
         "11:14"
-      ]
+      ],
+      "count": 1
     }
   ],
   "enemy": [
