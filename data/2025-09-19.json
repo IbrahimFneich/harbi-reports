@@ -9,7 +9,8 @@
     "enemy": 2,
     "iran": 0,
     "videos": 3,
-    "allies": 0
+    "allies": 0,
+    "summaries": 0
   },
   "bayanat": [],
   "sirens": [],
@@ -44,5 +45,6 @@
       "fullText": "بالفيديو | شهداء الرضوان وشهداء مبنى الأرز\n\n#كل_حياتي_وصية\n#الإعلام_الحربي"
     }
   ],
-  "allies": []
+  "allies": [],
+  "summaries": []
 }

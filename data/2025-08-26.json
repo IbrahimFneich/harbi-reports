@@ -9,7 +9,8 @@
     "enemy": 13,
     "iran": 0,
     "videos": 1,
-    "allies": 0
+    "allies": 0,
+    "summaries": 0
   },
   "bayanat": [],
   "sirens": [
@@ -105,5 +106,6 @@
       "fullText": "بالفيديو |سَيَرى العَالمُ بَأسَنا\n\n#إنا_على_العهد \n#الإعلام_الحربي"
     }
   ],
-  "allies": []
+  "allies": [],
+  "summaries": []
 }

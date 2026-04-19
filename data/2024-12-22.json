@@ -6,7 +6,7 @@
   "stats": {
     "bayanat": 0,
     "sirens": 0,
-    "enemy": 8,
+    "enemy": 7,
     "iran": 1,
     "videos": 0,
     "allies": 16,
@@ -20,11 +20,6 @@
       "time": "05:57",
       "summary": "صحيفة \"يديعوت أحرونوت\" العبرية:\n\n- رُصدت طائرات مقاتلة إسرائيلية تُحلق على ارتفاعات منخفضة فوق منطقة غوش دان في المساء.\n\n- كثّف الجيش الإسرائيلي دورياته الجوية نتيجة تزايد الأنشطة اليمنية في الآونة ال",
       "fullText": "#إعلام_العدو \n\nصحيفة \"يديعوت أحرونوت\" العبرية:\n\n- رُصدت طائرات مقاتلة إسرائيلية تُحلق على ارتفاعات منخفضة فوق منطقة غوش دان في المساء.\n\n- كثّف الجيش الإسرائيلي دورياته الجوية نتيجة تزايد الأنشطة اليمنية في الآونة الأخيرة.\n\n#الإعلام_الحربي"
-    },
-    {
-      "time": "06:14",
-      "summary": "صحيفة \"إسرائيل اليوم\" العبرية - اللواء في الاحتياط غرشون هكوهين: لقد نجح الجيش اليمني في إغلاق طريق بحري استراتيجي لأكثر من عام، على الرغم من جهود التحالف العسكري الذي تقوده الولايات المتحدة وبريطانيا",
-      "fullText": "#إعلام_العدو \n\nصحيفة \"إسرائيل اليوم\" العبرية - اللواء في الاحتياط غرشون هكوهين: لقد نجح الجيش اليمني في إغلاق طريق بحري استراتيجي لأكثر من عام، على الرغم من جهود التحالف العسكري الذي تقوده الولايات المتحدة وبريطانيا.\n\n#الإعلام_الحربي"
     },
     {
       "time": "08:23",
@@ -67,12 +62,6 @@
   ],
   "videos": [],
   "allies": [
-    {
-      "flag": "اليمن",
-      "time": "14:17",
-      "summary": "بيان القوات المسلحة اليمنية بشأن استهداف حاملة الطائرات الأمريكية \"يو أس أس هاري أس ترومان\" وعدد من المدمرات التابعة لها بعملية نوعية نتج عنها إفشال هجوم أمريكي بريطاني على بلدنا وإسقاط (طائرة F18) - ",
-      "fullText": "بيان القوات المسلحة اليمنية بشأن استهداف حاملة الطائرات الأمريكية \"يو أس أس هاري أس ترومان\" وعدد من المدمرات التابعة لها بعملية نوعية نتج عنها إفشال هجوم أمريكي بريطاني على بلدنا وإسقاط (طائرة F18) - 22 ديسمبر 2024م‎.\n\nhttp://t.me/army21ye"
-    },
     {
       "flag": "اليمن",
       "time": "06:14",
@@ -138,6 +127,12 @@
       "time": "14:17",
       "summary": "بيانٌ صادرٌ عنِ القواتِ المسلحةِ اليمنية\n\nبسمِ اللهِ الرحمنِ الرحيم\nقال تعالى: {یَـٰۤأَیُّهَا ٱلَّذِینَ ءَامَنُوۤا۟ إِن تَنصُرُوا۟ ٱللَّهَ یَنصُرۡكُمۡ وَیُثَبِّتۡ أَقۡدَامَكُمۡ } صدقَ اللهُ العظيم\n\nان",
       "fullText": "بيانٌ صادرٌ عنِ القواتِ المسلحةِ اليمنية\n\nبسمِ اللهِ الرحمنِ الرحيم\nقال تعالى: {یَـٰۤأَیُّهَا ٱلَّذِینَ ءَامَنُوۤا۟ إِن تَنصُرُوا۟ ٱللَّهَ یَنصُرۡكُمۡ وَیُثَبِّتۡ أَقۡدَامَكُمۡ } صدقَ اللهُ العظيم\n\nانتصاراً لمظلوميةِ الشعبِ الفلسطينيِّ ومجاهديه ورداً على العدوانِ الأمريكي البريطاني على بلدِنا\n\nنجحتِ القواتُ المسلحةُ في إفشالِ هجومٍ أمريكيٍّ بريطانيٍّ على بلدِنا حيث تم استهدافُ حاملةِ الطائراتِ يو أس أس هاري أس ترومان وعددٍ من المدمراتِ التابعةِ لها بالتزامن مع بَدءِ الهجومِ العدوانيِّ مساءَ يومِ أمسِ على بلدِنا \n\nونُفذتِ العمليةُ بثمانيةِ صواريخَ مجنحةٍ و17 طائرةً مسيرةً وقد أدتِ العمليةُ بعونِ اللهِ تعالى إلى:\n\nأولاً: إسقاطُ طائرةٍ إف 18 وذلكَ أثناءَ محاولةِ المدمراتِ التصديَ للمسيراتِ والصواريخِ اليمنية.\n\nثانياً: مغادرةُ معظمِ الطائراتِ الحربيةِ المعاديةِ الأجواءَ اليمنيةَ إلى أجواءِ المياهِ الدوليةِ في البحرِ الأحمر للدفاعِ عن حاملةِ الطائراتِ أثناءَ استهدافِها.\nثالثاً: فشلُ الهجومِ المعادي على الأراضي اليمنية\nرابعاً: انسحابُ حاملةِ الطائراتِ يو أس أس هاري أس ترومان بعد استهدافِها من موقعِها السابقِ نحو شمالِ البحرِ الأحمر وذلك بعد تعرضِها لأكثرَ من هجومٍ من قِبلِ القوةِ الصاروخيةِ والقواتِ البحريةِ وسلاحِ الجوِّ المسير.\nإنَّ القواتِ المسلحةَ اليمنيةَ وهي تؤكدُ نجاحَها في التصدي للعدوانِ الأمريكيِّ البريطانيِّ وإفشالِه لَتجددُ التأكيدَ على استعدادِها للتصدي لأي حماقةٍ أمريكيةٍ بريطانيةٍ إسرائيلية خلالَ الفترةِ المقبلة.\n\nوتحذرُ العدوَّ الإسرائيليَّ والأمريكيَّ من العدوانِ على اليمنِ وأنَّ القواتِ المسلحةَ اليمنيةَ سوف تستخدمُ حقَّها الكاملَ في الدفاعِ عن اليمنِ واستمراراً ومواصلةً لإسنادِ الشعبِ الفلسطينيِّ حتى وقفِ العدوانِ على غزةَ ورفعِ الحصارِ عنها.\n\n\nواللهُ حسبُنا ونعمَ الوكيل، نعمَ المولى ونعمَ النصير\n\nعاشَ اليمنُ حراً عزيزاً مستقلاً\nوالنصرُ لليمنِ ولكلِّ أحرارِ الأمة\n\nصنعاء 21 من جمادَى الآخرة 1446للهجرة\nالموافق للـ 22 ديسمبر 2024م\n\nصادرٌ عنِ القواتِ المسلحةِ اليمنية\n...............................................\n...............................................\nTriumphing for the oppression of the Palestinian people and their Mujahideen and in retaliation to the American-British aggression against our country\n\nThe Armed Forces succeeded in thwarting an American-British attack on our country, where the aircraft carrier USS Harry Truman and a number of its destroyers Triumphing for the oppression of the Palestinian people and their Mujahideen and in retaliation to the American-British aggression against our country\n\n\nThe operation was carried out with eight cruise missiles and 17 drones and the operation led to:\n\nFirst: Shooting down an F-18 aircraft while the destroyers were trying to confront the Yemeni drones and missiles.\n\nSecond: Most of the enemy warplanes left Yemeni airspace for international waters in the Red Sea to defend the aircraft carrier while it was being targeted.\n\nThird: The failure of the enemy attack on Yemeni territory\n\nFourth: The withdrawal of the aircraft carrier USS Harry S. Truman after being targeted from its previous location towards the northern Red Sea after being subjected to more than one attack by the missile force, naval forces and the air force.\n\nThe Yemeni Armed Forces, while confirming their success in confronting and thwarting the American-British aggression, renew their emphasis on their readiness to confront any American-British-Israeli foolishness during the coming period.\n\nThe Yemeni armed forces warn the Israeli and American enemy against aggression against Yemen and that the Yemeni armed forces will use their full right to defend Yemen and continue to support the Palestinian people until the aggression against Gaza stops and the siege is lifted.\n\nSana'a, 21 Jumada al-Akhirah 1446 AH\n December 22, 2024 AD\n\nIssued by the Yemeni Armed Forces \nnd the siege is lifted.\n\nhttp://t.me/army21ye"
+    },
+    {
+      "flag": "اليمن",
+      "time": "14:17",
+      "summary": "بيان القوات المسلحة اليمنية بشأن استهداف حاملة الطائرات الأمريكية \"يو أس أس هاري أس ترومان\" وعدد من المدمرات التابعة لها بعملية نوعية نتج عنها إفشال هجوم أمريكي بريطاني على بلدنا وإسقاط (طائرة F18) - ",
+      "fullText": "بيان القوات المسلحة اليمنية بشأن استهداف حاملة الطائرات الأمريكية \"يو أس أس هاري أس ترومان\" وعدد من المدمرات التابعة لها بعملية نوعية نتج عنها إفشال هجوم أمريكي بريطاني على بلدنا وإسقاط (طائرة F18) - 22 ديسمبر 2024م‎.\n\nhttp://t.me/army21ye"
     },
     {
       "flag": "فلسطين",

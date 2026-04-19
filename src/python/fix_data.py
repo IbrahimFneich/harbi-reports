@@ -184,21 +184,25 @@ def fix_bayan_spillover(date_str, data):
         return 0
 
     # Find the restart point: walk backwards from the end, looking for where
-    # num abruptly drops compared to the entry before it
+    # num abruptly drops. Compare against the nearest earlier entry with num>0
+    # (skip num=0 Iraqi/unnumbered bayans that would otherwise break detection).
     restart_idx = None
     for i in range(len(bayanat) - 1, 0, -1):
         cur = bayanat[i]
-        prev = bayanat[i - 1]
         cur_num = cur.get('num', 0)
-        prev_num = prev.get('num', 0)
-
-        # Skip communiqués
-        if cur.get('badge') == 'communique' or prev.get('badge') == 'communique':
+        if cur.get('badge') == 'communique' or cur_num <= 0:
             continue
-
-        # A restart is when the current num is dramatically less than the previous
-        # (e.g., prev=54, cur=1 — that's a drop of 53+)
-        if cur_num > 0 and prev_num > 0 and prev_num - cur_num >= 5:
+        # Find nearest earlier entry with num>0 that isn't a communique
+        prev_num = 0
+        for j in range(i - 1, -1, -1):
+            p = bayanat[j]
+            if p.get('badge') == 'communique':
+                continue
+            pn = p.get('num', 0)
+            if pn > 0:
+                prev_num = pn
+                break
+        if prev_num > 0 and prev_num - cur_num >= 5:
             restart_idx = i
             break
 
@@ -211,10 +215,14 @@ def fix_bayan_spillover(date_str, data):
     if not main:
         return 0
 
-    # Verify ALL spillover entries have late times (>= 22:00). Dropped from
-    # 22:30 to 22:00 after observing 2026-04-13 where bayan #1 of next day
-    # was posted at 22:05 — a legitimate spillover the old threshold missed.
-    all_late = all(b.get('postTime', '00:00') >= '22:00' for b in spillover)
+    # Verify numbered spillover entries have late times (>= 21:00). Lowered from
+    # 22:00 to 21:00 after observing 2024-11-09 where restart happened at 21:19.
+    # num=0 entries (Iraqi/unnumbered) in the spillover tail get a pass — they
+    # belong with whichever day the numbered entries do.
+    all_late = all(
+        b.get('postTime', '00:00') >= '21:00' or b.get('num', 0) <= 0
+        for b in spillover
+    )
     if not all_late:
         return 0
 

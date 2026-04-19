@@ -1,5 +1,19 @@
 [
   {
+    "version": "2.6.1",
+    "date": "2026-04-20",
+    "title": "Corpus-wide re-categorise — eliminated 231 cross-category double-counts",
+    "changes": [
+      "Bulk re-ran categorize.py across all 924 raw/YYYY-MM-DD.json files. Prior to this, only the 11 Phase A days plus a handful of cherry-picked days had been re-categorised after v2.5.41 introduced PALESTINE_MARKERS / YEMEN_MARKERS / IRAQ_MARKERS. The remaining ~900 day files still carried the old-categorizer output where Palestinian/Yemeni/Iraqi posts with #إعلام_العدو were filed under `enemy`, and were then additionally picked up in `allies` on a subsequent partial merge — producing same-postTime same-fullText entries in BOTH categories.",
+      "Duplicate scan before fix: 129 enemy∩allies + 102 iran∩allies = 231 posts counted twice in stats, spread across 147 days. Scan after fix: 0 cross-category duplicates across all 924 files. Within-day siren dupes (same text + same time): 0. Cross-day exact spillover (same fullText on 2+ dates): 0 (when compared on full-text hash, not 200-char prefix).",
+      "src/python/fix_data.py — spillover restart detection now skips num=0 entries (Iraqi/unnumbered bayans) when walking backwards to find the drop point. Previously a num=0 entry between the last Palestinian bayan of the day and the next-day restart would block detection (seen on 2024-11-09, 2024-11-21).",
+      "src/python/fix_data.py — spillover late-time threshold lowered from 22:00 → 21:00. num=0 entries inside the spillover tail are exempt from the threshold (they belong wherever the numbered entries do). Caught 2024-11-09 where the restart happened at 21:19.",
+      "Net corpus delta (re-categorise + spillover fixes): bayanat 5,121 → 5,875 (+754 — v2.5.41-43 bayan improvements now applied corpus-wide), enemy 13,743 → 13,476 (−267), allies 7,959 → 7,628 (−331), iran 1,073 → 969 (−104), sirens 7,739 → 7,730 (−9), videos 1,037 → 1,028 (−9), summaries unchanged at 166.",
+      "Validator result: 0 errors, 17 warnings, 907/924 clean days (98.2%) — improved from 23 warnings / 901 clean (97.5%) at v2.6.0.",
+      "Stats shown on the website were previously inflated for enemy/allies/iran on the 147 affected days. Every daily stats header, spotlight index, monthly chronicle, and search facet has been rebuilt against the de-duplicated data."
+    ]
+  },
+  {
     "version": "2.6.0",
     "date": "2026-04-20",
     "title": "Phase A raw re-pull — corpus now authoritative (11 new day files + 4 batches, 0 validator errors)",

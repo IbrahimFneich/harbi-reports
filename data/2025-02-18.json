@@ -9,7 +9,8 @@
     "enemy": 12,
     "iran": 0,
     "videos": 0,
-    "allies": 0
+    "allies": 0,
+    "summaries": 0
   },
   "bayanat": [],
   "sirens": [],
@@ -78,5 +79,6 @@
   ],
   "iran": [],
   "videos": [],
-  "allies": []
+  "allies": [],
+  "summaries": []
 }
