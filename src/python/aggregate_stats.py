@@ -76,7 +76,7 @@ TARGET_TYPE_FALLBACK = 'أخرى'
 # ─────────────────────────────────────────────────────────────────────────
 WEAPON_FAMILY_RULES = [
     ('سلاح_البحرية',        re.compile(r'بحريّ?ة|بحر\s')),
-    ('الدفاع_الجوي',        re.compile(r'دفاع جوّ?يّ?|أرض\s*جو|أرض[- ]جوّ')),
+    ('الدفاع_الجوي',        re.compile(r'دفاع\s+جوّ?يّ?|أرض[\s\-‑–]*جو')),
     ('سلاح_الهندسة',        re.compile(r'عبوة|عبوات|شواظ|هندس(?:ة|ي)|تشريك(?:ة|ات)|لغم|ألغام')),
     ('مسيّرات_ومحلقات',     re.compile(r'مُ?سيّرة|مسيّرات|مسيرة|مسيرات|محلّق|محلقة|كواد')),
     ('الصواريخ_الموجهة',    re.compile(r'موجّ?ه')),
@@ -245,34 +245,50 @@ def aggregate(from_date, to_date):
                     counter_landing += 1
                 elif DEF_COUNTER_ADVANCE.search(ft):
                     counter_advance += 1
-                target_counts[classify_target_type(b.get('target',''), b.get('badge',''))] += 1
-                weapon_counts[classify_weapon_family(b.get('weapon',''))] += 1
+                wfam = classify_weapon_family(b.get('weapon',''))
+                if wfam == 'الدفاع_الجوي':
+                    target_counts['طائرات_ومسيّرات'] += 1
+                else:
+                    target_counts[classify_target_type(b.get('target',''), b.get('badge',''))] += 1
+                weapon_counts[wfam] += 1
                 continue
 
             # Classify each strike. Counter-advance is tracked via the
             # تصدي_لعملية_تقدم target_type bucket rather than a separate
-            # counter_advance counter.
+            # counter_advance counter. Air-defense weapons override the
+            # target type — if the weapon is surface-to-air / AA, the
+            # target was an aircraft / drone regardless of named location.
             if bt == 'list_strikes' and b.get('strikes'):
                 for s in b['strikes']:
                     tgt = s.get('target','')
-                    ttype = classify_target_type(tgt, b.get('badge',''))
+                    wpn = s.get('weapon','') or b.get('weapon','')
+                    wfam = classify_weapon_family(wpn)
+                    if wfam == 'الدفاع_الجوي':
+                        ttype = 'طائرات_ومسيّرات'
+                    else:
+                        ttype = classify_target_type(tgt, b.get('badge',''))
                     if ttype == 'تصدي_لعملية_تقدم':
                         counter_advance += 1
                     else:
                         offensive_strikes += 1
                     day_strikes += 1
                     target_counts[ttype] += 1
-                    weapon_counts[classify_weapon_family(s.get('weapon',''))] += 1
+                    weapon_counts[wfam] += 1
             else:
                 tgt = b.get('target','')
-                ttype = classify_target_type(tgt, b.get('badge',''))
+                wpn = b.get('weapon','')
+                wfam = classify_weapon_family(wpn)
+                if wfam == 'الدفاع_الجوي':
+                    ttype = 'طائرات_ومسيّرات'
+                else:
+                    ttype = classify_target_type(tgt, b.get('badge',''))
                 if ttype == 'تصدي_لعملية_تقدم':
                     counter_advance += 1
                 else:
                     offensive_strikes += 1
                 day_strikes += 1
                 target_counts[ttype] += 1
-                weapon_counts[classify_weapon_family(b.get('weapon',''))] += 1
+                weapon_counts[wfam] += 1
 
         # Scan enemy[] for losses
         for e in data.get('enemy', []) or []:

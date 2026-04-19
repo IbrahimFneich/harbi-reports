@@ -2,8 +2,9 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<title>إحصاءات العمليات — Harbi Reports</title>
+<title>الحصاد العام — Harbi Reports</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="src/css/navbar.css?v=2.5.40"/>
 <style>
   :root {
     --bg: #fafaf7; --fg: #1a1a1a; --accent: #b87333; --muted: #666;
@@ -48,8 +49,8 @@
 <body>
 
 <header>
-  <h1>إحصاءات العمليات العسكرية</h1>
-  <div class="sub">الحصاد العام — Harbi Reports</div>
+  <h1>الحصاد العام للعمليات العسكرية</h1>
+  <div class="sub">إحصاءات الاستهدافات والأسلحة والخسائر ضمن نطاق زمني محدّد</div>
 </header>
 
 <div class="container">
@@ -88,8 +89,13 @@
 
 <footer>
   <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;"
-        onclick="window.location='index.html'">Harbi Reports v2.5.39</span>
+        onclick="window.location='index.html'">Harbi Reports v2.5.40</span>
 </footer>
+
+<script type="module">
+import { initNavbar } from './src/js/ui/navbar.js';
+initNavbar();
+</script>
 
 <script>
 // Simple client-side aggregator — reads data/YYYY-MM-DD.json directly.
@@ -133,7 +139,7 @@ function classifyTarget(target, badge){
 
 const W = [
   ['سلاح_البحرية',      /بحرية|بحر\s/],
-  ['الدفاع_الجوي',      /دفاع جو|أرض[- ]?جو/],
+  ['الدفاع_الجوي',      /دفاع\s+جو|أرض[\s\-‑–]*جو/],
   ['سلاح_الهندسة',      /عبوة|شواظ|هندس|تشريك|لغم/],
   ['مسيّرات_ومحلقات',   /مسيّرة|مسيّرات|مسيرة|مسيرات|محلّق|محلق|كواد/],
   ['الصواريخ_الموجهة',  /موجّ?ه/],
@@ -222,21 +228,26 @@ async function run(){
       LOSS.forEach(([k,rx])=>{ const m = ft.match(rx); if (m) losses[k] = (losses[k]||0)+m.length; });
       if (bt === 'defensive'){
         def++; dayCount++;
-        const tt = classifyTarget(b.target, b.badge);
+        const wf = classifyWeapon(b.weapon);
+        const tt = (wf === 'الدفاع_الجوي') ? 'طائرات_ومسيّرات'
+                                          : classifyTarget(b.target, b.badge);
         targets[tt] = (targets[tt]||0)+1;
-        weapons[classifyWeapon(b.weapon)] = (weapons[classifyWeapon(b.weapon)]||0)+1;
+        weapons[wf] = (weapons[wf]||0)+1;
         continue;
       }
       const items = (bt==='list_strikes' && b.strikes) ? b.strikes : [b];
       for (const it of items){
         const tgt = it.target || '';
-        const tt = classifyTarget(tgt, b.badge);
+        const w = it.weapon || b.weapon || '';
+        const wf = classifyWeapon(w);
+        // Air-defense weapons override target type — strike was against an aircraft.
+        const tt = (wf === 'الدفاع_الجوي') ? 'طائرات_ومسيّرات'
+                                          : classifyTarget(tgt, b.badge);
         if (tt === 'تصدي_لعملية_تقدم') ca++;
         else off++;
         dayCount++;
         targets[tt] = (targets[tt]||0)+1;
-        const w = it.weapon || b.weapon || '';
-        weapons[classifyWeapon(w)] = (weapons[classifyWeapon(w)]||0)+1;
+        weapons[wf] = (weapons[wf]||0)+1;
       }
     }
     for (const e of (data.enemy||[])){

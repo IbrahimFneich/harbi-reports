@@ -19,6 +19,7 @@ export function initNavbar() {
   if (path.indexOf('timeline') !== -1) page = 'timeline';
   if (path.indexOf('monthly') !== -1) page = 'monthly';
   if (path.indexOf('search') !== -1) page = 'search';
+  if (path.indexOf('stats') !== -1) page = 'stats';
 
   // Detect if we're in a subdirectory (e.g. monthly/)
   var prefix = (path.indexOf('/monthly/') !== -1) ? '../' : '';
@@ -40,6 +41,7 @@ export function initNavbar() {
     { href: prefix + 'search.html', label: '\u0628\u062D\u062B \u0645\u062A\u0642\u062F\u0645', id: 'search' },
     { href: prefix + 'timeline.html', label: '\u0627\u0644\u062A\u0633\u0644\u0633\u0644 \u0627\u0644\u0632\u0645\u0646\u064A', id: 'timeline' },
     { href: prefix + 'analytics.html', label: '\u0627\u0644\u062A\u062D\u0644\u064A\u0644\u0627\u062A', id: 'analytics' },
+    { href: prefix + 'stats.html', label: '\u0627\u0644\u062D\u0635\u0627\u062F \u0627\u0644\u0639\u0627\u0645', id: 'stats' },
     { href: (page === 'monthly') ? '#' : (prefix + 'monthly/2023-10.html'), label: '\u0627\u0644\u0648\u062B\u064A\u0642\u0629 \u0627\u0644\u0634\u0647\u0631\u064A\u0629', id: 'monthly' }
   ];
   items.forEach(function(item) {
