@@ -1,5 +1,24 @@
 [
   {
+    "version": "2.5.42",
+    "date": "2026-04-19",
+    "title": "Target + weapon extractor overhaul + extended sirens — 2,510 empty weapons and 149 empty targets recovered",
+    "changes": [
+      "src/python/categorize.py extract_target: broaden the verb alternation with feminine/plural/passive forms (استهدفت/استهدفوا/قصفت/قصفوا/دكّت/دكّوا/هاجم/هاجمت/هاجموا/فجّرت/تصدّت/أسقطت/رصدت/اشتبكت/شنّت/نفّذت/استُهدف/قُصف), extend the place-noun list with مرفأ/ميناء/مطار/محطّة/معبر/حقل/جسر/نفق/مفرق/مدخل/بوابة/منظومة/مصفاة/مصنع/مقر/مجمّع/مستعمرة, add colon-list pattern (في: A، B، وC), add reverse-order syntax (X استهدفها المجاهدون), broaden TERM punctuation class (۔/؟/!/—/:) and weapon terminators (بالقذائف/بالصليات/بالمحلقات/ببركان/بشاهد/بكنعان/بفلق/بكروز).",
+      "src/python/categorize.py _clean_body_for_target: now strips shadda + all harakat + zero-width marks before pattern matching — no more `ّ?` noise in patterns and shadda-variants don't block matches.",
+      "src/python/categorize.py extract_weapon: rewritten with normalised-dict keys. Added named-system entries (كاتيوشا/بركان/فلق/كنعان/شاهد/كروز/بدر), حسan Hezbollah-specific phrasings (سرب/أسراب من المسيّرات / المحلّقات الانقضاضية, صليات صاروخية كبيرة, الأسلحة المناسبة, قذائف الهاون, عبوات ناسفة, تشريكة ميكانيكية). Fallback regex `ب(ال)?(صاروخ|صواريخ|قذائف|قذيفة|سلاح|أسلحة) X` for unseen named systems.",
+      "src/python/categorize.py parse_list_strikes: bullet + inline terminators loosened from mandatory `\\.` to `(\\.|$)`. Recovers strikes where channel formatter skipped trailing periods.",
+      "src/python/categorize.py SIREN_COORDS: +35 new locations (كرمئيل without al- prefix, كريات جات/يام/أتا/ملاخي/موتسكين/بياليك/إيلعيزر, الغجر, سهل الحولة, إييليت هشاخر, راموت نفتالي, رمات هشارون, برعام, بيت هيلل/شمش, ديشون, نؤوت مردخاي, روش بينا, هغوشريم, شآر يشوف, بني براك, كفار مساريك, دافنه, نوف هجليل/الناصرة العليا, الناصرة, هوشعيا, مسعاده/مجدل شمس/بقعاتا, يوكنعام, زرعيت, شتولا, زيكيم, أشكلون). Covers the 106 ungeocoded sirens from the corpus audit.",
+      "Corpus re-merge (safe — no regressions):",
+      "  • 2,510 empty weapon fields recovered (was 7-10% combat bayanat; now 8.2%)",
+      "  • 149 empty target fields recovered (was 10.4%; now 7.5%)",
+      "  • 1,997 target values cleaned (RTL marks / shadda / weapon-phrase leakage removed)",
+      "  • 448 days re-geocoded with extended SIREN_COORDS",
+      "  • 94% of 7,721 siren events now geocoded (up from ~85%)",
+      "Validator: 0 new errors (same 2 pre-existing dup-num unchanged). Index rebuilt cleanly."
+    ]
+  },
+  {
     "version": "2.5.41",
     "date": "2026-04-19",
     "title": "Arabic normaliser + Palestinian/Yemeni/Iraqi/summaries handlers — +6,352 entries recovered",
