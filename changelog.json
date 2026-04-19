@@ -1,5 +1,19 @@
 [
   {
+    "version": "2.5.37",
+    "date": "2026-04-19",
+    "title": "Fix target-field data bugs and add bayan_type classifier",
+    "changes": [
+      "src/python/categorize.py — target extractor now stops at list-format markers ('على النحو الآتي' / 'كالآتي:' / 'على الشكل الآتي') so bullet timestamps don't leak into the target field; fixes 12 corrupted targets.",
+      "src/python/categorize.py — strips trailing clash-verb clauses ('اشتبك معها مجاهدو…' / 'واشتبكوا معها' / 'واستهدفوا…') from captured locations; fixes 5 action-verb-in-target bugs.",
+      "src/python/categorize.py — every bayan now gets a bayan_type field: statement | offensive | defensive | list_strikes | narrative_recap. Lets downstream stats filter political statements and count defensive/counter-operations separately.",
+      "src/python/categorize.py — added --skip-build flag to suppress the automatic build_index rerun when batch-re-categorizing.",
+      "data/*.json — 481 files touched. 309 targets cleaned (17 known bugs + 292 incidental pattern-match improvements). All 5,079 bayanat now carry bayan_type (distribution: 4,895 offensive, 85 statement, 83 defensive, 16 list_strikes).",
+      "monthly/*.html — regenerated chronicle pages reflect the cleaned targets.",
+      "AMBIGUITY_REPORT.md — full-corpus content-ambiguity audit documenting the 17 bugs, the 9 multi-strike bayanat (strike uplift +42), and recommended Tier 2/3 follow-ups."
+    ]
+  },
+  {
     "version": "2.5.36",
     "date": "2026-04-18",
     "title": "Add report for 2026-04-17",

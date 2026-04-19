@@ -330,6 +330,7 @@ def parse_bayan(msg):
             'weapon': '',
             'badge': 'communique',
             'tags': ['بيان عام'],
+            'bayan_type': 'statement',
             'fullText': text,
         }
 
@@ -364,6 +365,7 @@ def parse_bayan(msg):
         'weapon': weapon,
         'badge': badge,
         'tags': tags,
+        'bayan_type': classify_bayan_type(text, num),
         'fullText': text
     }
 
@@ -372,6 +374,12 @@ def _clean_body_for_target(text):
     body = text
     # Strip Arabic tatweel (letter-elongation character) used for emphasis
     body = body.replace('ـ', '')
+    # Truncate at list-format markers — bayanat using "على النحو الآتي:" enumerate
+    # multiple strikes; the true primary target is in the text *before* the marker.
+    body = re.split(
+        r'على\s+النحو\s+الآتي|على\s+الشكل\s+الآتي|على\s+النحو\s+التالي|كالآتي\s*:|كالتّالي\s*:|وفق\s+الآتي',
+        body, maxsplit=1
+    )[0]
     # Remove Quran verses in braces
     body = re.sub(r'﴿[^﴾]*﴾', ' ', body)
     body = re.sub(r'صَدَقَ اللهُ[^\n]*', ' ', body)
@@ -416,6 +424,13 @@ def _clean_location(loc):
     loc = re.sub(r'\s+', ' ', loc).strip()
     # Strip leading "من " (source marker, not a target)
     loc = re.sub(r'^(?:من|مِن)\s+', '', loc)
+    # Drop trailing clash/engagement verb clauses — defensive bayanat describe
+    # Israeli advances by naming the location first, then "اشتبك معها مجاهدو…" —
+    # the verb phrase is not part of the location.
+    loc = re.sub(
+        r'\s+(?:و?اشتبك|و?اشتبكوا|و?استهدفوا|و?تصدّ[ىوا]|و?تصدى|محاول)\s*.*$',
+        '', loc
+    )
     # Drop trailing connective clauses
     loc = re.sub(
         r'\s+(?:المحتلّ?ة|المُحتلّ?ة|والتي|التي|وما|وقد|حيث|بعد|باتجاه)\s*.*$',
@@ -599,6 +614,33 @@ def classify_badge(text, target):
         return 'deep'
     return ''
 
+
+def classify_bayan_type(text, num):
+    """Classify a bayan by kind of content. Values:
+
+    - statement       : political/condolence/address (Hezbollah communiqué, no strike)
+    - narrative_recap : ops-room multi-event narrative summarizing prior operations
+    - list_strikes    : single announcement enumerating multiple strikes
+                        via 'على النحو الآتي:' (or variants)
+    - defensive       : engagement/counter-advance/counter-infiltration
+    - offensive       : default — outward strike(s) described in a single bayan
+    """
+    if (num == 0 and 'بيان صادر عن المقاومة الإسلامية' not in text) or \
+       'بيان صادر عن حزب الله' in text or \
+       'بيان عام لحزب الله' in text or \
+       'بيان إلى أهالي' in text or \
+       'حول انتخاب' in text or \
+       'حول استشهاد' in text:
+        return 'statement'
+    if 'غرفة عمليّات المقاومة' in text or 'غرفة عمليات المقاومة' in text or \
+       'غرفة العمليات' in text:
+        return 'narrative_recap'
+    if re.search(r'على\s+النحو\s+الآتي|على\s+الشكل\s+الآتي|كالآتي\s*:|كالتّالي\s*:', text):
+        return 'list_strikes'
+    if re.search(r'اشتبك|تصدّى|تصدى|كمين|تسلّل|محاولة\s+التقدّم|محاولة\s+التسلّل', text):
+        return 'defensive'
+    return 'offensive'
+
 # ═══════════════ SIREN POINTS ═══════════════
 def compute_siren_points(sirens):
     """Aggregate sirens by location into map points."""
@@ -695,11 +737,12 @@ def main():
         len(siren_points)))
 
     # Rebuild derived indexes (spotlight-index.json, reports-meta.js, nav.js)
-    build_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'build_index.py')
-    if os.path.exists(build_script):
-        import subprocess
-        print('Rebuilding indexes...')
-        subprocess.run([sys.executable, build_script], check=True)
+    if '--skip-build' not in sys.argv:
+        build_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'build_index.py')
+        if os.path.exists(build_script):
+            import subprocess
+            print('Rebuilding indexes...')
+            subprocess.run([sys.executable, build_script], check=True)
 
 if __name__ == '__main__':
     main()
