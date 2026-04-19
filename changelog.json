@@ -1,5 +1,15 @@
 [
   {
+    "version": "2.7.1",
+    "date": "2026-04-20",
+    "title": "Stats drawer stacking fix + footer version sync",
+    "changes": [
+      "stats.html — bumped drawer z-index (100 → 300) and backdrop z-index (90 → 290) so they render above the sticky navbar (z-index: 200). Previously the teal drawer header was hidden under the navbar and the backdrop didn't dim the top strip.",
+      "stats.html — backdrop opacity nudged from rgba(0,0,0,.25) to rgba(0,0,0,.35) for clearer focus contrast when the drawer is open.",
+      "index.html, archive.html, analytics.html, timeline.html — footer version labels synced to v2.7.1 (previously still showing v2.6.2)."
+    ]
+  },
+  {
     "version": "2.7.0",
     "date": "2026-04-20",
     "title": "Stats page rework — A1 layout + B2 drill-down drawer",
