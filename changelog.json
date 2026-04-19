@@ -1,5 +1,18 @@
 [
   {
+    "version": "2.5.40",
+    "date": "2026-04-19",
+    "title": "Wire stats page into nav + close aircraft/drone classification gap",
+    "changes": [
+      "src/js/ui/navbar.js — added 'الحصاد العام' (stats.html) link to the shared navigation bar with page detection so the active-link highlight works on the stats page.",
+      "stats.html — loads the shared navbar component via initNavbar() so the page has the same top navigation as index/archive/search/timeline/analytics. Title refined to 'الحصاد العام للعمليات العسكرية'.",
+      "src/python/aggregate_stats.py + stats.html — classifier now overrides target_type to طائرات_ومسيّرات when the weapon family is الدفاع_الجوي (surface-to-air / air-defense). Previously 10 air-defense bayanat in Mar–Apr 2026 landed in 'other' or 'border position'; they now correctly count as aircraft/drone engagements.",
+      "Tightened the الدفاع_الجوي regex to handle أرض-جو (hyphen), أرض‑جو (unicode hyphen/en-dash), أرض جو, and دفاع جوي/جوّي variants.",
+      "Same weapon-override also applies when the bayan_type is defensive (previously the defensive branch didn't run the override). Pulled 5 extra air-defense strikes into the correct bucket.",
+      "Validation on 2026-03-02 → 2026-04-16 after v2.5.40: aircraft/drones 11 (was 1; published 34 — 32% coverage, up from 3%), max single day 94 (vs 98), counter-advance 925 (vs 957, 97%)."
+    ]
+  },
+  {
     "version": "2.5.39",
     "date": "2026-04-19",
     "title": "Infographic-style stats aggregator + stats.html page",
