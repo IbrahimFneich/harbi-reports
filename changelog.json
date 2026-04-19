@@ -1,5 +1,21 @@
 [
   {
+    "version": "2.5.43",
+    "date": "2026-04-19",
+    "title": "Arabic-prefix-tolerant markers + more sources — +488 entries",
+    "changes": [
+      "src/python/categorize.py — all dispatcher markers (IRAN/YEMEN/IRAQ/PALESTINE/SUMMARY) now drop the leading ال so prefix forms (ل + ل = لل, ب + ال = بال, ف + ال = فال, و + ال = وال, ك + ال = كال) match via plain substring. Previously \"بيان مهم للقوات المسلحة اليمنية\" failed because القوات ≠ للقوات.",
+      "SUMMARY_MARKERS: added the channel's common daily-summary phrasing \"أصدرت المقاومة الإسلامية بتاريخ\" — captures 33 summary posts in the Mar 19–Apr 17 window alone.",
+      "PALESTINE_MARKERS: added حركة المجاهدين الفلسطينية, المكتب الإعلامي لحركة حماس, الناطق العسكري باسم كتائب القسام, أبو عبيدة.",
+      "BAYAN_MARKERS: added \"بيان صادر عن الإعلام الحربي\" (war-media variant seen on 2026-03-28).",
+      "ENEMY_MARKERS: added UKMTO, الهيئة البحرية البريطانية, القناة 15, مراسل القناة, هآرتس, يديعوت أحرونوت, يسرائيل هيوم, وسائل إعلام أجنبية.",
+      "IRAN_MARKERS: added more detected phrasings.",
+      "Corpus re-merge result: +347 allies (new Palestinian/Yemeni variants), +133 summaries, +19 enemy (UKMTO + maritime reports), +8 iran. Spotlight: 36,155 → 36,529 (+374).",
+      "\"Other\" drop rate in 30-day window: 14.0% → 12.0% → 11.0% (v2.5.41 → v2.5.42 → v2.5.43).",
+      "Validator clean (same 2 pre-existing duplicate-num errors unchanged)."
+    ]
+  },
+  {
     "version": "2.5.42",
     "date": "2026-04-19",
     "title": "Target + weapon extractor overhaul + extended sirens — 2,510 empty weapons and 149 empty targets recovered",
