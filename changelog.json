@@ -1,5 +1,18 @@
 [
   {
+    "version": "2.7.2",
+    "date": "2026-04-22",
+    "title": "Add reports for Apr 18-21, 2026 (4-day quiet stretch)",
+    "changes": [
+      "data/2026-04-18.json — pulled 46 raw msgs → 1 bayan, 12 enemy, 14 iran, 5 allies (no sirens, no videos).",
+      "data/2026-04-19.json — pulled 16 raw msgs → 0 bayanat, 7 enemy, 1 iran, 2 videos (channel near-silent).",
+      "data/2026-04-20.json — pulled 20 raw msgs → 1 bayan, 10 enemy, 3 iran, 1 video, 1 ally.",
+      "data/2026-04-21.json — pulled 27 raw msgs → 1 bayan, 3 sirens (1 geocoded), 6 enemy, 3 iran, 1 video, 6 allies.",
+      "Indexes regenerated: reports-meta.js, spotlight-index.json, nav.js, harbi.db, search-facets.json. Monthly chronicle for 2026-04 rebuilt (21 days, 1962 events).",
+      "Footer version synced to v2.7.2 across app.js + all top-level HTML pages."
+    ]
+  },
+  {
     "version": "2.7.1",
     "date": "2026-04-20",
     "title": "Stats drawer stacking fix + footer version sync",
