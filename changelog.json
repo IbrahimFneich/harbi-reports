@@ -1,5 +1,16 @@
 [
   {
+    "version": "2.7.3",
+    "date": "2026-04-24",
+    "title": "Add reports for Apr 22-23, 2026 (quiet stretch continues)",
+    "changes": [
+      "data/2026-04-22.json — pulled 23 raw msgs → 4 bayanat, 9 enemy, 5 iran, 1 video, 1 daily summary (no sirens, no allies).",
+      "data/2026-04-23.json — pulled 45 raw msgs → 6 bayanat, 1 siren (geocoded), 27 enemy, 1 iran, 1 video, 2 allies, 1 daily summary.",
+      "Indexes regenerated: reports-meta.js (930 reports), spotlight-index.json (36841 entries), nav.js, harbi.db. Monthly chronicle for 2026-04 rebuilt.",
+      "Validation: 0 errors; quiet-stretch coverage now spans Apr 18-23."
+    ]
+  },
+  {
     "version": "2.7.2",
     "date": "2026-04-22",
     "title": "Add reports for Apr 18-21, 2026 (4-day quiet stretch)",
