@@ -75,6 +75,7 @@
 
 .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.35);
             z-index: 290; animation: fadeIn .2s ease-out; }
+.backdrop[hidden] { display: none !important; }
 @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
 
 .drawer { position: fixed; top: 0; bottom: 0; inset-inline-start: 0;
@@ -82,6 +83,7 @@
           display: flex; flex-direction: column;
           box-shadow: 4px 0 18px rgba(0,0,0,.18);
           animation: slideIn .25s ease-out; }
+.drawer[hidden] { display: none !important; }
 [dir=rtl] .drawer { box-shadow: -4px 0 18px rgba(0,0,0,.18); animation-name: slideInRtl; }
 @keyframes slideIn { from { transform: translateX(-100%) } to { transform: translateX(0) } }
 @keyframes slideInRtl { from { transform: translateX(100%) } to { transform: translateX(0) } }
@@ -166,7 +168,7 @@
 
 <footer>
   <span style="display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;"
-        onclick="window.location='index.html'">Harbi Reports v2.7.3</span>
+        onclick="window.location='index.html'">Harbi Reports v2.7.4</span>
 </footer>
 
 <script type="module">

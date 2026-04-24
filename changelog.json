@@ -1,5 +1,14 @@
 [
   {
+    "version": "2.7.4",
+    "date": "2026-04-24",
+    "title": "Stats drawer close-button fix",
+    "changes": [
+      "stats.html — drawer was staying open after clicking إغلاق because `.drawer { display:flex }` author CSS overrides the `[hidden]` attribute's UA `display:none`. Added `.drawer[hidden]` and `.backdrop[hidden]` rules with `display:none !important` so `hidden=true` actually hides them.",
+      "Footer version synced to v2.7.4 across app.js + all top-level HTML pages."
+    ]
+  },
+  {
     "version": "2.7.3",
     "date": "2026-04-24",
     "title": "Add reports for Apr 22-23, 2026 (quiet stretch continues)",
