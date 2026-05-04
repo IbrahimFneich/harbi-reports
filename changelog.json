@@ -1,5 +1,25 @@
 [
   {
+    "version": "2.7.5",
+    "date": "2026-05-04",
+    "title": "Add reports for Apr 24 — May 4, 2026 (11-day quiet-stretch bundle)",
+    "changes": [
+      "data/2026-04-24.json — 51 raw → 5 bayanat, 5 sirens (2 geocoded), 16 enemy, 4 iran, 5 videos, 1 allies, 1 daily summary.",
+      "data/2026-04-25.json — 36 raw → 1 bayan, 4 sirens (3 geocoded), 11 enemy, 3 iran, 4 videos.",
+      "data/2026-04-26.json — 57 raw → 6 bayanat, 4 sirens (1 geocoded), 23 enemy, 7 iran, 5 videos, 1 daily summary.",
+      "data/2026-04-27.json — 48 raw → 3 bayanat, 5 sirens (1 geocoded), 28 enemy, 1 iran, 2 videos, 1 daily summary.",
+      "data/2026-04-28.json — 36 raw → 6 bayanat, 3 sirens (3 geocoded), 22 enemy, 1 video, 1 daily summary.",
+      "data/2026-04-29.json — 39 raw → 5 bayanat, 6 sirens (2 geocoded), 21 enemy, 1 iran, 1 daily summary.",
+      "data/2026-04-30.json — 60 raw → 11 bayanat, 6 sirens (3 geocoded), 32 enemy, 3 iran, 1 video, 1 daily summary.",
+      "data/2026-05-01.json — 49 raw → 9 bayanat, 2 sirens (2 geocoded), 20 enemy, 3 iran, 2 videos, 1 daily summary.",
+      "data/2026-05-02.json — 35 raw → 5 bayanat, 1 siren (1 geocoded), 8 enemy, 2 iran, 3 videos, 1 allies, 1 daily summary.",
+      "data/2026-05-03.json — 52 raw → 11 bayanat, 3 sirens (2 geocoded), 17 enemy, 2 iran, 4 videos, 1 allies, 1 daily summary.",
+      "data/2026-05-04.json — 68 raw → 13 bayanat, 1 siren (1 geocoded), 20 enemy, 8 iran, 7 videos, 3 allies (partial — pulled before 22:30 wrap-up).",
+      "Tempo profile: war-pace stays low (35-72 msgs/day vs Apr 1-7 peak of 200-260), with mild uptick on Apr 30, May 1, and May 3-4. Bayanat total 75 across the bundle.",
+      "Indexes regenerated: reports-meta.js, spotlight-index.json, nav.js, harbi.db. Monthly chronicles for 2026-04 and 2026-05 rebuilt."
+    ]
+  },
+  {
     "version": "2.7.4",
     "date": "2026-04-24",
     "title": "Stats drawer close-button fix",
