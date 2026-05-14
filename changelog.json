@@ -1,5 +1,23 @@
 [
   {
+    "version": "2.7.6",
+    "date": "2026-05-13",
+    "title": "Add reports for May 5 — May 13, 2026 (9-day escalation bundle)",
+    "changes": [
+      "data/2026-05-05.json — 67 raw → 18 bayanat, 1 siren (1 geocoded), 18 enemy, 7 iran, 7 videos, 1 allies, 1 daily summary.",
+      "data/2026-05-06.json — 63 raw → 16 bayanat, 4 sirens (3 geocoded), 18 enemy, 3 iran, 5 videos, 4 allies, 1 daily summary.",
+      "data/2026-05-07.json — 52 raw → 13 bayanat, 0 sirens, 15 enemy, 4 iran, 5 videos, 2 allies, 1 daily summary.",
+      "data/2026-05-08.json — 73 raw → 27 bayanat, 3 sirens (3 geocoded), 22 enemy, 2 iran, 6 videos, 0 allies, 1 daily summary.",
+      "data/2026-05-09.json — 63 raw → 21 bayanat, 8 sirens (2 geocoded), 14 enemy, 2 iran, 4 videos, 2 allies, 1 daily summary.",
+      "data/2026-05-10.json — 88 raw → 24 bayanat, 6 sirens (2 geocoded), 25 enemy, 3 iran, 6 videos, 1 allies, 1 daily summary.",
+      "data/2026-05-11.json — 79 raw → 21 bayanat, 3 sirens (2 geocoded), 22 enemy, 3 iran, 8 videos, 2 allies, 1 daily summary.",
+      "data/2026-05-12.json — 91 raw → 24 bayanat, 5 sirens (2 geocoded), 29 enemy, 2 iran, 8 videos, 1 allies, 1 daily summary.",
+      "data/2026-05-13.json — 53 raw → 19 bayanat, 2 sirens (1 geocoded), 9 enemy, 1 iran, 7 videos, 0 allies, 1 daily summary.",
+      "Tempo profile: escalation. Bayanat total 183 in 9 days (~3.6× the daily pace of the prior Apr 24–May 4 bundle's 75 over 11 days). Daily raw-msg counts climb from 52 mid-week to 88-91 by May 10-12, then ease back to 53 on May 13.",
+      "Indexes regenerated: reports-meta.js, spotlight-index.json, nav.js, harbi.db, search-facets.json. Monthly chronicles rebuilt (May 2026: 13 days, 641 events)."
+    ]
+  },
+  {
     "version": "2.7.5",
     "date": "2026-05-04",
     "title": "Add reports for Apr 24 — May 4, 2026 (11-day quiet-stretch bundle)",
