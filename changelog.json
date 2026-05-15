@@ -1,5 +1,15 @@
 [
   {
+    "version": "2.7.7",
+    "date": "2026-05-14",
+    "title": "Add report for May 14, 2026",
+    "changes": [
+      "data/2026-05-14.json — 73 raw → 16 bayanat, 4 sirens (4 geocoded), 26 enemy, 0 iran, 6 videos, 0 allies, 1 daily summary.",
+      "Tempo continuation: 73 raw msgs matches the May 5–13 escalation band (52–91/day, median 67). No iran/allies content this day; enemy at 26 is on-trend.",
+      "Indexes regenerated: reports-meta.js, spotlight-index.json, nav.js, harbi.db, search-facets.json. Monthly chronicle for 2026-05 rebuilt (14 days, 694 events)."
+    ]
+  },
+  {
     "version": "2.7.6",
     "date": "2026-05-13",
     "title": "Add reports for May 5 — May 13, 2026 (9-day escalation bundle)",
