@@ -1,5 +1,26 @@
 [
   {
+    "version": "2.7.8",
+    "date": "2026-05-26",
+    "title": "Add reports for May 15 — May 26, 2026 (12-day bundle)",
+    "changes": [
+      "data/2026-05-15.json — 88 raw → 28 bayanat, 15 sirens (5 geocoded), 19 enemy, 3 iran, 6 videos, 2 allies, 1 daily summary.",
+      "data/2026-05-16.json — 64 raw → 22 bayanat, 5 sirens (3 geocoded), 16 enemy, 0 iran, 5 videos, 1 allies, 1 daily summary.",
+      "data/2026-05-17.json — 55 raw → 10 bayanat, 2 sirens (2 geocoded), 20 enemy, 2 iran, 7 videos, 2 allies, 1 daily summary.",
+      "data/2026-05-18.json — 56 raw → 14 bayanat, 3 sirens (2 geocoded), 17 enemy, 1 iran, 5 videos, 4 allies, 1 daily summary.",
+      "data/2026-05-19.json — 60 raw → 26 bayanat, 1 siren (1 geocoded), 16 enemy, 0 iran, 4 videos, 0 allies, 1 daily summary.",
+      "data/2026-05-20.json — 83 raw → 28 bayanat, 3 sirens (2 geocoded), 28 enemy, 3 iran, 5 videos, 1 allies, 1 daily summary.",
+      "data/2026-05-21.json — 38 raw → 14 bayanat, 4 sirens (2 geocoded), 7 enemy, 0 iran, 2 videos, 0 allies, 1 daily summary.",
+      "data/2026-05-22.json — 75 raw → 21 bayanat, 9 sirens (2 geocoded), 27 enemy, 0 iran, 4 videos, 0 allies, 1 daily summary.",
+      "data/2026-05-23.json — 80 raw → 11 bayanat, 11 sirens (4 geocoded), 31 enemy, 1 iran, 8 videos, 1 allies, 1 daily summary.",
+      "data/2026-05-24.json — 104 raw → 27 bayanat, 8 sirens (3 geocoded), 19 enemy, 3 iran, 7 videos, 0 allies, 1 daily summary.",
+      "data/2026-05-25.json — 101 raw → 22 bayanat, 16 sirens (4 geocoded), 36 enemy, 2 iran, 5 videos, 1 allies, 1 daily summary.",
+      "data/2026-05-26.json — 90 raw → 33 bayanat, 9 sirens (3 geocoded), 24 enemy, 3 iran, 4 videos, 4 allies, 1 daily summary.",
+      "Tempo profile: sustained-high. Bayanat total 256 in 12 days (~21.3/day, on par with the May 5-13 escalation bundle's 20.3/day). Siren tempo jumps sharply — 86 events vs 32 in the prior bundle (2.7×), with May 25 setting a 16-siren single-day high. Enemy reports climb to 260 (vs 172 prior, 1.5×); peak on May 25 with 36 reports. May 21 is the lull day (38 raw, 7 enemy) — only sub-50 raw day in the window.",
+      "Indexes regenerated: reports-meta.js, spotlight-index.json, nav.js, harbi.db, search-facets.json. Monthly chronicle for 2026-05 rebuilt (26 days)."
+    ]
+  },
+  {
     "version": "2.7.7",
     "date": "2026-05-14",
     "title": "Add report for May 14, 2026",
