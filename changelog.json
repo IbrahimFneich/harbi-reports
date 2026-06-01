@@ -9,7 +9,7 @@
       "data/2026-05-29.json — 55 raw → 21 bayanat, 4 sirens (1 geocoded), 13 enemy, 0 iran, 4 videos, 0 allies, 1 daily summary.",
       "data/2026-05-30.json — 87 raw → 26 bayanat, 22 sirens (8 geocoded), 25 enemy, 0 iran, 3 videos, 0 allies, 1 daily summary.",
       "data/2026-05-31.json — 91 raw → 19 bayanat, 40 sirens (10 geocoded), 18 enemy, 1 iran, 3 videos, 0 allies, 1 daily summary.",
-      "Tempo profile: high-with-siren-surge. Bayanat total 126 in 5 days (~25.2/day, up from the May 15-26 bundle's 21.3/day). Siren tempo escalates sharply — 84 events in 5 days (~16.8/day) vs ~7.2/day in the prior 12-day bundle (2.3×). May 31 sets a new dataset single-day siren high at 40 (prior record 16 on May 25), with May 30 second at 22. Enemy reports 88 (~17.6/day), peak May 30 with 25. May 29 is the lull (55 raw, 21 bayanat, only 4 sirens). Iran activity thin (7 total, 5 of them May 28). Allies quiet — 6 items all on May 27, none May 28-31.",
+      "Tempo profile: high-with-siren-surge. Bayanat total 126 in 5 days (~25.2/day, up from the May 15-26 bundle's 21.3/day). Siren tempo escalates sharply — 84 events in 5 days (~16.8/day) vs ~7.2/day in the prior 12-day bundle (2.3×). May 31 is the bundle's siren high at 40 (5-day high; a sharp local surge but well below the Mar 2026 peak of 89 on Mar 11 — ranks ~30th of all days), with May 30 second at 22. Enemy reports 88 (~17.6/day), peak May 30 with 25. May 29 is the lull (55 raw, 21 bayanat, only 4 sirens). Iran activity thin (7 total, 5 of them May 28). Allies quiet — 6 items all on May 27, none May 28-31.",
       "Indexes regenerated: reports-meta.js, spotlight-index.json, nav.js, harbi.db, search-facets.json."
     ]
   },
