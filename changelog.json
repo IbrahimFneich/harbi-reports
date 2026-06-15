@@ -1,5 +1,18 @@
 [
   {
+    "version": "2.7.11",
+    "date": "2026-06-15",
+    "title": "Fix maps: unify dot & polygon positions + accurate coordinates",
+    "changes": [
+      "Root cause: the dot view used hand-typed coordinates (opCoords) while the polygon view used real OSM boundaries (borders.json) — two independent sources that drifted apart, so the same town landed in different spots depending on render mode (e.g. رشاف's dot was 16km from its polygon; القنطرة was placed on the Golan).",
+      "Fix (src/js/maps/border-renderer.js): dots now snap to their polygon's center — a single source of truth, so the DOT and POLY modes can never diverge. Applies to both the operations map and the siren map, every day.",
+      "Accuracy rebuild: re-resolved all 76 operations-map towns against OpenStreetMap and corrected coordinates (القنطرة → Marjayoun, يرؤون → Yir'on, حانيتا restored, الطيبة → Marjayoun, العديسة → border, …). Towns backed by a real OSM polygon went from 22 to 50.",
+      "data/borders.json: 134 → 149 entries (72 real polygons, up from 44).",
+      "19 obscure towns with no reliable OSM match kept their original coordinates (rendered as synthesized markers) — no regression.",
+      "Verification: 0 dot/polygon mismatches across all towns; every dot falls within the south-Lebanon / north-Israel border region."
+    ]
+  },
+  {
     "version": "2.7.10",
     "date": "2026-06-15",
     "title": "Add reports for June 1 — June 14, 2026 (14-day bundle)",

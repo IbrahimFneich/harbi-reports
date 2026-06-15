@@ -58,6 +58,29 @@ function synthesizePolygon(lat, lon, count) {
   return { type: 'Polygon', coordinates: [ring] };
 }
 
+// ── Polygon center (bbox center of any Polygon/MultiPolygon geojson) ──
+// Single source of truth: when a place has a real OSM polygon, its DOT must
+// sit at the polygon's center so the two render modes never diverge. Returns
+// [lat, lng] or null.
+function polygonCenter(geojson) {
+  if (!geojson || !geojson.coordinates) return null;
+  var minLat = Infinity, maxLat = -Infinity, minLng = Infinity, maxLng = -Infinity, found = false;
+  (function walk(c) {
+    if (Array.isArray(c) && c.length >= 2 && typeof c[0] === 'number' && typeof c[1] === 'number') {
+      var lng = c[0], lat = c[1];
+      if (lat < minLat) minLat = lat;
+      if (lat > maxLat) maxLat = lat;
+      if (lng < minLng) minLng = lng;
+      if (lng > maxLng) maxLng = lng;
+      found = true;
+    } else if (Array.isArray(c)) {
+      for (var i = 0; i < c.length; i++) walk(c[i]);
+    }
+  })(geojson.coordinates);
+  if (!found) return null;
+  return [(minLat + maxLat) / 2, (minLng + maxLng) / 2];
+}
+
 // ── Individual renderers ─────────────────────────────────────────────
 function renderPolygon(map, geojson, place, color) {
   var layer = L.geoJSON(geojson, {
@@ -228,6 +251,18 @@ export function createBorderMap(map, mapDiv, places, opts) {
 
   loadBorders().then(function(b) {
     borders = b || {};
+    // Unify the two render modes onto a single source of truth: if a place has
+    // a real polygon, move its dot to the polygon's center so DOT and POLY can
+    // never land in different spots. Places without a polygon keep their
+    // incoming lat/lng (the synthesized blob is centered on the same point, so
+    // those stay self-consistent too).
+    places.forEach(function(p) {
+      var entry = borders[p.name];
+      if (entry && entry.geojson) {
+        var c = polygonCenter(entry.geojson);
+        if (c) { p.lat = c[0]; p.lng = c[1]; }
+      }
+    });
     redraw();
     attachDrawer(mapDiv, places, state, redraw, opts);
   });
