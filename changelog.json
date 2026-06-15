@@ -1,5 +1,28 @@
 [
   {
+    "version": "2.7.10",
+    "date": "2026-06-15",
+    "title": "Add reports for June 1 — June 14, 2026 (14-day bundle)",
+    "changes": [
+      "data/2026-06-01.json — 113 raw → 43 bayanat, 22 sirens (6 geocoded), 22 enemy, 8 iran, 4 videos, 1 allies, 1 daily summary.",
+      "data/2026-06-02.json — 54 raw → 12 bayanat, 1 siren (1 geocoded), 23 enemy, 2 iran, 3 videos, 5 allies, 1 daily summary.",
+      "data/2026-06-03.json — 63 raw → 22 bayanat, 3 sirens (3 geocoded), 14 enemy, 1 iran, 3 videos, 0 allies, 1 daily summary.",
+      "data/2026-06-04.json — 82 raw → 27 bayanat, 7 sirens (4 geocoded), 20 enemy, 6 iran, 5 videos, 3 allies, 1 daily summary.",
+      "data/2026-06-05.json — 65 raw → 28 bayanat, 3 sirens (3 geocoded), 13 enemy, 0 iran, 5 videos, 0 allies, 1 daily summary.",
+      "data/2026-06-06.json — 55 raw → 27 bayanat, 3 sirens (2 geocoded), 10 enemy, 0 iran, 3 videos, 1 allies, 1 daily summary.",
+      "data/2026-06-07.json — 82 raw → 28 bayanat, 13 sirens (7 geocoded), 22 enemy, 5 iran, 2 videos, 2 allies, 1 daily summary.",
+      "data/2026-06-08.json — 74 raw → 16 bayanat, 12 sirens (6 geocoded), 23 enemy, 10 iran, 2 videos, 5 allies, 1 daily summary.",
+      "data/2026-06-09.json — 56 raw → 16 bayanat, 1 siren (0 geocoded), 26 enemy, 2 iran, 3 videos, 0 allies, 1 daily summary.",
+      "data/2026-06-10.json — 36 raw → 8 bayanat, 3 sirens (2 geocoded), 7 enemy, 7 iran, 3 videos, 0 allies, 1 daily summary.",
+      "data/2026-06-11.json — 60 raw → 24 bayanat, 2 sirens (1 geocoded), 13 enemy, 6 iran, 3 videos, 1 allies, 1 daily summary.",
+      "data/2026-06-12.json — 44 raw → 18 bayanat, 4 sirens (3 geocoded), 6 enemy, 1 iran, 4 videos, 0 allies, 0 daily summaries (no wrap-up post that day).",
+      "data/2026-06-13.json — 69 raw → 23 bayanat, 3 sirens (1 geocoded), 8 enemy, 1 iran, 9 videos, 0 allies, 1 daily summary.",
+      "data/2026-06-14.json — 100 raw → 27 bayanat, 8 sirens (4 geocoded), 26 enemy, 10 iran, 7 videos, 3 allies, 1 daily summary.",
+      "Tempo profile: cooling-after-may-surge. Bayanat total 319 in 14 days (~22.8/day, down from the May 27-31 bundle's 25.2/day). June 1 is the bayanat high (43) and also the siren high (22). Sirens cool sharply — 85 events in 14 days (~6.1/day) vs the May 27-31 surge of 16.8/day; after June 1, siren tempo settles to single digits most days (June 7 at 13 and June 8 at 12 the only secondary spikes). Enemy reports steady at 233 (~16.6/day), twin peaks June 9 and June 14 (26 each). Iran activity rebuilds late — 59 total, concentrated June 8 and June 14 (10 each). June 10 is the bundle lull (36 raw, 8 bayanat). Allies 21 across the bundle, June 2 and June 8 heaviest (5 each). June 12 posted no daily wrap-up (13 daily summaries across 14 days).",
+      "Indexes regenerated: reports-meta.js, spotlight-index.json, nav.js, harbi.db, search-facets.json."
+    ]
+  },
+  {
     "version": "2.7.9",
     "date": "2026-05-31",
     "title": "Add reports for May 27 — May 31, 2026 (5-day bundle)",
