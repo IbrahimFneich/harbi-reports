@@ -1,5 +1,17 @@
 [
   {
+    "version": "2.7.12",
+    "date": "2026-06-15",
+    "title": "Add report for 2026-06-15",
+    "changes": [
+      "data/2026-06-15.json — 41 raw messages → 3 bayanat, 0 sirens, 13 enemy-media, 3 Iran, 6 videos, 3 allies, 1 daily summary.",
+      "Quiet day on the Lebanon front: two defensive Merkava clashes at منطقة المعبر / أطراف كفرتبنيت (both tank-badged), plus a Hezbollah general communiqué. No outgoing offensive bayanat and no sirens.",
+      "Heavy enemy-media + Iran/Quds-Force (Qaani) political content following the latest Iran round; 6 video posts of prior operations.",
+      "categorize.py fix: the target cleaner now drops the standalone 'عبر' (via) connective so operation-method text no longer leaks into the target field (corrected bayan #2 to منطقة المعبر). Archive-wide grep confirmed this was the only affected target.",
+      "Indexes regenerated: reports-meta.js, spotlight-index.json (39,617 items), harbi.db, search-facets.json, nav.js."
+    ]
+  },
+  {
     "version": "2.7.11",
     "date": "2026-06-15",
     "title": "Fix maps: unify dot & polygon positions + accurate coordinates",

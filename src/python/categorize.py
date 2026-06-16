@@ -641,9 +641,11 @@ def _clean_location(loc):
         r'\s+(?:و?اشتبك|و?اشتبكوا|و?استهدفوا|و?تصدّ[ىوا]|و?تصدى|محاول)\s*.*$',
         '', loc
     )
-    # Drop trailing connective clauses
+    # Drop trailing connective clauses. "عبر" ("via/through") introduces the
+    # operation method (e.g. "...المعبر عبر استقدام قوة مدرعة...") — the noun
+    # "المعبر" is untouched since the standalone word needs leading whitespace.
     loc = re.sub(
-        r'\s+(?:المحتلّ?ة|المُحتلّ?ة|والتي|التي|وما|وقد|حيث|بعد|باتجاه)\s*.*$',
+        r'\s+(?:المحتلّ?ة|المُحتلّ?ة|والتي|التي|وما|وقد|حيث|بعد|باتجاه|عبر)\s*.*$',
         '', loc
     )
     # Balance parentheses — if unbalanced, drop from the unmatched paren onward
