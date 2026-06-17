@@ -66,6 +66,15 @@ def create_schema(cur):
             title, full_text, location, subtitle,
             content='events', content_rowid='id'
         );
+
+        DROP TABLE IF EXISTS bayan_targets;
+        CREATE TABLE bayan_targets (
+            date     TEXT NOT NULL,
+            town     TEXT NOT NULL,
+            is_recap INTEGER DEFAULT 0
+        );
+        CREATE INDEX idx_bt_town ON bayan_targets(town);
+        CREATE INDEX idx_bt_date ON bayan_targets(date);
     ''')
 
 
@@ -99,6 +108,11 @@ def insert_events(cur, data):
               item.get('badge', ''),
               json.dumps(item.get('tags', []), ensure_ascii=False),
               item.get('fullText', '')))
+        # One row per targeted town (canonical names) — analytics "Top locations"
+        # counts these, matching the report map (which also counts targets[]).
+        for _town in item.get('targets', []):
+            cur.execute('INSERT INTO bayan_targets (date, town, is_recap) VALUES (?, ?, ?)',
+                        (date, _town, 1 if item.get('is_recap') else 0))
 
     for item in data.get('sirens', []):
         cur.execute('''

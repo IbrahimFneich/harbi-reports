@@ -306,7 +306,10 @@ async function run(){
       const bt = b.bayan_type;
       if (bt === 'statement'){ stmt++; continue; }
       const ft = b.fullText || '';
-      LOSS.forEach(([k, rx]) => {
+      // Skip RECAP (end-of-day summary) statements for LOSS counting only — they
+      // re-state losses already counted in the individual statements, so scanning
+      // them double-counts equipment. (Town counts elsewhere DO include recaps.)
+      if (!b.is_recap) LOSS.forEach(([k, rx]) => {
         const m = ft.match(rx);
         if (m) {
           losses[k] = (losses[k] || 0) + m.length;

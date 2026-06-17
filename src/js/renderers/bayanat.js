@@ -71,6 +71,16 @@ export function renderBayanat(container, items) {
       if (b.weapon) {
         chips.push({ cls: 'weapon-chip', text: b.weapon });
       }
+      // Tag end-of-day SUMMARY statements (is_recap): they re-list strikes
+      // announced individually, so a town they name is counted on the map but
+      // this card is not a fresh strike — the tag explains the unit.
+      if (b.is_recap) {
+        chips.push({ cls: 'recap-chip', text: 'ملخّص اليوم' });
+      }
+      // Multi-target statement — show how many towns it hit.
+      if (b.targets && b.targets.length > 1) {
+        chips.push({ cls: 'multi-chip', text: b.targets.length + ' أهداف' });
+      }
 
       // Build dots and determine hasHit
       var dots = [];

@@ -42,6 +42,24 @@ def norm_ar(s):
     return s
 
 
+# Place-name folding: norm_ar PLUS taa-marbuta (ة→ه) and hamza-seat folds
+# (ء→'', ئ→ي, ؤ→و). Used ONLY for matching place names against the canonical
+# registry (data/places.json) — never stored. Verified to merge only genuine
+# spelling variants of the same town (no distinct towns collide). The JS mirror
+# is src/js/util/normalize-ar.js; src/python/validate_consistency.py asserts the
+# two agree on every registry name + corpus target so they can never drift.
+_AR_TAA_MAP = str.maketrans({'ة': 'ه'})
+_AR_HAMZA_SEAT_MAP = str.maketrans({'ء': '', 'ئ': 'ي', 'ؤ': 'و'})
+
+
+def norm_place(s):
+    """Normalise a place name for registry lookup (norm_ar + ة/ه + hamza folds)."""
+    s = norm_ar(s)
+    s = s.translate(_AR_TAA_MAP)
+    s = s.translate(_AR_HAMZA_SEAT_MAP)
+    return re.sub(r'\s+', ' ', s).strip()
+
+
 # ═══════════════ LOCATION → COORDINATES LOOKUP ═══════════════
 # Pre-computed lat/lng for known siren locations
 SIREN_COORDS = {
@@ -378,6 +396,10 @@ def categorize(messages):
         # ── Sirens ──
         # Normalised match handles shadda'd صفّارات and tatweel variants.
         if 'صفارات الانذار' in ntext or 'صفارات انذار' in ntext or 'صفاره انذار' in ntext:
+            # NEGATION: "دون/بدون/من دون (دوي) صفارات الإنذار" reports the ABSENCE
+            # of a siren (an explosion/launch with no alert) — NOT a siren event.
+            if re.search(r'(?:دون|بدون|من\s+دون)\s+(?:دوي\s+)?صف', ntext):
+                continue
             loc = text
             # Strip hashtags and common prefixes
             loc = re.sub(r'#\S+', '', loc).strip()
@@ -386,6 +408,7 @@ def categorize(messages):
             sirens.append({
                 'time': time,
                 'location': loc or text[:80],
+                'locations': _resolve_town_names(text),  # canonical towns for the map
                 'fullText': text
             })
             continue
@@ -483,6 +506,59 @@ def categorize(messages):
 
     return bayanat, sirens, enemy, iran, videos, allies, summaries
 
+def _target_region(text):
+    """The strike-describing body — full text minus Quran verses, hashtags and
+    Hijri dates, but KEEPING the enumerated strike list (unlike
+    _clean_body_for_target which truncates at the list marker). Used to resolve
+    every targeted town, including secondary targets of multi-target statements."""
+    body = _AR_INVISIBLES_RE.sub('', text or '')
+    body = re.sub(r'﴿[^﴾]*﴾', ' ', body)              # Quran verses
+    body = re.sub(r'صَدَقَ اللهُ[^\n]*', ' ', body)
+    body = re.sub(r'بِسْمِ اللَّـهِ[^\n]*', ' ', body)
+    body = re.sub(r'#[ء-ي_]+', ' ', body)     # hashtags
+    body = re.sub(
+        r'\d+\s+(?:شوال|شعبان|رمضان|ذي القعدة|ذي الحجة|محرم|صفر|ربيع الأول|'
+        r'ربيع الثاني|جمادى الأولى|جمادى الثانية|رجب)\s+\d+\s+هـ', ' ', body)
+    return body
+
+
+def _resolve_town_names(text):
+    """Canonical registry display names for every town named in `text` (whole-word,
+    multi-target). Lazy import avoids the categorize<->place_registry cycle."""
+    import place_registry as PR
+    reg = PR.load_places()
+    return [reg[k]['display'] for k in PR.find_places_in_text(text or '')]
+
+
+def _extract_targets(text, primary_target):
+    """All canonical towns a statement targets (multi-target aware), as registry
+    display names. Primary target's town(s) lead, then any others in the body.
+    Stored as original surface (registry display) — matching uses norm_place."""
+    ordered = []
+    for src in (primary_target or '', _target_region(text)):
+        for disp in _resolve_town_names(src):
+            if disp not in ordered:
+                ordered.append(disp)
+    return ordered
+
+
+def _is_recap(ntext, targets, has_list_marker):
+    """True for end-of-day SUMMARY/aggregate statements that re-state strikes
+    announced individually elsewhere. is_recap is a DATA axis orthogonal to
+    bayan_type: town counts INCLUDE recaps (a named target is still a target),
+    but loss/operation aggregates must EXCLUDE them to avoid double-counting."""
+    if 'غرفة عمليات المقاومة' in ntext or 'غرفة العمليات' in ntext:
+        return True
+    if re.search(r'حصاد|حصيلة|موجز\s+العمليات', ntext):
+        return True
+    # a time RANGE ("من الساعة X حتى الساعة Y") that enumerates several targets.
+    # NOTE: ntext is norm_ar output, so ى->ي (حتى->حتي, الى->الي) — match those forms.
+    if re.search(r'من\s+الساعة\s*\d{1,2}:\d{2}\s*(?:حتي|الي|ولغاية|لغاية)', ntext) \
+            and (has_list_marker or len(targets) > 1):
+        return True
+    return False
+
+
 def parse_bayan(msg):
     """Parse a resistance statement into structured data."""
     text = msg['text']
@@ -510,6 +586,8 @@ def parse_bayan(msg):
             'badge': 'communique',
             'tags': ['بيان عام'],
             'bayan_type': 'statement',
+            'targets': [],          # political communiqué — not an operation
+            'is_recap': False,
             'fullText': text,
         }
 
@@ -557,11 +635,16 @@ def parse_bayan(msg):
         'fullText': text
     }
 
+    # Multi-target town list (drives the map / dashboards / counts) + recap flag.
+    has_list_marker = bool(_LIST_MARKER_RE.search(text))
+    result['targets'] = _extract_targets(text, target)
+    result['is_recap'] = _is_recap(ntext, result['targets'], has_list_marker)
+
     # Expand any enumerated strikes into a strikes[] sub-array — fires for
     # both list_strikes AND defensive bayanat that happen to enumerate
     # multiple counter-strikes. The existence of a list marker in the text is
     # the trigger; bayan_type doesn't gate it.
-    if _LIST_MARKER_RE.search(text):
+    if has_list_marker:
         strikes = parse_list_strikes(text, target)
         if strikes:
             result['strikes'] = strikes
@@ -634,6 +717,10 @@ def _clean_location(loc):
     loc = re.sub(r'\s+', ' ', loc).strip()
     # Strip leading "من " (source marker, not a target)
     loc = re.sub(r'^(?:من|مِن)\s+', '', loc)
+    # Strip leading subject/attribution prefixes that leak from recap/list bayanat
+    # (e.g. "المقاومة الإسلامية موقع الضهيرة" -> "موقع الضهيرة"). Multi-word phrases
+    # only — never bare town-like tokens — so real place names are never truncated.
+    loc = re.sub(r'^(?:المقاومة\s+الإسلام[يّ]*ة|القوّ?ات\s+المسلّ?حة|الحركة)\s+', '', loc)
     # Drop trailing clash/engagement verb clauses — defensive bayanat describe
     # Israeli advances by naming the location first, then "اشتبك معها مجاهدو…" —
     # the verb phrase is not part of the location.
@@ -892,6 +979,13 @@ def extract_weapon(text):
         # Avoid capturing the generic closer like "وحققوا"
         if not word.startswith(('و','ف','ال')):
             return word
+    # "بواسطة [weapon]" — method phrasing (e.g. "بواسطة الطيران المسيّر",
+    # "بواسطة المسيّرات"). Capture the weapon phrase up to the next clause break.
+    m = re.search(r'بواسطة\s+([^.،؛\n]{2,30}?)(?:\s*(?:[.،؛\n]|واستهدف|وحقق|مما)|$)', n)
+    if m:
+        word = re.sub(r'\s+', ' ', m.group(1)).strip(' .،')
+        if word and not word.startswith(('و', 'ف')):
+            return word
     return ''
 
 def classify_badge(text, target):
@@ -941,6 +1035,7 @@ def classify_bayan_type(text, num):
 
 _LIST_MARKER_RE = re.compile(
     r'على\s+النحو\s+الآتي|على\s+الشكل\s+الآتي|على\s+النحو\s+التالي|كالآتي\s*:|كالتّالي\s*:|وفق\s+الآتي'
+    r'|الأهداف\s+الآتية|الأهداف\s+التالية|الأهداف\s+الآتي'
 )
 # Weapon-preposition prefix — "ب" + weapon noun. When this starts the post-time
 # segment, the line has no per-strike sub-location (shared parent target used).
@@ -1052,39 +1147,33 @@ def parse_list_strikes(text, primary_target):
 
 # ═══════════════ SIREN POINTS ═══════════════
 def compute_siren_points(sirens):
-    """Aggregate sirens by location into map points.
+    """Aggregate sirens into map points via the canonical registry.
 
-    Matching is done on normalised strings (tatweel/shadda/alef stripped) so
-    'المالكيّة' and 'المالكية' both map to the same coord, and 'كرمئيل'
-    matches when the dict has 'الكرمئيل'.
-    """
-    # Pre-normalise the dict keys once.
-    norm_coords = {norm_ar(k): (k, v) for k, v in SIREN_COORDS.items()}
+    MULTI-TOWN aware: a siren naming several towns ("طبريا وصفد والجولان") now
+    contributes a point to EACH town (was: first-match-only). Coordinates come
+    from data/places.json (the single source the JS siren map also uses), so the
+    map and the data agree. `times` are de-duplicated per town."""
+    import place_registry as PR
+    reg = PR.load_places()
     loc_groups = defaultdict(list)
-
     for s in sirens:
-        loc = s['location']
-        nloc = norm_ar(loc)
-        best_key = None
-        for nkey in norm_coords:
-            if nkey in nloc or nloc.startswith(nkey):
-                if best_key is None or len(nkey) > len(best_key):
-                    best_key = nkey
-        if best_key:
-            orig_key = norm_coords[best_key][0]
-            loc_groups[orig_key].append(s['time'])
+        towns = s.get('locations') or _resolve_town_names(s.get('location', ''))
+        for disp in towns:
+            if s['time'] not in loc_groups[disp]:
+                loc_groups[disp].append(s['time'])
 
     points = []
-    for loc, times in loc_groups.items():
-        lat, lng = SIREN_COORDS[loc]
+    for disp, times in loc_groups.items():
+        e = reg.get(norm_place(disp))
+        if not e or e.get('lat') is None:
+            continue
         points.append({
-            'lat': lat,
-            'lng': lng,
-            'loc': loc,
+            'lat': e['lat'],
+            'lng': e['lng'],
+            'loc': disp,
             'times': times,
-            'count': len(times)
+            'count': len(times),
         })
-
     return sorted(points, key=lambda p: -p['count'])
 
 # ═══════════════ MAIN ═══════════════

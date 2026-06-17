@@ -216,12 +216,17 @@ def main():
         enemy = s.get('enemy', s.get('e', len(data.get('enemy', []))))
         iran = s.get('iran', s.get('ir', len(data.get('iran', []))))
         videos = s.get('videos', s.get('v', len(data.get('videos', []))))
-        total = bayanat + sirens + enemy + iran + videos
-        stats[date] = {'bayanat': bayanat, 'sirens': sirens, 'enemy': enemy, 'iran': iran, 'videos': videos, 'total': total}
+        allies = s.get('allies', s.get('al', len(data.get('allies', []))))
+        # `total` must match build_db.py (b+s+e+ir+v+al). 'summaries' is the day's
+        # editorial-summary count, not an event category, so it is excluded.
+        total = bayanat + sirens + enemy + iran + videos + allies
+        stats[date] = {'bayanat': bayanat, 'sirens': sirens, 'enemy': enemy, 'iran': iran,
+                       'videos': videos, 'allies': allies, 'total': total}
 
         # Search keywords
         kw = extract_keywords(data)
-        search_idx[date] = {'kw': kw, 'bayanat': bayanat, 'sirens': sirens, 'enemy': enemy, 'iran': iran, 'videos': videos}
+        search_idx[date] = {'kw': kw, 'bayanat': bayanat, 'sirens': sirens, 'enemy': enemy,
+                            'iran': iran, 'videos': videos, 'allies': allies}
 
         # Spotlight entries
         spotlight_entries.extend(build_spotlight_entry(data))
@@ -242,16 +247,16 @@ def main():
         f.write('var reportStats = {\n')
         for d in dates_desc:
             s = stats[d]
-            f.write("  '{}': {{bayanat:{}, sirens:{}, enemy:{}, iran:{}, videos:{}, total:{}}},\n".format(
-                d, s['bayanat'], s['sirens'], s['enemy'], s['iran'], s['videos'], s['total']))
+            f.write("  '{}': {{bayanat:{}, sirens:{}, enemy:{}, iran:{}, videos:{}, allies:{}, total:{}}},\n".format(
+                d, s['bayanat'], s['sirens'], s['enemy'], s['iran'], s['videos'], s['allies'], s['total']))
         f.write('};\n\n')
 
         # searchIndex
         f.write('var searchIndex = {\n')
         for d in dates_desc:
             si = search_idx[d]
-            f.write("  '{}': {{kw:'{}',bayanat:{},sirens:{},enemy:{},iran:{},videos:{}}},\n".format(
-                d, si['kw'].replace("'", "\\'"), si['bayanat'], si['sirens'], si['enemy'], si['iran'], si['videos']))
+            f.write("  '{}': {{kw:'{}',bayanat:{},sirens:{},enemy:{},iran:{},videos:{},allies:{}}},\n".format(
+                d, si['kw'].replace("'", "\\'"), si['bayanat'], si['sirens'], si['enemy'], si['iran'], si['videos'], si['allies']))
         f.write('};\n')
 
     print('Written {} ({} reports)'.format(meta_path, len(dates_desc)))

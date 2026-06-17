@@ -97,7 +97,11 @@ export function initEnemyDash() {
   var filterDiv = document.createElement('div');
   filterDiv.className = 'cat-filter-bar';
   var eFilters = [['\u0627\u0644\u0643\u0644 ('+rows.length+')','all']];
-  sortedSources.slice(0,5).forEach(function(s){eFilters.push([s+' ('+sources[s]+')','s:'+s]);});
+  // Filter on the source KEYWORD, not the short label \u2014 e.g. label "\u0643\u0627\u0646" must
+  // filter by "\u0642\u0646\u0627\u0629 \u0643\u0627\u0646", else bare "\u0643\u0627\u0646" (was/were) matches unrelated rows.
+  var srcKw = {};
+  sourceKw.forEach(function(sk){ srcKw[sk[0]] = sk[1][0]; });
+  sortedSources.slice(0,5).forEach(function(s){eFilters.push([s+' ('+sources[s]+')','s:'+(srcKw[s]||s)]);});
   eFilters.forEach(function(f){
     var b = document.createElement('button');
     b.className = 'cat-filter-btn'+(f[1]==='all'?' active':'');

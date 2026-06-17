@@ -87,6 +87,7 @@ export function initIranDash() {
   if(categories.missiles>0) iFilters.push(['\u0627\u0644\u0648\u0639\u062F \u0627\u0644\u0635\u0627\u062F\u0642 ('+categories.missiles+')','\u0627\u0644\u0648\u0639\u062F']);
   if(categories.drones_down>0) iFilters.push(['\u0625\u0633\u0642\u0627\u0637 ('+categories.drones_down+')','\u0625\u0633\u0642\u0627\u0637']);
   if(categories.warnings>0) iFilters.push(['\u0625\u0646\u0630\u0627\u0631\u0627\u062A ('+categories.warnings+')','\u0627\u0644\u0645\u0644\u0627\u062C\u0626']);
+  if(categories.statements>0) iFilters.push(['\u0628\u064A\u0627\u0646\u0627\u062A \u0631\u0633\u0645\u064A\u0629 ('+categories.statements+')','\u0628\u064A\u0627\u0646']);
 
   iFilters.forEach(function(f){
     var b = document.createElement('button');

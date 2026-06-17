@@ -24,7 +24,7 @@ var _tableFullscreen = false;
 var _tableFullscreenPageSize = 30;
 
 // Whitelist of sortable columns to prevent SQL injection from the onSort callback.
-var _sortableKeys = { date: 1, bayanat: 1, sirens: 1, enemy: 1, iran: 1, videos: 1, total: 1 };
+var _sortableKeys = { date: 1, bayanat: 1, sirens: 1, enemy: 1, iran: 1, videos: 1, allies: 1, total: 1 };
 
 var TABLE_COLUMNS = [
   { key: 'date', label: '\u0627\u0644\u062A\u0627\u0631\u064A\u062E' },
@@ -33,12 +33,13 @@ var TABLE_COLUMNS = [
   { key: 'enemy', label: '\u0639\u062F\u0648' },
   { key: 'iran', label: '\u0625\u064A\u0631\u0627\u0646' },
   { key: 'videos', label: '\u0641\u064A\u062F\u064A\u0648' },
+  { key: 'allies', label: '\u062D\u0644\u0641\u0627\u0621' },
   { key: 'total', label: '\u0625\u062C\u0645\u0627\u0644\u064A' }
 ];
 
 var TABLE_COLORS = {
   bayanat: 'var(--green)', sirens: 'var(--red)', enemy: 'var(--orange)',
-  iran: 'var(--purple)', videos: 'var(--teal)', total: 'var(--accent)'
+  iran: 'var(--purple)', videos: 'var(--teal)', allies: 'var(--blue)', total: 'var(--accent)'
 };
 
 function getTableSQL() {
@@ -54,6 +55,7 @@ function getTableSQL() {
     "SUM(CASE WHEN category='enemy' THEN 1 ELSE 0 END) as enemy, " +
     "SUM(CASE WHEN category='iran' THEN 1 ELSE 0 END) as iran, " +
     "SUM(CASE WHEN category='videos' THEN 1 ELSE 0 END) as videos, " +
+    "SUM(CASE WHEN category='allies' THEN 1 ELSE 0 END) as allies, " +
     'COUNT(*) as total ' +
     'FROM events ' + w.where +
     ' GROUP BY date ORDER BY ' + key + ' ' + dir +
@@ -164,11 +166,13 @@ function refresh() {
   renderHeatmap('heatmapPanel', hmRows);
 
   // ── Top locations ──
+  // Top locations: count canonical targeted towns from bayan_targets (same source
+  // as the report's operations map), NOT raw bayanat titles — so analytics and the
+  // report agree on which towns were most targeted.
   var locWhere = buildWhere();
-  var locSql = "SELECT title as name, COUNT(*) as value FROM events " +
-    (locWhere.where ? locWhere.where + " AND " : "WHERE ") +
-    "category = 'bayanat' AND title != '' " +
-    "GROUP BY title ORDER BY value DESC LIMIT 10";
+  var locSql = "SELECT town as name, COUNT(*) as value FROM bayan_targets " +
+    (locWhere.where || "") +
+    " GROUP BY town ORDER BY value DESC LIMIT 10";
   renderBarChart('barChart', queryRows(locSql, locWhere.params), 'var(--accent)');
 
   // ── Table ──

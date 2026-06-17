@@ -227,7 +227,7 @@ function renderReport(data) {
   var ver = document.createElement('span');
   ver.className = 'ver-link';
   ver.style.cssText = 'display:inline-block;font-size:0.6rem;opacity:0.55;direction:ltr;cursor:pointer;';
-  ver.textContent = 'Harbi Reports v2.7.12';
+  ver.textContent = 'Harbi Reports v2.8.0';
   ver.onclick = function() { showChangelog(); };
   slot.appendChild(ver);
   footer.appendChild(slot);
@@ -238,6 +238,10 @@ function renderReport(data) {
   initSearch();
   window._mapInited = false;
   window._sirenPoints = data.sirenPoints || [];
+  // Authoritative per-statement data for the bayanat map/dashboard counts —
+  // carries targets[] (multi-target) + is_recap, so views count the SAME way
+  // the pipeline does (no fragile DOM-substring matching).
+  window._bayanatData = data.bayanat || [];
 
   // Handle deep-link from search: ?tab=X&idx=N&q=term
   var urlParams = new URLSearchParams(window.location.search);

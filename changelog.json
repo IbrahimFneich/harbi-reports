@@ -1,5 +1,18 @@
 [
   {
+    "version": "2.8.0",
+    "date": "2026-06-17",
+    "title": "Data consistency overhaul — every view now agrees with the source",
+    "changes": [
+      "Root fix for the reported bug (a town showing 2 on the bayanat map but 3 in the statements): every statement now carries a multi-target targets[] list + an is_recap flag. The map, dashboards, analytics and list all count the same targets[], so a town's count is identical everywhere (e.g. العديسة on 2026-06-14 is now 3 across all views).",
+      "Single source of truth for town coordinates/names: the 6 old divergent tables are unified into data/places.json. The JS normalizer is proven codepoint-identical to the Python one.",
+      "Repaired 35 double-encoded (mojibake) keys in borders.json that made those towns' polygons unreachable; dropped 62 false 'no-siren' (negation) reports; the siren map now plots every named town (multi-town aware).",
+      "Fixed a cross-builder total mismatch (allies omitted from the index total) that under-counted the archive's daily totals on 881 of 983 days.",
+      "All 983 days regenerated true-to-source. Added a cross-view consistency harness (validate_consistency.py, 11 invariants, green across every day), wired as a release gate so future reports can't publish inconsistent data.",
+      "Recap (end-of-day summary) statements are tagged in the list; equipment-loss counts no longer double-count them."
+    ]
+  },
+  {
     "version": "2.7.12",
     "date": "2026-06-15",
     "title": "Add report for 2026-06-15",
