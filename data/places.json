@@ -2,6 +2,66 @@
   "version": 1,
   "normalizer": "norm_ar",
   "places": {
+    "ابل السقي": {
+      "display": "إبل السقي",
+      "lat": 33.35594,
+      "lng": 35.62085,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "إبل السقي",
+        "ابل السقي"
+      ]
+    },
+    "ابيريم": {
+      "display": "أبيريم",
+      "lat": 33.03865,
+      "lng": 35.28714,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "أبيريم",
+        "ابيريم"
+      ]
+    },
+    "ادميت": {
+      "display": "أدميت",
+      "lat": 33.07959,
+      "lng": 35.21025,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "أدميت",
+        "ادميت"
+      ]
+    },
+    "اربيل": {
+      "display": "أربيل",
+      "lat": 36.19117,
+      "lng": 44.00941,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "أربيل",
+        "اربيل"
+      ]
+    },
+    "ارنون": {
+      "display": "أرنون",
+      "lat": 33.33395,
+      "lng": 35.52728,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "أرنون",
+        "ارنون"
+      ]
+    },
     "اسدود": {
       "display": "أسدود",
       "lat": 31.81299,
@@ -11,6 +71,19 @@
       "hasPolygon": true,
       "aliases": [
         "أسدود"
+      ]
+    },
+    "اسكندرونه": {
+      "display": "الإسكندرونة",
+      "lat": 33.123,
+      "lng": 35.204,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "إسكندرونة",
+        "إسكندرونه",
+        "اسكندرونة"
       ]
     },
     "اشدود": {
@@ -47,6 +120,30 @@
         "إصبع الجليل"
       ]
     },
+    "افن مناحم": {
+      "display": "إيفن مناحيم",
+      "lat": 33.07361,
+      "lng": 35.29414,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "إفن مناحم",
+        "افن مناحم"
+      ]
+    },
+    "افيفم": {
+      "display": "أفيفم",
+      "lat": 33.08868,
+      "lng": 35.47294,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "أفيفم",
+        "افيفم"
+      ]
+    },
     "افيفيم": {
       "display": "أفيفيم",
       "lat": 33.08887,
@@ -59,26 +156,372 @@
         "إفيفيم"
       ]
     },
+    "الابل السقي": {
+      "display": "إبل السقي",
+      "lat": 33.35594,
+      "lng": 35.62085,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الإبل السقي",
+        "الابل السقي"
+      ]
+    },
+    "الابيريم": {
+      "display": "أبيريم",
+      "lat": 33.03865,
+      "lng": 35.28714,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الأبيريم",
+        "الابيريم"
+      ]
+    },
+    "الادميت": {
+      "display": "أدميت",
+      "lat": 33.07959,
+      "lng": 35.21025,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الأدميت",
+        "الادميت"
+      ]
+    },
+    "الاربيل": {
+      "display": "أربيل",
+      "lat": 36.19117,
+      "lng": 44.00941,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الأربيل",
+        "الاربيل"
+      ]
+    },
+    "الارنون": {
+      "display": "أرنون",
+      "lat": 33.33395,
+      "lng": 35.52728,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الأرنون",
+        "الارنون"
+      ]
+    },
+    "الاسكندرونه": {
+      "display": "الإسكندرونة",
+      "lat": 33.123,
+      "lng": 35.204,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الإسكندرونة",
+        "الإسكندرونه",
+        "الاسكندرونة"
+      ]
+    },
+    "الافن مناحم": {
+      "display": "إفن مناحم",
+      "lat": 33.07361,
+      "lng": 35.29414,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الإفن مناحم",
+        "الافن مناحم"
+      ]
+    },
+    "الافيفم": {
+      "display": "أفيفم",
+      "lat": 33.08868,
+      "lng": 35.47294,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الأفيفم",
+        "الافيفم"
+      ]
+    },
+    "الايفن مناحيم": {
+      "display": "إيفن مناحيم",
+      "lat": 33.07361,
+      "lng": 35.29414,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الإيفن مناحيم",
+        "الايفن مناحيم"
+      ]
+    },
+    "الايلانيا": {
+      "display": "إيلانيا",
+      "lat": 32.75496,
+      "lng": 35.40747,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الإيلانيا",
+        "الايلانيا"
+      ]
+    },
+    "الايلون": {
+      "display": "إيلون",
+      "lat": 33.06335,
+      "lng": 35.21975,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الإيلون",
+        "الايلون"
+      ]
+    },
+    "الاييليت هشاحر": {
+      "display": "اييليت هشاحر",
+      "lat": 33.0216,
+      "lng": 35.57595,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الأييليت هشاحر",
+        "الاييليت هشاحر"
+      ]
+    },
+    "البار يوحاي": {
+      "display": "بار يوحاي",
+      "lat": 32.997,
+      "lng": 35.44812,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "البار يوحاي"
+      ]
+    },
+    "البرعشيت": {
+      "display": "برعشيت",
+      "lat": 33.17845,
+      "lng": 35.4372,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "البرعشيت"
+      ]
+    },
+    "البركه ريشه": {
+      "display": "بركة ريشة",
+      "lat": 33.09853,
+      "lng": 35.26222,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "البركة ريشة",
+        "البركه ريشه"
+      ]
+    },
+    "البصه": {
+      "display": "البصة",
+      "lat": 33.0711,
+      "lng": 35.13514,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "البصة",
+        "البصه"
+      ]
+    },
+    "البعلبك": {
+      "display": "بعلبك",
+      "lat": 34.00965,
+      "lng": 36.21171,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "البعلبك"
+      ]
+    },
+    "البلاط": {
+      "display": "بلاط",
+      "lat": 33.38403,
+      "lng": 35.60466,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "البلاط"
+      ]
+    },
+    "البليدا": {
+      "display": "بليدا",
+      "lat": 33.13632,
+      "lng": 35.5046,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "البليدا"
+      ]
+    },
+    "البوابه فاطمه": {
+      "display": "بوابة فاطمة",
+      "lat": 33.2785,
+      "lng": 35.5775,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "البوابة فاطمة",
+        "البوابه فاطمه"
+      ]
+    },
     "البياضه": {
       "display": "البيّاضة",
-      "lat": 33.15,
-      "lng": 35.53,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "البيّاضة"
       ]
     },
+    "البيت ليف": {
+      "display": "بيت ليف",
+      "lat": 33.13207,
+      "lng": 35.33401,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "البيت ليف"
+      ]
+    },
+    "البيت هعميك": {
+      "display": "بيت هعميك",
+      "lat": 32.97049,
+      "lng": 35.14614,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "البيت هعميك"
+      ]
+    },
+    "البيت ياحون": {
+      "display": "بيت ياحون",
+      "lat": 33.15818,
+      "lng": 35.4212,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "البيت ياحون"
+      ]
+    },
+    "البيروت": {
+      "display": "بيروت",
+      "lat": 33.89592,
+      "lng": 35.47843,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "البيروت"
+      ]
+    },
+    "البيريا": {
+      "display": "بيريا",
+      "lat": 32.97759,
+      "lng": 35.50065,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "البيريا"
+      ]
+    },
+    "التسفعون": {
+      "display": "تسفعون",
+      "lat": 32.84437,
+      "lng": 35.25381,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "التسفعون"
+      ]
+    },
+    "التنف": {
+      "display": "التنف",
+      "lat": 33.43692,
+      "lng": 38.83546,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "التنف"
+      ]
+    },
+    "الجبشيت": {
+      "display": "جبشيت",
+      "lat": 33.36157,
+      "lng": 35.428,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الجبشيت"
+      ]
+    },
     "الجرداح": {
       "display": "الجرداح",
-      "lat": 33.08,
-      "lng": 35.44,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "الجرداح"
+      ]
+    },
+    "الجشر هزيف": {
+      "display": "جشر هزيف",
+      "lat": 33.03947,
+      "lng": 35.11098,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الجشر هزيف"
+      ]
+    },
+    "الجعتون": {
+      "display": "جعتون",
+      "lat": 33.00571,
+      "lng": 35.21375,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الجعتون"
       ]
     },
     "الجليل الاعلي": {
@@ -103,12 +546,23 @@
         "الجليل الغربي"
       ]
     },
+    "الجنتا": {
+      "display": "جنتا",
+      "lat": 33.83913,
+      "lng": 36.09956,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الجنتا"
+      ]
+    },
     "الجولان": {
       "display": "الجولان",
       "lat": 32.95,
       "lng": 35.77,
       "coordSource": "facet_coords",
-      "confidence": "low",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "الجولان"
@@ -125,6 +579,128 @@
         "الجولان المحتل"
       ]
     },
+    "الحانين": {
+      "display": "حانين",
+      "lat": 33.109,
+      "lng": 35.38208,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الحانين"
+      ]
+    },
+    "الحبوشيت": {
+      "display": "حبوشيت",
+      "lat": 33.40645,
+      "lng": 35.48664,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الحبوشيت"
+      ]
+    },
+    "الحتسور": {
+      "display": "حتسور",
+      "lat": 32.97917,
+      "lng": 35.54333,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الحتسور"
+      ]
+    },
+    "الحتسور هاجليليت": {
+      "display": "حتسور هاجليليت",
+      "lat": 32.97917,
+      "lng": 35.54333,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الحتسور هاجليليت"
+      ]
+    },
+    "الحداثا": {
+      "display": "حداثا",
+      "lat": 33.15605,
+      "lng": 35.3912,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الحداثا"
+      ]
+    },
+    "الحرير": {
+      "display": "حرير",
+      "lat": 36.67,
+      "lng": 44.34,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الحرير"
+      ]
+    },
+    "الحسكه": {
+      "display": "الحسكة",
+      "lat": 36.41318,
+      "lng": 40.52691,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الحسكة",
+        "الحسكه"
+      ]
+    },
+    "الحقل العمر": {
+      "display": "حقل العمر",
+      "lat": 34.93,
+      "lng": 40.85,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الحقل العمر"
+      ]
+    },
+    "الحورفيش": {
+      "display": "حورفيش",
+      "lat": 33.01737,
+      "lng": 35.34696,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الحورفيش"
+      ]
+    },
+    "الحوسن": {
+      "display": "حوسن",
+      "lat": 32.99758,
+      "lng": 35.29799,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الحوسن"
+      ]
+    },
+    "الحولا": {
+      "display": "حولا",
+      "lat": 33.20759,
+      "lng": 35.51025,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الحولا"
+      ]
+    },
     "الحوله": {
       "display": "الحولة",
       "lat": 33.12,
@@ -134,6 +710,29 @@
       "hasPolygon": false,
       "aliases": [
         "الحولة"
+      ]
+    },
+    "الخربه نفحا": {
+      "display": "خربة نفحا",
+      "lat": 32.93457,
+      "lng": 35.31763,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الخربة نفحا",
+        "الخربه نفحا"
+      ]
+    },
+    "الخردلي": {
+      "display": "الخردلي",
+      "lat": 33.34234,
+      "lng": 35.54311,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الخردلي"
       ]
     },
     "الخضيره": {
@@ -159,56 +758,512 @@
         "الخيام"
       ]
     },
+    "الدبعال": {
+      "display": "دبعال",
+      "lat": 33.24922,
+      "lng": 35.34893,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الدبعال"
+      ]
+    },
+    "الدبين": {
+      "display": "دبين",
+      "lat": 33.3693,
+      "lng": 35.59785,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الدبين"
+      ]
+    },
+    "الدفنا": {
+      "display": "دفنا",
+      "lat": 33.23037,
+      "lng": 35.63926,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الدفنا"
+      ]
+    },
+    "الدلتون": {
+      "display": "دلتون",
+      "lat": 33.01667,
+      "lng": 35.48919,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الدلتون"
+      ]
+    },
+    "الدير سيريان": {
+      "display": "دير سيريان",
+      "lat": 33.29291,
+      "lng": 35.49664,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الدير سيريان"
+      ]
+    },
+    "الدير قانون راس العين": {
+      "display": "دير قانون رأس العين",
+      "lat": 33.21385,
+      "lng": 35.22416,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الدير قانون رأس العين",
+        "الدير قانون راس العين"
+      ]
+    },
+    "الدير كيفا": {
+      "display": "دير كيفا",
+      "lat": 33.25327,
+      "lng": 35.40066,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الدير كيفا"
+      ]
+    },
+    "الدير ميماس": {
+      "display": "دير ميماس",
+      "lat": 33.30186,
+      "lng": 35.54318,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الدير ميماس"
+      ]
+    },
+    "الرامات دافيد": {
+      "display": "رامات دافيد",
+      "lat": 32.67757,
+      "lng": 35.2039,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الرامات دافيد"
+      ]
+    },
+    "الرامات ديفيد": {
+      "display": "رامات ديفيد",
+      "lat": 32.67757,
+      "lng": 35.2039,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الرامات ديفيد"
+      ]
+    },
+    "الراميه": {
+      "display": "رامية",
+      "lat": 33.11114,
+      "lng": 35.30999,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الرامية",
+        "الراميه"
+      ]
+    },
     "الراهب": {
       "display": "الراهب",
-      "lat": 33.2,
-      "lng": 35.55,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "الراهب"
       ]
     },
+    "الرب الثلاثين": {
+      "display": "رب الثلاثين",
+      "lat": 33.249,
+      "lng": 35.51898,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الرب الثلاثين"
+      ]
+    },
+    "الرميش": {
+      "display": "رميش",
+      "lat": 33.0778,
+      "lng": 35.36784,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الرميش"
+      ]
+    },
+    "الرميلان": {
+      "display": "رميلان",
+      "lat": 37.052,
+      "lng": 42.069,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الرميلان"
+      ]
+    },
+    "الروش هانيكرا": {
+      "display": "روش هانيكرا",
+      "lat": 33.08575,
+      "lng": 35.11508,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الروش هانيكرا"
+      ]
+    },
+    "الرومين": {
+      "display": "رومين",
+      "lat": 33.46231,
+      "lng": 35.44262,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الرومين"
+      ]
+    },
+    "الريحان": {
+      "display": "الريحان",
+      "lat": 33.43893,
+      "lng": 35.56326,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الريحان"
+      ]
+    },
+    "الزخرون": {
+      "display": "زخرون",
+      "lat": 32.57398,
+      "lng": 34.95381,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الزخرون"
+      ]
+    },
+    "الزرعيت": {
+      "display": "زرعيت",
+      "lat": 33.09964,
+      "lng": 35.28864,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الزرعيت"
+      ]
+    },
+    "الزهراني": {
+      "display": "الزهراني",
+      "lat": 33.42919,
+      "lng": 35.44682,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الزهراني"
+      ]
+    },
+    "الزوطر الشرقيه": {
+      "display": "زوطر الشرقية",
+      "lat": 33.3197,
+      "lng": 35.47343,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الزوطر الشرقية",
+        "الزوطر الشرقيه"
+      ]
+    },
+    "الساعر": {
+      "display": "ساعر",
+      "lat": 33.02691,
+      "lng": 35.39499,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الساعر"
+      ]
+    },
+    "الستيلا ماريس": {
+      "display": "ستيلا ماريس",
+      "lat": 32.82345,
+      "lng": 34.97736,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الستيلا ماريس"
+      ]
+    },
+    "السخنين": {
+      "display": "سخنين",
+      "lat": 32.86381,
+      "lng": 35.30232,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "السخنين"
+      ]
+    },
+    "الشاعل": {
+      "display": "شاعل",
+      "lat": 33.11648,
+      "lng": 35.71657,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الشاعل"
+      ]
+    },
+    "الشامير": {
+      "display": "شامير",
+      "lat": 33.16389,
+      "lng": 35.65917,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الشامير"
+      ]
+    },
+    "الشبريحا": {
+      "display": "الشبريحا",
+      "lat": 33.27648,
+      "lng": 35.22876,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الشبريحا"
+      ]
+    },
+    "الشتولا": {
+      "display": "شتولا",
+      "lat": 33.08476,
+      "lng": 35.31431,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الشتولا"
+      ]
+    },
+    "الشدادي": {
+      "display": "الشدادي",
+      "lat": 36.05852,
+      "lng": 40.73054,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الشدادي"
+      ]
+    },
+    "الشمع": {
+      "display": "شمع",
+      "lat": 33.14581,
+      "lng": 35.20526,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الشمع"
+      ]
+    },
+    "الشهابيه": {
+      "display": "الشهابية",
+      "lat": 33.24333,
+      "lng": 35.38307,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الشهابية",
+        "الشهابيه"
+      ]
+    },
+    "الشوميرا": {
+      "display": "الشوميرا",
+      "lat": 33.08181,
+      "lng": 35.28418,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الشوميرا"
+      ]
+    },
+    "الشيخ": {
+      "display": "الشيخ",
+      "lat": 33.21018,
+      "lng": 35.51873,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الشيخ"
+      ]
+    },
     "الصدح": {
       "display": "الصدح",
-      "lat": 33.06,
-      "lng": 35.42,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "الصدح"
       ]
     },
+    "الصديقين": {
+      "display": "صديقين",
+      "lat": 33.19138,
+      "lng": 35.30502,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الصديقين"
+      ]
+    },
+    "الصريفا": {
+      "display": "صريفا",
+      "lat": 33.28222,
+      "lng": 35.40188,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الصريفا"
+      ]
+    },
+    "الصور": {
+      "display": "صور",
+      "lat": 33.27212,
+      "lng": 35.1964,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الصور"
+      ]
+    },
+    "الصيدا": {
+      "display": "صيدا",
+      "lat": 33.56473,
+      "lng": 35.37498,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الصيدا"
+      ]
+    },
     "الضهيره": {
       "display": "الضهيرة",
-      "lat": 33.1011,
-      "lng": 35.2271,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "الضهيرة"
       ]
     },
+    "الطلوسه": {
+      "display": "طلوسة",
+      "lat": 33.22837,
+      "lng": 35.48846,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الطلوسة",
+        "الطلوسه"
+      ]
+    },
     "الطيبه": {
       "display": "الطيبة",
-      "lat": 33.275,
-      "lng": 35.5205,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "الطيبة"
       ]
     },
+    "الطير حرفا": {
+      "display": "طير حرفا",
+      "lat": 33.13372,
+      "lng": 35.22357,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الطير حرفا"
+      ]
+    },
+    "الطيرحرفا": {
+      "display": "طيرحرفا",
+      "lat": 33.13372,
+      "lng": 35.22357,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الطيرحرفا"
+      ]
+    },
+    "الطيري": {
+      "display": "الطيري",
+      "lat": 33.14231,
+      "lng": 35.40287,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الطيري"
+      ]
+    },
     "العاصي": {
       "display": "العاصي",
-      "lat": 33.15,
-      "lng": 35.55,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "العاصي"
@@ -216,24 +1271,71 @@
     },
     "العباد": {
       "display": "العباد",
-      "lat": 33.11,
-      "lng": 35.46,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "العباد"
       ]
     },
+    "العباسيه": {
+      "display": "العباسية",
+      "lat": 33.2971,
+      "lng": 35.28307,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "العباسية",
+        "العباسيه"
+      ]
+    },
+    "العدشيت": {
+      "display": "عدشيت",
+      "lat": 33.27812,
+      "lng": 35.48346,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "العدشيت"
+      ]
+    },
+    "العدلون": {
+      "display": "عدلون",
+      "lat": 33.40482,
+      "lng": 35.27439,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "العدلون"
+      ]
+    },
     "العديسه": {
       "display": "العديسة",
-      "lat": 33.24834,
-      "lng": 35.53916,
-      "coordSource": "borders",
+      "lat": 33.25776,
+      "lng": 35.54668,
+      "coordSource": "curated",
       "confidence": "high",
       "hasPolygon": true,
       "aliases": [
-        "العديسة"
+        "العديسة",
+        "العديسه"
+      ]
+    },
+    "العرب اللويزه": {
+      "display": "عرب اللويزة",
+      "lat": 33.274,
+      "lng": 35.61462,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "العرب اللويزة",
+        "العرب اللويزه"
       ]
     },
     "العفولا": {
@@ -258,6 +1360,108 @@
         "العفولة"
       ]
     },
+    "العلما الشعب": {
+      "display": "علما الشعب",
+      "lat": 33.10678,
+      "lng": 35.17956,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "العلما الشعب"
+      ]
+    },
+    "العلي الطاهر": {
+      "display": "علي الطاهر",
+      "lat": 33.36574,
+      "lng": 35.51682,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "العلي الطاهر"
+      ]
+    },
+    "العمر": {
+      "display": "حقل العمر",
+      "lat": 34.93,
+      "lng": 40.85,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "العمر"
+      ]
+    },
+    "العمير": {
+      "display": "عمير",
+      "lat": 33.17877,
+      "lng": 35.62078,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "العمير"
+      ]
+    },
+    "العيتا الجبل": {
+      "display": "عيتا الجبل",
+      "lat": 33.17449,
+      "lng": 35.40944,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "العيتا الجبل"
+      ]
+    },
+    "العيشيه": {
+      "display": "العيشية",
+      "lat": 33.40741,
+      "lng": 35.55644,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "العيشية",
+        "العيشيه"
+      ]
+    },
+    "العين ابل": {
+      "display": "عين إبل",
+      "lat": 33.1093,
+      "lng": 35.40311,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "العين إبل",
+        "العين ابل"
+      ]
+    },
+    "العين الاسد": {
+      "display": "عين الأسد",
+      "lat": 33.786,
+      "lng": 42.4412,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "العين الأسد",
+        "العين الاسد"
+      ]
+    },
+    "العين زيتيم": {
+      "display": "عين زيتيم",
+      "lat": 32.99503,
+      "lng": 35.48436,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "العين زيتيم"
+      ]
+    },
     "الغجر": {
       "display": "الغجر",
       "lat": 33.27,
@@ -267,6 +1471,76 @@
       "hasPolygon": false,
       "aliases": [
         "الغجر"
+      ]
+    },
+    "الغندوريه": {
+      "display": "الغندورية",
+      "lat": 33.27799,
+      "lng": 35.43721,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الغندورية",
+        "الغندوريه"
+      ]
+    },
+    "الغورنوت هغليل": {
+      "display": "غورنوت هغليل",
+      "lat": 33.05954,
+      "lng": 35.24965,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الغورنوت هغليل"
+      ]
+    },
+    "القاعده بالماخيم": {
+      "display": "قاعدة بالماخيم",
+      "lat": 31.93341,
+      "lng": 34.70726,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "القاعدة بالماخيم",
+        "القاعده بالماخيم"
+      ]
+    },
+    "القاعده تل نوف": {
+      "display": "قاعدة تل نوف",
+      "lat": 31.83605,
+      "lng": 34.81999,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "القاعدة تل نوف",
+        "القاعده تل نوف"
+      ]
+    },
+    "القاعده نفح": {
+      "display": "قاعدة نفح",
+      "lat": 33.05783,
+      "lng": 35.73584,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "القاعدة نفح",
+        "القاعده نفح"
+      ]
+    },
+    "القبريخا": {
+      "display": "قبريخا",
+      "lat": 33.24634,
+      "lng": 35.46336,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "القبريخا"
       ]
     },
     "القدس": {
@@ -282,13 +1556,25 @@
     },
     "القلعه": {
       "display": "القلعة",
-      "lat": 33.3026,
-      "lng": 35.664,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "القلعة"
+      ]
+    },
+    "القلعه الشقيف": {
+      "display": "قلعة الشقيف",
+      "lat": 33.32454,
+      "lng": 35.53217,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "القلعة الشقيف",
+        "القلعه الشقيف"
       ]
     },
     "القنطره": {
@@ -304,13 +1590,47 @@
     },
     "القوزح": {
       "display": "القوزح",
-      "lat": 33.18,
-      "lng": 35.55,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "القوزح"
+      ]
+    },
+    "القيساريه": {
+      "display": "قيسارية",
+      "lat": 32.50597,
+      "lng": 34.90622,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "القيسارية",
+        "القيساريه"
+      ]
+    },
+    "الكدمات تسفي": {
+      "display": "كدمات تسفي",
+      "lat": 33.02974,
+      "lng": 35.69703,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكدمات تسفي"
+      ]
+    },
+    "الكرم بن زمرا": {
+      "display": "كرم بن زمرا",
+      "lat": 33.03889,
+      "lng": 35.46805,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكرم بن زمرا"
       ]
     },
     "الكرمييل": {
@@ -325,14 +1645,25 @@
       ]
     },
     "الكرميييل": {
-      "display": "الكرميئيل",
-      "lat": 32.9137,
-      "lng": 35.2918,
-      "coordSource": "facet_coords",
+      "display": "كرميئيل",
+      "lat": 32.91591,
+      "lng": 35.29343,
+      "coordSource": "curated",
       "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "الكرميئيل"
+      ]
+    },
+    "الكرن نفتالي": {
+      "display": "كرن نفتالي",
+      "lat": 33.09071,
+      "lng": 35.56294,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكرن نفتالي"
       ]
     },
     "الكريوت": {
@@ -344,6 +1675,206 @@
       "hasPolygon": false,
       "aliases": [
         "الكريوت"
+      ]
+    },
+    "الكفار بلوم": {
+      "display": "كفار بلوم",
+      "lat": 33.17237,
+      "lng": 35.61012,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكفار بلوم"
+      ]
+    },
+    "الكفار فراديم": {
+      "display": "كفار فراديم",
+      "lat": 32.99725,
+      "lng": 35.27253,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكفار فراديم"
+      ]
+    },
+    "الكفر جلعادي": {
+      "display": "كفر جلعادي",
+      "lat": 33.24178,
+      "lng": 35.57496,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكفر جلعادي"
+      ]
+    },
+    "الكفر فرديم": {
+      "display": "كفر فرديم",
+      "lat": 32.99725,
+      "lng": 35.27253,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكفر فرديم"
+      ]
+    },
+    "الكفر يوفال": {
+      "display": "كفر يوفال",
+      "lat": 33.24742,
+      "lng": 35.59749,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكفر يوفال"
+      ]
+    },
+    "الكفرا": {
+      "display": "كفرا",
+      "lat": 33.18053,
+      "lng": 35.354,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكفرا"
+      ]
+    },
+    "الكفرتبنيت": {
+      "display": "كفرتبنيت",
+      "lat": 33.35188,
+      "lng": 35.51863,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكفرتبنيت"
+      ]
+    },
+    "الكفرحونه": {
+      "display": "كفرحونة",
+      "lat": 33.447,
+      "lng": 35.508,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكفرحونة",
+        "الكفرحونه"
+      ]
+    },
+    "الكفرسولد": {
+      "display": "كفرسولد",
+      "lat": 33.19469,
+      "lng": 35.65785,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكفرسولد"
+      ]
+    },
+    "الكفرشوبا": {
+      "display": "كفرشوبا",
+      "lat": 33.32767,
+      "lng": 35.69273,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكفرشوبا"
+      ]
+    },
+    "الكفركلا": {
+      "display": "كفركلا",
+      "lat": 33.28271,
+      "lng": 35.55876,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكفركلا"
+      ]
+    },
+    "الكفرملكي": {
+      "display": "كفرملكي",
+      "lat": 33.50126,
+      "lng": 35.48079,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكفرملكي"
+      ]
+    },
+    "الكفريوفال": {
+      "display": "كفريوفال",
+      "lat": 33.24742,
+      "lng": 35.59749,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكفريوفال"
+      ]
+    },
+    "الكفور": {
+      "display": "الكفور",
+      "lat": 33.39832,
+      "lng": 35.45179,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكفور"
+      ]
+    },
+    "الكونيكو": {
+      "display": "كونيكو",
+      "lat": 35.08,
+      "lng": 40.5,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكونيكو"
+      ]
+    },
+    "الكيرم بن زمرا": {
+      "display": "كيرم بن زمرا",
+      "lat": 33.03889,
+      "lng": 35.46805,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الكيرم بن زمرا"
+      ]
+    },
+    "اللبونه": {
+      "display": "اللبونة",
+      "lat": 33.09331,
+      "lng": 35.14868,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "اللبونة",
+        "اللبونه"
+      ]
+    },
+    "الليمان": {
+      "display": "ليمان",
+      "lat": 33.0595,
+      "lng": 35.11303,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الليمان"
       ]
     },
     "المالكيه": {
@@ -358,6 +1889,28 @@
         "المالكيّة"
       ]
     },
+    "المتات": {
+      "display": "متات",
+      "lat": 33.04154,
+      "lng": 35.35983,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "المتات"
+      ]
+    },
+    "المتسوفا": {
+      "display": "متسوفا",
+      "lat": 33.06294,
+      "lng": 35.1571,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "المتسوفا"
+      ]
+    },
     "المتوله": {
       "display": "المتوله",
       "lat": 33.28,
@@ -369,15 +1922,71 @@
         "المتوله"
       ]
     },
+    "المجدل زون": {
+      "display": "مجدل زون",
+      "lat": 33.15032,
+      "lng": 35.22603,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "المجدل زون"
+      ]
+    },
+    "المحافظه ديالي": {
+      "display": "محافظة ديالى",
+      "lat": 34.02287,
+      "lng": 45.10462,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "المحافظة ديالى",
+        "المحافظه ديالى"
+      ]
+    },
     "المرج": {
       "display": "المرج",
-      "lat": 33.28,
-      "lng": 35.6,
-      "coordSource": "op_coords",
+      "lat": 32.58,
+      "lng": 35.32,
+      "coordSource": "siren_coords",
       "confidence": "low",
       "hasPolygon": false,
       "aliases": [
         "المرج"
+      ]
+    },
+    "المروحين": {
+      "display": "مروحين",
+      "lat": 33.10865,
+      "lng": 35.27674,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "المروحين"
+      ]
+    },
+    "المسغاف عام": {
+      "display": "مسغاف عام",
+      "lat": 33.24779,
+      "lng": 35.54867,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "المسغاف عام"
+      ]
+    },
+    "المسكفعام": {
+      "display": "مسكفعام",
+      "lat": 33.24779,
+      "lng": 35.54867,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "المسكفعام"
       ]
     },
     "المطله": {
@@ -392,6 +2001,50 @@
         "المطلّة"
       ]
     },
+    "المعالوت ترشيحا": {
+      "display": "معالوت ترشيحا",
+      "lat": 33.01574,
+      "lng": 35.27597,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "المعالوت ترشيحا"
+      ]
+    },
+    "المعالوت تشريحا": {
+      "display": "معالوت تشريحا",
+      "lat": 33.01574,
+      "lng": 35.27597,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "المعالوت تشريحا"
+      ]
+    },
+    "المعروب": {
+      "display": "معروب",
+      "lat": 33.2843,
+      "lng": 35.34673,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "المعروب"
+      ]
+    },
+    "المعيليا": {
+      "display": "معيليا",
+      "lat": 33.02806,
+      "lng": 35.25833,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "المعيليا"
+      ]
+    },
     "المناره": {
       "display": "المنارة",
       "lat": 33.19328,
@@ -401,6 +2054,39 @@
       "hasPolygon": true,
       "aliases": [
         "المنارة"
+      ]
+    },
+    "المنصوري": {
+      "display": "المنصوري",
+      "lat": 33.17365,
+      "lng": 35.21109,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "المنصوري"
+      ]
+    },
+    "المنوت": {
+      "display": "منوت",
+      "lat": 33.03836,
+      "lng": 35.19469,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "المنوت"
+      ]
+    },
+    "الميس الجبل": {
+      "display": "ميس الجبل",
+      "lat": 33.17557,
+      "lng": 35.50994,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الميس الجبل"
       ]
     },
     "الناصره": {
@@ -425,6 +2111,86 @@
         "الناصرة العليا"
       ]
     },
+    "النافيه زيف": {
+      "display": "نافيه زيف",
+      "lat": 33.02759,
+      "lng": 35.18349,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "النافيه زيف"
+      ]
+    },
+    "الناقوره": {
+      "display": "الناقورة",
+      "lat": 33.11063,
+      "lng": 35.12291,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الناقورة",
+        "الناقوره"
+      ]
+    },
+    "النبطيه": {
+      "display": "النبطية",
+      "lat": 33.3812,
+      "lng": 35.48253,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "النبطية",
+        "النبطيه"
+      ]
+    },
+    "النبي شيت": {
+      "display": "النبي شيت",
+      "lat": 33.87268,
+      "lng": 36.11089,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "النبي شيت"
+      ]
+    },
+    "النبي شيث": {
+      "display": "النبي شيت",
+      "lat": 33.87268,
+      "lng": 36.11089,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "النبي شيث"
+      ]
+    },
+    "النبي يوشع": {
+      "display": "النبي يوشع",
+      "lat": 33.1023,
+      "lng": 35.55312,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "النبي يوشع"
+      ]
+    },
+    "النحله": {
+      "display": "نحلة",
+      "lat": 34.04228,
+      "lng": 36.25861,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "النحلة",
+        "النحله"
+      ]
+    },
     "النقب": {
       "display": "النقب",
       "lat": 31.0,
@@ -436,12 +2202,102 @@
         "النقب"
       ]
     },
+    "الهجوشريم": {
+      "display": "هجوشريم",
+      "lat": 33.22113,
+      "lng": 35.62307,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الهجوشريم"
+      ]
+    },
+    "الوادي الحجير": {
+      "display": "وادي الحجير",
+      "lat": 33.29008,
+      "lng": 35.43749,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "الوادي الحجير"
+      ]
+    },
+    "الياروون": {
+      "display": "يارؤون",
+      "lat": 33.07778,
+      "lng": 35.45575,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "اليارؤون"
+      ]
+    },
+    "اليارين": {
+      "display": "يارين",
+      "lat": 33.10593,
+      "lng": 35.23612,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "اليارين"
+      ]
+    },
+    "اليحمر الشقيف": {
+      "display": "يحمر الشقيف",
+      "lat": 33.31237,
+      "lng": 35.51775,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "اليحمر الشقيف"
+      ]
+    },
+    "اليسود هامعلاه": {
+      "display": "يسود هامعلاه",
+      "lat": 33.05738,
+      "lng": 35.60302,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "اليسود هامعلاة",
+        "اليسود هامعلاه"
+      ]
+    },
+    "اليسود همعلاه": {
+      "display": "يسود همعلاه",
+      "lat": 33.05738,
+      "lng": 35.60302,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "اليسود همعلاة",
+        "اليسود همعلاه"
+      ]
+    },
+    "اليعرا": {
+      "display": "يعرا",
+      "lat": 33.06742,
+      "lng": 35.18585,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "اليعرا"
+      ]
+    },
     "ايرز": {
       "display": "إيرز",
       "lat": 31.55,
       "lng": 34.53,
-      "coordSource": "siren_coords",
-      "confidence": "low",
+      "coordSource": "facet_coords",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "إيرز",
@@ -452,12 +2308,24 @@
       "display": "ايفن مناحم",
       "lat": 33.06,
       "lng": 35.2,
-      "coordSource": "siren_coords",
-      "confidence": "low",
+      "coordSource": "facet_coords",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "إيفن مناحم",
         "ايفن مناحم"
+      ]
+    },
+    "ايفن مناحيم": {
+      "display": "إيفن مناحيم",
+      "lat": 33.07361,
+      "lng": 35.29414,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "إيفن مناحيم",
+        "ايفن مناحيم"
       ]
     },
     "ايفين مناحم": {
@@ -483,15 +2351,51 @@
         "ايلات"
       ]
     },
+    "ايلانيا": {
+      "display": "إيلانيا",
+      "lat": 32.75496,
+      "lng": 35.40747,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "إيلانيا",
+        "ايلانيا"
+      ]
+    },
+    "ايلون": {
+      "display": "إيلون",
+      "lat": 33.06335,
+      "lng": 35.21975,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "إيلون",
+        "ايلون"
+      ]
+    },
     "ايليت هشاخر": {
       "display": "ايليت هشاخر",
       "lat": 33.04,
       "lng": 35.55,
-      "coordSource": "siren_coords",
-      "confidence": "low",
+      "coordSource": "facet_coords",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "ايليت هشاخر"
+      ]
+    },
+    "اييليت هشاحر": {
+      "display": "اييليت هشاحر",
+      "lat": 33.0216,
+      "lng": 35.57595,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "أييليت هشاحر",
+        "اييليت هشاحر"
       ]
     },
     "اييليت هشاخر": {
@@ -503,6 +2407,17 @@
       "hasPolygon": false,
       "aliases": [
         "إييليت هشاخر"
+      ]
+    },
+    "بار يوحاي": {
+      "display": "بار يوحاي",
+      "lat": 32.997,
+      "lng": 35.44812,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "بار يوحاي"
       ]
     },
     "بتاح تكفا": {
@@ -538,6 +2453,17 @@
         "برعام"
       ]
     },
+    "برعشيت": {
+      "display": "برعشيت",
+      "lat": 33.17845,
+      "lng": 35.4372,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "برعشيت"
+      ]
+    },
     "برعم": {
       "display": "برعم",
       "lat": 33.04,
@@ -551,21 +2477,56 @@
     },
     "بركه ريشا": {
       "display": "بركة ريشا",
-      "lat": 33.3,
-      "lng": 35.83,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "بركة ريشا"
       ]
     },
+    "بركه ريشه": {
+      "display": "بركة ريشة",
+      "lat": 33.09853,
+      "lng": 35.26222,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "بركة ريشة",
+        "بركه ريشه"
+      ]
+    },
+    "بصه": {
+      "display": "البصة",
+      "lat": 33.0711,
+      "lng": 35.13514,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "بصة",
+        "بصه"
+      ]
+    },
+    "بعلبك": {
+      "display": "بعلبك",
+      "lat": 34.00965,
+      "lng": 36.21171,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "بعلبك"
+      ]
+    },
     "بفلاي": {
       "display": "بفلاي",
-      "lat": 33.31,
-      "lng": 35.38,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "بفلاي"
@@ -575,8 +2536,8 @@
       "display": "بقعاتا",
       "lat": 33.19,
       "lng": 35.77,
-      "coordSource": "siren_coords",
-      "confidence": "low",
+      "coordSource": "facet_coords",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "بقعاتا"
@@ -586,11 +2547,22 @@
       "display": "بقعاثا",
       "lat": 33.19,
       "lng": 35.77,
-      "coordSource": "siren_coords",
-      "confidence": "low",
+      "coordSource": "facet_coords",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "بقعاثا"
+      ]
+    },
+    "بلاط": {
+      "display": "بلاط",
+      "lat": 33.38403,
+      "lng": 35.60466,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "بلاط"
       ]
     },
     "بلده دبل": {
@@ -602,6 +2574,17 @@
       "hasPolygon": true,
       "aliases": [
         "بلدة دبل"
+      ]
+    },
+    "بليدا": {
+      "display": "بليدا",
+      "lat": 33.13632,
+      "lng": 35.5046,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "بليدا"
       ]
     },
     "بنت جبيل": {
@@ -624,6 +2607,18 @@
       "hasPolygon": false,
       "aliases": [
         "بني براك"
+      ]
+    },
+    "بوابه فاطمه": {
+      "display": "بوابة فاطمة",
+      "lat": 33.2785,
+      "lng": 35.5775,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "بوابة فاطمة",
+        "بوابه فاطمه"
       ]
     },
     "بياض بليدا": {
@@ -661,13 +2656,24 @@
     },
     "بيت ليف": {
       "display": "بيت ليف",
-      "lat": null,
-      "lng": null,
-      "coordSource": null,
-      "confidence": "none",
+      "lat": 33.13207,
+      "lng": 35.33401,
+      "coordSource": "curated",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "بيت ليف"
+      ]
+    },
+    "بيت هعميك": {
+      "display": "بيت هعميك",
+      "lat": 32.97049,
+      "lng": 35.14614,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "بيت هعميك"
       ]
     },
     "بيت هلل": {
@@ -685,11 +2691,22 @@
       "display": "بيت هيلل",
       "lat": 33.24,
       "lng": 35.58,
-      "coordSource": "siren_coords",
-      "confidence": "low",
+      "coordSource": "facet_coords",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "بيت هيلل"
+      ]
+    },
+    "بيت ياحون": {
+      "display": "بيت ياحون",
+      "lat": 33.15818,
+      "lng": 35.4212,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "بيت ياحون"
       ]
     },
     "بير السبع": {
@@ -703,12 +2720,34 @@
         "بئر السبع"
       ]
     },
+    "بيروت": {
+      "display": "بيروت",
+      "lat": 33.89592,
+      "lng": 35.47843,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "بيروت"
+      ]
+    },
+    "بيريا": {
+      "display": "بيريا",
+      "lat": 32.97759,
+      "lng": 35.50065,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "بيريا"
+      ]
+    },
     "بييري": {
       "display": "بئيري",
       "lat": 31.37,
       "lng": 34.47,
-      "coordSource": "siren_coords",
-      "confidence": "low",
+      "coordSource": "facet_coords",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "بئيري"
@@ -725,6 +2764,17 @@
         "تبنين"
       ]
     },
+    "تسفعون": {
+      "display": "تسفعون",
+      "lat": 32.84437,
+      "lng": 35.25381,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "تسفعون"
+      ]
+    },
     "تل ابيب": {
       "display": "تل أبيب",
       "lat": 32.08816,
@@ -736,15 +2786,81 @@
         "تل أبيب"
       ]
     },
+    "تنف": {
+      "display": "التنف",
+      "lat": 33.43692,
+      "lng": 38.83546,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "تنف"
+      ]
+    },
+    "جبشيت": {
+      "display": "جبشيت",
+      "lat": 33.36157,
+      "lng": 35.428,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "جبشيت"
+      ]
+    },
+    "جسر هزيف": {
+      "display": "جشر هزيف",
+      "lat": 33.03947,
+      "lng": 35.11098,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "جسر هزيف"
+      ]
+    },
+    "جشر هزيف": {
+      "display": "جشر هزيف",
+      "lat": 33.03947,
+      "lng": 35.11098,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "جشر هزيف"
+      ]
+    },
+    "جعتون": {
+      "display": "جعتون",
+      "lat": 33.00571,
+      "lng": 35.21375,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "جعتون"
+      ]
+    },
     "جل العلام": {
       "display": "جل العلام",
-      "lat": 33.1,
-      "lng": 35.49,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "جل العلام"
+      ]
+    },
+    "جنتا": {
+      "display": "جنتا",
+      "lat": 33.83913,
+      "lng": 36.09956,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "جنتا"
       ]
     },
     "جويا": {
@@ -780,6 +2896,39 @@
         "حانيتا"
       ]
     },
+    "حانين": {
+      "display": "حانين",
+      "lat": 33.109,
+      "lng": 35.38208,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "حانين"
+      ]
+    },
+    "حانيين": {
+      "display": "حانين",
+      "lat": 33.109,
+      "lng": 35.38208,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "حانيين"
+      ]
+    },
+    "حبوشيت": {
+      "display": "حبوشيت",
+      "lat": 33.40645,
+      "lng": 35.48664,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "حبوشيت"
+      ]
+    },
     "حتسريم": {
       "display": "حتسريم",
       "lat": 31.23,
@@ -789,6 +2938,106 @@
       "hasPolygon": false,
       "aliases": [
         "حتسريم"
+      ]
+    },
+    "حتسور": {
+      "display": "حتسور",
+      "lat": 32.97917,
+      "lng": 35.54333,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "حتسور"
+      ]
+    },
+    "حتسور هاجليليت": {
+      "display": "حتسور هاجليليت",
+      "lat": 32.97917,
+      "lng": 35.54333,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "حتسور هاجليليت"
+      ]
+    },
+    "حداثا": {
+      "display": "حداثا",
+      "lat": 33.15605,
+      "lng": 35.3912,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "حداثا"
+      ]
+    },
+    "حرير": {
+      "display": "حرير",
+      "lat": 36.67,
+      "lng": 44.34,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "حرير"
+      ]
+    },
+    "حسكه": {
+      "display": "الحسكة",
+      "lat": 36.41318,
+      "lng": 40.52691,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "حسكة",
+        "حسكه"
+      ]
+    },
+    "حقل العمر": {
+      "display": "حقل العمر",
+      "lat": 34.93,
+      "lng": 40.85,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "حقل العمر"
+      ]
+    },
+    "حورفيش": {
+      "display": "حورفيش",
+      "lat": 33.01737,
+      "lng": 35.34696,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "حورفيش"
+      ]
+    },
+    "حوسن": {
+      "display": "حوسن",
+      "lat": 32.99758,
+      "lng": 35.29799,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "حوسن"
+      ]
+    },
+    "حولا": {
+      "display": "حولا",
+      "lat": 33.20759,
+      "lng": 35.51025,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "حولا"
       ]
     },
     "حولاتا": {
@@ -806,8 +3055,8 @@
       "display": "حوليت",
       "lat": 30.9,
       "lng": 34.38,
-      "coordSource": "siren_coords",
-      "confidence": "low",
+      "coordSource": "facet_coords",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "حوليت"
@@ -833,6 +3082,17 @@
       "hasPolygon": false,
       "aliases": [
         "حيفا والكريوت"
+      ]
+    },
+    "خردلي": {
+      "display": "الخردلي",
+      "lat": 33.34234,
+      "lng": 35.54311,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "خردلي"
       ]
     },
     "دافنا": {
@@ -868,6 +3128,17 @@
         "دان"
       ]
     },
+    "دبعال": {
+      "display": "دبعال",
+      "lat": 33.24922,
+      "lng": 35.34893,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "دبعال"
+      ]
+    },
     "دبل": {
       "display": "دبل",
       "lat": 33.12292,
@@ -877,6 +3148,39 @@
       "hasPolygon": true,
       "aliases": [
         "دبل"
+      ]
+    },
+    "دبين": {
+      "display": "دبين",
+      "lat": 33.3693,
+      "lng": 35.59785,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "دبين"
+      ]
+    },
+    "دفنا": {
+      "display": "دفنا",
+      "lat": 33.23037,
+      "lng": 35.63926,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "دفنا"
+      ]
+    },
+    "دلتون": {
+      "display": "دلتون",
+      "lat": 33.01667,
+      "lng": 35.48919,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "دلتون"
       ]
     },
     "دوفيف": {
@@ -901,12 +3205,57 @@
         "دير سريان"
       ]
     },
+    "دير سيريان": {
+      "display": "دير سيريان",
+      "lat": 33.29291,
+      "lng": 35.49664,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "دير سيريان"
+      ]
+    },
+    "دير قانون راس العين": {
+      "display": "دير قانون رأس العين",
+      "lat": 33.21385,
+      "lng": 35.22416,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "دير قانون رأس العين",
+        "دير قانون راس العين"
+      ]
+    },
+    "دير كيفا": {
+      "display": "دير كيفا",
+      "lat": 33.25327,
+      "lng": 35.40066,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "دير كيفا"
+      ]
+    },
+    "دير ميماس": {
+      "display": "دير ميماس",
+      "lat": 33.30186,
+      "lng": 35.54318,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "دير ميماس"
+      ]
+    },
     "ديشون": {
       "display": "ديشون",
       "lat": 33.04,
       "lng": 35.48,
-      "coordSource": "siren_coords",
-      "confidence": "low",
+      "coordSource": "facet_coords",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "ديشون"
@@ -921,6 +3270,28 @@
       "hasPolygon": true,
       "aliases": [
         "ديمونا"
+      ]
+    },
+    "رامات دافيد": {
+      "display": "رامات دافيد",
+      "lat": 32.67757,
+      "lng": 35.2039,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "رامات دافيد"
+      ]
+    },
+    "رامات ديفيد": {
+      "display": "رامات ديفيد",
+      "lat": 32.67757,
+      "lng": 35.2039,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "رامات ديفيد"
       ]
     },
     "رامات هشارون": {
@@ -958,10 +3329,10 @@
     },
     "راميا": {
       "display": "راميا",
-      "lat": 33.07,
-      "lng": 35.47,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "راميا"
@@ -969,21 +3340,44 @@
     },
     "راميم": {
       "display": "راميم",
-      "lat": 33.06,
-      "lng": 35.43,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "راميم"
       ]
     },
+    "راميه": {
+      "display": "رامية",
+      "lat": 33.11114,
+      "lng": 35.30999,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "رامية",
+        "راميه"
+      ]
+    },
+    "رب الثلاثين": {
+      "display": "رب الثلاثين",
+      "lat": 33.249,
+      "lng": 35.51898,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "رب الثلاثين"
+      ]
+    },
     "رب ثلاثين": {
       "display": "ربّ ثلاثين",
-      "lat": 33.15,
-      "lng": 35.47,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "ربّ ثلاثين"
@@ -1011,6 +3405,28 @@
         "رمات هشارون"
       ]
     },
+    "رميش": {
+      "display": "رميش",
+      "lat": 33.0778,
+      "lng": 35.36784,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "رميش"
+      ]
+    },
+    "رميلان": {
+      "display": "رميلان",
+      "lat": 37.052,
+      "lng": 42.069,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "رميلان"
+      ]
+    },
     "روش بينا": {
       "display": "روش بينا",
       "lat": 32.97,
@@ -1022,15 +3438,48 @@
         "روش بينا"
       ]
     },
+    "روش هانيكرا": {
+      "display": "روش هانيكرا",
+      "lat": 33.08575,
+      "lng": 35.11508,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "روش هانيكرا"
+      ]
+    },
+    "رومين": {
+      "display": "رومين",
+      "lat": 33.46231,
+      "lng": 35.44262,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "رومين"
+      ]
+    },
     "رويسات العلم": {
       "display": "رويسات العلم",
-      "lat": 33.4,
-      "lng": 35.8,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "رويسات العلم"
+      ]
+    },
+    "ريحان": {
+      "display": "الريحان",
+      "lat": 33.43893,
+      "lng": 35.56326,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "ريحان"
       ]
     },
     "زبدين": {
@@ -1044,26 +3493,93 @@
         "زبدين"
       ]
     },
+    "زخرون": {
+      "display": "زخرون",
+      "lat": 32.57398,
+      "lng": 34.95381,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "زخرون"
+      ]
+    },
     "زرعيت": {
       "display": "زرعيت",
-      "lat": 33.10005,
-      "lng": 35.2884,
-      "coordSource": "borders",
+      "lat": 33.09964,
+      "lng": 35.28864,
+      "coordSource": "curated",
       "confidence": "high",
       "hasPolygon": true,
       "aliases": [
         "زرعيت"
       ]
     },
+    "زهراني": {
+      "display": "الزهراني",
+      "lat": 33.42919,
+      "lng": 35.44682,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "زهراني"
+      ]
+    },
+    "زوطر الشرقيه": {
+      "display": "زوطر الشرقية",
+      "lat": 33.3197,
+      "lng": 35.47343,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "زوطر الشرقية",
+        "زوطر الشرقيه"
+      ]
+    },
     "زيكيم": {
       "display": "زيكيم",
       "lat": 31.59,
       "lng": 34.51,
-      "coordSource": "siren_coords",
-      "confidence": "low",
+      "coordSource": "facet_coords",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "زيكيم"
+      ]
+    },
+    "ساعر": {
+      "display": "ساعر",
+      "lat": 33.02691,
+      "lng": 35.39499,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "ساعر"
+      ]
+    },
+    "ستيلا ماريس": {
+      "display": "ستيلا ماريس",
+      "lat": 32.82345,
+      "lng": 34.97736,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "ستيلا ماريس"
+      ]
+    },
+    "سخنين": {
+      "display": "سخنين",
+      "lat": 32.86381,
+      "lng": 35.30232,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "سخنين"
       ]
     },
     "سديروت": {
@@ -1081,7 +3597,7 @@
       "display": "سعسع",
       "lat": 33.05,
       "lng": 35.42,
-      "coordSource": "op_coords",
+      "coordSource": "facet_coords",
       "confidence": "medium",
       "hasPolygon": false,
       "aliases": [
@@ -1121,6 +3637,39 @@
         "شاعار يشوف"
       ]
     },
+    "شاعل": {
+      "display": "شاعل",
+      "lat": 33.11648,
+      "lng": 35.71657,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "شاعل"
+      ]
+    },
+    "شامير": {
+      "display": "شامير",
+      "lat": 33.16389,
+      "lng": 35.65917,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "شامير"
+      ]
+    },
+    "شبريحا": {
+      "display": "الشبريحا",
+      "lat": 33.27648,
+      "lng": 35.22876,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "شبريحا"
+      ]
+    },
     "شبعا": {
       "display": "شبعا",
       "lat": 33.3537,
@@ -1134,13 +3683,24 @@
     },
     "شتولا": {
       "display": "شتولا",
-      "lat": 33.08543,
-      "lng": 35.31517,
-      "coordSource": "borders",
+      "lat": 33.08476,
+      "lng": 35.31431,
+      "coordSource": "curated",
       "confidence": "high",
       "hasPolygon": true,
       "aliases": [
         "شتولا"
+      ]
+    },
+    "شدادي": {
+      "display": "الشدادي",
+      "lat": 36.05852,
+      "lng": 40.73054,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "شدادي"
       ]
     },
     "شلومي": {
@@ -1154,15 +3714,71 @@
         "شلومي"
       ]
     },
+    "شمع": {
+      "display": "شمع",
+      "lat": 33.14581,
+      "lng": 35.20526,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "شمع"
+      ]
+    },
+    "شهابيه": {
+      "display": "الشهابية",
+      "lat": 33.24333,
+      "lng": 35.38307,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "شهابية",
+        "شهابيه"
+      ]
+    },
     "شوميرا": {
-      "display": "شوميرا",
-      "lat": 33.08469,
-      "lng": 35.28484,
-      "coordSource": "borders",
+      "display": "الشوميرا",
+      "lat": 33.08181,
+      "lng": 35.28418,
+      "coordSource": "curated",
       "confidence": "high",
       "hasPolygon": true,
       "aliases": [
         "شوميرا"
+      ]
+    },
+    "شيخ": {
+      "display": "الشيخ",
+      "lat": 33.21018,
+      "lng": 35.51873,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "شيخ"
+      ]
+    },
+    "صديقين": {
+      "display": "صديقين",
+      "lat": 33.19138,
+      "lng": 35.30502,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "صديقين"
+      ]
+    },
+    "صريفا": {
+      "display": "صريفا",
+      "lat": 33.28222,
+      "lng": 35.40188,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "صريفا"
       ]
     },
     "صفد": {
@@ -1178,13 +3794,35 @@
     },
     "صلحا": {
       "display": "صلحا",
-      "lat": 33.0833,
-      "lng": 35.45,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "صلحا"
+      ]
+    },
+    "صور": {
+      "display": "صور",
+      "lat": 33.27212,
+      "lng": 35.1964,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "صور"
+      ]
+    },
+    "صيدا": {
+      "display": "صيدا",
+      "lat": 33.56473,
+      "lng": 35.37498,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "صيدا"
       ]
     },
     "طبريا": {
@@ -1220,6 +3858,97 @@
         "طلعة المحيبيب"
       ]
     },
+    "طلوسه": {
+      "display": "طلوسة",
+      "lat": 33.22837,
+      "lng": 35.48846,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "طلوسة",
+        "طلوسه"
+      ]
+    },
+    "طير حرفا": {
+      "display": "طيرحرفا",
+      "lat": 33.13372,
+      "lng": 35.22357,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "طير حرفا"
+      ]
+    },
+    "طيرحرفا": {
+      "display": "طيرحرفا",
+      "lat": 33.13372,
+      "lng": 35.22357,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "طيرحرفا"
+      ]
+    },
+    "طيري": {
+      "display": "الطيري",
+      "lat": 33.14231,
+      "lng": 35.40287,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "طيري"
+      ]
+    },
+    "عباسيه": {
+      "display": "العباسية",
+      "lat": 33.2971,
+      "lng": 35.28307,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "عباسية",
+        "عباسيه"
+      ]
+    },
+    "عدشيت": {
+      "display": "عدشيت",
+      "lat": 33.27812,
+      "lng": 35.48346,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "عدشيت"
+      ]
+    },
+    "عدلون": {
+      "display": "عدلون",
+      "lat": 33.40482,
+      "lng": 35.27439,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "عدلون"
+      ]
+    },
+    "عديسه": {
+      "display": "العديسة",
+      "lat": 33.25776,
+      "lng": 35.54668,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "عديسة",
+        "عديسه"
+      ]
+    },
     "عرب العرامشه": {
       "display": "عرب العرامشة",
       "lat": 33.07,
@@ -1229,6 +3958,18 @@
       "hasPolygon": false,
       "aliases": [
         "عرب العرامشة"
+      ]
+    },
+    "عرب اللويزه": {
+      "display": "عرب اللويزة",
+      "lat": 33.274,
+      "lng": 35.61462,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "عرب اللويزة",
+        "عرب اللويزه"
       ]
     },
     "عسقلان": {
@@ -1253,15 +3994,59 @@
         "عكا"
       ]
     },
+    "علما الشعب": {
+      "display": "علما الشعب",
+      "lat": 33.10678,
+      "lng": 35.17956,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "علما الشعب"
+      ]
+    },
+    "علي الطاهر": {
+      "display": "علي الطاهر",
+      "lat": 33.36574,
+      "lng": 35.51682,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "علي الطاهر"
+      ]
+    },
+    "عمير": {
+      "display": "عمير",
+      "lat": 33.17877,
+      "lng": 35.62078,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "عمير"
+      ]
+    },
     "عميعاد": {
       "display": "عميعاد",
       "lat": 32.9088,
       "lng": 35.5248,
-      "coordSource": "op_coords",
+      "coordSource": "facet_coords",
       "confidence": "medium",
       "hasPolygon": false,
       "aliases": [
         "عميعاد"
+      ]
+    },
+    "عيتا الجبل": {
+      "display": "عيتا الجبل",
+      "lat": 33.17449,
+      "lng": 35.40944,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "عيتا الجبل"
       ]
     },
     "عيتا الشعب": {
@@ -1284,6 +4069,53 @@
       "hasPolygon": true,
       "aliases": [
         "عيترون"
+      ]
+    },
+    "عيشيه": {
+      "display": "العيشية",
+      "lat": 33.40741,
+      "lng": 35.55644,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "عيشية",
+        "عيشيه"
+      ]
+    },
+    "عين ابل": {
+      "display": "عين إبل",
+      "lat": 33.1093,
+      "lng": 35.40311,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "عين إبل",
+        "عين ابل"
+      ]
+    },
+    "عين الاسد": {
+      "display": "عين الأسد",
+      "lat": 33.786,
+      "lng": 42.4412,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "عين الأسد",
+        "عين الاسد"
+      ]
+    },
+    "عين زيتيم": {
+      "display": "عين زيتيم",
+      "lat": 32.99503,
+      "lng": 35.48436,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "عين زيتيم"
       ]
     },
     "عين قنيا": {
@@ -1330,6 +4162,18 @@
         "غلاف غزة"
       ]
     },
+    "غندوريه": {
+      "display": "الغندورية",
+      "lat": 33.27799,
+      "lng": 35.43721,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "غندورية",
+        "غندوريه"
+      ]
+    },
     "غورن": {
       "display": "غورن",
       "lat": 33.05667,
@@ -1339,6 +4183,28 @@
       "hasPolygon": true,
       "aliases": [
         "غورن"
+      ]
+    },
+    "غورنوت هجليل": {
+      "display": "غورنوت هغليل",
+      "lat": 33.05954,
+      "lng": 35.24965,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "غورنوت هجليل"
+      ]
+    },
+    "غورنوت هغليل": {
+      "display": "غورنوت هغليل",
+      "lat": 33.05954,
+      "lng": 35.24965,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "غورنوت هغليل"
       ]
     },
     "غوش حلاف": {
@@ -1352,15 +4218,97 @@
         "غوش حلاف"
       ]
     },
+    "غيشر هزيف": {
+      "display": "جشر هزيف",
+      "lat": 33.03947,
+      "lng": 35.11098,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "غيشر هزيف"
+      ]
+    },
+    "قاعده بالماخيم": {
+      "display": "قاعدة بالماخيم",
+      "lat": 31.93341,
+      "lng": 34.70726,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "قاعدة بالماخيم",
+        "قاعده بالماخيم"
+      ]
+    },
+    "قاعده تل نوف": {
+      "display": "قاعدة تل نوف",
+      "lat": 31.83605,
+      "lng": 34.81999,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "قاعدة تل نوف",
+        "قاعده تل نوف"
+      ]
+    },
+    "قاعده نفح": {
+      "display": "قاعدة نفح",
+      "lat": 33.05783,
+      "lng": 35.73584,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "قاعدة نفح",
+        "قاعده نفح"
+      ]
+    },
+    "قبريخا": {
+      "display": "قبريخا",
+      "lat": 33.24634,
+      "lng": 35.46336,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "قبريخا"
+      ]
+    },
+    "قلعه الشقيف": {
+      "display": "قلعة الشقيف",
+      "lat": 33.32454,
+      "lng": 35.53217,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "قلعة الشقيف",
+        "قلعه الشقيف"
+      ]
+    },
     "قلعه هونين": {
       "display": "قلعة هونين",
-      "lat": 33.2208,
-      "lng": 35.5443,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "قلعة هونين"
+      ]
+    },
+    "قيساريه": {
+      "display": "قيسارية",
+      "lat": 32.50597,
+      "lng": 34.90622,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "قيسارية",
+        "قيساريه"
       ]
     },
     "كابري": {
@@ -1396,6 +4344,17 @@
         "كتسرين"
       ]
     },
+    "كدمات تسفي": {
+      "display": "كدمات تسفي",
+      "lat": 33.02974,
+      "lng": 35.69703,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كدمات تسفي"
+      ]
+    },
     "كرم ابو سالم": {
       "display": "كرم أبو سالم",
       "lat": 31.2275,
@@ -1405,6 +4364,17 @@
       "hasPolygon": true,
       "aliases": [
         "كرم أبو سالم"
+      ]
+    },
+    "كرم بن زمرا": {
+      "display": "كرم بن زمرا",
+      "lat": 33.03889,
+      "lng": 35.46805,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كرم بن زمرا"
       ]
     },
     "كرمييل": {
@@ -1419,8 +4389,30 @@
         "كرمييل"
       ]
     },
+    "كرميييل": {
+      "display": "كرميئيل",
+      "lat": 32.91591,
+      "lng": 35.29343,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كرميئيل"
+      ]
+    },
+    "كرن نفتالي": {
+      "display": "كرن نفتالي",
+      "lat": 33.09071,
+      "lng": 35.56294,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كرن نفتالي"
+      ]
+    },
     "كريات اتا": {
-      "display": "كريات آتا",
+      "display": "كريات أتا",
       "lat": 32.8,
       "lng": 35.1,
       "coordSource": "facet_coords",
@@ -1531,6 +4523,17 @@
         "كريات يام"
       ]
     },
+    "كفار بلوم": {
+      "display": "كفار بلوم",
+      "lat": 33.17237,
+      "lng": 35.61012,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفار بلوم"
+      ]
+    },
     "كفار جلعادي": {
       "display": "كفار جلعادي",
       "lat": 33.225,
@@ -1551,6 +4554,17 @@
       "hasPolygon": false,
       "aliases": [
         "كفار غلعادي"
+      ]
+    },
+    "كفار فراديم": {
+      "display": "كفار فراديم",
+      "lat": 32.99725,
+      "lng": 35.27253,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفار فراديم"
       ]
     },
     "كفار مساريك": {
@@ -1586,6 +4600,28 @@
         "كفاريوفال"
       ]
     },
+    "كفر بلوم": {
+      "display": "كفار بلوم",
+      "lat": 33.17237,
+      "lng": 35.61012,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفر بلوم"
+      ]
+    },
+    "كفر تبنيت": {
+      "display": "كفرتبنيت",
+      "lat": 33.35188,
+      "lng": 35.51863,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفر تبنيت"
+      ]
+    },
     "كفر جلعاد": {
       "display": "كفر جلعاد",
       "lat": 33.225,
@@ -1597,6 +4633,61 @@
         "كفر جلعاد"
       ]
     },
+    "كفر جلعادي": {
+      "display": "كفر جلعادي",
+      "lat": 33.24178,
+      "lng": 35.57496,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفر جلعادي"
+      ]
+    },
+    "كفر فرديم": {
+      "display": "كفر فرديم",
+      "lat": 32.99725,
+      "lng": 35.27253,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفر فرديم"
+      ]
+    },
+    "كفر يوفال": {
+      "display": "كفر يوفال",
+      "lat": 33.24742,
+      "lng": 35.59749,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفر يوفال"
+      ]
+    },
+    "كفرا": {
+      "display": "كفرا",
+      "lat": 33.18053,
+      "lng": 35.354,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفرا"
+      ]
+    },
+    "كفرتبنيت": {
+      "display": "كفرتبنيت",
+      "lat": 33.35188,
+      "lng": 35.51863,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفرتبنيت"
+      ]
+    },
     "كفرجلعادي": {
       "display": "كفرجلعادي",
       "lat": 33.23869,
@@ -1606,6 +4697,106 @@
       "hasPolygon": true,
       "aliases": [
         "كفرجلعادي"
+      ]
+    },
+    "كفرحونه": {
+      "display": "كفرحونة",
+      "lat": 33.447,
+      "lng": 35.508,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفرحونة",
+        "كفرحونه"
+      ]
+    },
+    "كفرسولد": {
+      "display": "كفرسولد",
+      "lat": 33.19469,
+      "lng": 35.65785,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفرسولد"
+      ]
+    },
+    "كفرشوبا": {
+      "display": "كفرشوبا",
+      "lat": 33.32767,
+      "lng": 35.69273,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفرشوبا"
+      ]
+    },
+    "كفركلا": {
+      "display": "كفركلا",
+      "lat": 33.28271,
+      "lng": 35.55876,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفركلا"
+      ]
+    },
+    "كفرملكي": {
+      "display": "كفرملكي",
+      "lat": 33.50126,
+      "lng": 35.48079,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفرملكي"
+      ]
+    },
+    "كفريوفال": {
+      "display": "كفريوفال",
+      "lat": 33.24742,
+      "lng": 35.59749,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفريوفال"
+      ]
+    },
+    "كفور": {
+      "display": "الكفور",
+      "lat": 33.39832,
+      "lng": 35.45179,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كفور"
+      ]
+    },
+    "كونيكو": {
+      "display": "كونيكو",
+      "lat": 35.08,
+      "lng": 40.5,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كونيكو"
+      ]
+    },
+    "كيرم بن زمرا": {
+      "display": "كيرم بن زمرا",
+      "lat": 33.03889,
+      "lng": 35.46805,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "كيرم بن زمرا"
       ]
     },
     "كيسوفيم": {
@@ -1623,11 +4814,34 @@
       "display": "لاخيش",
       "lat": 31.56,
       "lng": 34.85,
-      "coordSource": "siren_coords",
-      "confidence": "low",
+      "coordSource": "facet_coords",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "لاخيش"
+      ]
+    },
+    "لبونه": {
+      "display": "اللبونة",
+      "lat": 33.09331,
+      "lng": 35.14868,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "لبونة",
+        "لبونه"
+      ]
+    },
+    "ليمان": {
+      "display": "ليمان",
+      "lat": 33.0595,
+      "lng": 35.11303,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "ليمان"
       ]
     },
     "مارون الراس": {
@@ -1641,6 +4855,39 @@
         "مارون الراس"
       ]
     },
+    "متات": {
+      "display": "متات",
+      "lat": 33.04154,
+      "lng": 35.35983,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "متات"
+      ]
+    },
+    "متسوفا": {
+      "display": "متسوفا",
+      "lat": 33.06294,
+      "lng": 35.1571,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "متسوفا"
+      ]
+    },
+    "مجدل زون": {
+      "display": "مجدل زون",
+      "lat": 33.15032,
+      "lng": 35.22603,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "مجدل زون"
+      ]
+    },
     "مجدل شمس": {
       "display": "مجدل شمس",
       "lat": 33.27,
@@ -1650,6 +4897,29 @@
       "hasPolygon": false,
       "aliases": [
         "مجدل شمس"
+      ]
+    },
+    "محافظه ديالي": {
+      "display": "محافظة ديالى",
+      "lat": 34.02287,
+      "lng": 45.10462,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "محافظة ديالى",
+        "محافظه ديالى"
+      ]
+    },
+    "مرتفع علي الطاهر": {
+      "display": "علي الطاهر",
+      "lat": 33.36574,
+      "lng": 35.51682,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "مرتفع علي الطاهر"
       ]
     },
     "مرجليوت": {
@@ -1685,6 +4955,17 @@
         "مركبا"
       ]
     },
+    "مروحين": {
+      "display": "مروحين",
+      "lat": 33.10865,
+      "lng": 35.27674,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "مروحين"
+      ]
+    },
     "مسعاده": {
       "display": "مسعاده",
       "lat": 33.25,
@@ -1694,6 +4975,17 @@
       "hasPolygon": false,
       "aliases": [
         "مسعاده"
+      ]
+    },
+    "مسغاف عام": {
+      "display": "مسكفعام",
+      "lat": 33.24779,
+      "lng": 35.54867,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "مسغاف عام"
       ]
     },
     "مسكاف عام": {
@@ -1718,15 +5010,70 @@
         "مسكافعام"
       ]
     },
+    "مسكف عام": {
+      "display": "مسكفعام",
+      "lat": 33.24779,
+      "lng": 35.54867,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "مسكف عام"
+      ]
+    },
+    "مسكفعام": {
+      "display": "مسكفعام",
+      "lat": 33.24779,
+      "lng": 35.54867,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "مسكفعام"
+      ]
+    },
     "معالوت ترشيحا": {
       "display": "معالوت ترشيحا",
-      "lat": 33.01446,
-      "lng": 35.2767,
-      "coordSource": "borders",
+      "lat": 33.01574,
+      "lng": 35.27597,
+      "coordSource": "curated",
       "confidence": "high",
       "hasPolygon": true,
       "aliases": [
         "معالوت ترشيحا"
+      ]
+    },
+    "معالوت تشريحا": {
+      "display": "معالوت تشريحا",
+      "lat": 33.01574,
+      "lng": 35.27597,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "معالوت تشريحا"
+      ]
+    },
+    "معروب": {
+      "display": "معروب",
+      "lat": 33.2843,
+      "lng": 35.34673,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "معروب"
+      ]
+    },
+    "معلوت ترشيحا": {
+      "display": "معالوت ترشيحا",
+      "lat": 33.01574,
+      "lng": 35.27597,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "معلوت ترشيحا"
       ]
     },
     "معيان باروخ": {
@@ -1738,6 +5085,39 @@
       "hasPolygon": true,
       "aliases": [
         "معيان باروخ"
+      ]
+    },
+    "معيليا": {
+      "display": "معيليا",
+      "lat": 33.02806,
+      "lng": 35.25833,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "معيليا"
+      ]
+    },
+    "منصوري": {
+      "display": "المنصوري",
+      "lat": 33.17365,
+      "lng": 35.21109,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "منصوري"
+      ]
+    },
+    "منوت": {
+      "display": "منوت",
+      "lat": 33.03836,
+      "lng": 35.19469,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "منوت"
       ]
     },
     "ميتات": {
@@ -1762,6 +5142,17 @@
         "ميرون"
       ]
     },
+    "ميس الجبل": {
+      "display": "ميس الجبل",
+      "lat": 33.17557,
+      "lng": 35.50994,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "ميس الجبل"
+      ]
+    },
     "ناحاريا": {
       "display": "ناحاريا",
       "lat": 33.0,
@@ -1782,6 +5173,52 @@
       "hasPolygon": true,
       "aliases": [
         "ناحال عوز"
+      ]
+    },
+    "ناقوره": {
+      "display": "الناقورة",
+      "lat": 33.11063,
+      "lng": 35.12291,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "ناقورة",
+        "ناقوره"
+      ]
+    },
+    "نبطيه": {
+      "display": "النبطية",
+      "lat": 33.3812,
+      "lng": 35.48253,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "نبطية",
+        "نبطيه"
+      ]
+    },
+    "نبي شيت": {
+      "display": "النبي شيت",
+      "lat": 33.87268,
+      "lng": 36.11089,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "نبي شيت"
+      ]
+    },
+    "نبي يوشع": {
+      "display": "النبي يوشع",
+      "lat": 33.1023,
+      "lng": 35.55312,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "نبي يوشع"
       ]
     },
     "نتانيا": {
@@ -1817,12 +5254,24 @@
         "نتيفوت"
       ]
     },
+    "نحله": {
+      "display": "نحلة",
+      "lat": 34.04228,
+      "lng": 36.25861,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "نحلة",
+        "نحله"
+      ]
+    },
     "نعيم": {
       "display": "نعيم",
-      "lat": 33.09,
-      "lng": 35.51,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "نعيم"
@@ -1863,11 +5312,11 @@
       ]
     },
     "نووت مردخاي": {
-      "display": "نوؤت مردخاي",
+      "display": "نؤوت مردخاي",
       "lat": 33.24,
       "lng": 35.62,
-      "coordSource": "siren_coords",
-      "confidence": "low",
+      "coordSource": "facet_coords",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "نؤوت مردخاي",
@@ -1878,8 +5327,8 @@
       "display": "نير عام",
       "lat": 31.37,
       "lng": 34.4,
-      "coordSource": "siren_coords",
-      "confidence": "low",
+      "coordSource": "facet_coords",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "نير عام"
@@ -1889,8 +5338,8 @@
       "display": "نيرعام",
       "lat": 31.37,
       "lng": 34.4,
-      "coordSource": "siren_coords",
-      "confidence": "low",
+      "coordSource": "facet_coords",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "نيرعام"
@@ -1907,12 +5356,23 @@
         "نيريم"
       ]
     },
+    "هجوشريم": {
+      "display": "هجوشريم",
+      "lat": 33.22113,
+      "lng": 35.62307,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "هجوشريم"
+      ]
+    },
     "هغوشريم": {
       "display": "هغوشريم",
       "lat": 33.21,
       "lng": 35.61,
-      "coordSource": "siren_coords",
-      "confidence": "low",
+      "coordSource": "facet_coords",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
         "هغوشريم"
@@ -1931,13 +5391,24 @@
     },
     "هونين": {
       "display": "هونين",
-      "lat": 33.2194,
-      "lng": 35.5442,
-      "coordSource": "op_coords",
-      "confidence": "medium",
+      "lat": null,
+      "lng": null,
+      "coordSource": null,
+      "confidence": "none",
       "hasPolygon": false,
       "aliases": [
         "هونين"
+      ]
+    },
+    "وادي الحجير": {
+      "display": "وادي الحجير",
+      "lat": 33.29008,
+      "lng": 35.43749,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "وادي الحجير"
       ]
     },
     "يارون": {
@@ -1949,6 +5420,39 @@
       "hasPolygon": true,
       "aliases": [
         "يارون"
+      ]
+    },
+    "ياروون": {
+      "display": "يارؤون",
+      "lat": 33.07778,
+      "lng": 35.45575,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "يارؤون"
+      ]
+    },
+    "يارين": {
+      "display": "يارين",
+      "lat": 33.10593,
+      "lng": 35.23612,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "يارين"
+      ]
+    },
+    "يحمر الشقيف": {
+      "display": "يحمر الشقيف",
+      "lat": 33.31237,
+      "lng": 35.51775,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "يحمر الشقيف"
       ]
     },
     "يروون": {
@@ -1971,6 +5475,41 @@
       "hasPolygon": false,
       "aliases": [
         "يسعور"
+      ]
+    },
+    "يسود هامعلاه": {
+      "display": "يسود هامعلاه",
+      "lat": 33.05738,
+      "lng": 35.60302,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "يسود هامعلاة",
+        "يسود هامعلاه"
+      ]
+    },
+    "يسود همعلاه": {
+      "display": "يسود همعلاه",
+      "lat": 33.05738,
+      "lng": 35.60302,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "يسود همعلاة",
+        "يسود همعلاه"
+      ]
+    },
+    "يعرا": {
+      "display": "يعرا",
+      "lat": 33.06742,
+      "lng": 35.18585,
+      "coordSource": "curated",
+      "confidence": "high",
+      "hasPolygon": false,
+      "aliases": [
+        "يعرا"
       ]
     },
     "يفتاح": {

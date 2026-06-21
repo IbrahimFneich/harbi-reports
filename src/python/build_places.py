@@ -49,9 +49,133 @@ norm_place = C.norm_place
 # (Populated in the conflict-resolution pass — see build_places report output.)
 OVERRIDES = {}
 
-# Names that are NOT real places (parser noise) — excluded from the registry so
-# they never become phantom map points. Keyed by norm_place(name).
-NOT_A_PLACE = set()
+# ── Curated authoritative towns (hand-verified OSM nodes) ───────────────────
+# The registry only admits a town that appears in some SOURCE table, and OVERRIDES
+# can only re-point a coordinate for a town that is ALREADY in the union — it
+# cannot INTRODUCE a town. This curated source DOES introduce towns: every town
+# the corpus targets but that no other source carries lives here, geocoded via
+# OSM Nominatim (geocode_towns.py) and bbox/type-validated. It is the highest
+# coordinate authority and forces a single canonical display so spelling variants
+# (e.g. "كفرتبنيت" vs "كفر تبنيت" — norm_place keeps internal spaces, so these are
+# distinct keys) collapse to ONE town on the map.
+# The curated list lives in data/curated_places.json (auditable, scales past a
+# Python literal). Each entry: {"display","lat","lng","aliases":[...spellings...]}.
+# Every alias becomes its own registry key (norm_place keeps internal spaces, so
+# spelling variants are distinct keys); _FORCE_DISPLAY collapses them to ONE
+# canonical display so a town counts/places identically across every view.
+def _load_curated():
+    path = os.path.join(BASE, 'data', 'curated_places.json')
+    if not os.path.exists(path):
+        return []
+    with open(path, encoding='utf-8') as f:
+        return json.load(f)
+
+CURATED = _load_curated()
+
+_CURATED_COORD = {}        # surface spelling -> (lat, lng)
+_FORCE_DISPLAY = {}        # norm_place(surface) -> canonical display
+for _e in CURATED:
+    _disp = _e['display']
+    _coord = (float(_e['lat']), float(_e['lng']))
+    for _s in (_e.get('aliases') or [_disp]):
+        _CURATED_COORD[_s] = _coord
+        _FORCE_DISPLAY[norm_place(_s)] = _disp
+
+# Names that are NOT real places (parser noise / political communiqués / broad
+# regions) — excluded from the registry so they never become phantom map points,
+# AND whitelisted in the validator's HARD coverage gate so an empty targets[] for
+# one of these is allowed. Keyed by norm_place(name). Adding here is a deliberate,
+# auditable act — the visible escape hatch, never silent suppression.
+# Two matching semantics, deliberately split. DISTINCTIVE surfaces are matched by
+# whole-word CONTAINMENT — one "العراق" covers "العراق الأربعاء", one codename
+# "خربة ماعر" covers "قاعدة خربة ماعر ومرابضها". These are proper nouns /
+# distinctive phrases that can never be a substring of a real target town.
+_NAP_CONTAINS_SURFACES = [
+    # Countries / distinctive broad regions (not a single map point)
+    "العراق", "سوريا", "فلسطين", "جنوب لبنان", "المناطق الحدودية",
+    "المستوطنات الحدودية", "مثلث التحرير", "أراضينا", "اراضينا", "مناطقنا",
+    "إقليم التفاح", "الخضراء بالعمق السوري", "الخضراء", "بعد 68 ميلا",
+    # Political communiqués (distinctive openings)
+    "بيان عام لحزب الله", "بيان حول", "بيان إلى", "بيان الى", "جيش العدو",
+    # Israeli / border POSITION codenames with no public coordinate. These are the
+    # resistance's own names for enemy positions/hilltops; OSM has no node, and a
+    # guessed coordinate would be worse than an honest omission (see
+    # reference_harbi_reports_maps). Acknowledged here, never silently dropped —
+    # add to CURATED if a reliable coordinate is ever sourced.
+    "البغدادي", "الطيحات", "نطوعة", "نطوعا", "الزاعورة", "حدب البستان",
+    "خربة ماعر", "جل الدير", "معاليه غولان", "معاليه غولاني", "الكرنتينا",
+    "نذر", "نمر الجمل", "ميشار", "عداثر", "تل شعر", "غابات الجليل",
+    "السماقة", "هرمون", "نيمرا", "أبو دجاج", "الكوبرا", "كوبرا", "دادو",
+    "حدب عيتا", "سردا", "العليقة", "هضبة العجل", "يوآف", "كيلع", "الجبين",
+    "العويضة", "رويسة القرن", "رويسات القرن", "إبل القمح", "الحمامص", "العزية",
+    "إلياد", "بتست", "تل إسماعيل", "شمشون", "زوفولون", "موقع الرادار",
+    "موقع الحمرا", "حرج رميم", "موقع رميم", "معاليم", "وردة", "المروانية",
+    "وادي السلوقي", "جبل أدير", "منطقة المعبر", "الرمثا", "الرمتا",
+    "معسكر أوفيك", "بيت ليد", "أم التوت", "نافيه زيف", "خربة نفحا",
+    "قاعدة مسغاف", "عين يعقوب", "جبل نيريا", "نيريا", "إييليت", "إيليت",
+    "أييليت", "نفتالي", "راوية", "علمان", "الخزان", "تلة الخزان", "وادي العيون",
+    "الوزاني", "الناعورة", "الصناعات الجوية", "القصير", "قرى جنتا", "البحري",
+]
+
+# COMMON words / sentence fragments — matched by EXACT normalised equality ONLY.
+# Critical: a FUTURE bayan naming an unregistered town in a phrase that merely
+# CONTAINS one of these (e.g. "القطاع الشرقي من بلدة <new town>") must still FAIL
+# RESOLVE-1 so we are forced to register the town — never silently whitelisted. So
+# these use exact-match, only for the precise noise strings seen in the corpus.
+_NAP_EXACT_SURFACES = [
+    "الجنوب", "الجنوب مما أجبرها على التراجع والانسحاب الى خلف الحدود اللبنانية مع فلسطين",
+    "البقاع", "البقاع الغربي", "البقاع ومنعها من تحقيق أهدافها",
+    "القطاع الغربي", "القطاع الأوسط", "القطاع الشرقي", "القطاع الغربي جنوب لبنان",
+    "الشرقية", "الشرقية جنوب لبنان",
+    "الساعة",
+    "الرئيسية للنقل والدعم اللوجستي للمنطقة الشمالية",
+    "الحافة الأمامية على الحدود اللبنانية الفلسطينية",
+    "الهدف المنشود ومن مسارات متعددة",
+    "لرفع الأضرار",
+    "المقاومة الاسلامية يوم 30-07- 2024 للطائرات الحربية الصهيونية المعادية",
+]
+
+# NOT_A_PLACE (the containment set) is also what build_registry excludes from the
+# registry, so a noise surface can never become a phantom map point. Adding to
+# either set is deliberate and auditable — never silent suppression, never a
+# guessed coordinate.
+NOT_A_PLACE = {norm_place(s) for s in _NAP_CONTAINS_SURFACES}
+_NAP_EXACT = {norm_place(s) for s in _NAP_EXACT_SURFACES}
+
+
+def _word_in(needle, hay):
+    """Whole-word containment of normalised `needle` in normalised `hay`
+    (boundary = start/end or non-Arabic-letter). Mirrors place_registry matching
+    so a NOT_A_PLACE phrase matches a target that merely contains it."""
+    if not needle:
+        return False
+    start = 0
+    while True:
+        i = hay.find(needle, start)
+        if i < 0:
+            return False
+        end = i + len(needle)
+        left_ok = (i == 0) or not ('ء' <= hay[i - 1] <= 'ي')
+        right_ok = (end >= len(hay)) or not ('ء' <= hay[end] <= 'ي')
+        if left_ok and right_ok:
+            return True
+        start = i + 1
+
+
+def is_nonplace_target(text):
+    """True if a bayan `target` is legitimately place-less (parser noise, political
+    communiqué, or a region too broad to pin) and so MAY have an empty targets[].
+    Used by the validator's HARD coverage gate as the auditable escape hatch.
+
+    EXACT-equality for common-word fragments (so a future town hidden behind a
+    common word still fails the gate) + whole-word CONTAINMENT for distinctive
+    proper-noun/codename surfaces (so one entry covers all its variants)."""
+    nt = norm_place(text or '')
+    if not nt:
+        return True
+    if nt in _NAP_EXACT:
+        return True
+    return any(_word_in(nap, nt) for nap in NOT_A_PLACE)
 
 
 def _haversine_km(a, b):
@@ -115,6 +239,10 @@ def load_sources():
     """Return dict: source_name -> { surface_name: (lat,lng) | None }."""
     src = {}
 
+    # 0) CURATED authoritative towns (hand-verified OSM nodes) — introduces towns
+    # no other source carries; highest coordinate authority (see COORD_PRIORITY).
+    src['curated'] = dict(_CURATED_COORD)
+
     # 1) SIREN_COORDS (python dict of name -> (lat,lng))
     src['siren_coords'] = {k: (float(v[0]), float(v[1])) for k, v in C.SIREN_COORDS.items()}
 
@@ -154,7 +282,7 @@ def load_sources():
 
 
 # Coordinate authority, highest priority first.
-COORD_PRIORITY = ['borders', 'facet_coords', 'op_coords', 'siren_coords']
+COORD_PRIORITY = ['curated', 'borders', 'facet_coords', 'op_coords', 'siren_coords']
 
 
 def build_registry(src):
@@ -176,7 +304,7 @@ def build_registry(src):
     for nk in sorted(keys):
         aliases, display, coord, coord_src = set(), None, None, None
         # collect aliases + pick a display form (prefer borders surface form, else longest)
-        for sname in ['borders', 'op_coords', 'facet_coords', 'siren_coords', 'dash_locnames']:
+        for sname in ['borders', 'op_coords', 'facet_coords', 'siren_coords', 'dash_locnames', 'curated']:
             tbl = src.get(sname, {})
             for surface in tbl:
                 if norm_place(surface) == nk:
@@ -185,6 +313,10 @@ def build_registry(src):
                         display = surface
         if display is None:
             display = max(aliases, key=len) if aliases else nk
+        # Curated towns force a single canonical display so spelling variants
+        # (distinct norm keys) collapse to one town across every view.
+        if nk in _FORCE_DISPLAY:
+            display = _FORCE_DISPLAY[nk]
         # resolve coordinate by priority
         if nk in OVERRIDES:
             coord, coord_src = OVERRIDES[nk], 'override'
@@ -208,7 +340,7 @@ def build_registry(src):
         spread = max((_haversine_km(all_coords[0], c) for c in all_coords[1:]), default=0.0)
         if coord is None:
             confidence = 'none'
-        elif coord_src in ('override', 'borders') or (len(all_coords) >= 2 and spread <= 1.5):
+        elif coord_src in ('override', 'borders', 'curated') or (len(all_coords) >= 2 and spread <= 1.5):
             confidence = 'high'
         elif coord_src == 'siren_coords' or spread > 1.5:
             confidence = 'low'

@@ -1,5 +1,16 @@
 [
   {
+    "version": "2.8.2",
+    "date": "2026-06-21",
+    "title": "Never miss a region on the map — registry expansion + hard gate",
+    "changes": [
+      "Fixed the operations map missing named target towns (e.g. كفرتبنيت / علي الطاهر / أرنون on 18 June showed no points). Root cause: the place registry held only 181 towns, so ~34% of all statement targets resolved to nothing and silently vanished from the map.",
+      "Expanded the registry to 494 places — geocoded via OSM Nominatim (bbox/type-validated, never from memory) into the new auditable data/curated_places.json: dozens of South-Lebanon villages plus Israeli/Syrian/Iraqi named sites. Whole archive re-resolved in place (targets/sirenPoints only — counts and text unchanged).",
+      "Added a HARD release gate (RESOLVE-1): a statement that names a target town now CANNOT ship unless that town plots on the map, or is explicitly listed as a non-place (country / broad region / political communiqué / enemy position codename). The old check only warned.",
+      "Bayanat-target map coverage rose from 66% to ~84% of statements (the remainder are genuinely non-pinnable and acknowledged, not silently dropped)."
+    ]
+  },
+  {
     "version": "2.8.1",
     "date": "2026-06-21",
     "title": "Reports for 16–20 June 2026 (Iran–Israel war coverage)",

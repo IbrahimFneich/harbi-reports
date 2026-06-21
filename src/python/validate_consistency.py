@@ -311,6 +311,29 @@ def inv_bayan_targets_integrity(days, rstats, dbrep):
     return bad
 
 
+def inv_bayan_target_resolves(days, rstats, dbrep):
+    """HARD: every bayan that NAMES a target must put >=1 point on the operations
+    map. Concretely: target non-empty ⇒ targets[] non-empty, UNLESS the target is
+    a known non-place (build_places.NOT_A_PLACE — the visible, auditable escape
+    hatch). The map renders from targets[], so this makes an empty/partial map for
+    a day whose statements named towns IMPOSSIBLE to ship. This is the gate that
+    closes the 'كفرتبنيت / علي الطاهر named but not on the map' class of bug."""
+    import build_places as BP
+    bad = []
+    for date, d in days.items():
+        for b in d.get('bayanat', []):
+            t = b.get('target')
+            if not t:
+                continue
+            if b.get('targets'):
+                continue
+            if BP.is_nonplace_target(t):
+                continue
+            bad.append((date, f"num={b.get('num')} target {t!r} → NO map point "
+                              f"(add town to build_places.CURATED, or to NOT_A_PLACE if not a place)"))
+    return bad
+
+
 def inv_target_coverage(days, rstats, dbrep):
     """SOFT: how many bayanat targets / siren locations resolve to a registry place.
     Informational baseline — coverage gaps are a registry-expansion task, not a gate."""
@@ -342,6 +365,7 @@ INVARIANTS = [
     ('STORED-2 sirenPoints resolve in registry & sirens have locations[]', inv_stored_sirenpoints, 'HARD'),
     ('STORED-3 stats.<cat> == len(<cat>)', inv_stats_match_arrays, 'HARD'),
     ('STORED-4 bayan_targets rows == sum len(targets[])', inv_bayan_targets_integrity, 'HARD'),
+    ('RESOLVE-1 named bayan target ⇒ ≥1 map point (else NOT_A_PLACE)', inv_bayan_target_resolves, 'HARD'),
     ('COVERAGE target/siren registry resolution', inv_target_coverage, 'SOFT'),
 ]
 
