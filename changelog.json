@@ -1,5 +1,15 @@
 [
   {
+    "version": "2.8.1",
+    "date": "2026-06-21",
+    "title": "Reports for 16–20 June 2026 (Iran–Israel war coverage)",
+    "changes": [
+      "Added five daily reports: 16, 17, 18, 19 and 20 June 2026.",
+      "Coverage profile shifted from Hezbollah numbered statements (bayanat) to enemy-media (إعلام العدو) and Iranian-military reporting on the Iran–Israel war — bayanat collapsed after the 14 June peak (28) to 0/1/2/4/2, while enemy reports dominated (6/24/12/19/26).",
+      "Fetched via the Telethon fallback fetcher (MCP unbound this session), reproducing list_messages output byte-for-byte with UTC day-boundary grouping; consistency harness green across all 988 days."
+    ]
+  },
+  {
     "version": "2.8.0",
     "date": "2026-06-17",
     "title": "Data consistency overhaul — every view now agrees with the source",
