@@ -4,7 +4,7 @@
     "date": "2026-07-11",
     "title": "Reports for 21 June – 10 July 2026 (post-war quiet phase)",
     "changes": [
-      "Added 20 daily reports (21 Jun – 10 Jul). Channel tempo dropped sharply from the June war peak — only 7 مقاومة bayanat across the whole span; coverage shifted to إعلام العدو and Iran (Khamenei funeral, Strait of Hormuz).",
+      "Added 20 daily reports (21 Jun – 10 Jul). Channel tempo dropped sharply from the June war peak — only 6 مقاومة bayanat across the whole span; coverage shifted to إعلام العدو and Iran (Khamenei funeral, Strait of Hormuz).",
       "Registry: geocoded الطيبة (قضاء مرجعيون — 33.275/35.521 via OSM Nominatim), which had a null-coord entry and would have silently dropped from the 28 June operations map. Whole archive re-resolved in place against the updated registry.",
       "Consistency gate green (RESOLVE-1: every named bayan target plots); 28 June map visually verified — all 6 South-Lebanon towns cluster correctly, none in the sea."
     ]
