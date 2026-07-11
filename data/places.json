@@ -1216,13 +1216,14 @@
     },
     "الطيبه": {
       "display": "الطيبة",
-      "lat": null,
-      "lng": null,
-      "coordSource": null,
-      "confidence": "none",
+      "lat": 33.27498,
+      "lng": 35.52053,
+      "coordSource": "curated",
+      "confidence": "high",
       "hasPolygon": false,
       "aliases": [
-        "الطيبة"
+        "الطيبة",
+        "الطيبه"
       ]
     },
     "الطير حرفا": {
@@ -2305,7 +2306,7 @@
       ]
     },
     "ايفن مناحم": {
-      "display": "ايفن مناحم",
+      "display": "إيفن مناحم",
       "lat": 33.06,
       "lng": 35.2,
       "coordSource": "facet_coords",
@@ -4378,7 +4379,7 @@
       ]
     },
     "كرمييل": {
-      "display": "كرمئيل",
+      "display": "كرمييل",
       "lat": 32.9137,
       "lng": 35.2918,
       "coordSource": "facet_coords",
@@ -5312,7 +5313,7 @@
       ]
     },
     "نووت مردخاي": {
-      "display": "نؤوت مردخاي",
+      "display": "نوؤت مردخاي",
       "lat": 33.24,
       "lng": 35.62,
       "coordSource": "facet_coords",
